@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base.Contract
+namespace Generic.Base.Handler.Map.Contract
 {
     public interface IGenericMapper
     {
