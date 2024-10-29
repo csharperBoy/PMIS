@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service
+namespace Generic.Service.Abstract
 {
-    public class GenericNormalEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto> : IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
+    public class AbstractGenericNormalEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto> : IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         where TEntity : class
         where TEntityEditRequestDto : class
         where TEntityEditResponseDto : class

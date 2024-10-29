@@ -1,4 +1,4 @@
-﻿using Generic.Service;
+﻿using Generic.Service.Abstract;
 using PMIS.DTO.Indicator;
 using PMIS.Models;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PMIS.Services
 {
     public class IndicatorService //: GenericService<Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchRequestDto, IndicatorSearchResponseDto>
-    :GenericNormalAddService<PmisContext,Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto>
+    :AbstractGenericNormalAddService<PmisContext,Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto>
     {
 
 
@@ -19,7 +19,7 @@ namespace PMIS.Services
         {
             if (source is Indicator src && destination is IndicatorAddResponseDto dest)
             {
-                dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
+                //dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
                 
             }
             return destination;

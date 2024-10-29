@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.Handler.Map.Abstract
 {
-    public abstract class AbstractGenericMapper : IGenericMapper
+    public abstract class AbstractGenericMapHandler : IGenericMapHandler
     {
         public async Task<TDestination> Map<TSource, TDestination>(TSource source)
            where TDestination : class

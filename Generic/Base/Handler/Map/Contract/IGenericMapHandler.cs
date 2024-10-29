@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.Handler.Map.Contract
 {
-    public interface IGenericMapper
+    internal interface IGenericMapHandler
     {
         Task<TDestination> Map<TSource, TDestination>(TSource source)
             where TDestination : class

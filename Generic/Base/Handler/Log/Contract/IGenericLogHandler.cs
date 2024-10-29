@@ -8,5 +8,6 @@ namespace Generic.Base.Handler.Log.Contract
 {
     internal interface IGenericLogHandler
     {
+
     }
 }

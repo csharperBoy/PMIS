@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.Handler.Map
 {
-    public class GenericMapper : AbstractGenericMapper
+    public class GenericMapHandler : AbstractGenericMapHandler
     {
     }
 }

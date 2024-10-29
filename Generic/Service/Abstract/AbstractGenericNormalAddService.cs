@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Generic.Base.Contract;
+
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Repository;
 using Generic.Repository.Contract;
@@ -11,10 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service
+namespace Generic.Service.Abstract
 {
-    public abstract class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> 
-        : AbstractGenericMapper
+    public abstract class AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
+        : AbstractGenericMapHandler
         , IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
         where TEntity : class
@@ -23,11 +23,11 @@ namespace Generic.Service
     {
         private TContext context;
         private IGenericRepository<TEntity> repository;
-        protected GenericNormalAddService()
+        protected AbstractGenericNormalAddService()
         {
-            repository = new GenericSqlServerRepository<TEntity,TContext>(context);
+            repository = new GenericSqlServerRepository<TEntity, TContext>(context);
         }
-      
+
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
             try
@@ -43,7 +43,7 @@ namespace Generic.Service
                     TEntity entity = null;
                     try
                     {
-                        entity = await Map<TEntityAddRequestDto,TEntity>(req);
+                        entity = await Map<TEntityAddRequestDto, TEntity>(req);
 
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
@@ -52,8 +52,8 @@ namespace Generic.Service
                     {
                         TEntityAddResponseDto responseTemp = await Map<TEntity, TEntityAddResponseDto>(entity);
 
-                        
-                        responseTemp = (TEntityAddResponseDto) await AssignExceptionInfoToObject(responseTemp, ex);
+
+                        responseTemp = (TEntityAddResponseDto)await AssignExceptionInfoToObject(responseTemp, ex);
                         results.Add(responseTemp);
                     }
 
@@ -86,8 +86,8 @@ namespace Generic.Service
         {
             throw new NotImplementedException();
         }
-        
 
-        
+
+
     }
 }
