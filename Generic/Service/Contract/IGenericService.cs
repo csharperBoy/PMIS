@@ -36,20 +36,17 @@ namespace Generic.Service.Contract
         where TEntitySearchResponseDto : class
     {
         Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput);
+        Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> reqEntities);
         Task<(bool, IEnumerable<TEntityEditResponseDto>)> EditGroup(IEnumerable<TEntityEditRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> DeleteGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
+        Task<bool> EditRange(IEnumerable<TEntityEditRequestDto> reqEntities);
+        Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> LogicalDeleteGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> RecycleGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> DeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
+        Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Search(IEnumerable<TEntitySearchRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Fetch(IEnumerable<TEntitySearchRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Translate(IEnumerable<TEntitySearchRequestDto> requestInput);
-
-        //Task<bool> AddRange(IEnumerable<TAddReqEntity> reqEntities);
-        //Task<(bool, IEnumerable<TAddResEntity>)> AddGroup(IEnumerable<TAddReqEntity> reqEntities);
-        //Task<(bool, IEnumerable<TEditResEntity>)> EditGroup(IEnumerable<TEditReqEntity> reqEntities);
-        //Task<bool> EditRange(IEnumerable<TEditReqEntity> reqEntities);
-        //Task<(bool, IEnumerable<TDeleteResEntity>)> DeleteGroup(IEnumerable<TDeleteReqEntity> reqEntities);
-        //Task<IEnumerable<TSearchResEntity>> Search(IEnumerable<TSearchReqEntity> request);
+        
+       
+       
+        
     }
 
 }

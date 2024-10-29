@@ -11,6 +11,6 @@ namespace Generic.Service.Contract
         where TEntityPhisycalDeleteRequestDto : class
         where TEntityPhisycalDeleteResponseDto : class
     {
-        Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> DeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
+        Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
     }
 }

@@ -11,7 +11,7 @@ namespace Generic.Service.Contract
         where TEntityLogicalDeleteRequestDto : class
         where TEntityLogicalDeleteResponseDto : class
     {
-        Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> DeleteGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
+        Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> LogicalDeleteGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> RecycleGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
     }
 }

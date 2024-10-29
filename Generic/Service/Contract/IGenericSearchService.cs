@@ -12,7 +12,6 @@ namespace Generic.Service.Contract
         where TEntitySearchResponseDto : class
     {
         Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Search(IEnumerable<TEntitySearchRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Fetch(IEnumerable<TEntitySearchRequestDto> requestInput);
-        Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Translate(IEnumerable<TEntitySearchRequestDto> requestInput);
+        
     }
 }

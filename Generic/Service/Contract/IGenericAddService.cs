@@ -12,5 +12,6 @@ namespace Generic.Service.Contract
         where TEntityAddResponseDto : class
     {
         Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput);
+        Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput);
     }
 }
