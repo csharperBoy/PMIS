@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Generic\Generic.csproj" />
+  </ItemGroup>
+
 </Project>

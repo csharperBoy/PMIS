@@ -1,4 +1,6 @@
-﻿using PMIS.Bases;
+﻿using Generic.Base;
+using PMIS.Bases;
+using PMIS.DTO.Indicator;
 using PMIS.Models;
 using System;
 using System.Collections.Generic;
@@ -20,8 +22,8 @@ namespace PMIS.Forms
             InitializeComponent();
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
+        private async void LoginForm_Load(object sender, EventArgs e)
+        {                        
             new PMIS.Bases.Initializer().Initialize();
         }
 

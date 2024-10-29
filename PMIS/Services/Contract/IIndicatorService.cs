@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services.Contract
 {
-    public interface IIndicatorService : IGenericService<Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchRequestDto, IndicatorSearchResponseDto>
+    public interface IIndicatorService// : IGenericService<Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchRequestDto, IndicatorSearchResponseDto>
     {
          
     }

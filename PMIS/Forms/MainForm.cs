@@ -58,7 +58,7 @@ namespace PMIS.Forms
 
             IEnumerable<IndicatorAddResponseDto> response = new List<IndicatorAddResponseDto>();
             bool IsSuccess;
-            (IsSuccess, response) = await indicatorService.AddGroup(lstReq);
+            //(IsSuccess, response) = await indicatorService.AddGroup(lstReq);
         }
     }
 }
