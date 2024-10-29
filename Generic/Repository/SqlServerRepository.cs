@@ -1,25 +1,21 @@
-﻿using Generic.Repository.Contract;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Generic.Repository.Abstract;
+using Generic.Repository.Contract;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Generic.Repository.Abstract
+namespace Generic.Repository
 {
-    public abstract class AbstractGenericSqlServerRepository<TEntity, TContext> : IGenericRepository<TEntity>, IDisposable
-    where TEntity : class
-    where TContext : DbContext
+    public class SqlServerRepository<TEntity, TContext> : GenericRepository<TEntity, TContext>
+        where TEntity : class
+        where TContext : DbContext
     {
         protected DbContext dbContext;
         internal DbSet<TEntity> dbSet;
         private IDbContextTransaction transaction;
         private bool disposed = false;
         // protected readonly ILogger _logger;
-        public AbstractGenericSqlServerRepository(TContext dbContext)
+        public SqlServerRepository(TContext dbContext)
         {
             this.dbContext = dbContext;
             dbSet = dbContext.Set<TEntity>();
@@ -27,7 +23,7 @@ namespace Generic.Repository.Abstract
             //  _logger = logger;
         }
 
-        public virtual async Task<bool> InsertAsync(TEntity entity)
+        public override async Task<bool> InsertAsync(TEntity entity)
         {
             try
             {
@@ -41,7 +37,7 @@ namespace Generic.Repository.Abstract
                 return false;
             }
         }
-        public void SetCommandTimeout(int timeout)
+        public override void SetCommandTimeout(int timeout)
         {
             try
             {
@@ -53,7 +49,7 @@ namespace Generic.Repository.Abstract
             }
         }
 
-        public async Task CommitAsync()
+        public override async Task CommitAsync()
         {
             try
             {
@@ -67,7 +63,7 @@ namespace Generic.Repository.Abstract
                 throw; // Rethrow the exception
             }
         }
-        public void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
+        public override void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
         {
             dbContext.Entry(entity).State = state;
         }
@@ -86,7 +82,7 @@ namespace Generic.Repository.Abstract
         }
 
         // Dispose pattern implementation
-        protected virtual void Dispose(bool disposing)
+        public void Dispose(bool disposing)
         {
             if (!disposed)
             {
@@ -98,7 +94,7 @@ namespace Generic.Repository.Abstract
             }
             disposed = true;
         }
-        public async Task DisposeAsync()
+        public override async Task DisposeAsync()
         {
             if (!disposed)
             {
@@ -107,12 +103,12 @@ namespace Generic.Repository.Abstract
                 disposed = true;
             }
         }
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public async Task SaveAsync()
+        public override async Task SaveAsync()
         {
             try
             {
@@ -126,7 +122,7 @@ namespace Generic.Repository.Abstract
             }
         }
 
-        public async Task SaveAndCommitAsync()
+        public override async Task SaveAndCommitAsync()
         {
             try
             {
@@ -139,7 +135,7 @@ namespace Generic.Repository.Abstract
                 throw;
             }
         }
-        //public virtual bool Insert(TEntity entity)
+        //public override bool Insert(TEntity entity)
         //{
         //    try
         //    {
@@ -153,7 +149,7 @@ namespace Generic.Repository.Abstract
         //        return false;
         //    }
         //}
-        //public virtual bool InsertRange(IEnumerable<TEntity> entities)
+        //public override bool InsertRange(IEnumerable<TEntity> entities)
         //{
         //    try
         //    {
@@ -167,7 +163,7 @@ namespace Generic.Repository.Abstract
         //    }
         //}
 
-        public virtual async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
+        public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -179,7 +175,7 @@ namespace Generic.Repository.Abstract
                 return false;
             }
         }
-        public bool Delete(TEntity entityToDelete)
+        public override bool Delete(TEntity entityToDelete)
         {
             try
             {
@@ -197,7 +193,7 @@ namespace Generic.Repository.Abstract
                 return false;
             }
         }
-        public async Task<bool> Delete(object id)
+        public override async Task<bool> Delete(object id)
         {
             try
             {
@@ -215,7 +211,7 @@ namespace Generic.Repository.Abstract
                 return false;
             }
         }
-        public bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
+        public override bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
         {
             try
             {
@@ -235,7 +231,7 @@ namespace Generic.Repository.Abstract
             }
         }
 
-        public async Task<TEntity?> GetByIdAsync(object id)
+        public override async Task<TEntity?> GetByIdAsync(object id)
         {
             try
             {
@@ -333,7 +329,7 @@ namespace Generic.Repository.Abstract
         //    }
         //}
 
-        public bool Update(TEntity entityToUpdate)
+        public override bool Update(TEntity entityToUpdate)
         {
             try
             {
@@ -349,7 +345,7 @@ namespace Generic.Repository.Abstract
                 return false;
             }
         }
-        public bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+        public override bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
         {
             try
             {
@@ -367,7 +363,7 @@ namespace Generic.Repository.Abstract
             }
         }
 
-        public async Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
+        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
         {
             try
             {
@@ -405,6 +401,5 @@ namespace Generic.Repository.Abstract
                 return (null, -2);
             }
         }
-
     }
 }

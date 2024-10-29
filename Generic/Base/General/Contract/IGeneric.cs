@@ -9,7 +9,7 @@ using Generic.Base.Handler.SystemException.Contract;
 
 namespace Generic.Base.General.Contract
 {
-    internal interface IGeneric : IGenericMapHandler , IGenericLogHandler , IGenericExceptionHandler
+    internal interface IGeneric
     {
     }
 }

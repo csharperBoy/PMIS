@@ -18,7 +18,7 @@ namespace PMIS.Forms
         {
             InitializeComponent();
         }
-        IndicatorService indicatorService = new IndicatorService();
+       // IndicatorService indicatorService = new IndicatorService();
         private void MainForm_Load(object sender, EventArgs e)
         {
 

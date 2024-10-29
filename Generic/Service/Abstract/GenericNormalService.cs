@@ -14,7 +14,7 @@ using Generic.Base.Handler.SystemException;
 
 namespace Generic.Service.Abstract
 {
-    public abstract class AbstractGenericNormalService<TContext,TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto> : 
+    public abstract class GenericNormalService<TContext,TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto> : 
         IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto> ,
         IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         where TContext : DbContext
@@ -29,11 +29,12 @@ namespace Generic.Service.Abstract
         private IGenericRepository<TEntity> repository;
         private IGenericMapHandler mapper;
         private IGenericExceptionHandler exceptionHandler;
-        protected AbstractGenericNormalService()
+        private NormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> normalAddService;
+        protected GenericNormalService()
         {
-            repository = new GenericSqlServerRepository<TEntity, TContext>(context);
-            mapper = new GenericMapHandler();
-            exceptionHandler = new GenericExceptionHandler();
+            repository = new SqlServerRepository<TEntity, TContext>(context);
+            mapper = new AutoMapHandler();
+            exceptionHandler = new MyExceptionHandler();
         }
 
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
@@ -80,7 +81,6 @@ namespace Generic.Service.Abstract
             }
         }
 
-        
 
         public Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
         {

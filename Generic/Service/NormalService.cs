@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Generic.Service
 {
-    public class GenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto> 
-         :AbstractGenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>          
+    public class NormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto> 
+         : GenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>          
         where TContext : DbContext
         where TEntity : class
         where TEntityAddRequestDto : class
@@ -18,5 +18,6 @@ namespace Generic.Service
         where TEntityEditRequestDto : class
         where TEntityEditResponseDto : class
     {
+         
     }
 }

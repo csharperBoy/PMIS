@@ -1,4 +1,6 @@
 ﻿using Generic.Base;
+using Generic.Base.Handler.Map;
+using Generic.Base.Handler.Map.Abstract;
 using PMIS.Bases;
 using PMIS.DTO.Indicator;
 using PMIS.Models;
@@ -23,7 +25,8 @@ namespace PMIS.Forms
         }
 
         private async void LoginForm_Load(object sender, EventArgs e)
-        {                        
+        {
+           // IndicatorAddRequestDto a = await GenericMapHandler.StaticMap<AutoMapHandler,Indicator, IndicatorAddRequestDto>(new AutoMapHandler(), new Indicator() { Code = "Ali"});
             new PMIS.Bases.Initializer().Initialize();
         }
 

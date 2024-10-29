@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Service.Abstract
 {
-    public abstract class AbstractGenericNormalEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto> : IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
+    public abstract class GenericNormalEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto> : IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         where TEntity : class
         where TEntityEditRequestDto : class
         where TEntityEditResponseDto : class

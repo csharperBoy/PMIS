@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace PMIS.Services
 {
     public class IndicatorService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>        
-    : GenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>
+    : NormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>
         where TContext : DbContext
         where TEntity : class
         where TEntityAddRequestDto : class
@@ -21,18 +21,18 @@ namespace PMIS.Services
         where TEntityEditRequestDto : class
         where TEntityEditResponseDto : class
     {
-
-        protected override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        {
+         
+        //protected override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        //{
            
-            if (source is Indicator src && destination is IndicatorAddResponseDto dest)
-            {
-                //dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
+        //    if (source is Indicator src && destination is IndicatorAddResponseDto dest)
+        //    {
+        //        //dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
                 
-            }
-            return destination;
+        //    }
+        //    return destination;
 
-        }
+        //}
 
 
     }

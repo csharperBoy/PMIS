@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.Map;
 using Generic.Repository;
 using Generic.Repository.Contract;
 using Generic.Service.Contract;
@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Generic.Service.Abstract
 {
-    public abstract class AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
-        : AbstractGenericMapHandler
+    public abstract class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
+        : AutoMapHandler
         , IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
         where TEntity : class
@@ -23,9 +23,9 @@ namespace Generic.Service.Abstract
     {
         private TContext context;
         private IGenericRepository<TEntity> repository;
-        protected AbstractGenericNormalAddService()
+        protected GenericNormalAddService()
         {
-            repository = new GenericSqlServerRepository<TEntity, TContext>(context);
+            repository = new SqlServerRepository<TEntity, TContext>(context);
         }
 
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
