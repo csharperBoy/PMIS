@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <Folder Include="Base\Handler\Exception\Contract\" />
-    <Folder Include="Base\Handler\Log\Contract\" />
     <Folder Include="Base\Handler\Map\Contract\" />
   </ItemGroup>
 
