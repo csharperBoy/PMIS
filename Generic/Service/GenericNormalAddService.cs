@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Generic.Base;
 using Generic.Base.Contract;
+using Generic.Base.Handler.Map.Abstract;
 using Generic.Repository;
 using Generic.Repository.Contract;
 using Generic.Service.Contract;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Generic.Service
 {
     public abstract class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> 
-        : GenericMapper
+        : AbstractGenericMapper
         , IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
         where TEntity : class

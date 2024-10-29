@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base
+namespace Generic.Base.Handler.Map.Abstract
 {
-    public abstract class GenericMapper : IGenericMapper        
+    public abstract class AbstractGenericMapper : IGenericMapper
     {
         public async Task<TDestination> Map<TSource, TDestination>(TSource source)
            where TDestination : class
@@ -21,10 +21,10 @@ namespace Generic.Base
             });
             var mapper = new Mapper(config);
             TDestination destination = mapper.Map<TDestination>(source);
-            destination = await ExtraMap( source, destination);
+            destination = await ExtraMap(source, destination);
             return destination;
         }
-        protected virtual async Task<TDestination> ExtraMap<TSource,TDestination>( TSource source, TDestination destination)            
+        protected virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {
