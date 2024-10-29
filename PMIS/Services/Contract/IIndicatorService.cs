@@ -1,4 +1,6 @@
-﻿using Generic.Service.Contract;
+﻿using Generic.Service;
+using Generic.Service.Contract;
+using Microsoft.EntityFrameworkCore;
 using PMIS.DTO.Indicator;
 using PMIS.Models;
 using System;
@@ -9,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services.Contract
 {
-    public interface IIndicatorService //: IGenericService<Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchRequestDto, IndicatorSearchResponseDto>
-    : IGenericAddService<Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto>
+    public interface IIndicatorService
     {
          
     }

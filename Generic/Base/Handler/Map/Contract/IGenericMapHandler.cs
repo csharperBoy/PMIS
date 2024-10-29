@@ -11,5 +11,7 @@ namespace Generic.Base.Handler.Map.Contract
         Task<TDestination> Map<TSource, TDestination>(TSource source)
             where TDestination : class
             where TSource : class;
+
+        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Generic.Base.General;
 using Generic.Base.Handler.Map.Contract;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace Generic.Base.Handler.Map.Abstract
         {
             return destination;
         }
+
+       
         //public async Task<TEntityDestination> Map(TEntitySource source)
         //{
         //    try

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Service.Contract
 {
-    public interface IGenericService<TEntity,
+    public interface IGenericNormalServiceTest<TEntity,
                                      TEntityAddRequestDto,
                                      TEntityAddResponseDto,
                                      TEntityEditRequestDto,
