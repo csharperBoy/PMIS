@@ -14,7 +14,7 @@ namespace PMIS.DTO.Indicator
         public class Filters
         {
             //public int Id { get; set; }
-            public 
+             
             public string Code { get; set; } = null!;
 
             public string Title { get; set; } = null!;
