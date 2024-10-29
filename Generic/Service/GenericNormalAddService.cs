@@ -27,6 +27,7 @@ namespace Generic.Service
         {
             repository = new GenericSqlServerRepository<TEntity,TContext>(context);
         }
+      
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
             try
@@ -42,21 +43,25 @@ namespace Generic.Service
                     TEntity entity = null;
                     try
                     {
-                        //entity = await mapperRequestToEntity.Map(req);
+                        entity = await Map<TEntityAddRequestDto,TEntity>(req);
 
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
                     }
                     catch (Exception ex)
                     {
-                       // results.Add(mapperEntityToResponse.Map(entity, ex.Message));
+                        TEntityAddResponseDto responseTemp = await Map<TEntity, TEntityAddResponseDto>(entity);
+
+                        
+                        responseTemp = (TEntityAddResponseDto) await AssignExceptionInfoToObject(responseTemp, ex);
+                        results.Add(responseTemp);
                     }
 
                     if (!result)
                         resultIsSuccess = false;
 
 
-                    //results.Add(mapperEntityToResponse.Map(entity));
+                    results.Add(await Map<TEntity, TEntityAddResponseDto>(entity));
                 }
                 await repository.CommitAsync();
                 return (resultIsSuccess, results);
@@ -65,6 +70,16 @@ namespace Generic.Service
             {
                 throw;
             }
+        }
+
+        protected virtual async Task<object> AssignExceptionInfoToObject(object responseTemp, Exception ex)
+        {
+            var errorMessageProperty = typeof(object).GetProperty("ErrorMessage");
+            if (errorMessageProperty != null)
+            {
+                errorMessageProperty.SetValue(responseTemp, ex.Message);
+            }
+            return responseTemp;
         }
 
         public Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)

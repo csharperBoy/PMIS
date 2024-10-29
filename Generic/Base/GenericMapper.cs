@@ -21,12 +21,12 @@ namespace Generic.Base
             });
             var mapper = new Mapper(config);
             TDestination destination = mapper.Map<TDestination>(source);
-            destination = await ExtraMap(destination, source);
+            destination = await ExtraMap( source, destination);
             return destination;
         }
-        protected virtual async Task<TDestination> ExtraMap<TDestination, TSource>(TDestination destination, TSource source)
-            where TDestination : class
+        protected virtual async Task<TDestination> ExtraMap<TSource,TDestination>( TSource source, TDestination destination)            
             where TSource : class
+            where TDestination : class
         {
             return destination;
         }

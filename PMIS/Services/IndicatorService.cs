@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.Indicator;
+﻿using Generic.Service;
+using PMIS.DTO.Indicator;
 using PMIS.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,22 @@ using System.Threading.Tasks;
 namespace PMIS.Services
 {
     public class IndicatorService //: GenericService<Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchRequestDto, IndicatorSearchResponseDto>
-    {       
+    :GenericNormalAddService<PmisContext,Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto>
+    {
+
+
+        protected override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        {
+            if (source is Indicator src && destination is IndicatorAddResponseDto dest)
+            {
+                dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
+                
+            }
+            return destination;
+
+        }
+
+
         //protected override Indicator mapAddReqToEntity(IndicatorAddRequestDto reqEntity)
         //{
 
@@ -40,7 +56,7 @@ namespace PMIS.Services
         //        IsSuccess = entity.Id == 0 ? false : true , 
         //        ErrorMessage = errorMessage
         //    };
-            
+
         //    return model;
         //}
         //protected override Indicator mapDeleteReqToEntity(IndicatorDeleteRequestDto reqEntities)
