@@ -29,10 +29,10 @@ namespace Generic.Base.Handler.Map.Abstract
            where TDestination : class
            where TSource : class;
 
-        public delegate Task MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
+        public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
         public event MappingHandler<object, object> MappingEvent;
 
-        public async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {

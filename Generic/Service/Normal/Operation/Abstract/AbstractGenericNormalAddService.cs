@@ -21,9 +21,9 @@ namespace Generic.Service.Normal.Operation.Abstract
     public abstract class AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         : IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
-        where TEntity : class
-        where TEntityAddRequestDto : class
-        where TEntityAddResponseDto : class
+        where TEntity : class, new()
+        where TEntityAddRequestDto : class, new()
+        where TEntityAddResponseDto : class, new()
     {        
         private AbstractGenericRepository<TEntity,TContext> repository;
         private AbstractGenericMapHandler mapper;
@@ -57,7 +57,8 @@ namespace Generic.Service.Normal.Operation.Abstract
                 List<TEntityAddResponseDto> results = new List<TEntityAddResponseDto>();
                 foreach (var req in requestInput)
                 {
-                    TEntity entity = null;
+                    TEntity entity = new TEntity();
+                    TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
                     try
                     {
                         entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
@@ -67,7 +68,8 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
-                        TEntityAddResponseDto responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
+
+                        responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
 
 
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
@@ -77,8 +79,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                     if (!result)
                         resultIsSuccess = false;
 
-
-                    results.Add(await mapper.Map<TEntity, TEntityAddResponseDto>(entity));
+                    responseTemp = new TEntityAddResponseDto();
+                    responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
+                    results.Add(responseTemp);
                 }
                 await repository.CommitAsync();
                 return (resultIsSuccess, results);

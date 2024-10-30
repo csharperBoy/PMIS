@@ -22,7 +22,7 @@ namespace PMIS.Services
         public IndicatorService(AbstractGenericRepository<Indicator, PmisContext> _repository, AbstractGenericMapHandler _mapper, AbstractGenericExceptionHandler _exceptionHandler) : base(_repository, _mapper, _exceptionHandler)
         {
         }
-        public override async Task ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        public override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         {
             if (source is IndicatorAddRequestDto src1 && destination is Indicator dest1) 
             {
@@ -32,7 +32,7 @@ namespace PMIS.Services
             {
                 dest2.ErrorMessage = $"{src2.Code} {src2.Title}";
             }
-            await Task.CompletedTask;
+            return await Task.FromResult(destination);
         }
     }
 }

@@ -13,9 +13,9 @@ namespace Generic.Service.Normal.Operation
 {
     internal class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> : AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
-        where TEntity : class
-        where TEntityAddRequestDto : class
-        where TEntityAddResponseDto : class
+        where TEntity : class, new()
+        where TEntityAddRequestDto : class, new()
+        where TEntityAddResponseDto : class, new()
     {
         public GenericNormalAddService(AbstractGenericRepository<TEntity, TContext> _repository, AbstractGenericMapHandler _mapper, AbstractGenericExceptionHandler _exceptionHandler) : base(_repository, _mapper, _exceptionHandler)
         {

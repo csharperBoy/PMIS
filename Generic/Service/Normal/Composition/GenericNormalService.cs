@@ -16,11 +16,11 @@ namespace Generic.Service.Normal.Composition
     public class GenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>
          : AbstractGenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto>
         where TContext : DbContext
-        where TEntity : class
-        where TEntityAddRequestDto : class
-        where TEntityAddResponseDto : class
-        where TEntityEditRequestDto : class
-        where TEntityEditResponseDto : class
+        where TEntity : class, new()
+        where TEntityAddRequestDto : class, new()
+        where TEntityAddResponseDto : class, new()
+        where TEntityEditRequestDto : class, new()
+        where TEntityEditResponseDto : class, new()
     {
         GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> normalAddService;
         GenericNormalEditService<TContext, TEntity, TEntityEditRequestDto, TEntityEditResponseDto> normalEditService;
@@ -37,19 +37,18 @@ namespace Generic.Service.Normal.Composition
             mapper = _mapper;
             mapper.MappingEvent += ExtraMap;
         }
-        public virtual async Task ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         where TSource : class
-        where TDestination : class
+        where TDestination : class, new()
         {
- 
-            await Task.CompletedTask; 
+            return await Task.FromResult(destination);
         }
 
-        public async Task<TDestination> PerformMapping<TSource, TDestination>(TSource source, TDestination destination)
+        public async Task PerformMapping<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {
-            return await mapper.ExtraMap(source, destination);
+            await mapper.ExtraMap<TSource, TDestination>(source, destination);
         }
 
         //public virtual async Task<TDestination> Map<TSource, TDestination>(TSource source)
