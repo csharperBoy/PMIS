@@ -29,49 +29,27 @@ namespace Generic.Base.Handler.Map.Abstract
            where TDestination : class
            where TSource : class;
 
-        public event Func<object, object, Task> MapEvent;
-        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        public delegate Task MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
+        public event MappingHandler<object, object> MappingEvent;
+
+        public async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {
             try
             {
-                if (MapEvent != null)
+                if (MappingEvent != null)
                 {
-                    await MapEvent.Invoke(source, destination);
+                    await MappingEvent.Invoke(source, destination);
                 }
+
                 return await Task.FromResult(destination);
             }
             catch (Exception)
             {
+
                 throw;
             }
-        }
-
-
-
-
-
-
-
-
-
-        public delegate Task MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
-        public event MappingHandler<object, object> MappingEvent;
-
-        public async Task<TDestination> Mapping<TSource, TDestination>(TSource source, TDestination destination)
-            where TSource : class
-            where TDestination : class
-        {
-            Console.WriteLine("Mapping is being performed...");
-
-            // فراخوانی رویداد در صورت وجود  
-            if (MappingEvent != null)
-            {
-                await MappingEvent.Invoke(source, destination);
-            }
-
-            return destination;
         }
     }
 }

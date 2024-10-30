@@ -1,12 +1,698 @@
-﻿using Generic.Repository.Abstract;
+﻿//using Generic.Repository.Abstract;
+//using Generic.Repository.Contract;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Storage;
+//using System.Linq.Expressions;
+
+//namespace Generic.Repository
+//{
+//    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext> ,IDisposable
+//        where TEntity : class
+//        where TContext : DbContext
+//    {
+//        protected DbContext dbContext;
+//        internal DbSet<TEntity> dbSet;
+//        private IDbContextTransaction transaction;
+//        private bool disposed = false;
+//        // protected readonly ILogger _logger;
+//        public GenericSqlServerRepository(TContext dbContext)
+//        {
+//            this.dbContext = dbContext;
+//            dbSet = dbContext.Set<TEntity>();
+//            transaction = dbContext.Database.BeginTransaction();
+//            //  _logger = logger;
+//        }
+
+//        public override async Task<bool> InsertAsync(TEntity entity)
+//        {
+//            try
+//            {
+//                await dbSet.AddAsync(entity);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+//        public override void SetCommandTimeout(int timeout)
+//        {
+//            try
+//            {
+//                dbContext.Database.SetCommandTimeout(timeout);
+//            }
+//            catch (Exception ex)
+//            {
+//                throw;
+//            }
+//        }
+
+//        public override async Task CommitAsync()
+//        {
+//            try
+//            {
+//                //await dbContext.SaveChangesAsync(); // Save changes to the database
+//                await transaction.CommitAsync(); // Commit the transaction
+//            }
+//            catch (Exception)
+//            {
+//                // Handle exceptions appropriately (logging, etc.)
+//                await transaction.RollbackAsync(); // Roll back the transaction
+//                throw; // Rethrow the exception
+//            }
+//        }
+//        public override void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
+//        {
+//            dbContext.Entry(entity).State = state;
+//        }
+
+//        public async Task RollbackAsync()
+//        {
+//            try
+//            {
+//                await transaction.RollbackAsync(); // Roll back the transaction
+//            }
+//            catch (Exception)
+//            {
+//                // Handle exceptions appropriately (logging, etc.)
+//                throw; // Rethrow the exception
+//            }
+//        }
+
+//        // Dispose pattern implementation
+//        public void Dispose(bool disposing)
+//        {
+//            if (!disposed)
+//            {
+//                if (disposing)
+//                {
+//                    transaction.Dispose(); // Dispose of the transaction                   
+//                    dbContext.Dispose(); // Dispose of the DbContext
+//                }
+//            }
+//            disposed = true;
+//        }
+//        public override async Task DisposeAsync()
+//        {
+//            if (!disposed)
+//            {
+//                await transaction.DisposeAsync(); // Dispose of the transaction                
+//                await dbContext.DisposeAsync(); // Dispose of the DbContext
+//                disposed = true;
+//            }
+//        }
+//        public override void Dispose()
+//        {
+//            Dispose(true);
+//            GC.SuppressFinalize(this);
+//        }
+//        public override async Task SaveAsync()
+//        {
+//            try
+//            {
+//                await dbContext.SaveChangesAsync(); // Save changes to the database                
+//            }
+//            catch (Exception)
+//            {
+//                // Handle exceptions appropriately (logging, etc.)
+//                await transaction.RollbackAsync(); // Roll back the transaction
+//                throw; // Rethrow the exception
+//            }
+//        }
+
+//        public override async Task SaveAndCommitAsync()
+//        {
+//            try
+//            {
+//                await SaveAsync();
+//                await CommitAsync();
+//            }
+//            catch (Exception ex)
+//            {
+//                await RollbackAsync();
+//                throw;
+//            }
+//        }
+//        //public override bool Insert(TEntity entity)
+//        //{
+//        //    try
+//        //    {
+//        //        dbSet.Add(entity);
+//        //        return true;
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+
+//        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//        //        return false;
+//        //    }
+//        //}
+//        //public override bool InsertRange(IEnumerable<TEntity> entities)
+//        //{
+//        //    try
+//        //    {
+//        //        dbSet.AddRange(entities);
+//        //        return true;
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+
+//        //        return false;
+//        //    }
+//        //}
+
+//        public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
+//        {
+//            try
+//            {
+//                await dbSet.AddRangeAsync(entities);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+//                return false;
+//            }
+//        }
+//        public override bool Delete(TEntity entityToDelete)
+//        {
+//            try
+//            {
+//                if (dbContext.Entry(entityToDelete).State == EntityState.Detached)
+//                {
+//                    dbSet.Attach(entityToDelete);
+//                }
+//                dbSet.Remove(entityToDelete);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+//        public override async Task<bool> Delete(object id)
+//        {
+//            try
+//            {
+//                TEntity? entityToDelete = await GetByIdAsync(id);
+//                if (entityToDelete != null)
+//                {
+//                    return Delete(entityToDelete);
+//                }
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+//        public override bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
+//        {
+//            try
+//            {
+//                //if (dbContext.Entry(entitiesToDelete).State == EntityState.Detached)
+//                //{
+//                //    dbSet.AttachRange(entitiesToDelete);
+//                //}
+//                //dbSet.RemoveRange(entitiesToDelete);
+//                dbContext.RemoveRange(entitiesToDelete);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+
+//        public override async Task<TEntity?> GetByIdAsync(object id)
+//        {
+//            try
+//            {
+//                TEntity? entity = await dbSet.FindAsync(id);
+//                return entity;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return null;
+//            }
+//        }
+//        //public TEntity? GetById(object id)
+//        //{
+//        //    try
+//        //    {
+//        //        TEntity? entity = dbSet.Find(id);
+//        //        return entity;
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+
+//        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//        //        return null;
+//        //    }
+//        //}
+
+//        //public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+//        //{
+//        //    try
+//        //    {
+//        //        IQueryable<TEntity> query = dbSet;
+
+//        //        if (filter != null)
+//        //        {
+//        //            query = query.Where(filter);
+//        //        }
+
+//        //        foreach (var includeProperty in includeProperties.Split
+//        //            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+//        //        {
+//        //            query = query.Include(includeProperty);
+//        //        }
+
+//        //        if (orderBy != null)
+//        //        {
+//        //            return orderBy(query).ToList();
+//        //        }
+//        //        else
+//        //        {
+//        //            return query.ToList();
+//        //        }
+
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+
+//        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//        //        return null;
+//        //    }
+//        //}
+//        //public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+//        //{
+//        //    try
+//        //    {
+//        //        IQueryable<TEntity> query = dbSet;
+
+//        //        if (filter != null)
+//        //        {
+//        //            query = query.Where(filter);
+//        //        }
+
+//        //        foreach (var includeProperty in includeProperties.Split
+//        //            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+//        //        {
+//        //            query = query.Include(includeProperty);
+//        //        }
+
+//        //        if (orderBy != null)
+//        //        {
+//        //            return await orderBy(query).ToListAsync();
+//        //        }
+//        //        else
+//        //        {
+//        //            return await query.ToListAsync();
+//        //        }
+
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+
+//        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//        //        return null;
+//        //    }
+//        //}
+
+//        public override bool Update(TEntity entityToUpdate)
+//        {
+//            try
+//            {
+
+//                dbSet.Attach(entityToUpdate);
+//                dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+//        public override bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+//        {
+//            try
+//            {
+//                foreach (var item in entitiesToUpdate)
+//                {
+//                    Update(item);
+//                }
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return false;
+//            }
+//        }
+
+//        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
+//        {
+//            try
+//            {
+//                IQueryable<TEntity> query = dbSet;
+
+//                if (filter != null)
+//                {
+//                    query = query.Where(filter);
+//                }
+//                int count = query.Count();
+//                foreach (var includeProperty in includeProperties.Split
+//                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+//                {
+//                    query = query.Include(includeProperty);
+//                }
+
+//                if (orderBy != null)
+//                {
+//                    query = orderBy(query).AsQueryable();
+//                }
+
+//                if (pageNumber > 0 && recordCount > 0)
+//                {
+//                    int skip = (pageNumber - 1) * recordCount;
+//                    query = query.Skip(skip).Take(recordCount);
+//                }
+//                var resultList = await query.ToListAsync();
+//                return (resultList, count);
+
+//            }
+//            catch (Exception ex)
+//            {
+
+//                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
+//                return (null, -2);
+//            }
+//        }
+//    }
+//}
+
+#region old
+//using Generic.Repository.Abstract;
+//using Generic.Repository.Contract;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Storage;
+//using System.Linq.Expressions;
+
+//namespace Generic.Repository
+//{
+//    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
+//        where TEntity : class
+//        where TContext : DbContext
+//    {
+//        protected DbContext dbContext;
+//        internal DbSet<TEntity> dbSet;
+//        private IDbContextTransaction transaction;
+//        private bool disposed = false;
+//        public GenericSqlServerRepository(TContext dbContext)
+//        {
+//            this.dbContext = dbContext;
+//            dbSet = dbContext.Set<TEntity>();
+//            transaction = dbContext.Database.BeginTransaction();
+
+//        }
+
+//        public override async Task<bool> InsertAsync(TEntity entity)
+//        {
+//            try
+//            {
+//                await dbSet.AddAsync(entity);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return false;
+//            }
+//        }
+//        public override void SetCommandTimeout(int timeout)
+//        {
+//            try
+//            {
+//                dbContext.Database.SetCommandTimeout(timeout);
+//            }
+//            catch (Exception ex)
+//            {
+//                throw;
+//            }
+//        }
+
+//        public override async Task CommitAsync()
+//        {
+//            try
+//            {
+//                await transaction.CommitAsync();
+//            }
+//            catch (Exception)
+//            {
+//                await transaction.RollbackAsync();
+//                throw;
+//            }
+//        }
+//        public override void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
+//        {
+//            dbContext.Entry(entity).State = state;
+//        }
+
+//        public async Task RollbackAsync()
+//        {
+//            try
+//            {
+//                await transaction.RollbackAsync();
+//            }
+//            catch (Exception)
+//            {
+//                throw;
+//            }
+//        }
+
+//        public void Dispose(bool disposing)
+//        {
+//            if (!disposed)
+//            {
+//                if (disposing)
+//                {
+//                    transaction.Dispose();
+//                    dbContext.Dispose();
+//                }
+//            }
+//            disposed = true;
+//        }
+//        public override async Task DisposeAsync()
+//        {
+//            if (!disposed)
+//            {
+//                await transaction.DisposeAsync();
+//                await dbContext.DisposeAsync();
+//                disposed = true;
+//            }
+//        }
+//        public override void Dispose()
+//        {
+//            Dispose(true);
+//            GC.SuppressFinalize(this);
+//        }
+//        public override async Task SaveAsync()
+//        {
+//            try
+//            {
+//                await dbContext.SaveChangesAsync();
+//            }
+//            catch (Exception)
+//            {
+//                await transaction.RollbackAsync();
+//                throw;
+//            }
+
+//        public override async Task SaveAndCommitAsync()
+//        {
+//            try
+//            {
+//                await SaveAsync();
+//                await CommitAsync();
+//            }
+//            catch (Exception ex)
+//            {
+//                await RollbackAsync();
+//                throw;
+//            }
+//        }
+//        public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
+//        {
+//            try
+//            {
+//                await dbSet.AddRangeAsync(entities);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+//                return false;
+//            }
+//        }
+//        public override bool Delete(TEntity entityToDelete)
+//        {
+//            try
+//            {
+//                if (dbContext.Entry(entityToDelete).State == EntityState.Detached)
+//                {
+//                    dbSet.Attach(entityToDelete);
+//                }
+//                dbSet.Remove(entityToDelete);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return false;
+//            }
+//        }
+//        public override async Task<bool> Delete(object id)
+//        {
+//            try
+//            {
+//                TEntity? entityToDelete = await GetByIdAsync(id);
+//                if (entityToDelete != null)
+//                {
+//                    return Delete(entityToDelete);
+//                }
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return false;
+//            }
+//        }
+//        public override bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
+//        {
+//            try
+//            {
+//                dbContext.RemoveRange(entitiesToDelete);
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+//                return false;
+//            }
+//        }
+
+//        public override async Task<TEntity?> GetByIdAsync(object id)
+//        {
+//            try
+//            {
+//                TEntity? entity = await dbSet.FindAsync(id);
+//                return entity;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return null;
+//            }
+//        }
+
+//        public override bool Update(TEntity entityToUpdate)
+//        {
+//            try
+//            {
+
+//                dbSet.Attach(entityToUpdate);
+//                dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return false;
+//            }
+//        }
+//        public override bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+//        {
+//            try
+//            {
+//                foreach (var item in entitiesToUpdate)
+//                {
+//                    Update(item);
+//                }
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return false;
+//            }
+//        }
+
+//        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
+//        {
+//            try
+//            {
+//                IQueryable<TEntity> query = dbSet;
+
+//                if (filter != null)
+//                {
+//                    query = query.Where(filter);
+//                }
+//                int count = query.Count();
+//                foreach (var includeProperty in includeProperties.Split
+//                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+//                {
+//                    query = query.Include(includeProperty);
+//                }
+
+//                if (orderBy != null)
+//                {
+//                    query = orderBy(query).AsQueryable();
+//                }
+
+//                if (pageNumber > 0 && recordCount > 0)
+//                {
+//                    int skip = (pageNumber - 1) * recordCount;
+//                    query = query.Skip(skip).Take(recordCount);
+//                }
+//                var resultList = await query.ToListAsync();
+//                return (resultList, count);
+
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return (null, -2);
+//            }
+//        }
+//    }
+//}
+
+#endregion
+using Generic.Repository.Abstract;
 using Generic.Repository.Contract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Generic.Repository
 {
-    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>
+    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
         where TEntity : class
         where TContext : DbContext
     {
@@ -14,13 +700,12 @@ namespace Generic.Repository
         internal DbSet<TEntity> dbSet;
         private IDbContextTransaction transaction;
         private bool disposed = false;
-        // protected readonly ILogger _logger;
+
         public GenericSqlServerRepository(TContext dbContext)
         {
             this.dbContext = dbContext;
             dbSet = dbContext.Set<TEntity>();
             transaction = dbContext.Database.BeginTransaction();
-            //  _logger = logger;
         }
 
         public override async Task<bool> InsertAsync(TEntity entity)
@@ -30,13 +715,12 @@ namespace Generic.Repository
                 await dbSet.AddAsync(entity);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
+
         public override void SetCommandTimeout(int timeout)
         {
             try
@@ -53,17 +737,18 @@ namespace Generic.Repository
         {
             try
             {
-                //await dbContext.SaveChangesAsync(); // Save changes to the database
-                await transaction.CommitAsync(); // Commit the transaction
+                await dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after commit
             }
             catch (Exception)
             {
-                // Handle exceptions appropriately (logging, etc.)
-                await transaction.RollbackAsync(); // Roll back the transaction
-                throw; // Rethrow the exception
+                await transaction.RollbackAsync();
+                throw;
             }
         }
-        public override void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
+
+        public override void SetEntityState<TEntity>(TEntity entity, EntityState state)
         {
             dbContext.Entry(entity).State = state;
         }
@@ -72,53 +757,54 @@ namespace Generic.Repository
         {
             try
             {
-                await transaction.RollbackAsync(); // Roll back the transaction
+                await transaction.RollbackAsync();
+                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after rollback
             }
             catch (Exception)
             {
-                // Handle exceptions appropriately (logging, etc.)
-                throw; // Rethrow the exception
+                throw;
             }
         }
 
-        // Dispose pattern implementation
         public void Dispose(bool disposing)
         {
             if (!disposed)
             {
                 if (disposing)
                 {
-                    transaction.Dispose(); // Dispose of the transaction                   
-                    dbContext.Dispose(); // Dispose of the DbContext
+                    transaction.Dispose();
+                    dbContext.Dispose();
                 }
             }
             disposed = true;
         }
+
         public override async Task DisposeAsync()
         {
             if (!disposed)
             {
-                await transaction.DisposeAsync(); // Dispose of the transaction                
-                await dbContext.DisposeAsync(); // Dispose of the DbContext
+                await transaction.DisposeAsync();
+                await dbContext.DisposeAsync();
                 disposed = true;
             }
         }
+
         public override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         public override async Task SaveAsync()
         {
             try
             {
-                await dbContext.SaveChangesAsync(); // Save changes to the database                
+                await dbContext.SaveChangesAsync();
             }
             catch (Exception)
             {
-                // Handle exceptions appropriately (logging, etc.)
-                await transaction.RollbackAsync(); // Roll back the transaction
-                throw; // Rethrow the exception
+                await RollbackAsync();
+                throw;
             }
         }
 
@@ -129,39 +815,12 @@ namespace Generic.Repository
                 await SaveAsync();
                 await CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await RollbackAsync();
                 throw;
             }
         }
-        //public override bool Insert(TEntity entity)
-        //{
-        //    try
-        //    {
-        //        dbSet.Add(entity);
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
-        //        return false;
-        //    }
-        //}
-        //public override bool InsertRange(IEnumerable<TEntity> entities)
-        //{
-        //    try
-        //    {
-        //        dbSet.AddRange(entities);
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return false;
-        //    }
-        //}
 
         public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
         {
@@ -170,11 +829,12 @@ namespace Generic.Repository
                 await dbSet.AddRangeAsync(entities);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
+
         public override bool Delete(TEntity entityToDelete)
         {
             try
@@ -186,47 +846,38 @@ namespace Generic.Repository
                 dbSet.Remove(entityToDelete);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
+
         public override async Task<bool> Delete(object id)
         {
             try
             {
-                TEntity? entityToDelete = await GetByIdAsync(id);
+                TEntity entityToDelete = await GetByIdAsync(id);
                 if (entityToDelete != null)
                 {
                     return Delete(entityToDelete);
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
+
         public override bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
         {
             try
             {
-                //if (dbContext.Entry(entitiesToDelete).State == EntityState.Detached)
-                //{
-                //    dbSet.AttachRange(entitiesToDelete);
-                //}
-                //dbSet.RemoveRange(entitiesToDelete);
-                dbContext.RemoveRange(entitiesToDelete);
+                dbSet.RemoveRange(entitiesToDelete);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
@@ -235,116 +886,29 @@ namespace Generic.Repository
         {
             try
             {
-                TEntity? entity = await dbSet.FindAsync(id);
+                TEntity entity = await dbSet.FindAsync(id);
                 return entity;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return null;
             }
         }
-        //public TEntity? GetById(object id)
-        //{
-        //    try
-        //    {
-        //        TEntity? entity = dbSet.Find(id);
-        //        return entity;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
-        //        return null;
-        //    }
-        //}
-
-        //public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
-        //{
-        //    try
-        //    {
-        //        IQueryable<TEntity> query = dbSet;
-
-        //        if (filter != null)
-        //        {
-        //            query = query.Where(filter);
-        //        }
-
-        //        foreach (var includeProperty in includeProperties.Split
-        //            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-        //        {
-        //            query = query.Include(includeProperty);
-        //        }
-
-        //        if (orderBy != null)
-        //        {
-        //            return orderBy(query).ToList();
-        //        }
-        //        else
-        //        {
-        //            return query.ToList();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
-        //        return null;
-        //    }
-        //}
-        //public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
-        //{
-        //    try
-        //    {
-        //        IQueryable<TEntity> query = dbSet;
-
-        //        if (filter != null)
-        //        {
-        //            query = query.Where(filter);
-        //        }
-
-        //        foreach (var includeProperty in includeProperties.Split
-        //            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-        //        {
-        //            query = query.Include(includeProperty);
-        //        }
-
-        //        if (orderBy != null)
-        //        {
-        //            return await orderBy(query).ToListAsync();
-        //        }
-        //        else
-        //        {
-        //            return await query.ToListAsync();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
-        //        return null;
-        //    }
-        //}
 
         public override bool Update(TEntity entityToUpdate)
         {
             try
             {
-
                 dbSet.Attach(entityToUpdate);
                 dbContext.Entry(entityToUpdate).State = EntityState.Modified;
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
+
         public override bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
         {
             try
@@ -355,10 +919,8 @@ namespace Generic.Repository
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return false;
             }
         }
@@ -368,23 +930,19 @@ namespace Generic.Repository
             try
             {
                 IQueryable<TEntity> query = dbSet;
-
                 if (filter != null)
                 {
                     query = query.Where(filter);
                 }
                 int count = query.Count();
-                foreach (var includeProperty in includeProperties.Split
-                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProperty);
                 }
-
                 if (orderBy != null)
                 {
                     query = orderBy(query).AsQueryable();
                 }
-
                 if (pageNumber > 0 && recordCount > 0)
                 {
                     int skip = (pageNumber - 1) * recordCount;
@@ -392,12 +950,9 @@ namespace Generic.Repository
                 }
                 var resultList = await query.ToListAsync();
                 return (resultList, count);
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                // _logger.LogError(ex, "{Repo} All function error", typeof(GenericRepository<TEntity>));
                 return (null, -2);
             }
         }

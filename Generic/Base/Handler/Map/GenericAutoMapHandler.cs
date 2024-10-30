@@ -21,8 +21,7 @@ namespace Generic.Base.Handler.Map
             });
             var mapper = new Mapper(config);
             TDestination destination = mapper.Map<TDestination>(source);
-            destination = await Mapping(source, destination); 
-           // destination = await ExtraMap(source, destination);
+            destination = await ExtraMap(source, destination); 
             return await Task.FromResult(destination);
         }
     }

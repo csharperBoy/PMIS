@@ -35,22 +35,21 @@ namespace Generic.Service.Normal.Composition
             normalAddService = new GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>(_repository,_mapper,_exceptionHandler);
             normalEditService = new GenericNormalEditService<TContext, TEntity, TEntityEditRequestDto, TEntityEditResponseDto>();
             mapper = _mapper;
-            mapper.MappingEvent += MyMapping;
+            mapper.MappingEvent += ExtraMap;
         }
-        public virtual async Task MyMapping<TSource, TDestination>(TSource source, TDestination destination)
+        public virtual async Task ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         where TSource : class
         where TDestination : class
         {
-
-            // می‌توانید منطق اضافی خود را در اینجا اضافه کنید.  
-            await Task.CompletedTask; // برای همگام سازی  
+ 
+            await Task.CompletedTask; 
         }
 
         public async Task<TDestination> PerformMapping<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {
-            return await mapper.Mapping(source, destination);
+            return await mapper.ExtraMap(source, destination);
         }
 
         //public virtual async Task<TDestination> Map<TSource, TDestination>(TSource source)

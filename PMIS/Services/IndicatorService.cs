@@ -18,26 +18,19 @@ namespace PMIS.Services
         : GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto>
     {
 
-        //protected override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        //{
-
-        //    if (source is Indicator src && destination is IndicatorAddResponseDto dest)
-        //    {
-        //        //dest.ErrorMessage = $"{src.FirstName} {src.LastName}";
-
-        //    }
-        //    return destination;
-
-        //}
+        
         public IndicatorService(AbstractGenericRepository<Indicator, PmisContext> _repository, AbstractGenericMapHandler _mapper, AbstractGenericExceptionHandler _exceptionHandler) : base(_repository, _mapper, _exceptionHandler)
         {
         }
-        public override async Task MyMapping<TSource, TDestination>(TSource source, TDestination destination)
+        public override async Task ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         {
-            if (source is Indicator src && destination is IndicatorAddResponseDto dest)
+            if (source is IndicatorAddRequestDto src1 && destination is Indicator dest1) 
             {
-                dest.ErrorMessage = $"{src.Code} {src.Title}";
-
+                dest1.SystemInfo = DateTime.Now.ToString();
+            }
+            else if(source is Indicator src2 && destination is IndicatorAddResponseDto dest2)
+            {
+                dest2.ErrorMessage = $"{src2.Code} {src2.Title}";
             }
             await Task.CompletedTask;
         }
