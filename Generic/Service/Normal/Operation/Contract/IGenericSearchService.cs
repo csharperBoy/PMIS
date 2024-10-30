@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service.Contract
+namespace Generic.Service.Normal.Operation.Contract
 {
     public interface IGenericSearchService<TEntity, TEntitySearchRequestDto, TEntitySearchResponseDto>
         where TEntity : class
@@ -12,6 +12,6 @@ namespace Generic.Service.Contract
         where TEntitySearchResponseDto : class
     {
         Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Search(IEnumerable<TEntitySearchRequestDto> requestInput);
-        
+
     }
 }

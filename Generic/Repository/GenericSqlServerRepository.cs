@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Generic.Repository
 {
-    public class SqlServerRepository<TEntity, TContext> : GenericRepository<TEntity, TContext>
+    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>
         where TEntity : class
         where TContext : DbContext
     {
@@ -15,7 +15,7 @@ namespace Generic.Repository
         private IDbContextTransaction transaction;
         private bool disposed = false;
         // protected readonly ILogger _logger;
-        public SqlServerRepository(TContext dbContext)
+        public GenericSqlServerRepository(TContext dbContext)
         {
             this.dbContext = dbContext;
             dbSet = dbContext.Set<TEntity>();

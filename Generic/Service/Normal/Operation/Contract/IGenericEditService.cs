@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service.Contract
+namespace Generic.Service.Normal.Operation.Contract
 {
     public interface IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         where TEntity : class

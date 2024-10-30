@@ -2,7 +2,7 @@
 
 namespace Generic.Base.Handler.SystemException.Abstract
 {
-    public abstract class GenericExceptionHandler : IGenericExceptionHandler
+    public abstract class AbstractGenericExceptionHandler : IGenericExceptionHandler
     {
         public async Task<object> AssignExceptionInfoToObject(object obj, Exception ex)
         {

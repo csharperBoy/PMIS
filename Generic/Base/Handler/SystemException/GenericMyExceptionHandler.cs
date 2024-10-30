@@ -3,7 +3,7 @@ using Generic.Base.Handler.SystemException.Contract;
 
 namespace Generic.Base.Handler.SystemException
 {
-    public class MyExceptionHandler : GenericExceptionHandler
+    public class GenericMyExceptionHandler : AbstractGenericExceptionHandler
     {
         
     }

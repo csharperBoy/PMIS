@@ -2,7 +2,7 @@
 
 namespace Generic.Base.Handler.Map.Abstract
 {
-    public abstract class GenericMapHandler : IGenericMapHandler
+    public abstract class AbstractGenericMapHandler : IGenericMapHandler
     {
         public static async Task<TDestination> StaticMap<TMapper, TSource, TDestination>(TMapper mapper, TSource source)
            where TDestination : class
@@ -28,7 +28,7 @@ namespace Generic.Base.Handler.Map.Abstract
         public abstract Task<TDestination> Map<TSource, TDestination>(TSource source)
            where TDestination : class
            where TSource : class;
-        protected virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
             where TDestination : class
         {

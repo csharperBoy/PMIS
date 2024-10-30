@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Generic.Repository.Abstract
 {
-    public abstract class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity>, IDisposable
+    public abstract class AbstractGenericRepository<TEntity, TContext> : IGenericRepository<TEntity>, IDisposable
     where TEntity : class
     where TContext : DbContext
     {

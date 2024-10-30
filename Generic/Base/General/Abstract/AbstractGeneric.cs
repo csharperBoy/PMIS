@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.General.Abstract
 {
-    public class Generic : IGeneric
+    public class AbstractGeneric : IGeneric
     {
     }
 }

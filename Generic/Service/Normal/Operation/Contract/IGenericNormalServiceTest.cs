@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service.Contract
+namespace Generic.Service.Normal.Operation.Contract
 {
     public interface IGenericNormalServiceTest<TEntity,
                                      TEntityAddRequestDto,
@@ -43,10 +43,10 @@ namespace Generic.Service.Contract
         Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> RecycleGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Search(IEnumerable<TEntitySearchRequestDto> requestInput);
-        
-       
-       
-        
+
+
+
+
     }
 
 }

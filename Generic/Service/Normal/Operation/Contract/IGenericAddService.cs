@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Service.Contract
+namespace Generic.Service.Normal.Operation.Contract
 {
     public interface IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TEntity : class

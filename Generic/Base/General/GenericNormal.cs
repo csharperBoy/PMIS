@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.General
 {
-    public class Normal : Abstract.Generic
+    public class GenericNormal : Abstract.AbstractGeneric
     {
 
     }

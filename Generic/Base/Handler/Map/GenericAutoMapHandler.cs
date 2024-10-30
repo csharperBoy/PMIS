@@ -4,13 +4,13 @@ using AutoMapper;
 
 namespace Generic.Base.Handler.Map
 {
-    public class AutoMapHandler : GenericMapHandler
+    public class GenericAutoMapHandler : AbstractGenericMapHandler
     {
         public static async Task<TDestination> StaticMap<TSource, TDestination>(TSource source)
            where TDestination : class
            where TSource : class
         {
-            IGenericMapHandler mapper = new AutoMapHandler();
+            IGenericMapHandler mapper = new GenericAutoMapHandler();
             return await mapper.Map<TSource, TDestination>(source);
         }
         public override async Task<TDestination> Map<TSource, TDestination>(TSource source)

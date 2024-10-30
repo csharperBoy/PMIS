@@ -2,7 +2,7 @@
 
 namespace Generic.Base.Handler.Map
 {
-    public class ManualMapHandler : GenericMapHandler
+    public class GenericManualMapHandler : AbstractGenericMapHandler
     {
         public override async Task<TDestination> Map<TSource, TDestination>(TSource source)
         {

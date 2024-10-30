@@ -1,4 +1,13 @@
-﻿using PMIS.DTO.Indicator;
+﻿using Generic.Base.Handler.Map;
+using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.SystemException;
+using Generic.Base.Handler.SystemException.Abstract;
+using Generic.Repository;
+using Generic.Repository.Abstract;
+using Microsoft.EntityFrameworkCore;
+using PMIS.DTO.Indicator;
+using PMIS.Models;
+using PMIS.Repository;
 using PMIS.Services;
 using System;
 using System.Collections.Generic;
@@ -18,7 +27,11 @@ namespace PMIS.Forms
         {
             InitializeComponent();
         }
-       // IndicatorService indicatorService = new IndicatorService();
+        IndicatorService indicatorService = new IndicatorService(
+            new GenericSqlServerRepository<Indicator,PmisContext>(new PmisContext()),
+            new GenericAutoMapHandler(), 
+            new GenericMyExceptionHandler()
+            );
         private void MainForm_Load(object sender, EventArgs e)
         {
 
@@ -58,7 +71,7 @@ namespace PMIS.Forms
 
             IEnumerable<IndicatorAddResponseDto> response = new List<IndicatorAddResponseDto>();
             bool IsSuccess;
-            //(IsSuccess, response) = await indicatorService.AddGroup(lstReq);
+            (IsSuccess, response) = await indicatorService.AddGroup(lstReq);
         }
     }
 }
