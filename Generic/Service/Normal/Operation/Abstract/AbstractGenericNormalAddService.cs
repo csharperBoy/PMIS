@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Generic.Base.General;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
@@ -12,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
 
 namespace Generic.Service.Normal.Operation.Abstract
 {
@@ -35,20 +38,13 @@ namespace Generic.Service.Normal.Operation.Abstract
             mapper = _mapper;
             exceptionHandler = _exceptionHandler;
             //mapper.ExtraMap += ExtraMap<>();
+            
+
         }
-        //protected virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        //    where TSource : class
-        //    where TDestination : class
-        //{
-        //    try
-        //    {
-        //        return await mapper.ExtraMap(source, destination);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
+
+        
+        
+
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
             try

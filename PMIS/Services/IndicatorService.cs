@@ -32,5 +32,14 @@ namespace PMIS.Services
         public IndicatorService(AbstractGenericRepository<Indicator, PmisContext> _repository, AbstractGenericMapHandler _mapper, AbstractGenericExceptionHandler _exceptionHandler) : base(_repository, _mapper, _exceptionHandler)
         {
         }
+        public override async Task MyMapping<TSource, TDestination>(TSource source, TDestination destination)
+        {
+            if (source is Indicator src && destination is IndicatorAddResponseDto dest)
+            {
+                dest.ErrorMessage = $"{src.Code} {src.Title}";
+
+            }
+            await Task.CompletedTask;
+        }
     }
 }
