@@ -10,15 +10,24 @@ using System.Threading.Tasks;
 namespace Generic.Base.Handler.Map
 {    public static class MapHandlerFactory
     {
-        public static AbstractGenericMapHandler GetMapper(bool useAutoMapping)
+        public enum MappingMode
         {
-            if (useAutoMapping)
+            Auto,
+            Manual
+        }
+
+        public static AbstractGenericMapHandler GetMapper(MappingMode mappingMode)
+        {
+            switch (mappingMode)
             {
-                return new GenericAutoMapHandler();
-            }
-            else
-            {
-                return new GenericManualMapHandler();
+                case MappingMode.Auto:
+                    return new GenericAutoMapHandler();
+
+                case MappingMode.Manual:
+                    return new GenericManualMapHandler();
+
+                default:
+                    throw new ArgumentException("Invalid mapping mode");
             }
         }
     }

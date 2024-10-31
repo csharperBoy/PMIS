@@ -30,7 +30,7 @@ namespace PMIS.Forms
         }
         IndicatorService indicatorService = new IndicatorService(
             new GenericSqlServerRepository<Indicator,PmisContext>(new PmisContext()),
-            MapHandlerFactory.GetMapper(true), 
+            MapHandlerFactory.GetMapper(MapHandlerFactory.MappingMode.Auto), 
             new GenericMyExceptionHandler()
             );
         private void MainForm_Load(object sender, EventArgs e)
