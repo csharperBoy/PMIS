@@ -1,10 +1,13 @@
-﻿using Generic.Base.Handler.Map.Abstract;
+﻿using Generic.Base.Handler.Map;
+using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Composition;
+using Generic.Service.Normal.Operation.Abstract;
 using Microsoft.EntityFrameworkCore;
 using PMIS.DTO.Indicator;
 using PMIS.Models;
+using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +19,12 @@ namespace PMIS.Services
 {
     public class IndicatorService
         : GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto>
+        ,IIndicatorService
     {
-
-        
-        public IndicatorService(AbstractGenericRepository<Indicator, PmisContext> _repository, AbstractGenericMapHandler _mapper, AbstractGenericExceptionHandler _exceptionHandler) : base(_repository, _mapper, _exceptionHandler)
+        public IndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto> _normalEditService) : base(_mapper, _normalAddService, _normalEditService)
         {
         }
+
         public override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         {
             if (source is IndicatorAddRequestDto src1 && destination is Indicator dest1) 

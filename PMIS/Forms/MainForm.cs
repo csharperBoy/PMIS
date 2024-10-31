@@ -3,6 +3,7 @@ using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.SystemException;
 using Generic.Base.Handler.SystemException.Abstract;
+using Generic.Base.Handler.SystemException.Concrete;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PMIS.DTO.Indicator;
 using PMIS.Models;
 using PMIS.Repository;
 using PMIS.Services;
+using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,16 +26,14 @@ namespace PMIS.Forms
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        IIndicatorService indicatorService;
+        public MainForm(IIndicatorService _indicatorService)
         {
+            
             InitializeComponent();
+            this.indicatorService = _indicatorService;
         }
-        IndicatorService indicatorService = new IndicatorService(
-            new GenericSqlServerRepository<Indicator,PmisContext>(new PmisContext()),
-            //MapHandlerFactory.GetMapper(MapHandlerFactory.MappingMode.Auto), 
-            new GenericAutoMapHandler(),
-            new GenericMyExceptionHandler()
-            );
+       
         private void MainForm_Load(object sender, EventArgs e)
         {
 

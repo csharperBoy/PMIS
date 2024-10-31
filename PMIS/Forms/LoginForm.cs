@@ -1,6 +1,7 @@
 ﻿using Generic.Base;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
+using Microsoft.Extensions.DependencyInjection;
 using PMIS.Bases;
 using PMIS.DTO.Indicator;
 using PMIS.Models;
@@ -51,13 +52,22 @@ namespace PMIS.Forms
                 //};
                 GlobalVariable.username = "Admin";
                 this.Hide();
-                (new MainForm()).ShowDialog();
+
+                
+
+                using (var scope = Program.ServiceProvider.CreateScope())
+                {
+                    var mainForm = Program.ServiceProvider.GetRequiredService<MainForm>();
+                    mainForm.ShowDialog();
+                }
+
+                
                 this.Close();
 
             } 
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Not OK Authentication");
+                MessageBox.Show("Not OK Authentication : " + ex.Message);
             }
         }
     }

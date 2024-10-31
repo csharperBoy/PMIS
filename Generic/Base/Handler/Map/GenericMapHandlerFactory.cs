@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,18 @@ namespace Generic.Base.Handler.Map
                 case MappingMode.Manual:
                     return new GenericManualMapHandler();
 
+                default:
+                    throw new ArgumentException("Invalid mapping mode");
+            }
+        }
+        public static AbstractGenericMapHandler GetMapper(IServiceProvider serviceProvider, MappingMode mappingMode)
+        {
+            switch (mappingMode)
+            {
+                case MappingMode.Auto:
+                    return serviceProvider.GetService<GenericAutoMapHandler>();
+                case MappingMode.Manual:
+                    return serviceProvider.GetService<GenericManualMapHandler>();
                 default:
                     throw new ArgumentException("Invalid mapping mode");
             }

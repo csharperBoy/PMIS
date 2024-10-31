@@ -1,4 +1,5 @@
-﻿using Generic.Base.Handler.Map.Abstract;
+﻿using Generic.Base.Handler.Map;
+using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Operation.Abstract;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Service.Normal.Operation
 {
-    internal class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> : AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
+    public class GenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> : AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
         where TContext : DbContext
         where TEntity : class, new()
         where TEntityAddRequestDto : class, new()
