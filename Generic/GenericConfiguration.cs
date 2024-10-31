@@ -33,7 +33,7 @@ namespace Generic
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.ClearProviders();
+                loggingBuilder.ClearProviders(); 
                 loggingBuilder.AddSerilog(dispose: true);
             });
             var logger = ServiceProvider.GetRequiredService<ILogger<Program>>();
