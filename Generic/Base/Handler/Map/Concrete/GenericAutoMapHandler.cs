@@ -2,7 +2,7 @@
 using Generic.Base.Handler.Map.Contract;
 using AutoMapper;
 
-namespace Generic.Base.Handler.Map
+namespace Generic.Base.Handler.Map.Concrete
 {
     public class GenericAutoMapHandler : AbstractGenericMapHandler
     {
@@ -22,7 +22,7 @@ namespace Generic.Base.Handler.Map
             var mapper = new Mapper(config);
             TDestination destination = Activator.CreateInstance<TDestination>();
             destination = mapper.Map<TDestination>(source);
-            return await ExtraMap(source, destination); 
+            return await ExtraMap(source, destination);
         }
         //public override Task<bool> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         //{

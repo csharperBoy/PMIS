@@ -1,5 +1,6 @@
 ﻿using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.SystemException;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Repository;
@@ -29,7 +30,7 @@ namespace PMIS.Forms
         }
         IndicatorService indicatorService = new IndicatorService(
             new GenericSqlServerRepository<Indicator,PmisContext>(new PmisContext()),
-            new GenericAutoMapHandler(), 
+            MapHandlerFactory.GetMapper(true), 
             new GenericMyExceptionHandler()
             );
         private void MainForm_Load(object sender, EventArgs e)

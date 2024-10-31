@@ -1,6 +1,6 @@
 ﻿using Generic.Base.Handler.Map.Abstract;
 
-namespace Generic.Base.Handler.Map
+namespace Generic.Base.Handler.Map.Concrete
 {
     public class GenericManualMapHandler : AbstractGenericMapHandler
     {
