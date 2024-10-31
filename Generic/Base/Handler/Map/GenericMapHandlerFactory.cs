@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Generic.Base.Handler.Map
-{    public static class MapHandlerFactory
+{    public static class GenericMapHandlerFactory
     {
         public enum MappingMode
         {

@@ -1,3 +1,6 @@
+﻿using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.Map.Concrete;
+using Microsoft.Extensions.DependencyInjection;
 using PMIS.Forms;
 namespace PMIS
 {
@@ -13,6 +16,21 @@ namespace PMIS
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new LoginForm());
-        } 
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+           // services.AddSingleton<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericLogHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddTransient<AbstractGenericMapHandler, GenericAutoMapHandler>();
+
+        }
     }
 }

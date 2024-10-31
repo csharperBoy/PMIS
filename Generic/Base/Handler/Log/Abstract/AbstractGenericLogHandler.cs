@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Generic.Base.Handler.Log.Abstract
 {
-    internal class AbstractGenericLogHandler
+    public class AbstractGenericLogHandler
     {
+        public int MyProperty { get; set; }
     }
 }
