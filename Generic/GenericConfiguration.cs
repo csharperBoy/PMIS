@@ -18,6 +18,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using Generic.Service.ShapeExample;
 
 namespace Generic
 {
@@ -26,7 +29,15 @@ namespace Generic
         public static void ConfigureGenericServices(IServiceCollection services)
         {
             #region Log
-            services.AddSingleton<AbstractGenericLogHandler, GenericLogHandler>();
+            services.AddSingleton<AbstractGenericLogHandler, GenericLogInFileHandler>();
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddSerilog(dispose: true);
+            });
+            var logger = ServiceProvider.GetRequiredService<ILogger<Program>>();
+
             #endregion
             #region Map
             services.AddSingleton<GenericAutoMapHandler>();
@@ -41,6 +52,28 @@ namespace Generic
             #region SystemException
             services.AddSingleton<AbstractGenericExceptionHandler, GenericMyExceptionHandler>();
             #endregion
+
+        }
+
+        public static void ConfigureSerilogServices(IServiceCollection services)
+        {
+            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddSerilog(dispose: true);
+            });
+
+
+            services.AddSingleton<Func<MappingMode, AbstractGenericMapHandler>>(serviceProvider => key =>
+            {
+                return GetMapper(serviceProvider, key);
+            });
         }
     }
 }

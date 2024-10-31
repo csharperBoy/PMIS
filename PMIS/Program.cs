@@ -1,4 +1,5 @@
 ﻿using Generic;
+using Generic.Base.Handler.Log;
 using Generic.Base.Handler.Log.Abstract;
 using Generic.Base.Handler.Log.Concrete;
 using Generic.Base.Handler.Map;
@@ -34,6 +35,21 @@ namespace PMIS
 
             var serviceCollection = new ServiceCollection();
             GenericConfiguration.ConfigureGenericServices(serviceCollection);
+            /////
+            ///
+            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
+            var connectionString = "your-sql-connection-string";
+            var logTableName = "LogTable";
+
+            // انتخاب لاگ‌کننده بر اساس نیاز
+            var logHandler = GenericLogHandlerFactory.GetLogHandler(GenericLogHandlerFactory.LogHandlerType.File, logFilePath);
+            // یا برای لاگ کردن در دیتابیس:
+            // var logHandler = LogHandlerFactory.GetLogHandler(LogHandlerFactory.LogHandlerType.Database, connectionString, logTableName);
+
+            Serilog.Log.Logger = logHandler.CreateLogger();
+
+            ////
+
             ConfigureServices(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
