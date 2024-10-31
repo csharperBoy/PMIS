@@ -33,7 +33,7 @@ namespace PMIS
             ApplicationConfiguration.Initialize();
 
             var serviceCollection = new ServiceCollection();
-            GenericConfig.ConfigureGenericServices(serviceCollection);
+            GenericConfiguration.ConfigureGenericServices(serviceCollection);
             ConfigureServices(serviceCollection);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();

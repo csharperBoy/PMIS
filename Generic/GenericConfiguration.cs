@@ -21,7 +21,7 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 
 namespace Generic
 {
-    public static class GenericConfig
+    public static class GenericConfiguration
     {
         public static void ConfigureGenericServices(IServiceCollection services)
         {
@@ -40,9 +40,7 @@ namespace Generic
             #endregion
             #region SystemException
             services.AddSingleton<AbstractGenericExceptionHandler, GenericMyExceptionHandler>();
-
             #endregion
-
         }
     }
 }
