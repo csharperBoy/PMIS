@@ -48,7 +48,7 @@ namespace PMIS
 
             serviceProvider = serviceCollection.BuildServiceProvider();
             
-            ConfigureGenericServicesProvider(serviceProvider);
+            ConfigureServicesProvider(serviceProvider);
 
             var loginForm = serviceProvider.GetRequiredService<LoginForm>();
             Application.Run(loginForm);
@@ -86,7 +86,7 @@ namespace PMIS
             #endregion
 
         }
-        private static void ConfigureGenericServicesProvider(IServiceProvider serviceProvider)
+        private static void ConfigureServicesProvider(IServiceProvider serviceProvider)
         {
             var logger = serviceProvider.GetRequiredService<AbstractGenericLogWithSerilogHandler>().CreateLogger();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
