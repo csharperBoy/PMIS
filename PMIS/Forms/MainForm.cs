@@ -48,9 +48,9 @@ namespace PMIS.Forms
         {
             try
             {
-                int a = 1;
-                int b = 0;
-                int aa = a / b;
+                //int a = 1;
+                //int b = 0;
+                //int aa = a / b;
 
                 List<IndicatorAddRequestDto> lstReq = new List<IndicatorAddRequestDto>() {
                 new IndicatorAddRequestDto() {

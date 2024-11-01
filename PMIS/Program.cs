@@ -22,6 +22,7 @@ using PMIS.Forms;
 using PMIS.Models;
 using PMIS.Services;
 using PMIS.Services.Contract;
+using Serilog;
 using System.Configuration;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 namespace PMIS
@@ -37,6 +38,7 @@ namespace PMIS
         [STAThread]
         static void Main()
         {
+         
             ApplicationConfiguration.Initialize();
 
             var serviceCollection = new ServiceCollection();
@@ -101,7 +103,20 @@ namespace PMIS
         private static void ConfigureGenericServicesContainer(IServiceCollection services)
         {
             #region Log
-            GenericConfigureLogWithSerilogRequestDto req = new GenericConfigureLogWithSerilogRequestDto()
+            GenericConfigureLogWithSerilogRequestDto reqCustomizeLog = new GenericConfigureLogWithSerilogRequestDto()
+            {
+                minimumLevel = Serilog.Events.LogEventLevel.Debug,
+                logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.Database,
+                rollingInterval = Serilog.RollingInterval.Day,
+                inSqlServerConfig = new GenericConfigureLogWithSerilogInSqlServerRequestDto()
+                {
+                    connectionString = configuration.GetSection("LogConfig:ConnectionString").Value,
+                    tableName = configuration.GetSection("LogConfig:TableName").Value,
+                }
+            };
+            GenericConfiguration.ConfigureGenericLogServices(services, reqCustomizeLog);
+
+            GenericConfigureLogWithSerilogRequestDto reqGlobalLog = new GenericConfigureLogWithSerilogRequestDto()
             {
                 minimumLevel = Serilog.Events.LogEventLevel.Debug,
                 logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.File,
@@ -109,16 +124,9 @@ namespace PMIS
                 inFileConfig = new GenericConfigureLogWithSerilogInFileRequestDto()
                 {
                     filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration.GetSection("LogConfig:FolderName").Value, configuration.GetSection("LogConfig:FileName").Value)
-                },
-                inSqlServerConfig = new GenericConfigureLogWithSerilogInSqlServerRequestDto()
-                {
-                    connectionString = configuration.GetSection("LogConfig:ConnectionString").Value,
-                    tableName = configuration.GetSection("LogConfig:TableName").Value,
                 }
             };
-            GenericConfiguration.ConfigureGenericLogServices(services,req);
-            //var logHandler = GenericConfiguration.ConfigureGenericLogServices(services,);
-            //Serilog.Log.Logger = logHandler.CreateLogger();
+            Log.Logger = GenericLogWithSerilogHandlerFactory.GetLogHandler(reqGlobalLog).CreateLogger();
             #endregion
 
             GenericConfiguration.ConfigureGenericMapServices(services);

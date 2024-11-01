@@ -90,7 +90,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     results.Add(responseTemp);
                 }
                 await repository.CommitAsync();
-                logHandler.Information( "test after comment request input" , requestInput);
+                logHandler.Information( "test after comment request input" );
                 return (resultIsSuccess, results);
             }
             catch (Exception ex)
