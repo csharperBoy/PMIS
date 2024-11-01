@@ -1,5 +1,4 @@
 ﻿using Generic;
-using Generic.Base.Handler.Log;
 using Generic.Base.Handler.Log.Abstract;
 using Generic.Base.Handler.Log.Concrete;
 using Generic.Base.Handler.Map;
@@ -7,6 +6,7 @@ using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
+using Generic.Base.Handler.SystemLog;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Composition;
@@ -16,6 +16,7 @@ using Generic.Service.Normal.Operation.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PMIS.DTO.Indicator;
 using PMIS.Forms;
 using PMIS.Models;
@@ -27,34 +28,20 @@ namespace PMIS
 {
     internal static class Program
     {
-        public static ServiceProvider ServiceProvider { get; private set; }
+        public static ServiceProvider serviceProvider { get; private set; }
         [STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
 
             var serviceCollection = new ServiceCollection();
-            GenericConfiguration.ConfigureGenericServices(serviceCollection);
-            /////
-            ///
-            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
-            var connectionString = "your-sql-connection-string";
-            var logTableName = "LogTable";
-
-            // انتخاب لاگ‌کننده بر اساس نیاز
-            var logHandler = GenericLogHandlerFactory.GetLogHandler(GenericLogHandlerFactory.LogHandlerType.File, logFilePath);
-            // یا برای لاگ کردن در دیتابیس:
-            // var logHandler = LogHandlerFactory.GetLogHandler(LogHandlerFactory.LogHandlerType.Database, connectionString, logTableName);
-
-            Serilog.Log.Logger = logHandler.CreateLogger();
-
-            ////
+            ConfigureGenericServicesContainer(serviceCollection);
 
             ConfigureServices(serviceCollection);
 
-            ServiceProvider = serviceCollection.BuildServiceProvider();
+            serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var loginForm = ServiceProvider.GetRequiredService<LoginForm>();
+            var loginForm = serviceProvider.GetRequiredService<LoginForm>();
             Application.Run(loginForm);
         }
         public static bool useLazyLoad { get; set; } = true;
@@ -90,6 +77,19 @@ namespace PMIS
             services.AddTransient<AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>, GenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>>();
             #endregion
 
+        }
+        private static void ConfigureGenericServicesContainer(IServiceCollection services)
+        {
+            #region Log
+            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
+            var connectionString = "your-sql-connection-string";
+            var logTableName = "LogTable";
+            var logHandler = GenericConfiguration.ConfigureGenericLogServices(services, GenericLogHandlerFactory.LogHandlerType.File, logFilePath);
+            Serilog.Log.Logger = logHandler.CreateLogger();
+            #endregion
+
+            GenericConfiguration.ConfigureGenericMapServices(services);
+            GenericConfiguration.ConfigureGenericSystemExceptionServices(services);
         }
     }
 }

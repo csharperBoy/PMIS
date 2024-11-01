@@ -1,4 +1,4 @@
-﻿using Generic.Base.Handler.Log.Abstract;
+﻿using Generic.Base.Handler.SystemLog.Abstract;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base.Handler.Log.Concrete
+namespace Generic.Base.Handler.SystemLog.Concrete
 {
     public class GenericLogInSqlServerHandler : AbstractGenericLogHandler
     {

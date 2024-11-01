@@ -1,4 +1,4 @@
-﻿using Generic.Base.Handler.Log.Contract;
+﻿using Generic.Base.Handler.SystemLog.Contract;
 using Microsoft.Extensions.Logging;
 using Serilog.Events;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base.Handler.Log.Abstract
+namespace Generic.Base.Handler.SystemLog.Abstract
 {
     public abstract class AbstractGenericLogHandler : IGenericLogHandler
     {

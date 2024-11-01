@@ -1,6 +1,6 @@
-﻿using Generic.Base.Handler.Log.Abstract;
-using Generic.Base.Handler.Log.Concrete;
-using Generic.Base.Handler.Log.Contract;
+﻿using Generic.Base.Handler.SystemLog.Concrete;
+using Generic.Base.Handler.SystemLog.Contract;
+using Generic.Base.Handler.SystemLog.Abstract;
 using Generic.DTO.Base.Handler.Log;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base.Handler.Log
+namespace Generic.Base.Handler.SystemLog
 {
 
     public static class GenericLogHandlerFactory
@@ -19,7 +19,7 @@ namespace Generic.Base.Handler.Log
             Database
         }
 
-        public static AbstractGenericLogHandler GetLogHandler(ConfigureGenericLogRequestDto req)
+        public static AbstractGenericLogHandler GetLogHandler(GenericConfigureLogRequestDto req)
         {
             switch (logHandlerType)
             {

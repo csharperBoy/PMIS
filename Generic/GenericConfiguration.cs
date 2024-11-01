@@ -1,6 +1,4 @@
-﻿using Generic.Base.Handler.Log.Abstract;
-using Generic.Base.Handler.Log.Concrete;
-using Generic.Base.Handler.Map.Abstract;
+﻿using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
@@ -21,24 +19,35 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using Generic.Service.ShapeExample;
+using static Generic.Base.Handler.SystemLog.GenericLogHandlerFactory;
+using Generic.DTO.Base.Handler.Log;
+using Generic.Base.Handler.SystemLog;
+using Generic.Base.Handler.SystemLog.Abstract;
+using Generic.Base.Handler.SystemLog.Concrete;
 
 namespace Generic
 {
     public static class GenericConfiguration
     {
-        public static void ConfigureGenericServices(IServiceCollection services)
+        public static AbstractGenericLogHandler ConfigureGenericLogServices(IServiceCollection _services, GenericConfigureLogRequestDto _req)
         {
             #region Log
-            services.AddSingleton<AbstractGenericLogHandler, GenericLogInFileHandler>();
+            _services.AddSingleton<AbstractGenericLogHandler, GenericLogInFileHandler>();
 
-            services.AddLogging(loggingBuilder =>
+            _services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.ClearProviders(); 
+                loggingBuilder.ClearProviders();
                 loggingBuilder.AddSerilog(dispose: true);
             });
-            var logger = ServiceProvider.GetRequiredService<ILogger<Program>>();
 
+            var logHandler = GenericLogHandlerFactory.GetLogHandler(_req);
+
+            return logHandler;
             #endregion
+        }
+        public static void ConfigureGenericMapServices(IServiceCollection services)
+        {
+
             #region Map
             services.AddSingleton<GenericAutoMapHandler>();
             services.AddSingleton<GenericManualMapHandler>();
@@ -49,31 +58,15 @@ namespace Generic
                 return GetMapper(serviceProvider, key);
             });
             #endregion
+
+        }
+
+        public static void ConfigureGenericSystemExceptionServices(IServiceCollection services)
+        {
             #region SystemException
             services.AddSingleton<AbstractGenericExceptionHandler, GenericMyExceptionHandler>();
             #endregion
 
-        }
-
-        public static void ConfigureSerilogServices(IServiceCollection services)
-        {
-            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.ClearProviders();
-                loggingBuilder.AddSerilog(dispose: true);
-            });
-
-
-            services.AddSingleton<Func<MappingMode, AbstractGenericMapHandler>>(serviceProvider => key =>
-            {
-                return GetMapper(serviceProvider, key);
-            });
         }
     }
 }
