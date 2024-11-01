@@ -1,6 +1,4 @@
 ﻿using Generic;
-using Generic.Base.Handler.Log.Abstract;
-using Generic.Base.Handler.Log.Concrete;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;

@@ -36,9 +36,13 @@ namespace Generic
 
             _services.AddSingleton<GenericLogWithSerilogInFileHandler>();
             _services.AddSingleton<GenericLogWithSerilogInSqlServerHandler>();
+            _services.AddSingleton<GenericLogWithSerilogInFileHandler>();
 
 
-            _services.AddSingleton<AbstractGenericLogWithSerilogHandler, GenericLogWithSerilogInFileHandler>();
+            _services.AddSingleton<AbstractGenericLogWithSerilogHandler, GenericLogWithSerilogInFileHandler> (provider =>
+            {
+                return new GenericLogWithSerilogInFileHandler(_req);
+            });
 
             _services.AddSingleton<Func<GenericConfigureLogWithSerilogRequestDto, AbstractGenericLogWithSerilogHandler>>(serviceProvider => key =>
             {
@@ -54,7 +58,7 @@ namespace Generic
 
             //var logHandler = GenericLogWithSerilogHandlerFactory.GetLogHandler(_req);
 
-          //  return logHandler;
+            //  return logHandler;
             #endregion
         }
         public static void ConfigureGenericMapServices(IServiceCollection services)

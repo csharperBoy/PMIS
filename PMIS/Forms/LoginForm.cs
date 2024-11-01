@@ -53,15 +53,16 @@ namespace PMIS.Forms
                 GlobalVariable.username = "Admin";
                 this.Hide();
 
-                
 
-                using (var scope = Program.ServiceProvider.CreateScope())
-                {
-                    var mainForm = Program.ServiceProvider.GetRequiredService<MainForm>();
-                    mainForm.ShowDialog();
-                }
 
-                
+                //using (var scope = Program.serviceProvider.CreateScope())
+                //{
+                //    var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
+                //    mainForm.ShowDialog();
+                //}
+                var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
+                mainForm.ShowDialog();
+
                 this.Close();
 
             } 
