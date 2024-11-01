@@ -19,20 +19,32 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using Generic.Service.ShapeExample;
-using static Generic.Base.Handler.SystemLog.GenericLogHandlerFactory;
+using static Generic.Base.Handler.SystemLog.WithSerilog.GenericLogWithSerilogHandlerFactory;
 using Generic.DTO.Base.Handler.Log;
-using Generic.Base.Handler.SystemLog;
-using Generic.Base.Handler.SystemLog.Abstract;
-using Generic.Base.Handler.SystemLog.Concrete;
+using Generic.Base.Handler.SystemLog.WithSerilog;
+using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
+using Generic.DTO.Base.Handler.SystemLog.Serilog;
 
 namespace Generic
 {
     public static class GenericConfiguration
     {
-        public static AbstractGenericLogHandler ConfigureGenericLogServices(IServiceCollection _services, GenericConfigureLogRequestDto _req)
+        public static void ConfigureGenericLogServices(IServiceCollection _services, GenericConfigureLogWithSerilogRequestDto _req)
         {
             #region Log
-            _services.AddSingleton<AbstractGenericLogHandler, GenericLogInFileHandler>();
+
+            _services.AddSingleton<GenericLogWithSerilogInFileHandler>();
+            _services.AddSingleton<GenericLogWithSerilogInSqlServerHandler>();
+
+
+            _services.AddSingleton<AbstractGenericLogWithSerilogHandler, GenericLogWithSerilogInFileHandler>();
+
+            _services.AddSingleton<Func<GenericConfigureLogWithSerilogRequestDto, AbstractGenericLogWithSerilogHandler>>(serviceProvider => key =>
+            {
+                return GenericLogWithSerilogHandlerFactory.GetLogHandler(key);
+            });
+
 
             _services.AddLogging(loggingBuilder =>
             {
@@ -40,9 +52,9 @@ namespace Generic
                 loggingBuilder.AddSerilog(dispose: true);
             });
 
-            var logHandler = GenericLogHandlerFactory.GetLogHandler(_req);
+            //var logHandler = GenericLogWithSerilogHandlerFactory.GetLogHandler(_req);
 
-            return logHandler;
+          //  return logHandler;
             #endregion
         }
         public static void ConfigureGenericMapServices(IServiceCollection services)

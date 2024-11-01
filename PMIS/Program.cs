@@ -6,7 +6,8 @@ using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
-using Generic.Base.Handler.SystemLog;
+using Generic.Base.Handler.SystemLog.WithSerilog;
+using Generic.DTO.Base.Handler.SystemLog.Serilog;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Composition;
@@ -81,11 +82,24 @@ namespace PMIS
         private static void ConfigureGenericServicesContainer(IServiceCollection services)
         {
             #region Log
-            var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
-            var connectionString = "your-sql-connection-string";
-            var logTableName = "LogTable";
-            var logHandler = GenericConfiguration.ConfigureGenericLogServices(services, GenericLogHandlerFactory.LogHandlerType.File, logFilePath);
-            Serilog.Log.Logger = logHandler.CreateLogger();
+            GenericConfigureLogWithSerilogRequestDto req = new GenericConfigureLogWithSerilogRequestDto()
+            {
+                minimumLevel = Serilog.Events.LogEventLevel.Information,
+                logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.File,
+                rollingInterval = Serilog.RollingInterval.Day,
+                inFileConfig = new GenericConfigureLogWithSerilogInFileRequestDto()
+                {
+                    filePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt")
+                },
+                inSqlServerConfig = new GenericConfigureLogWithSerilogInSqlServerRequestDto()
+                {
+                    connectionString = "",
+                    tableName = "",
+                }
+            };
+            GenericConfiguration.ConfigureGenericLogServices(services,req);
+            //var logHandler = GenericConfiguration.ConfigureGenericLogServices(services,);
+            //Serilog.Log.Logger = logHandler.CreateLogger();
             #endregion
 
             GenericConfiguration.ConfigureGenericMapServices(services);

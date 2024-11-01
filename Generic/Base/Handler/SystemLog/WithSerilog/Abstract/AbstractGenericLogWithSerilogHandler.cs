@@ -1,15 +1,15 @@
-﻿using Generic.Base.Handler.SystemLog.Contract;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace Generic.Base.Handler.SystemLog.Abstract
+using Serilog;
+using Generic.Base.Handler.SystemLog.WithSerilog.Contract;
+namespace Generic.Base.Handler.SystemLog.WithSerilog.Abstract
 {
-    public abstract class AbstractGenericLogHandler : IGenericLogHandler
+    public abstract class AbstractGenericLogWithSerilogHandler : IGenericLogWithSerilogHandler
     {
         //public abstract IDisposable? BeginScope<TState>(TState state) 
         //    where TState : notnull ;

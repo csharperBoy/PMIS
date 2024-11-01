@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Generic.DTO.Base.Handler.SystemLog.Serilog
 {
-    public class GenericConfigureLogWithSerilogInFileRequestDto : GenericConfigureLogWithSerilogRequestDto
+    public class GenericConfigureLogWithSerilogInFileRequestDto 
     {
         public string filePath { get; set; }
 

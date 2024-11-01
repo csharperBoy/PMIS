@@ -3,11 +3,13 @@ using Generic.Base.General;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Generic.Repository.Contract;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,22 +30,26 @@ namespace Generic.Service.Normal.Operation.Abstract
         private AbstractGenericRepository<TEntity,TContext> repository;
         private AbstractGenericMapHandler mapper;
         private AbstractGenericExceptionHandler exceptionHandler;
+        private Serilog.ILogger logHandler;
         protected AbstractGenericNormalAddService(
             AbstractGenericRepository<TEntity, TContext> _repository,
             AbstractGenericMapHandler _mapper,
-            AbstractGenericExceptionHandler _exceptionHandler
+            AbstractGenericExceptionHandler _exceptionHandler,
+            AbstractGenericLogWithSerilogHandler _logHandler
             )
         {
             repository = _repository;
             mapper = _mapper;
             exceptionHandler = _exceptionHandler;
+            //logHandler = _logHandler;
             //mapper.ExtraMap += ExtraMap<>();
-            
+            logHandler = _logHandler.CreateLogger();
+           // Serilog.Log.Logger = _logHandler.CreateLogger();
 
         }
 
-        
-        
+
+
 
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
@@ -84,11 +90,16 @@ namespace Generic.Service.Normal.Operation.Abstract
                     results.Add(responseTemp);
                 }
                 await repository.CommitAsync();
+                logHandler.Information( "test after comment request input" , requestInput);
                 return (resultIsSuccess, results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logHandler.Error(ex, "test exception add error");
                 throw;
+            }finally
+            {
+                logHandler.Information("Test Add Finally");
             }
         }
 

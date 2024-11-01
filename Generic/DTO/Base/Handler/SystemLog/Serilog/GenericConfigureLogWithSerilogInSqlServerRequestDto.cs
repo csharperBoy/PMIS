@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Generic.DTO.Base.Handler.SystemLog.Serilog
 {
-    public class GenericConfigureLogWithSerilogInSqlServerRequestDto : GenericConfigureLogWithSerilogRequestDto
+    public class GenericConfigureLogWithSerilogInSqlServerRequestDto 
     {
         public string connectionString { get; set; }
         public string tableName { get; set; }
