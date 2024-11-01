@@ -88,18 +88,19 @@ namespace PMIS
         }
         private static void ConfigureServicesProvider(IServiceProvider serviceProvider)
         {
-            var logger = serviceProvider.GetRequiredService<AbstractGenericLogWithSerilogHandler>().CreateLogger();
+            var logHandler = serviceProvider.GetRequiredService<AbstractGenericLogWithSerilogHandler>().CreateLogger();
+            var exceptionHandler = serviceProvider.GetRequiredService<AbstractGenericExceptionHandler>();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
-                logger.Error(e.ExceptionObject as Exception, "An unhandled exception occurred.");
+                exceptionHandler.HandleException(e.ExceptionObject as Exception);
+                logHandler.Error(e.ExceptionObject as Exception, "An unhandled exception occurred.");
             };
-
             Application.ThreadException += (sender, e) =>
             {
-                logger.Error(e.Exception, "A thread exception occurred.");
+                exceptionHandler.HandleException(e.Exception);
+                logHandler.Error(e.Exception, "A thread exception occurred.");
             };
         }
-      
         private static void ConfigureGenericServicesContainer(IServiceCollection services)
         {
             #region Log

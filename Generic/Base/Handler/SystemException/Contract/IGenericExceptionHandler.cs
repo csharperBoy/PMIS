@@ -4,6 +4,6 @@
     {
         Task<object> AssignExceptionInfoToObject(object responseTemp, Exception ex);
 
-        //Task HandleException(Exception ex);
+        Task HandleException(Exception ex);
     }
 }

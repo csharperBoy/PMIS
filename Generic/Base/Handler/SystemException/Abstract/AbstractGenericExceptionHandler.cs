@@ -13,6 +13,8 @@ namespace Generic.Base.Handler.SystemException.Abstract
             }
             return await Task.FromResult<object>(obj);
         }
+
+        public abstract Task HandleException(Exception ex);
         
     }
 }
