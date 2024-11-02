@@ -20,11 +20,11 @@ namespace Generic.Repository.Contract
         // bool InsertRange(IEnumerable<TEntity> entities);
         Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities);
 
-        bool Delete(TEntity entityToDelete);
+        Task<bool> Delete(TEntity entityToDelete);
         Task<bool> Delete(object id);
-        bool DeleteRange(IEnumerable<TEntity> entitiesToDelete);
-        bool Update(TEntity entityToUpdate);
-        bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate);
+        Task<bool> DeleteRange(IEnumerable<TEntity> entitiesToDelete);
+        Task<bool> Update(TEntity entityToUpdate);
+        Task<bool> UpdateRange(IEnumerable<TEntity> entitiesToUpdate);
         //IEnumerable<TEntity> Get(
         //    Expression<Func<TEntity, bool>> filter = null,
         //    Func<IQueryable<TEntity>,

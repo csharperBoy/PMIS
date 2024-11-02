@@ -33,12 +33,20 @@ namespace PMIS.Services
                 {
                     indicatorDestination.SystemInfo = DateTime.Now.ToString();
                 }
+                else if (source is IndicatorEditRequestDto editRequesSource)
+                {
+                    indicatorDestination.SystemInfo = DateTime.Now.ToString();
+                }
             }
             else if (source is Indicator IndicatorSource)
             {
                 if (destination is IndicatorAddResponseDto addResponsDestination)
                 {
                     addResponsDestination.ErrorMessage = $"{IndicatorSource.Code} {IndicatorSource.Title}";
+                }
+                else if (destination is IndicatorEditResponseDto editResponsDestination)
+                {
+                    editResponsDestination.ErrorMessage = $"{IndicatorSource.Code} {IndicatorSource.Title}";
                 }
             }
             else

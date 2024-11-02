@@ -86,6 +86,44 @@ namespace PMIS.Forms
                 //MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
                 IsSuccess = await indicatorService.AddRange(lstReq);
                 MessageBox.Show(IsSuccess.ToString());
+
+
+
+                List<IndicatorEditRequestDto> lstEditReq = new List<IndicatorEditRequestDto>() {
+                new IndicatorEditRequestDto() {
+                    Id = 92,
+                Code = textBox1.Text,
+                Description = textBox2.Text,
+                Formula = textBox3.Text,
+                Title = textBox4.Text,
+                FkLkpDesirabilityId = 501,
+                FkLkpFormId = 501,
+                FkLkpManualityId = 501,
+                FkLkpMeasureId = 500,
+                FkLkpPeriodId = 500,
+                FkLkpUnitId = 500,
+                SystemInfo = "{test : test}"
+                },
+                new IndicatorEditRequestDto() {
+                    Id=93,
+                Code = textBox1.Text,
+                Description = textBox2.Text,
+                Formula = textBox3.Text,
+                Title = textBox4.Text,
+                FkLkpDesirabilityId = 551,
+                FkLkpFormId = 551,
+                FkLkpManualityId = 550,
+                FkLkpMeasureId = 550,
+                FkLkpPeriodId = 550,
+                FkLkpUnitId = 551,
+                SystemInfo = "{test : test2}"
+                }};
+                IEnumerable<IndicatorEditResponseDto> response2 = new List<IndicatorEditResponseDto>();
+                bool IsSuccess2;
+                (IsSuccess2, response2) = await indicatorService.EditGroup(lstEditReq);
+                MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
+                //IsSuccess2 = await indicatorService.EditRange(lstEditReq);
+                //MessageBox.Show(IsSuccess2.ToString());
             }
             catch (Exception ex)
             {

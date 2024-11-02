@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
 using Generic.Base.Handler.Map;
+using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.SystemException.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using Generic.Repository.Abstract;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,10 +17,26 @@ namespace Generic.Service.Normal.Operation.Abstract
     public abstract class AbstractGenericNormalEditService<TContext, TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         : IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>
         where TContext : DbContext
-        where TEntity : class
-        where TEntityEditRequestDto : class
-        where TEntityEditResponseDto : class
+        where TEntity : class, new()
+        where TEntityEditRequestDto : class, new()
+        where TEntityEditResponseDto : class, new()
     {
+        private AbstractGenericRepository<TEntity, TContext> repository;
+        private AbstractGenericMapHandler mapper;
+        private AbstractGenericExceptionHandler exceptionHandler;
+        private Serilog.ILogger logHandler;
+        protected AbstractGenericNormalEditService(
+            AbstractGenericRepository<TEntity, TContext> _repository,
+            AbstractGenericMapHandler _mapper,
+            AbstractGenericExceptionHandler _exceptionHandler,
+            AbstractGenericLogWithSerilogHandler _logHandler
+            )
+        {
+            repository = _repository;
+            mapper = _mapper;
+            exceptionHandler = _exceptionHandler;
+            logHandler = _logHandler.CreateLogger();
+        }
         public async Task<(bool, IEnumerable<TEntityEditResponseDto>)> EditGroup(IEnumerable<TEntityEditRequestDto> requestInput)
         {
             try
@@ -35,17 +55,16 @@ namespace Generic.Service.Normal.Operation.Abstract
                     {
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
 
-                        result = await repository.InsertAsync(entity);
+                        result = await repository.Update(entity);
                         await repository.SaveAsync();
+                        repository.SetEntityState(entity, EntityState.Detached);
                     }
                     catch (Exception ex)
                     {
 
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
-
-
                         responseTemp = (TEntityEditResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
-                        results.Edit(responseTemp);
+                        results.Add(responseTemp);
                     }
 
                     if (!result)
@@ -53,7 +72,7 @@ namespace Generic.Service.Normal.Operation.Abstract
 
                     responseTemp = new TEntityEditResponseDto();
                     responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
-                    results.Edit(responseTemp);
+                    results.Add(responseTemp);
 
                 }
                 await repository.CommitAsync();
@@ -87,10 +106,11 @@ namespace Generic.Service.Normal.Operation.Abstract
                     TEntityEditResponseDto responseTemp = new TEntityEditResponseDto();
 
                     entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
-                    entityRequest.Edit(entity);
+                    entityRequest.Add(entity);
                 }
-                result = await repository.InsertRangeAsync(entityRequest);
+                result = await repository.UpdateRange(entityRequest);
                 await repository.SaveAndCommitAsync();
+                repository.SetEntityState(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)

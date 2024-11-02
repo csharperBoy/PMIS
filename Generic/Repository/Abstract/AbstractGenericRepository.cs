@@ -11,11 +11,11 @@ namespace Generic.Repository.Abstract
     {
         public abstract Task CommitAsync();
 
-        public abstract bool Delete(TEntity entityToDelete);
+        public abstract Task<bool> Delete(TEntity entityToDelete);
 
         public abstract Task<bool> Delete(object id);
 
-        public abstract bool DeleteRange(IEnumerable<TEntity> entitiesToDelete);
+        public abstract Task<bool> DeleteRange(IEnumerable<TEntity> entitiesToDelete);
 
         public abstract void Dispose();
 
@@ -37,8 +37,8 @@ namespace Generic.Repository.Abstract
 
         public abstract void SetEntityState<TEntity1>(TEntity1 entity, EntityState state) where TEntity1 : class;
 
-        public abstract bool Update(TEntity entityToUpdate);
+        public abstract Task<bool> Update(TEntity entityToUpdate);
 
-        public abstract bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate);
+        public abstract Task<bool> UpdateRange(IEnumerable<TEntity> entitiesToUpdate);
     }
 }

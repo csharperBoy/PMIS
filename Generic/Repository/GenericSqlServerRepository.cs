@@ -862,7 +862,7 @@ namespace Generic.Repository
             }
         }
 
-        public override bool Delete(TEntity entityToDelete)
+        public override Task<bool> Delete(TEntity entityToDelete)
         {
             try
             {
@@ -871,11 +871,11 @@ namespace Generic.Repository
                     dbSet.Attach(entityToDelete);
                 }
                 dbSet.Remove(entityToDelete);
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception)
             {
-                return false;
+                return Task.FromResult(false);
             }
             finally
             {
@@ -892,7 +892,7 @@ namespace Generic.Repository
                 entityToDelete = await GetByIdAsync(id);
                 if (entityToDelete != null)
                 {
-                    return Delete(entityToDelete);
+                    return await Delete(entityToDelete);
                 }
                 return true;
             }
@@ -907,16 +907,16 @@ namespace Generic.Repository
             }
         }
 
-        public override bool DeleteRange(IEnumerable<TEntity> entitiesToDelete)
+        public override Task<bool> DeleteRange(IEnumerable<TEntity> entitiesToDelete)
         {
             try
             {
                 dbSet.RemoveRange(entitiesToDelete);
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception)
             {
-                return false;
+                return Task.FromResult(false);
             }
             finally
             {
@@ -941,17 +941,17 @@ namespace Generic.Repository
             }
         }
 
-        public override bool Update(TEntity entityToUpdate)
+        public override Task<bool> Update(TEntity entityToUpdate)
         {
             try
             {
                 dbSet.Attach(entityToUpdate);
                 dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception)
             {
-                return false;
+                return Task.FromResult(false);
             }
             finally
             {
@@ -960,13 +960,13 @@ namespace Generic.Repository
             }
         }
 
-        public override bool UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+        public  override async Task<bool> UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
         {
             try
             {
                 foreach (var item in entitiesToUpdate)
                 {
-                    Update(item);
+                    await Update(item);
                 }
                 return true;
             }

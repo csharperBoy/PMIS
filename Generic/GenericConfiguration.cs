@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 using Serilog;
 using Microsoft.Extensions.Logging;
-using Generic.Service.ShapeExample;
 using static Generic.Base.Handler.SystemLog.WithSerilog.GenericLogWithSerilogHandlerFactory;
 using Generic.DTO.Base.Handler.Log;
 using Generic.Base.Handler.SystemLog.WithSerilog;

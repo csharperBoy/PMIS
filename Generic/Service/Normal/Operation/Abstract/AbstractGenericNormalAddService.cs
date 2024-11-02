@@ -69,6 +69,7 @@ namespace Generic.Service.Normal.Operation.Abstract
 
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
+                        repository.SetEntityState(entity,EntityState.Detached);
                     }
                     catch (Exception ex)
                     {
@@ -123,6 +124,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.InsertRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
+                repository.SetEntityState(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)
