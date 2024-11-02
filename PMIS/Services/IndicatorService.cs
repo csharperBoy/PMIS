@@ -19,7 +19,7 @@ namespace PMIS.Services
 {
     public class IndicatorService
         : GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto>
-        ,IIndicatorService
+        , IIndicatorService
     {
         public IndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto> _normalEditService) : base(_mapper, _normalAddService, _normalEditService)
         {
@@ -27,13 +27,25 @@ namespace PMIS.Services
 
         public override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
         {
-            if (source is IndicatorAddRequestDto src1 && destination is Indicator dest1) 
+            if (destination is Indicator indicatorDestination)
             {
-                dest1.SystemInfo = DateTime.Now.ToString();
+                if (source is IndicatorAddRequestDto addRequesSource)
+                {
+                    indicatorDestination.SystemInfo = DateTime.Now.ToString();
+                }
             }
-            else if(source is Indicator src2 && destination is IndicatorAddResponseDto dest2)
+            else if (source is Indicator IndicatorSource)
             {
-                dest2.ErrorMessage = $"{src2.Code} {src2.Title}";
+                if (destination is IndicatorAddResponseDto addResponsDestination)
+                {
+                    addResponsDestination.ErrorMessage = $"{IndicatorSource.Code} {IndicatorSource.Title}";
+                }
+            }
+            else
+            {
+                //Indicator indicatorIntermediary = new Indicator();
+                //indicatorIntermediary = ExtraMap<TSource, TDestination>(source, indicatorIntermediary);
+                //destination = ExtraMap<TSource, TDestination>(indicatorIntermediary, destination);
             }
             return await Task.FromResult(destination);
         }
