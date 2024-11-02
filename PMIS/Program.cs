@@ -119,7 +119,7 @@ namespace PMIS
 
             GenericConfigureLogWithSerilogRequestDto reqGlobalLog = new GenericConfigureLogWithSerilogRequestDto()
             {
-                minimumLevel = Serilog.Events.LogEventLevel.Debug,
+                minimumLevel = Serilog.Events.LogEventLevel.Information,
                 logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.File,
                 rollingInterval = Serilog.RollingInterval.Day,
                 inFileConfig = new GenericConfigureLogWithSerilogInFileRequestDto()

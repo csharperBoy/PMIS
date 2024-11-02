@@ -82,8 +82,10 @@ namespace PMIS.Forms
 
                 IEnumerable<IndicatorAddResponseDto> response = new List<IndicatorAddResponseDto>();
                 bool IsSuccess;
-                (IsSuccess, response) = await indicatorService.AddGroup(lstReq);
-                MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
+                //(IsSuccess, response) = await indicatorService.AddGroup(lstReq);
+                //MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
+                IsSuccess = await indicatorService.AddRange(lstReq);
+                MessageBox.Show(IsSuccess.ToString());
             }
             catch (Exception ex)
             {

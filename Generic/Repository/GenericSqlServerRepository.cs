@@ -680,16 +680,21 @@
 //}
 
 #endregion
+using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
+using Generic.Helper;
 using Generic.Repository.Abstract;
 using Generic.Repository.Contract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Helper = Generic.Helper;
 namespace Generic.Repository
 {
     public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
@@ -700,12 +705,15 @@ namespace Generic.Repository
         internal DbSet<TEntity> dbSet;
         private IDbContextTransaction transaction;
         private bool disposed = false;
+        private Serilog.ILogger logHandler;
+        private string entityName = typeof(TEntity).Name;
 
-        public GenericSqlServerRepository(TContext dbContext)
+        public GenericSqlServerRepository(TContext dbContext, AbstractGenericLogWithSerilogHandler _logHandler)
         {
             this.dbContext = dbContext;
             dbSet = dbContext.Set<TEntity>();
             transaction = dbContext.Database.BeginTransaction();
+            logHandler = _logHandler.CreateLogger();
         }
 
         public override async Task<bool> InsertAsync(TEntity entity)
@@ -718,6 +726,11 @@ namespace Generic.Repository
             catch (Exception)
             {
                 return false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
+                logHandler.Information("Add {@entityJson} in {@entityName}", entityJson, entityName);
             }
         }
 
@@ -746,6 +759,11 @@ namespace Generic.Repository
                 await transaction.RollbackAsync();
                 throw;
             }
+            finally
+            {
+
+                logHandler.Information("Commited in {@entityName}",  entityName);
+            }
         }
 
         public override void SetEntityState<TEntity>(TEntity entity, EntityState state)
@@ -763,6 +781,10 @@ namespace Generic.Repository
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                logHandler.Information("Rollback in {@entityName}",  entityName);
             }
         }
 
@@ -833,6 +855,11 @@ namespace Generic.Repository
             {
                 return false;
             }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
+                logHandler.Information("Add range {@entityJson} in {@entityName}", entityJson, entityName);
+            }
         }
 
         public override bool Delete(TEntity entityToDelete)
@@ -850,13 +877,19 @@ namespace Generic.Repository
             {
                 return false;
             }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToDelete);
+                logHandler.Information("Delete by entity {@entityJson} in {@entityName}", entityJson, entityName);
+            }
         }
 
         public override async Task<bool> Delete(object id)
         {
+            TEntity? entityToDelete = null;
             try
             {
-                TEntity entityToDelete = await GetByIdAsync(id);
+                entityToDelete = await GetByIdAsync(id);
                 if (entityToDelete != null)
                 {
                     return Delete(entityToDelete);
@@ -866,6 +899,11 @@ namespace Generic.Repository
             catch (Exception)
             {
                 return false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToDelete);
+                logHandler.Information("Delete by id {@entityJson} in {@entityName}", entityJson, entityName);
             }
         }
 
@@ -880,6 +918,11 @@ namespace Generic.Repository
             {
                 return false;
             }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entitiesToDelete);
+                logHandler.Information("DeleteRange {@entityJson} in {@entityName}", entityJson, entityName);
+            }
         }
 
         public override async Task<TEntity?> GetByIdAsync(object id)
@@ -892,6 +935,9 @@ namespace Generic.Repository
             catch (Exception)
             {
                 return null;
+            }
+            finally
+            {
             }
         }
 
@@ -906,6 +952,11 @@ namespace Generic.Repository
             catch (Exception)
             {
                 return false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToUpdate);
+                logHandler.Information("Update {@entityJson} in {@entityName}", entityJson, entityName);
             }
         }
 
@@ -922,6 +973,11 @@ namespace Generic.Repository
             catch (Exception)
             {
                 return false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entitiesToUpdate);
+                logHandler.Information("UpdateRange {@entityJson} in {@entityName}", entityJson, entityName);
             }
         }
 
@@ -958,3 +1014,7 @@ namespace Generic.Repository
         }
     }
 }
+
+
+
+

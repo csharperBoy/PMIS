@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,8 +28,8 @@ namespace Generic.Service.Normal.Operation.Abstract
         where TEntity : class, new()
         where TEntityAddRequestDto : class, new()
         where TEntityAddResponseDto : class, new()
-    {        
-        private AbstractGenericRepository<TEntity,TContext> repository;
+    {
+        private AbstractGenericRepository<TEntity, TContext> repository;
         private AbstractGenericMapHandler mapper;
         private AbstractGenericExceptionHandler exceptionHandler;
         private Serilog.ILogger logHandler;
@@ -44,7 +46,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             //logHandler = _logHandler;
             //mapper.ExtraMap += ExtraMap<>();
             logHandler = _logHandler.CreateLogger();
-           // Serilog.Log.Logger = _logHandler.CreateLogger();
+            // Serilog.Log.Logger = _logHandler.CreateLogger();
 
         }
 
@@ -88,26 +90,55 @@ namespace Generic.Service.Normal.Operation.Abstract
                     responseTemp = new TEntityAddResponseDto();
                     responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                     results.Add(responseTemp);
+
                 }
                 await repository.CommitAsync();
-                logHandler.Information( "test after comment request input" );
+
                 return (resultIsSuccess, results);
             }
             catch (Exception ex)
             {
-                logHandler.Error(ex, "test exception add error");
+                //logHandler.Error(ex, "test exception add error");
                 throw;
-            }finally
+            }
+            finally
             {
-                logHandler.Information("Test Add Finally");
+                Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
 
         
 
-        public Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
+        public async Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (requestInput == null || requestInput.Count() == 0)
+                    throw new Exception("لیست خالیست!!!");
+
+                bool result = true;
+                List<TEntity> entityRequest = new List<TEntity>();
+                foreach (var req in requestInput)
+                {
+                    TEntity entity = new TEntity();
+                    TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
+
+                    entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
+                    entityRequest.Add(entity);
+                }
+                result = await repository.InsertRangeAsync(entityRequest);
+                await repository.SaveAndCommitAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //logHandler.Error(ex, "test exception add error");
+                throw;
+            }
+            finally
+            {
+                Helper.Helper.ServiceLog.FinallyAction(logHandler);
+            }
         }
 
 
