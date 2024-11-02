@@ -43,11 +43,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             repository = _repository;
             mapper = _mapper;
             exceptionHandler = _exceptionHandler;
-            //logHandler = _logHandler;
-            //mapper.ExtraMap += ExtraMap<>();
             logHandler = _logHandler.CreateLogger();
-            // Serilog.Log.Logger = _logHandler.CreateLogger();
-
         }
 
 
@@ -98,7 +94,6 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
-                //logHandler.Error(ex, "test exception add error");
                 throw;
             }
             finally
@@ -132,7 +127,6 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
-                //logHandler.Error(ex, "test exception add error");
                 throw;
             }
             finally

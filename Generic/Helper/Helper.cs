@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Serilog.Context;
 using Serilog.Core;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,9 +45,8 @@ namespace Generic.Helper
                 try
                 {
                     var calledPath = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName;
-                    string messageText = memberName + " + " + sourceFilePath + " + " + sourceLineNumber + " + " + calledPath;
-                    //logHandler.Information( messageText , calledPath, memberName, sourceFilePath, sourceLineNumber);
-                    logHandler.Information("Calld From: {@calledPath}, {@memberName}, {@sourceFilePath}, {@sourceLineNumber}", calledPath, memberName, sourceFilePath, sourceLineNumber);
+                    logHandler.Information("Calld in  {@calledPath} From {@sourceFilePath} and member name is {@memberName} and line is {@sourceLineNumber}."
+                        , calledPath, memberName, sourceFilePath, sourceLineNumber);
                 }
                 catch (Exception)
                 {
