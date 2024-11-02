@@ -55,9 +55,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                     {
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
 
-                        result = await repository.Update(entity);
+                        result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityState(entity, EntityState.Detached);
+                        repository.SetEntityStateAsync(entity, EntityState.Detached);
                     }
                     catch (Exception ex)
                     {
@@ -108,9 +108,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                     entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
                     entityRequest.Add(entity);
                 }
-                result = await repository.UpdateRange(entityRequest);
+                result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-                repository.SetEntityState(entityRequest, EntityState.Detached);
+                repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)

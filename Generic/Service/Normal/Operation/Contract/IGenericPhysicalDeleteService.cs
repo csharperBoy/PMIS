@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Generic.Service.Normal.Operation.Contract
 {
-    public interface IGenericPhisycalDeleteService<TEntity, TEntityPhisycalDeleteRequestDto, TEntityPhisycalDeleteResponseDto>
+    public interface IGenericPhisycalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
         where TEntity : class
-        where TEntityPhisycalDeleteRequestDto : class
-        where TEntityPhisycalDeleteResponseDto : class
+        where TEntityDeleteRequestDto : class
+        where TEntityDeleteResponseDto : class
     {
-        Task<(bool, IEnumerable<TEntityPhisycalDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityPhisycalDeleteRequestDto> requestInput);
+        Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput);
+        Task<bool> PhisycalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput);
     }
 }

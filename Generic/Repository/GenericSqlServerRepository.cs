@@ -734,11 +734,12 @@ namespace Generic.Repository
             }
         }
 
-        public override void SetCommandTimeout(int timeout)
+        public override Task SetCommandTimeoutAsync(int timeout)
         {
             try
             {
                 dbContext.Database.SetCommandTimeout(timeout);
+                return Task.CompletedTask;
             }
             catch (Exception ex)
             {
@@ -766,9 +767,10 @@ namespace Generic.Repository
             }
         }
 
-        public override void SetEntityState<TEntity>(TEntity entity, EntityState state)
+        public override Task SetEntityStateAsync<TEntity>(TEntity entity, EntityState state)
         {
             dbContext.Entry(entity).State = state;
+            return Task.CompletedTask;
         }
 
         public async Task RollbackAsync()
@@ -862,7 +864,7 @@ namespace Generic.Repository
             }
         }
 
-        public override Task<bool> Delete(TEntity entityToDelete)
+        public override Task<bool> DeleteAsync(TEntity entityToDelete)
         {
             try
             {
@@ -884,7 +886,7 @@ namespace Generic.Repository
             }
         }
 
-        public override async Task<bool> Delete(object id)
+        public override async Task<bool> DeleteAsync(object id)
         {
             TEntity? entityToDelete = null;
             try
@@ -892,7 +894,7 @@ namespace Generic.Repository
                 entityToDelete = await GetByIdAsync(id);
                 if (entityToDelete != null)
                 {
-                    return await Delete(entityToDelete);
+                    return await DeleteAsync(entityToDelete);
                 }
                 return true;
             }
@@ -907,7 +909,7 @@ namespace Generic.Repository
             }
         }
 
-        public override Task<bool> DeleteRange(IEnumerable<TEntity> entitiesToDelete)
+        public override Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entitiesToDelete)
         {
             try
             {
@@ -941,7 +943,7 @@ namespace Generic.Repository
             }
         }
 
-        public override Task<bool> Update(TEntity entityToUpdate)
+        public override Task<bool> UpdateAsync(TEntity entityToUpdate)
         {
             try
             {
@@ -960,13 +962,13 @@ namespace Generic.Repository
             }
         }
 
-        public  override async Task<bool> UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+        public  override async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entitiesToUpdate)
         {
             try
             {
                 foreach (var item in entitiesToUpdate)
                 {
-                    await Update(item);
+                    await UpdateAsync(item);
                 }
                 return true;
             }
@@ -981,7 +983,7 @@ namespace Generic.Repository
             }
         }
 
-        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
+        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
         {
             try
             {

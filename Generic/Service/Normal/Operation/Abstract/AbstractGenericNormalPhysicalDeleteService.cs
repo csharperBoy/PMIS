@@ -1,39 +1,30 @@
-﻿using AutoMapper;
-using Generic.Base.General;
-using Generic.Base.Handler.Map;
-using Generic.Base.Handler.Map.Abstract;
+﻿using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.Repository;
 using Generic.Repository.Abstract;
-using Generic.Repository.Contract;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
 namespace Generic.Service.Normal.Operation.Abstract
 {
-    public abstract class AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
-        : IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>
+    public abstract class AbstractGenericNormalPhysicalDeleteService<TContext, TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
+        :  IGenericPhisycalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
         where TContext : DbContext
         where TEntity : class, new()
-        where TEntityAddRequestDto : class, new()
-        where TEntityAddResponseDto : class, new()
+        where TEntityDeleteRequestDto : class, new()
+        where TEntityDeleteResponseDto : class, new()
     {
         private AbstractGenericRepository<TEntity, TContext> repository;
         private AbstractGenericMapHandler mapper;
         private AbstractGenericExceptionHandler exceptionHandler;
         private Serilog.ILogger logHandler;
-        protected AbstractGenericNormalAddService(
+        protected AbstractGenericNormalPhysicalDeleteService(
             AbstractGenericRepository<TEntity, TContext> _repository,
             AbstractGenericMapHandler _mapper,
             AbstractGenericExceptionHandler _exceptionHandler,
@@ -46,10 +37,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             logHandler = _logHandler.CreateLogger();
         }
 
-
-
-
-        public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
+        public  async Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
             try
             {
@@ -58,34 +46,34 @@ namespace Generic.Service.Normal.Operation.Abstract
 
                 bool resultIsSuccess = true;
                 bool result = true;
-                List<TEntityAddResponseDto> results = new List<TEntityAddResponseDto>();
+                List<TEntityDeleteResponseDto> results = new List<TEntityDeleteResponseDto>();
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
-                    TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
+                    TEntityDeleteResponseDto responseTemp = new TEntityDeleteResponseDto();
                     try
                     {
-                        entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
+                        entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
-                        result = await repository.InsertAsync(entity);
+                        result = await repository.DeleteAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityStateAsync(entity,EntityState.Detached);
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                     }
                     catch (Exception ex)
                     {
 
-                        responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
+                        responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
 
 
-                        responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
+                        responseTemp = (TEntityDeleteResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                         results.Add(responseTemp);
                     }
 
                     if (!result)
                         resultIsSuccess = false;
 
-                    responseTemp = new TEntityAddResponseDto();
-                    responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
+                    responseTemp = new TEntityDeleteResponseDto();
+                    responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
                     results.Add(responseTemp);
 
                 }
@@ -103,9 +91,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
         }
 
-        
-
-        public async Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
+        public async Task<bool> PhisycalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
             try
             {
@@ -117,12 +103,12 @@ namespace Generic.Service.Normal.Operation.Abstract
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
-                    TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
+                    TEntityDeleteResponseDto responseTemp = new TEntityDeleteResponseDto();
 
-                    entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
+                    entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
                     entityRequest.Add(entity);
                 }
-                result = await repository.InsertRangeAsync(entityRequest);
+                result = await repository.DeleteRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
                 repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
@@ -136,8 +122,5 @@ namespace Generic.Service.Normal.Operation.Abstract
                 Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
-
-
-
     }
 }

@@ -13,5 +13,8 @@ namespace Generic.Service.Normal.Operation.Contract
     {
         Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> LogicalDeleteGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
         Task<(bool, IEnumerable<TEntityLogicalDeleteResponseDto>)> RecycleGroup(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
+
+        Task<bool> LogicalDeleteRange(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
+        Task<bool> RecycleRange(IEnumerable<TEntityLogicalDeleteRequestDto> requestInput);
     }
 }

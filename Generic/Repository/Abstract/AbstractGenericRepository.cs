@@ -11,11 +11,11 @@ namespace Generic.Repository.Abstract
     {
         public abstract Task CommitAsync();
 
-        public abstract Task<bool> Delete(TEntity entityToDelete);
+        public abstract Task<bool> DeleteAsync(TEntity entityToDelete);
 
-        public abstract Task<bool> Delete(object id);
+        public abstract Task<bool> DeleteAsync(object id);
 
-        public abstract Task<bool> DeleteRange(IEnumerable<TEntity> entitiesToDelete);
+        public abstract Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entitiesToDelete);
 
         public abstract void Dispose();
 
@@ -23,7 +23,7 @@ namespace Generic.Repository.Abstract
 
         public abstract Task<TEntity> GetByIdAsync(object id);
 
-        public abstract Task<(IEnumerable<TEntity> entites, int count)> GetPaging(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0);
+        public abstract Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0);
 
         public abstract Task<bool> InsertAsync(TEntity entity);
 
@@ -33,12 +33,12 @@ namespace Generic.Repository.Abstract
 
         public abstract Task SaveAsync();
 
-        public abstract void SetCommandTimeout(int timeout);
+        public abstract Task SetCommandTimeoutAsync(int timeout);
 
-        public abstract void SetEntityState<TEntity1>(TEntity1 entity, EntityState state) where TEntity1 : class;
+        public abstract Task SetEntityStateAsync<TEntity1>(TEntity1 entity, EntityState state) where TEntity1 : class;
 
-        public abstract Task<bool> Update(TEntity entityToUpdate);
+        public abstract Task<bool> UpdateAsync(TEntity entityToUpdate);
 
-        public abstract Task<bool> UpdateRange(IEnumerable<TEntity> entitiesToUpdate);
+        public abstract Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entitiesToUpdate);
     }
 }
