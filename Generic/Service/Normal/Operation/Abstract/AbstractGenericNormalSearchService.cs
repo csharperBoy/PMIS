@@ -3,6 +3,7 @@ using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.DTO.Service;
+using Generic.Helper;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
@@ -45,19 +46,16 @@ namespace Generic.Service.Normal.Operation.Abstract
             {
                 var filterExpression = BuildFilterExpression(requestInput.filters);
 
-                // مرتب‌سازی
                 Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = query => ApplySorting(query, requestInput.sorts);
 
-                // فراخوانی GetPagingAsync برای دریافت نتایج
-                 (IEnumerable<TEntity> entities,int totalCount) = await repository.GetPagingAsync(
-                    filter: filterExpression,
-                    orderBy: orderBy,
-                    pageNumber: requestInput.pageNumber,
-                    recordCount: requestInput.recordCount
-                );
+                (IEnumerable<TEntity> entities, int totalCount) = await repository.GetPagingAsync(
+                   filter: filterExpression,
+                   orderBy: orderBy,
+                   pageNumber: requestInput.pageNumber,
+                   recordCount: requestInput.recordCount
+               );
 
-                // تبدیل نتیجه به DTO
-                List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
+               List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
 
                 return (true, results);
             }
@@ -72,55 +70,94 @@ namespace Generic.Service.Normal.Operation.Abstract
         }
         private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
         {
-            Expression<Func<TEntity, bool>> filterExpression = e => true;
+            var parameter = Expression.Parameter(typeof(TEntity), "entity");
+            var filterExpression = Helper.PredicateBuilder.True<TEntity>(); // شروع با True
+
             foreach (var filter in filters)
             {
-                filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.NextLogicalOperator);
+                var member = Expression.Property(parameter, filter.columnName);
+                var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
+
+                Expression comparison;
+                switch (filter.operation)
+                {
+                    case FilterOperator.Equals:
+                        comparison = Expression.Equal(member, constant);
+                        break;
+                    // سایر عملیات‌ها را می‌توانی اینجا اضافه کنی
+                    default:
+                        throw new NotSupportedException($"Filter operation {filter.operation} is not supported");
+                }
+
+                if (filter.LogicalOperator == LogicalOperator.And)
+                {
+                    filterExpression = filterExpression.And(Expression.Lambda<Func<TEntity, bool>>(comparison, parameter));
+                }
+                else if (filter.LogicalOperator == LogicalOperator.Or)
+                {
+                    filterExpression = filterExpression.Or(Expression.Lambda<Func<TEntity, bool>>(comparison, parameter));
+                }
+                else if (filter.LogicalOperator == LogicalOperator.begin)
+                {
+                    filterExpression = Expression.Lambda<Func<TEntity, bool>>(comparison, parameter);
+                }
             }
+
             return filterExpression;
         }
-        private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
-        {
-            var parameter = Expression.Parameter(typeof(TEntity), "entity");
-            var member = Expression.Property(parameter, filter.columnName);
-            var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
 
-            Expression body = filter.operation switch
-            {
-                FilterOperator.Equals => Expression.Equal(member, constant),
-                FilterOperator.NotEquals => Expression.NotEqual(member, constant),
-                FilterOperator.GreaterThan => Expression.GreaterThan(member, constant),
-                FilterOperator.LessThan => Expression.LessThan(member, constant),
-                FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
-                FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
-                FilterOperator.Contains => Expression.Call(member, typeof(string).GetMethod("Contains", new[] { typeof(string) }), constant),
-                FilterOperator.StartsWith => Expression.Call(member, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }), constant),
-                FilterOperator.EndsWith => Expression.Call(member, typeof(string).GetMethod("EndsWith", new[] { typeof(string) }), constant),
-                _ => throw new NotSupportedException($"Filter operation '{filter.operation}' is not supported.")
-            };
+        //private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
+        //{
+        //    Expression<Func<TEntity, bool>> filterExpression = e => true;
+        //    foreach (var filter in filters)
+        //    {
+        //        filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.LogicalOperator);
+        //    }
+        //    return filterExpression;
+        //}
+        //private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
+        //{
+        //    var parameter = Expression.Parameter(typeof(TEntity), "Indicator");
+        //    var member = Expression.Property(parameter, filter.columnName);
+        //    var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
 
-            return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
-        }
-        private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
-        {
-            switch (logicalOperator)
-            {
-                case LogicalOperator.And:
-                    return Expression.Lambda<Func<TEntity, bool>>(
-                        Expression.AndAlso(expr1.Body, expr2.Body),
-                        expr1.Parameters.Single()
-                    );
-                case LogicalOperator.Or:
-                    return Expression.Lambda<Func<TEntity, bool>>(
-                        Expression.OrElse(expr1.Body, expr2.Body),
-                        expr1.Parameters.Single()
-                    );
-                case LogicalOperator.End:
-                    return expr1;
-                default:
-                    throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");
-            }
-        }
+        //    Expression body = filter.operation switch
+        //    {
+        //        FilterOperator.Equals => Expression.Equal(member, constant),
+        //        FilterOperator.NotEquals => Expression.NotEqual(member, constant),
+        //        FilterOperator.GreaterThan => Expression.GreaterThan(member, constant),
+        //        FilterOperator.LessThan => Expression.LessThan(member, constant),
+        //        FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
+        //        FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
+        //        FilterOperator.Contains => Expression.Call(member, typeof(string).GetMethod("Contains", new[] { typeof(string) }), constant),
+        //        FilterOperator.StartsWith => Expression.Call(member, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }), constant),
+        //        FilterOperator.EndsWith => Expression.Call(member, typeof(string).GetMethod("EndsWith", new[] { typeof(string) }), constant),
+        //        _ => throw new NotSupportedException($"Filter operation '{filter.operation}' is not supported.")
+        //    };
+
+        //    return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+        //}
+        //private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
+        //{
+        //    switch (logicalOperator)
+        //    {
+        //        case LogicalOperator.And:
+        //            return Expression.Lambda<Func<TEntity, bool>>(
+        //                Expression.AndAlso(expr1.Body, expr2.Body),
+        //                expr1.Parameters.Single()
+        //            );
+        //        case LogicalOperator.Or:
+        //            return Expression.Lambda<Func<TEntity, bool>>(
+        //                Expression.OrElse(expr1.Body, expr2.Body),
+        //                expr1.Parameters.Single()
+        //            );
+        //        case LogicalOperator.begin:
+        //            return expr2;
+        //        default:
+        //            throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");
+        //    }
+        //}
+
         private IOrderedQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, List<GenericSearchSortDto> sorts)
         {
             IOrderedQueryable<TEntity> orderedQuery = null;
@@ -131,19 +168,20 @@ namespace Generic.Service.Normal.Operation.Abstract
                 var parameter = Expression.Parameter(typeof(TEntity), "entity");
                 var member = Expression.Property(parameter, sort.columnName);
                 var keySelector = Expression.Lambda(member, parameter);
-                if (i == 0)
-                {
-                    orderedQuery = sort.direction == SortDirection.Ascending
-                        ? query.OrderBy((dynamic)keySelector)
-                        : query.OrderByDescending((dynamic)keySelector);
-                }
-                else
-                {
-                    orderedQuery = sort.direction == SortDirection.Ascending
-                        ? orderedQuery.ThenBy((dynamic)keySelector)
-                        : orderedQuery.ThenByDescending((dynamic)keySelector);
-                }
+
+                var methodName = (i == 0) ?
+                    (sort.direction == SortDirection.Ascending ? "OrderBy" : "OrderByDescending") :
+                    (sort.direction == SortDirection.Ascending ? "ThenBy" : "ThenByDescending");
+
+                var method = typeof(Queryable).GetMethods()
+                    .Where(m => m.Name == methodName && m.GetParameters().Length == 2)
+                    .Single()
+                    .MakeGenericMethod(typeof(TEntity), member.Type);
+
+                orderedQuery = (IOrderedQueryable<TEntity>)method.Invoke(null, new object[] { (i == 0 ? query : orderedQuery), keySelector });
             }
+
             return orderedQuery ?? (IOrderedQueryable<TEntity>)query;
         }
+    }
 }

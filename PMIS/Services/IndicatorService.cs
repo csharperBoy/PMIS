@@ -18,10 +18,10 @@ using System.Threading.Tasks;
 namespace PMIS.Services
 {
     public class IndicatorService
-        : GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto>
+        : GenericNormalService<PmisContext,Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto>
         , IIndicatorService
     {
-        public IndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto> _normalEditService) : base(_mapper, _normalAddService, _normalEditService)
+        public IndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
         }
 

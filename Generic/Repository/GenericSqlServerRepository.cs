@@ -992,7 +992,7 @@ namespace Generic.Repository
                 {
                     query = query.Where(filter);
                 }
-                int count = query.Count();
+               int count =await query.CountAsync();
                 foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProperty);
@@ -1009,7 +1009,7 @@ namespace Generic.Repository
                 var resultList = await query.ToListAsync();
                 return (resultList, count);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return (null, -2);
             }

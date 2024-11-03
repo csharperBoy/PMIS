@@ -5,6 +5,7 @@ using Generic.Base.Handler.SystemException;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using Generic.DTO.Service;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -124,6 +125,54 @@ namespace PMIS.Forms
                 MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
                 //IsSuccess2 = await indicatorService.EditRange(lstEditReq);
                 //MessageBox.Show(IsSuccess2.ToString());
+            }
+            catch (Exception ex)
+            {
+                //logHandler.Error(ex, "error log");
+                throw;
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                GenericSearchRequestDto requestDto = new GenericSearchRequestDto() 
+                {
+                    filters =new List<GenericSearchFilterDto>()
+                    { 
+                        //new GenericSearchFilterDto() 
+                        //{ 
+                        //    columnName = "Title",
+                        //    LogicalOperator = LogicalOperator.begin,
+                        //    operation = FilterOperator.Contains,
+                        //    type = "string",
+                        //    value = "test"
+                        //}, 
+                        new GenericSearchFilterDto() 
+                        {
+                            columnName = "FkLkpFormID",
+                            LogicalOperator = LogicalOperator.begin,
+                            operation = FilterOperator.Equals,
+                            type = "int",
+                            value = "501"
+                        } ,
+                        new GenericSearchFilterDto()
+                        {
+                            columnName = "FkLkpFormID",
+                            LogicalOperator = LogicalOperator.Or,
+                            operation = FilterOperator.Equals,
+                            type = "int",
+                            value = "500"
+                        }
+                    },
+                    pageNumber = 1,
+                    recordCount = 10,
+                    sorts = new List<GenericSearchSortDto>() { new GenericSearchSortDto() { columnName="ID" , direction = SortDirection.Ascending } }
+                };
+                (bool IsSuccess , IEnumerable<IndicatorSearchResponseDto> res) = await indicatorService.Search(requestDto);
+                MessageBox.Show(IsSuccess.ToString());
+                
             }
             catch (Exception ex)
             {

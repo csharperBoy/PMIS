@@ -14,14 +14,14 @@ namespace Generic.DTO.Service
         public List<GenericSearchFilterDto> InternalFilters { get; set; }
         public FilterOperator operation { get; set; }
 
-        public LogicalOperator NextLogicalOperator { get; set; }
+        public LogicalOperator LogicalOperator { get; set; }
 
     }
     public enum LogicalOperator
     {
         And,
         Or,
-        End
+        begin
     }
     public enum FilterOperator
     {
