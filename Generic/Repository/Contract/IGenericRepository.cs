@@ -28,7 +28,7 @@ namespace Generic.Repository.Contract
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>,
                 IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "", int pageNumber = 0,
-            int recordCount = 0);
+            string includeProperties = "", int? pageNumber = null,
+            int? recordCount = null);
     }
 }

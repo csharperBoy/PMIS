@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
-        private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
+        /*private Expression<Func<TEntity, bool>> BuildFilterExpression2(List<GenericSearchFilterDto> filters)
         {
             var parameter = Expression.Parameter(typeof(TEntity), "entity");
             var filterExpression = Helper.PredicateBuilder.True<TEntity>(); // شروع با True
@@ -104,59 +105,58 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
 
             return filterExpression;
+        }*/
+        
+        private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
+        {
+            Expression<Func<TEntity, bool>> filterExpression = e => true;
+            foreach (var filter in filters)
+            {
+                if(filter.type == PharseType.Condition)
+                    filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.LogicalOperator);
+                if (filter.InternalFilters != null && filter.InternalFilters.Any())
+                    filterExpression = CombineExpressions(filterExpression, BuildFilterExpression(filter.InternalFilters) , filter.LogicalOperator);
+            }
+            return filterExpression;
+        }
+        private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "entity");
+            var member = Expression.Property(parameter, filter.columnName);
+            var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
+
+            Expression body = filter.operation switch
+            {
+                FilterOperator.Equals => Expression.Equal(member, constant),
+                FilterOperator.NotEquals => Expression.NotEqual(member, constant),
+                FilterOperator.GreaterThan => Expression.GreaterThan(member, constant),
+                FilterOperator.LessThan => Expression.LessThan(member, constant),
+                FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
+                FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
+                FilterOperator.Contains => Expression.Call(member, typeof(string).GetMethod("Contains", new[] { typeof(string) }), constant),
+                FilterOperator.StartsWith => Expression.Call(member, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }), constant),
+                FilterOperator.EndsWith => Expression.Call(member, typeof(string).GetMethod("EndsWith", new[] { typeof(string) }), constant),
+                _ => throw new NotSupportedException($"Filter operation '{filter.operation}' is not supported.")
+            };
+
+            return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+        }
+        private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
+        {
+            switch (logicalOperator)
+            {
+                case LogicalOperator.And:
+                    return expr1.And(expr2);
+                case LogicalOperator.Or:
+                    return expr1.Or(expr2);
+                case LogicalOperator.begin:
+                    return expr2;
+                default:
+                    throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");
+            }
         }
 
-        //private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
-        //{
-        //    Expression<Func<TEntity, bool>> filterExpression = e => true;
-        //    foreach (var filter in filters)
-        //    {
-        //        filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.LogicalOperator);
-        //    }
-        //    return filterExpression;
-        //}
-        //private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
-        //{
-        //    var parameter = Expression.Parameter(typeof(TEntity), "Indicator");
-        //    var member = Expression.Property(parameter, filter.columnName);
-        //    var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
-
-        //    Expression body = filter.operation switch
-        //    {
-        //        FilterOperator.Equals => Expression.Equal(member, constant),
-        //        FilterOperator.NotEquals => Expression.NotEqual(member, constant),
-        //        FilterOperator.GreaterThan => Expression.GreaterThan(member, constant),
-        //        FilterOperator.LessThan => Expression.LessThan(member, constant),
-        //        FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
-        //        FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
-        //        FilterOperator.Contains => Expression.Call(member, typeof(string).GetMethod("Contains", new[] { typeof(string) }), constant),
-        //        FilterOperator.StartsWith => Expression.Call(member, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }), constant),
-        //        FilterOperator.EndsWith => Expression.Call(member, typeof(string).GetMethod("EndsWith", new[] { typeof(string) }), constant),
-        //        _ => throw new NotSupportedException($"Filter operation '{filter.operation}' is not supported.")
-        //    };
-
-        //    return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
-        //}
-        //private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
-        //{
-        //    switch (logicalOperator)
-        //    {
-        //        case LogicalOperator.And:
-        //            return Expression.Lambda<Func<TEntity, bool>>(
-        //                Expression.AndAlso(expr1.Body, expr2.Body),
-        //                expr1.Parameters.Single()
-        //            );
-        //        case LogicalOperator.Or:
-        //            return Expression.Lambda<Func<TEntity, bool>>(
-        //                Expression.OrElse(expr1.Body, expr2.Body),
-        //                expr1.Parameters.Single()
-        //            );
-        //        case LogicalOperator.begin:
-        //            return expr2;
-        //        default:
-        //            throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");
-        //    }
-        //}
+        
 
         private IOrderedQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, List<GenericSearchSortDto> sorts)
         {
@@ -183,5 +183,69 @@ namespace Generic.Service.Normal.Operation.Abstract
 
             return orderedQuery ?? (IOrderedQueryable<TEntity>)query;
         }
+     /*
+        private Expression<Func<TEntity, bool>> BuildFilterExpression(List<GenericSearchFilterDto> filters)
+        {
+            return BuildFilterExpressionRecursive(filters);
+        }
+
+        private Expression<Func<TEntity, bool>> BuildFilterExpressionRecursive(List<GenericSearchFilterDto> filters)
+        {
+            Expression<Func<TEntity, bool>> filterExpression = e => true;
+
+            foreach (var filter in filters)
+            {
+                Expression<Func<TEntity, bool>> singleExpression = BuildSingleFilterExpression(filter);
+
+                if (filter.InternalFilters != null && filter.InternalFilters.Any())
+                {
+                    var internalExpression = BuildFilterExpressionRecursive(filter.InternalFilters);
+                    singleExpression = CombineExpressions(singleExpression, internalExpression, filter.LogicalOperator);
+                }
+
+                filterExpression = CombineExpressions(filterExpression, singleExpression, filter.LogicalOperator);
+            }
+
+            return filterExpression;
+        }
+
+        private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "entity");
+            var member = Expression.Property(parameter, filter.columnName);
+            var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
+
+            Expression body = filter.operation switch
+            {
+                FilterOperator.Equals => Expression.Equal(member, constant),
+                FilterOperator.NotEquals => Expression.NotEqual(member, constant),
+                FilterOperator.GreaterThan => Expression.GreaterThan(member, constant),
+                FilterOperator.LessThan => Expression.LessThan(member, constant),
+                FilterOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
+                FilterOperator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
+                FilterOperator.Contains => Expression.Call(member, typeof(string).GetMethod("Contains", new[] { typeof(string) }), constant),
+                FilterOperator.StartsWith => Expression.Call(member, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }), constant),
+                FilterOperator.EndsWith => Expression.Call(member, typeof(string).GetMethod("EndsWith", new[] { typeof(string) }), constant),
+                _ => throw new NotSupportedException($"Filter operation '{filter.operation}' is not supported.")
+            };
+
+            return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+        }
+
+        private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
+        {
+            switch (logicalOperator)
+            {
+                case LogicalOperator.And:
+                    return expr1.And(expr2);
+                case LogicalOperator.Or:
+                    return expr1.Or(expr2);
+                case LogicalOperator.begin:
+                    return expr2;
+                default:
+                    throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");
+            }
+        }
+*/
     }
 }

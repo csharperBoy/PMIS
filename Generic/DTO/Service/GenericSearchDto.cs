@@ -10,8 +10,8 @@ namespace Generic.DTO.Service
     {
         public List<GenericSearchFilterDto> filters { get; set; } = new List<GenericSearchFilterDto>();
         public List<GenericSearchSortDto> sorts { get; set; } = new List<GenericSearchSortDto>();
-        public int recordCount { get; set; }
-        public int pageNumber { get; set; }
+        public int? recordCount { get; set; } = null;
+        public int? pageNumber { get; set; } = null;
 
     }
     public class GenericSearchResponseDto

@@ -133,46 +133,60 @@ namespace PMIS.Forms
             }
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+
+
+        private async void button2_Click_1(object sender, EventArgs e)
         {
             try
             {
-                GenericSearchRequestDto requestDto = new GenericSearchRequestDto() 
+                GenericSearchRequestDto requestDto = new GenericSearchRequestDto()
                 {
-                    filters =new List<GenericSearchFilterDto>()
-                    { 
-                        //new GenericSearchFilterDto() 
-                        //{ 
-                        //    columnName = "Title",
-                        //    LogicalOperator = LogicalOperator.begin,
-                        //    operation = FilterOperator.Contains,
-                        //    type = "string",
-                        //    value = "test"
-                        //}, 
-                        new GenericSearchFilterDto() 
+                    filters = new List<GenericSearchFilterDto>()
+                    {
+                        new GenericSearchFilterDto()
                         {
-                            columnName = "FkLkpFormID",
+                            columnName = "Title",
                             LogicalOperator = LogicalOperator.begin,
-                            operation = FilterOperator.Equals,
-                            type = "int",
-                            value = "501"
+                            operation = FilterOperator.Contains,
+                            type = PharseType.Condition,
+                            value = "test"
                         } ,
                         new GenericSearchFilterDto()
                         {
-                            columnName = "FkLkpFormID",
-                            LogicalOperator = LogicalOperator.Or,
-                            operation = FilterOperator.Equals,
-                            type = "int",
-                            value = "500"
+                            columnName = null,
+                            LogicalOperator = LogicalOperator.And,
+                            operation = null,
+                            type = PharseType.Parentheses,
+                            value =null,
+                            InternalFilters = new List<GenericSearchFilterDto>()
+                            {
+                                new GenericSearchFilterDto()
+                                {
+                                    columnName = "FkLkpFormID",
+                                    LogicalOperator = LogicalOperator.begin,
+                                    operation = FilterOperator.Equals,
+                                    type = PharseType.Condition,
+                                    value = "501"
+                                } ,
+                                new GenericSearchFilterDto()
+                                {
+                                    columnName = "FkLkpFormID",
+                                    LogicalOperator = LogicalOperator.Or,
+                                    operation = FilterOperator.Equals,
+                                    type = PharseType.Condition,
+                                    value = "500"
+                                }
+                            }
                         }
+
                     },
-                    pageNumber = 1,
-                    recordCount = 10,
-                    sorts = new List<GenericSearchSortDto>() { new GenericSearchSortDto() { columnName="ID" , direction = SortDirection.Ascending } }
+                    pageNumber = null,
+                    recordCount = null,
+                    sorts = new List<GenericSearchSortDto>() { new GenericSearchSortDto() { columnName = "ID", direction = SortDirection.Ascending } }
                 };
-                (bool IsSuccess , IEnumerable<IndicatorSearchResponseDto> res) = await indicatorService.Search(requestDto);
-                MessageBox.Show(IsSuccess.ToString());
-                
+                (bool IsSuccess, IEnumerable<IndicatorSearchResponseDto> res) = await indicatorService.Search(requestDto);
+                // MessageBox.Show(IsSuccess.ToString());
+                dataGridView1.DataSource = res;
             }
             catch (Exception ex)
             {

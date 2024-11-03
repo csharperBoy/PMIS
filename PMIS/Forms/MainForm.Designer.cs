@@ -109,6 +109,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(button2);
             tabPage3.Controls.Add(dataGridView1);
             tabPage3.Location = new Point(4, 29);
             tabPage3.Margin = new Padding(3, 4, 3, 4);
@@ -177,7 +178,6 @@
             // 
             // tabPage6
             // 
-            tabPage6.Controls.Add(button2);
             tabPage6.Controls.Add(button1);
             tabPage6.Controls.Add(label4);
             tabPage6.Controls.Add(label3);
@@ -364,13 +364,13 @@
             // 
             // button2
             // 
-            button2.Location = new Point(400, 246);
+            button2.Location = new Point(400, 421);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
-            button2.TabIndex = 9;
+            button2.TabIndex = 10;
             button2.Text = "button2";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button2.Click += button2_Click_1;
             // 
             // MainForm
             // 

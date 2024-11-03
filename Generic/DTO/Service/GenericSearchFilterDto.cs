@@ -8,11 +8,11 @@ namespace Generic.DTO.Service
 {
     public class GenericSearchFilterDto
     {
-        public string columnName { get; set; }
-        public string value { get; set; }
-        public string type { get; set; }
-        public List<GenericSearchFilterDto> InternalFilters { get; set; }
-        public FilterOperator operation { get; set; }
+        public string? columnName { get; set; }
+        public string? value { get; set; }
+        public PharseType type { get; set; }
+        public List<GenericSearchFilterDto>? InternalFilters { get; set; }
+        public FilterOperator? operation { get; set; }
 
         public LogicalOperator LogicalOperator { get; set; }
 
@@ -34,5 +34,10 @@ namespace Generic.DTO.Service
         Contains,
         StartsWith,
         EndsWith
+    }
+    public enum PharseType
+    {
+        Parentheses,
+        Condition
     }
 }

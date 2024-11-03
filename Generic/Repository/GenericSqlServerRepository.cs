@@ -983,7 +983,7 @@ namespace Generic.Repository
             }
         }
 
-        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int pageNumber = 0, int recordCount = 0)
+        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int? pageNumber = null, int? recordCount = null)
         {
             try
             {
@@ -1001,10 +1001,10 @@ namespace Generic.Repository
                 {
                     query = orderBy(query).AsQueryable();
                 }
-                if (pageNumber > 0 && recordCount > 0)
+                if (pageNumber != null  && recordCount !=null )
                 {
-                    int skip = (pageNumber - 1) * recordCount;
-                    query = query.Skip(skip).Take(recordCount);
+                    int skip = ((int)pageNumber - 1) * (int)recordCount;
+                    query = query.Skip(skip).Take((int)recordCount);
                 }
                 var resultList = await query.ToListAsync();
                 return (resultList, count);
