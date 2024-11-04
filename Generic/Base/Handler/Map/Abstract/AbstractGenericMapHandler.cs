@@ -4,37 +4,38 @@ using System.Linq.Expressions;
 
 namespace Generic.Base.Handler.Map.Abstract
 {
-    public abstract class AbstractGenericMapHandler : IGenericMapHandler
+public abstract class AbstractGenericMapHandler : IGenericMapHandler
+{
+    public IConfigurationProvider ConfigurationProvider => throw new NotImplementedException();
+
+    public static async Task<TDestination> StaticMap<TMapper, TSource, TDestination>(TMapper mapper, TSource source)
+        where TDestination : class
+        where TSource : class
     {
-        public IConfigurationProvider ConfigurationProvider => throw new NotImplementedException();
-
-        public static async Task<TDestination> StaticMap<TMapper, TSource, TDestination>(TMapper mapper, TSource source)
-           where TDestination : class
-           where TSource : class
+        try
         {
-            try
-            {
-                var subclassType = mapper.GetType();
-                var instance = Activator.CreateInstance(subclassType) as IGenericMapHandler;
+            var subclassType = mapper.GetType();
+            var instance = Activator.CreateInstance(subclassType) as IGenericMapHandler;
 
-                if (instance == null)
-                {
-                    throw new InvalidOperationException("Could not create instance of subclass.");
-                }
-
-                return await instance.Map<TSource, TDestination>(source);
-            }
-            catch (Exception)
+            if (instance == null)
             {
-                throw;
+                throw new InvalidOperationException("Could not create instance of subclass.");
             }
+
+            return await instance.Map<TSource, TDestination>(source);
         }
-        public abstract Task<TDestination> Map<TSource, TDestination>(TSource source)
-           where TDestination : class
-           where TSource : class;
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 
-        public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
-        public event MappingHandler<object, object> MappingEvent;
+    public abstract Task<TDestination> Map<TSource, TDestination>(TSource source)
+        where TDestination : class
+        where TSource : class;
+
+    public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
+    public event MappingHandler<object, object> MappingEvent;
 
         public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class
@@ -51,7 +52,6 @@ namespace Generic.Base.Handler.Map.Abstract
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

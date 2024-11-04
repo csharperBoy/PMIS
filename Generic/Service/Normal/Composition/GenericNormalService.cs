@@ -17,16 +17,16 @@ using System.Threading.Tasks;
 namespace Generic.Service.Normal.Composition
 {
     public class GenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
-         : AbstractGenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
-        where TContext : DbContext
-        where TEntity : class, new()
-        where TEntityAddRequestDto : class, new()
-        where TEntityAddResponseDto : class, new()
-        where TEntityEditRequestDto : class, new()
-        where TEntityEditResponseDto : class, new()
-        where TEntityDeleteRequestDto : class, new()
-        where TEntityDeleteResponseDto : class, new()
-        where TEntitySearchResponseDto : class, new()
+      : AbstractGenericNormalService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
+     where TContext : DbContext
+     where TEntity : class, new()
+     where TEntityAddRequestDto : class, new()
+     where TEntityAddResponseDto : class, new()
+     where TEntityEditRequestDto : class, new()
+     where TEntityEditResponseDto : class, new()
+     where TEntityDeleteRequestDto : class, new()
+     where TEntityDeleteResponseDto : class, new()
+     where TEntitySearchResponseDto : class, new()
     {
         AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> normalAddService;
         AbstractGenericNormalEditService<TContext, TEntity, TEntityEditRequestDto, TEntityEditResponseDto> normalEditService;
@@ -47,30 +47,30 @@ namespace Generic.Service.Normal.Composition
             AbstractGenericNormalLogicalDeleteService<TContext, TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto> _logicalDeleteService,
             AbstractGenericNormalPhysicalDeleteService<TContext, TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto> _physicalDeleteService,
             AbstractGenericNormalSearchService<TContext, TEntity, TEntitySearchResponseDto> _searchService
-            )
+        )
         {
-
             this.normalAddService = _normalAddService;
             this.normalEditService = _normalEditService;
             this.searchService = _searchService;
             this.physicalDeleteService = _physicalDeleteService;
             this.logicalDeleteService = _logicalDeleteService;
             this.mapper = _mapper;
-            mapper.MappingEvent += ExtraMap;
+            this.mapper.MappingEvent += ExtraMap;
         }
+
         public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        where TSource : class
-        where TDestination : class, new()
+            where TSource : class
+            where TDestination : class, new()
         {
             return await Task.FromResult(destination);
         }
 
-        public async Task PerformMapping<TSource, TDestination>(TSource source, TDestination destination)
-            where TSource : class
-            where TDestination : class
-        {
-            await mapper.ExtraMap<TSource, TDestination>(source, destination);
-        }
+        //public async Task PerformMapping<TSource, TDestination>(TSource source, TDestination destination)
+        //    where TSource : class
+        //    where TDestination : class
+        //{
+        //    await mapper.ExtraMap<TSource, TDestination>(source, destination);
+        //}
 
 
         public override async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)

@@ -46,7 +46,7 @@ namespace PMIS.Services
                 else if (destination is LookUpDestinationSearchResponseDto searchResponsDestination)
                 {
 
-                    searchResponsDestination= searchResponsDestination.extraMapFromBaseModel(LookUpSource);
+                    searchResponsDestination= searchResponsDestination.extraMapFromBaseModel(LookUpSource, searchResponsDestination);
                    
                 }
             }

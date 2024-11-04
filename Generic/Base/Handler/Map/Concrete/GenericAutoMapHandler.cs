@@ -6,12 +6,12 @@ namespace Generic.Base.Handler.Map.Concrete
 {
     public class GenericAutoMapHandler : AbstractGenericMapHandler
     {
-        public static async Task StaticMap<TSource, TDestination>(TSource source)
+        public static async void StaticMap<TSource, TDestination>(TSource source,TDestination destination)
            where TDestination : class
            where TSource : class
         {
             IGenericMapHandler mapper = new GenericAutoMapHandler();
-            await mapper.Map<TSource, TDestination>(source);
+            destination =await mapper.Map<TSource, TDestination>(source);
         }
         public override async Task<TDestination> Map<TSource, TDestination>(TSource source)
         {

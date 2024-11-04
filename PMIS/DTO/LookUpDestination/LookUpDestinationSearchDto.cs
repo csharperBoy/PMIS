@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PMIS.DTO.LookUp;
+using PMIS.DTO.LookUpValue;
 using PMIS.Models;
 
 namespace PMIS.DTO.LookUpDestination
 {
     public class LookUpDestinationSearchResponseDto
     {
-        public LookUpDestinationSearchResponseDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
+        public LookUpDestinationSearchResponseDto extraMapFromBaseModel(PMIS.Models.LookUpDestination sourceModel , LookUpDestinationSearchResponseDto destinationModel )
         {
-            this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
-            return this;
+            //this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
+            destinationModel.LookUpValuesInfo = sourceModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueSearchResponseDto(v)).extraMapFromBaseModel(v)).ToList();
+
+            return destinationModel;
         }
         public int Id { get; set; }
 
@@ -30,7 +33,9 @@ namespace PMIS.DTO.LookUpDestination
        // public bool? FlgLogicalDelete { get; set; }
 
         public virtual LookUpSearchResponseDto FkLookUpInfo { get; set; } = null!;
+        public virtual ICollection<LookUpValueSearchResponseDto> LookUpValuesInfo { get; set; } = new List<LookUpValueSearchResponseDto>();
+
     }
 
-  
+
 }

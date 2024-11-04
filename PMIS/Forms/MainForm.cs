@@ -32,16 +32,16 @@ namespace PMIS.Forms
 {
     public partial class MainForm : Form
     {
-        //IIndicatorService indicatorService;
+        IIndicatorService indicatorService;
         ILookUpService lookUpService;
        ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
-        public MainForm(/*IIndicatorService _indicatorService,*/ AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
+        public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
         {
 
             InitializeComponent();
-          //  this.indicatorService = _indicatorService;
+            this.indicatorService = _indicatorService;
             this.logHandler = _logHandler.CreateLogger();
             this.lookUpService = _lookUpService;
             this.lookUpDestinationService = _lookUpDestinationService;
