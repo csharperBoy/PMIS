@@ -10,6 +10,9 @@ using Generic.Repository;
 using Generic.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
 using PMIS.DTO.Indicator;
+using PMIS.DTO.LookUp;
+using PMIS.DTO.LookUpDestination;
+using PMIS.DTO.LookUpValue;
 using PMIS.Models;
 using PMIS.Repository;
 using PMIS.Services;
@@ -30,13 +33,19 @@ namespace PMIS.Forms
     public partial class MainForm : Form
     {
         IIndicatorService indicatorService;
+        ILookUpService lookUpService;
+       ILookUpValueService lookUpValueService;
+        ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
         {
 
             InitializeComponent();
             this.indicatorService = _indicatorService;
             this.logHandler = _logHandler.CreateLogger();
+            this.lookUpService = _lookUpService;
+            this.lookUpDestinationService = _lookUpDestinationService;
+            this.lookUpValueService = _lookUpValueService;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -134,7 +143,7 @@ namespace PMIS.Forms
         }
 
 
-
+        /*
         private async void button2_Click_1(object sender, EventArgs e)
         {
             try
@@ -187,6 +196,87 @@ namespace PMIS.Forms
                 (bool IsSuccess, IEnumerable<IndicatorSearchResponseDto> res) = await indicatorService.Search(requestDto);
                 // MessageBox.Show(IsSuccess.ToString());
                 dataGridView1.DataSource = res;
+            }
+            catch (Exception ex)
+            {
+                //logHandler.Error(ex, "error log");
+                throw;
+            }
+        }
+        */
+
+        private async void button2_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                //GenericSearchRequestDto requestDto = new GenericSearchRequestDto()
+                //{
+                //    filters = new List<GenericSearchFilterDto>()
+                //    {
+                //        new GenericSearchFilterDto()
+                //        {
+                //            columnName = "FlgLogicalDelete",
+                //            LogicalOperator = LogicalOperator.begin,
+                //            operation = FilterOperator.Equals,
+                //            type = PharseType.Condition,
+                //            value = "False"
+                //        } ,
+                //        new GenericSearchFilterDto()
+                //        {
+                //            columnName = "ID",
+                //            LogicalOperator = LogicalOperator.And,
+                //            operation = FilterOperator.Equals,
+                //            type = PharseType.Condition,
+                //            value = "501"
+                //        }
+                //    },
+                //    pageNumber = null,
+                //    recordCount = null,
+                //    sorts = null
+                //};
+                GenericSearchRequestDto requestDto = new GenericSearchRequestDto()
+                {
+                    filters = new List<GenericSearchFilterDto>()
+                    {
+                        new GenericSearchFilterDto()
+                        {
+                            columnName = "FlgLogicalDelete",
+                            LogicalOperator = LogicalOperator.begin,
+                            operation = FilterOperator.Equals,
+                            type = PharseType.Condition,
+                            value = "False"
+                        } ,
+                        new GenericSearchFilterDto()
+                        {
+                            columnName = "TableName",
+                            LogicalOperator = LogicalOperator.And,
+                            operation = FilterOperator.Equals,
+                            type = PharseType.Condition,
+                            value = "Indicator"
+                        },
+                        new GenericSearchFilterDto()
+                        {
+                            columnName = "ColumnName",
+                            LogicalOperator = LogicalOperator.And,
+                            operation = FilterOperator.Equals,
+                            type = PharseType.Condition,
+                            value = "FkLkpUnitID"
+                        }
+                    },
+                    pageNumber = null,
+                    recordCount = null,
+                    sorts = null
+                };
+                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
+                List<LookUpValueSearchResponseDto> lst = new List<LookUpValueSearchResponseDto>();
+                foreach (var item in res)
+                {
+                    lst.AddRange(item.FkLookUp.LookUpValues.ToList()); 
+                }
+                dataGridView1.DataSource = lst;
+                MessageBox.Show(IsSuccess.ToString());
+
+               
             }
             catch (Exception ex)
             {

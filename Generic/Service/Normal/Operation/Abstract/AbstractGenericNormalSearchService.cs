@@ -46,12 +46,17 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 var filterExpression = BuildFilterExpression(requestInput.filters);
-
-                Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = query => ApplySorting(query, requestInput.sorts);
+                var includeProperties = "";
+                Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy;
+                if (requestInput.sorts == null)
+                    orderBy = null;
+                else
+                     orderBy = query => ApplySorting(query, requestInput.sorts);
 
                 (IEnumerable<TEntity> entities, int totalCount) = await repository.GetPagingAsync(
                    filter: filterExpression,
                    orderBy: orderBy,
+                   includeProperties: includeProperties,
                    pageNumber: requestInput.pageNumber,
                    recordCount: requestInput.recordCount
                );
@@ -123,7 +128,18 @@ namespace Generic.Service.Normal.Operation.Abstract
         {
             var parameter = Expression.Parameter(typeof(TEntity), "entity");
             var member = Expression.Property(parameter, filter.columnName);
-            var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
+            //var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
+            object convertedValue;
+            if (Nullable.GetUnderlyingType(member.Type) != null)
+            {
+                convertedValue = string.IsNullOrEmpty(filter.value) ? null : Convert.ChangeType(filter.value, Nullable.GetUnderlyingType(member.Type));
+            }
+            else
+            {
+                convertedValue = Convert.ChangeType(filter.value, member.Type);
+            }
+
+            var constant = Expression.Constant(convertedValue, member.Type);
 
             Expression body = filter.operation switch
             {
@@ -158,10 +174,11 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         
 
-        private IOrderedQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, List<GenericSearchSortDto> sorts)
+        private IOrderedQueryable<TEntity>? ApplySorting(IQueryable<TEntity> query, List<GenericSearchSortDto> sorts)
         {
+            if (sorts == null)
+                return null;
             IOrderedQueryable<TEntity> orderedQuery = null;
-
             for (int i = 0; i < sorts.Count; i++)
             {
                 var sort = sorts[i];
