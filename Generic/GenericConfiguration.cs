@@ -65,11 +65,11 @@ namespace Generic
         {
 
             #region Map
-            services.AddSingleton<GenericAutoMapHandler>();
-            services.AddSingleton<GenericManualMapHandler>();
+            services.AddScoped<GenericAutoMapHandler>();
+            services.AddScoped<GenericManualMapHandler>();
 
-            services.AddSingleton<AbstractGenericMapHandler, GenericAutoMapHandler>();
-            services.AddSingleton<Func<MappingMode, AbstractGenericMapHandler>>(serviceProvider => key =>
+            services.AddScoped<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddScoped<Func<MappingMode, AbstractGenericMapHandler>>(serviceProvider => key =>
             {
                 return GetMapper(serviceProvider, key);
             });

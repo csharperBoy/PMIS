@@ -12,7 +12,7 @@ namespace PMIS.DTO.LookUpDestination
     {
         public LookUpDestinationSearchResponseDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-            this.FkLookUp = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
+            this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
             return this;
         }
         public int Id { get; set; }
@@ -29,7 +29,7 @@ namespace PMIS.DTO.LookUpDestination
 
        // public bool? FlgLogicalDelete { get; set; }
 
-        public virtual LookUpSearchResponseDto FkLookUp { get; set; } = null!;
+        public virtual LookUpSearchResponseDto FkLookUpInfo { get; set; } = null!;
     }
 
   

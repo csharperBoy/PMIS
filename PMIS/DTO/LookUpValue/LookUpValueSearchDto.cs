@@ -23,7 +23,7 @@ namespace PMIS.DTO.LookUpValue
         //}
         public LookUpValueSearchResponseDto extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
         {
-            this.FkLookUp = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
+            this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
             return this;
         }
         public int Id { get; set; }
@@ -44,7 +44,7 @@ namespace PMIS.DTO.LookUpValue
 
       //  public virtual ICollection<Claim> Claims { get; set; } = new List<Claim>();
 
-        public virtual LookUpSearchResponseDto FkLookUp { get; set; } = null!;
+        public virtual LookUpSearchResponseDto FkLookUpInfo { get; set; } = null!;
 
        // public virtual ICollection<IndicatorCategory> IndicatorCategoryFkLkpCategoryDetails { get; set; } = new List<IndicatorCategory>();
 

@@ -32,16 +32,16 @@ namespace PMIS.Forms
 {
     public partial class MainForm : Form
     {
-        IIndicatorService indicatorService;
+        //IIndicatorService indicatorService;
         ILookUpService lookUpService;
        ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
+        public MainForm(/*IIndicatorService _indicatorService,*/ AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
         {
 
             InitializeComponent();
-            this.indicatorService = _indicatorService;
+          //  this.indicatorService = _indicatorService;
             this.logHandler = _logHandler.CreateLogger();
             this.lookUpService = _lookUpService;
             this.lookUpDestinationService = _lookUpDestinationService;
@@ -94,8 +94,8 @@ namespace PMIS.Forms
                 bool IsSuccess;
                 //(IsSuccess, response) = await indicatorService.AddGroup(lstReq);
                 //MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
-                IsSuccess = await indicatorService.AddRange(lstReq);
-                MessageBox.Show(IsSuccess.ToString());
+               // IsSuccess = await indicatorService.AddRange(lstReq);
+              //  MessageBox.Show(IsSuccess.ToString());
 
 
 
@@ -130,8 +130,8 @@ namespace PMIS.Forms
                 }};
                 IEnumerable<IndicatorEditResponseDto> response2 = new List<IndicatorEditResponseDto>();
                 bool IsSuccess2;
-                (IsSuccess2, response2) = await indicatorService.EditGroup(lstEditReq);
-                MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
+              //  (IsSuccess2, response2) = await indicatorService.EditGroup(lstEditReq);
+             //   MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
                 //IsSuccess2 = await indicatorService.EditRange(lstEditReq);
                 //MessageBox.Show(IsSuccess2.ToString());
             }
@@ -271,7 +271,7 @@ namespace PMIS.Forms
                 List<LookUpValueSearchResponseDto> lst = new List<LookUpValueSearchResponseDto>();
                 foreach (var item in res)
                 {
-                    lst.AddRange(item.FkLookUp.LookUpValues.ToList()); 
+                    lst.AddRange(item.FkLookUpInfo.LookUpValuesInfo.ToList()); 
                 }
                 dataGridView1.DataSource = lst;
                 MessageBox.Show(IsSuccess.ToString());

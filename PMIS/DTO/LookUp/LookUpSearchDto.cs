@@ -13,8 +13,8 @@ namespace PMIS.DTO.LookUp
     {
         public LookUpSearchResponseDto extraMapFromBaseModel(PMIS.Models.LookUp baseModel)
         {
-            this.LookUpDestinations = baseModel.LookUpDestinations.Select(d => (new LookUpDestinationSearchResponseDto()).extraMapFromBaseModel(d)).ToList();
-            this.LookUpValues = baseModel.LookUpValues.Select(v => (new LookUpValueSearchResponseDto()).extraMapFromBaseModel(v)).ToList();
+            this.LookUpDestinationsInfo = baseModel.LookUpDestinations.Select(d => (new LookUpDestinationSearchResponseDto()).extraMapFromBaseModel(d)).ToList();
+            this.LookUpValuesInfo = baseModel.LookUpValues.Select(v => (new LookUpValueSearchResponseDto()).extraMapFromBaseModel(v)).ToList();
             return this;
         }
         public int Id { get; set; }
@@ -29,9 +29,9 @@ namespace PMIS.DTO.LookUp
 
         //public bool? FlgLogicalDelete { get; set; }
 
-        public virtual ICollection<LookUpDestinationSearchResponseDto> LookUpDestinations { get; set; } = new List<LookUpDestinationSearchResponseDto>();
+        public virtual ICollection<LookUpDestinationSearchResponseDto> LookUpDestinationsInfo { get; set; } = new List<LookUpDestinationSearchResponseDto>();
 
-        public virtual ICollection<LookUpValueSearchResponseDto> LookUpValues { get; set; } = new List<LookUpValueSearchResponseDto>();
+        public virtual ICollection<LookUpValueSearchResponseDto> LookUpValuesInfo { get; set; } = new List<LookUpValueSearchResponseDto>();
     }
 
   
