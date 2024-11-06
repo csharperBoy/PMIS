@@ -117,7 +117,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             Expression<Func<TEntity, bool>> filterExpression = e => true;
             foreach (var filter in filters)
             {
-                if(filter.type == PharseType.Condition)
+                if(filter.type == PhraseType.Condition)
                     filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.LogicalOperator);
                 if (filter.InternalFilters != null && filter.InternalFilters.Any())
                     filterExpression = CombineExpressions(filterExpression, BuildFilterExpression(filter.InternalFilters) , filter.LogicalOperator);
@@ -165,7 +165,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     return expr1.And(expr2);
                 case LogicalOperator.Or:
                     return expr1.Or(expr2);
-                case LogicalOperator.begin:
+                case LogicalOperator.Begin:
                     return expr2;
                 default:
                     throw new NotSupportedException($"Logical operator '{logicalOperator}' is not supported.");

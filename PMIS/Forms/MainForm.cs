@@ -243,7 +243,7 @@ namespace PMIS.Forms
                             columnName = "FlgLogicalDelete",
                             LogicalOperator = LogicalOperator.begin,
                             operation = FilterOperator.Equals,
-                            type = PharseType.Condition,
+                            type = PhraseType.Condition,
                             value = "False"
                         } ,
                         new GenericSearchFilterDto()
@@ -251,7 +251,7 @@ namespace PMIS.Forms
                             columnName = "TableName",
                             LogicalOperator = LogicalOperator.And,
                             operation = FilterOperator.Equals,
-                            type = PharseType.Condition,
+                            type = PhraseType.Condition,
                             value = "Indicator"
                         },
                         new GenericSearchFilterDto()
@@ -259,7 +259,7 @@ namespace PMIS.Forms
                             columnName = "ColumnName",
                             LogicalOperator = LogicalOperator.And,
                             operation = FilterOperator.Equals,
-                            type = PharseType.Condition,
+                            type = PhraseType.Condition,
                             value = "FkLkpUnitID"
                         }
                     },

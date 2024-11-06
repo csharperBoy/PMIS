@@ -10,7 +10,7 @@ namespace Generic.DTO.Service
     {
         public string? columnName { get; set; }
         public string? value { get; set; }
-        public PharseType type { get; set; }
+        public PhraseType type { get; set; }
         public List<GenericSearchFilterDto>? InternalFilters { get; set; }
         public FilterOperator? operation { get; set; }
 
@@ -21,7 +21,7 @@ namespace Generic.DTO.Service
     {
         And,
         Or,
-        begin
+        Begin
     }
     public enum FilterOperator
     {
@@ -35,7 +35,7 @@ namespace Generic.DTO.Service
         StartsWith,
         EndsWith
     }
-    public enum PharseType
+    public enum PhraseType
     {
         Parentheses,
         Condition
