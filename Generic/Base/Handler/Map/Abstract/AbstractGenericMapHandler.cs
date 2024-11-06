@@ -4,57 +4,61 @@ using System.Linq.Expressions;
 
 namespace Generic.Base.Handler.Map.Abstract
 {
-public abstract class AbstractGenericMapHandler : IGenericMapHandler
-{
-    public IConfigurationProvider ConfigurationProvider => throw new NotImplementedException();
-
-    public static async Task<TDestination> StaticMap<TMapper, TSource, TDestination>(TMapper mapper, TSource source)
-        where TDestination : class
-        where TSource : class
+    public abstract class AbstractGenericMapHandler : IGenericMapHandler
     {
-        try
-        {
-            var subclassType = mapper.GetType();
-            var instance = Activator.CreateInstance(subclassType) as IGenericMapHandler;
+        public IConfigurationProvider ConfigurationProvider => throw new NotImplementedException();
 
-            if (instance == null)
-            {
-                throw new InvalidOperationException("Could not create instance of subclass.");
-            }
-
-            return await instance.Map<TSource, TDestination>(source);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public abstract Task<TDestination> Map<TSource, TDestination>(TSource source)
-        where TDestination : class
-        where TSource : class;
-
-    public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
-    public event MappingHandler<object, object> MappingEvent;
-
-        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-            where TSource : class
+        public static async Task<TDestination> StaticMap<TMapper, TSource, TDestination>(TMapper mapper, TSource source)
             where TDestination : class
+            where TSource : class
         {
             try
             {
-                if (MappingEvent != null)
+                var subclassType = mapper.GetType();
+                var instance = Activator.CreateInstance(subclassType) as IGenericMapHandler;
+
+                if (instance == null)
                 {
-                    await MappingEvent.Invoke(source, destination);
+                    throw new InvalidOperationException("Could not create instance of subclass.");
                 }
 
-                return await Task.FromResult(destination);
+                return await instance.Map<TSource, TDestination>(source);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public abstract Task<TDestination> Map<TSource, TDestination>(TSource source)
+            where TDestination : class
+            where TSource : class;
+
+        public abstract Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
+             where TDestination : class
+             where TSource : class;
+
+        //    public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
+        //public event MappingHandler<object, object> MappingEvent;
+
+        //    public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        //        where TSource : class
+        //        where TDestination : class
+        //    {
+        //        try
+        //        {
+        //            if (MappingEvent != null)
+        //            {
+        //                await MappingEvent.Invoke(source, destination);
+        //            }
+
+        //            return await Task.FromResult(destination);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw;
+        //        }
+        //    }
 
         public TDestination Map<TDestination>(object source, Action<IMappingOperationOptions<object, TDestination>> opts)
         {

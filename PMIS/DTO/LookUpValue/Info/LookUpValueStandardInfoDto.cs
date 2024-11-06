@@ -13,7 +13,7 @@ namespace PMIS.DTO.LookUpValue.Info
     {
         public LookUpValueStandardInfoDto extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
         {
-            LookUpValueStandardInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpValue, LookUpValueStandardInfoDto>(baseModel, this);
+            LookUpValueStandardInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpValue, LookUpValueStandardInfoDto>(baseModel).Result;
 
             //this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
             temp.LookUpDestinationsInfo = baseModel.FkLookUp.LookUpDestinations.Select(v => (new LookUpDestinationShortInfoDto()).extraMapFromBaseModel(v)).ToList();

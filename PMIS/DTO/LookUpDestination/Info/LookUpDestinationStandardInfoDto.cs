@@ -16,8 +16,8 @@ namespace PMIS.DTO.LookUpDestination.Info
     {
         public LookUpDestinationStandardInfoDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-            LookUpDestinationStandardInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationStandardInfoDto>(baseModel, this);
-
+            LookUpDestinationStandardInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationStandardInfoDto>(baseModel).Result;
+            temp.Description = "testc";
             //this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
             temp.LookUpValuesInfo = baseModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueShortInfoDto()).extraMapFromBaseModel(v)).ToList();
 

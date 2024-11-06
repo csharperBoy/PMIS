@@ -14,7 +14,7 @@ namespace PMIS.DTO.LookUpDestination.Info
     {
         public LookUpDestinationTinyInfoDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-            LookUpDestinationTinyInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationTinyInfoDto>(baseModel, this);
+            LookUpDestinationTinyInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationTinyInfoDto>(baseModel).Result;
 
             return temp;
         }

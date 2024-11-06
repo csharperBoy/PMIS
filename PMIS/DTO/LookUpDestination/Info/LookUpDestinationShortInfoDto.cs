@@ -14,10 +14,10 @@ namespace PMIS.DTO.LookUpDestination.Info
     {
         public LookUpDestinationShortInfoDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-            LookUpDestinationShortInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationShortInfoDto>(baseModel, this);
+            LookUpDestinationShortInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationShortInfoDto>(baseModel).Result;
 
             //this.FkLookUpInfo = (new LookUpSearchResponseDto()).extraMapFromBaseModel(baseModel.FkLookUp);
-            temp.LookUpValuesInfo = baseModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueTinyInfoDto(v)).extraMapFromBaseModel(v)).ToList();
+            temp.LookUpValuesInfo = baseModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(v)).ToList();
 
             return temp;
         }

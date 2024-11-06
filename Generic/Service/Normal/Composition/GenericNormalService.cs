@@ -55,7 +55,7 @@ namespace Generic.Service.Normal.Composition
             this.physicalDeleteService = _physicalDeleteService;
             this.logicalDeleteService = _logicalDeleteService;
             this.mapper = _mapper;
-            this.mapper.MappingEvent += ExtraMap;
+           // this.mapper.MappingEvent += ExtraMap;
         }
 
         public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
