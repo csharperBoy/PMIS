@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using static Generic.Base.Handler.SystemLog.WithSerilog.GenericLogWithSerilogHandlerFactory;
 
-namespace Generic.DTO.Base.Handler.Log
+namespace Generic.Base.Handler.SystemLog
 {
     public class GenericConfigureLogRequestDto
     {
         public LogHandlerType logHandlerType { get; set; }
-        
+
     }
 }

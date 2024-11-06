@@ -11,7 +11,7 @@ using Generic.Base.Handler.Map.Contract;
 using Generic.Base.Handler.SystemException.Contract;
 using Generic.Base.Handler.SystemException;
 using Generic.Service.Normal.Operation.Contract;
-using Generic.DTO.Service;
+using Generic.Service.DTO;
 
 namespace Generic.Service.Normal.Composition.Abstract
 ;

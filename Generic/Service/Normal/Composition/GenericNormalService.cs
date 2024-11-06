@@ -2,7 +2,7 @@
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
-using Generic.DTO.Service;
+using Generic.Service.DTO;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Composition.Abstract;
 using Generic.Service.Normal.Operation;

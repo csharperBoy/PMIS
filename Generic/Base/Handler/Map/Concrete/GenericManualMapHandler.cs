@@ -1,4 +1,5 @@
-﻿using Generic.Base.Handler.Map.Abstract;
+﻿using AutoMapper;
+using Generic.Base.Handler.Map.Abstract;
 
 namespace Generic.Base.Handler.Map.Concrete
 {
@@ -23,6 +24,11 @@ namespace Generic.Base.Handler.Map.Concrete
 
             //        throw;
             //    }
+            throw new NotImplementedException();
+        }
+
+        public override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
+        {
             throw new NotImplementedException();
         }
     }

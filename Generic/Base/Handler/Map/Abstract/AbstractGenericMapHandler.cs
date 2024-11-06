@@ -65,10 +65,10 @@ namespace Generic.Base.Handler.Map.Abstract
             throw new NotImplementedException();
         }
 
-        public TDestination Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
-        {
-            throw new NotImplementedException();
-        }
+        //public TDestination Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public TDestination Map<TSource, TDestination>(TSource source, TDestination destination, Action<IMappingOperationOptions<TSource, TDestination>> opts)
         {
@@ -121,6 +121,16 @@ namespace Generic.Base.Handler.Map.Abstract
         }
 
         public object Map(object source, object destination, Type sourceType, Type destinationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        TDestination IGenericMapHandler.Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
+        {
+            throw new NotImplementedException();
+        }
+
+        TDestination IMapper.Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
         {
             throw new NotImplementedException();
         }

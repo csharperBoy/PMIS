@@ -1,4 +1,4 @@
-﻿using Generic.DTO.Service;
+﻿using Generic.Service.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

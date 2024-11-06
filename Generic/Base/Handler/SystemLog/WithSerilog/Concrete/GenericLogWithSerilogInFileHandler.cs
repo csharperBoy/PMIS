@@ -1,5 +1,5 @@
 ﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.DTO.Base.Handler.SystemLog.Serilog;
+using Generic.Base.Handler.SystemLog.WithSerilog.DTO;
 using Serilog;
 using Serilog.Events;
 using System;

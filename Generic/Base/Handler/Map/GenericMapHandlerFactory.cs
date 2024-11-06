@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 namespace Generic.Base.Handler.Map
 {    public static class GenericMapHandlerFactory
     {
+        private static AbstractGenericMapHandler autoMapper;
+        private static AbstractGenericMapHandler manualMapper;
+
         public enum MappingMode
         {
             Auto,
@@ -22,10 +25,18 @@ namespace Generic.Base.Handler.Map
             switch (mappingMode)
             {
                 case MappingMode.Auto:
-                    return new GenericAutoMapHandler();
+                    if (autoMapper == null)
+                    {
+                        autoMapper = new GenericAutoMapHandler();
+                    }
+                    return autoMapper;
 
                 case MappingMode.Manual:
-                    return new GenericManualMapHandler();
+                    if (manualMapper == null)
+                    {
+                        manualMapper = new GenericManualMapHandler();
+                    }
+                    return manualMapper;
 
                 default:
                     throw new ArgumentException("Invalid mapping mode");

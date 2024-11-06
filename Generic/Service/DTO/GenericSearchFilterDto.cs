@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.DTO.Service
+namespace Generic.Service.DTO
 {
     public class GenericSearchFilterDto
     {

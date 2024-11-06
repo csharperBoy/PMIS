@@ -2,9 +2,9 @@
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.DTO.Service;
 using Generic.Helper;
 using Generic.Repository.Abstract;
+using Generic.Service.DTO;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
 using System;

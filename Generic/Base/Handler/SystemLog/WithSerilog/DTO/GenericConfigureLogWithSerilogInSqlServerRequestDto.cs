@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.DTO.Base.Handler.SystemLog.Serilog
+namespace Generic.Base.Handler.SystemLog.WithSerilog.DTO
 {
-    public class GenericConfigureLogWithSerilogInSqlServerRequestDto 
+    public class GenericConfigureLogWithSerilogInSqlServerRequestDto
     {
         public string connectionString { get; set; }
         public string tableName { get; set; }

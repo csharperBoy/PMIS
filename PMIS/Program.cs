@@ -6,7 +6,7 @@ using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
 using Generic.Base.Handler.SystemLog.WithSerilog;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.DTO.Base.Handler.SystemLog.Serilog;
+using Generic.Base.Handler.SystemLog.WithSerilog.DTO;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Composition;

@@ -5,7 +5,7 @@ using Generic.Base.Handler.SystemException;
 using Generic.Base.Handler.SystemException.Abstract;
 using Generic.Base.Handler.SystemException.Concrete;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.DTO.Service;
+using Generic.Service.DTO;
 using Generic.Repository;
 using Generic.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;

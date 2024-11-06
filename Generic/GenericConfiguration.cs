@@ -19,37 +19,32 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using static Generic.Base.Handler.SystemLog.WithSerilog.GenericLogWithSerilogHandlerFactory;
-using Generic.DTO.Base.Handler.Log;
 using Generic.Base.Handler.SystemLog.WithSerilog;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
-using Generic.DTO.Base.Handler.SystemLog.Serilog;
+using Generic.Base.Handler.SystemLog.WithSerilog.DTO;
 
 namespace Generic
 {
     public static class GenericConfiguration
     {
-        public static void ConfigureGenericLogServices(IServiceCollection _services, GenericConfigureLogWithSerilogRequestDto _req)
+        public static void ConfigureGenericLogServices(IServiceCollection services, GenericConfigureLogWithSerilogRequestDto req)
         {
             #region Log
 
-            _services.AddSingleton<GenericLogWithSerilogInFileHandler>();
-            _services.AddSingleton<GenericLogWithSerilogInSqlServerHandler>();
-            _services.AddSingleton<GenericLogWithSerilogInFileHandler>();
-
-            _services.AddSingleton<AbstractGenericLogWithSerilogHandler> (provider =>
+            services.AddSingleton<GenericLogWithSerilogInFileHandler>();
+            services.AddSingleton<GenericLogWithSerilogInSqlServerHandler>();
+            services.AddSingleton<AbstractGenericLogWithSerilogHandler> (serviceProvider =>
             {
-                return  GenericLogWithSerilogHandlerFactory.GetLogHandler(_req);
+                return  GetLogHandler(req);
             });
-            
-
-            _services.AddSingleton<Func<GenericConfigureLogWithSerilogRequestDto, AbstractGenericLogWithSerilogHandler>>(serviceProvider => key =>
+            services.AddSingleton<Func<GenericConfigureLogWithSerilogRequestDto, AbstractGenericLogWithSerilogHandler>>(serviceProvider => key =>
             {
-                return GenericLogWithSerilogHandlerFactory.GetLogHandler(key);
+                return GetLogHandler(serviceProvider, key);
             });
 
 
-            _services.AddLogging(loggingBuilder =>
+            services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.ClearProviders();
                 loggingBuilder.AddSerilog(dispose: true);
@@ -67,8 +62,10 @@ namespace Generic
             #region Map
             services.AddScoped<GenericAutoMapHandler>();
             services.AddScoped<GenericManualMapHandler>();
-
-            services.AddScoped<AbstractGenericMapHandler, GenericAutoMapHandler>();
+            services.AddScoped<AbstractGenericMapHandler>(serviceProvider =>
+            {
+                return GetMapper(serviceProvider, MappingMode.Auto);
+            });
             services.AddScoped<Func<MappingMode, AbstractGenericMapHandler>>(serviceProvider => key =>
             {
                 return GetMapper(serviceProvider, key);
