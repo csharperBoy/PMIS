@@ -1,11 +1,22 @@
 ﻿using AutoMapper;
 using Generic.Base.Handler.Map.Abstract;
+using Generic.Base.Handler.Map.Contract;
 
 namespace Generic.Base.Handler.Map.Concrete
 {
     public class GenericManualMapHandler : AbstractGenericMapHandler
     {
-        public override async Task<TDestination> Map<TSource, TDestination>(TSource source)
+        public override Task AfterMap(Action<object, object> afterFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task BeforeMap(Action<object, object> beforeFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<TDestination> Map<TSource, TDestination>(TSource source)
         {
             //    try
             //    {
@@ -26,8 +37,7 @@ namespace Generic.Base.Handler.Map.Concrete
             //    }
             throw new NotImplementedException();
         }
-
-        public override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
+        public override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts = null)
         {
             throw new NotImplementedException();
         }

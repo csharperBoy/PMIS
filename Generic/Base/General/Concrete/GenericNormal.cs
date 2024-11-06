@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generic.Base.General
+namespace Generic.Base.General.Concrete
 {
     public class GenericNormal : AbstractGeneric
     {
