@@ -7,7 +7,7 @@
         //Task BeforeMap(Action<TSource, TDestination> beforeFunction);
         //Task AfterMap(Action<TSource, TDestination> afterFunction);
     }
-    public sealed class MappingOperationOptions : IGenericMappingOperationOptions
+    public sealed class GenericMappingOperationOptions : IGenericMappingOperationOptions
     {
         public Action<object, object> BeforeMapAction { get; private set; }
         public Action<object, object> AfterMapAction { get; private set; }

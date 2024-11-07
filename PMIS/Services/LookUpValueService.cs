@@ -23,7 +23,7 @@ namespace PMIS.Services
         public LookUpValueService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, LookUpValue, LookUpValueAddRequestDto, LookUpValueAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, LookUpValue, LookUpValueEditRequestDto, LookUpValueEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, LookUpValue, LookUpValueDeleteRequestDto, LookUpValueDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, LookUpValue, LookUpValueDeleteRequestDto, LookUpValueDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, LookUpValue, LookUpValueSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
             mapper = _mapper;
-            this.mapper.MappingEvent += ExtraMap;
+            //this.mapper.MappingEvent += ExtraMap;
         }
 
         public override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)

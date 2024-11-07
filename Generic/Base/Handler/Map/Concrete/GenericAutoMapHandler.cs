@@ -24,15 +24,20 @@ namespace Generic.Base.Handler.Map.Concrete
             {
                 cfg.CreateMap<TSource, TDestination>();
             });
-            var mapper = new Mapper(config);
-            TDestination destination = Activator.CreateInstance<TDestination>();
-            destination = mapper.Map<TSource, TDestination>(source, (Action<IMappingOperationOptions<TSource, TDestination>>)opts);
-            // return await ExtraMap(source, destination);
-            //if (MappingEvent != null)
-            //{
-            //   await a<TSource, TDestination>.Invoke(source,destination);
-            //}
 
+            var mapper = new Mapper(config);
+            var destination = Activator.CreateInstance<TDestination>();
+            var mappingOptions = new GenericMappingOperationOptions();
+            opts?.Invoke(mappingOptions); 
+            if (mappingOptions.BeforeMapAction != null)
+            {
+                mappingOptions.BeforeMapAction(source, destination);
+            }
+            destination = mapper.Map<TSource, TDestination>(source);
+            if (mappingOptions.AfterMapAction != null)
+            {
+                mappingOptions.AfterMapAction(source, destination);
+            }
             return await Task.FromResult(destination);
         }
 

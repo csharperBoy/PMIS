@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Generic.Base.Handler.Map.Concrete.GenericAutoMapHandler;
 
 
 
@@ -65,7 +66,25 @@ namespace Generic.Service.Normal.Operation.Abstract
                     TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
                     try
                     {
-                        entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
+                        entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req, opts =>
+                        {
+                            opts.BeforeMap(async (src, dest) =>
+                            {
+                                var mapMethod = typeof(TEntityAddResponseDto).GetMethod("map");
+                                if (mapMethod != null)
+                                {
+                                    // فراخوانی متد Map با استفاده از Invoke  
+                                    // var result =
+                                    var result = await (Task<TEntityAddResponseDto>)mapMethod.Invoke(null, new object[] { src });
+                                    Console.WriteLine("Mapping completed.");
+                                }
+                            });
+
+                            opts.AfterMap((src, dest) =>
+                            {
+                                Console.WriteLine($"After mapping: Destination Id=");
+                            });
+                        });
 
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();

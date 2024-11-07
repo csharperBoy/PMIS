@@ -36,26 +36,26 @@ namespace Generic.Base.Handler.Map.Abstract
         public abstract Task AfterMap(Action<object, object> afterFunction);
 
 
-        //    public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
+        //public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
         //public event MappingHandler<object, object> MappingEvent;
 
-        //    public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        //        where TSource : class
-        //        where TDestination : class
+        //public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
+        //    where TSource : class
+        //    where TDestination : class
+        //{
+        //    try
         //    {
-        //        try
+        //        if (MappingEvent != null)
         //        {
-        //            if (MappingEvent != null)
-        //            {
-        //                await MappingEvent.Invoke(source, destination);
-        //            }
+        //            await MappingEvent.Invoke(source, destination);
+        //        }
 
-        //            return await Task.FromResult(destination);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw;
-        //        }
+        //        return await Task.FromResult(destination);
         //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

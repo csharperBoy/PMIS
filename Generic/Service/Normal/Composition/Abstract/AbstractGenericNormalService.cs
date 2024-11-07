@@ -12,6 +12,7 @@ using Generic.Base.Handler.SystemException.Contract;
 using Generic.Base.Handler.SystemException;
 using Generic.Service.Normal.Operation.Contract;
 using Generic.Service.DTO;
+using Generic.Service.Normal.Operation.Abstract;
 
 namespace Generic.Service.Normal.Composition.Abstract
 ;
@@ -31,6 +32,7 @@ public abstract class AbstractGenericNormalService<TContext, TEntity, TEntityAdd
     where TEntityDeleteResponseDto : class
     where TEntitySearchResponseDto : class
 {
+    //AbstractGenericNormalAddService<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto> normalAddService;
     //private TContext context;
     //private IGenericRepository<TEntity> repository;
     //private IGenericMapHandler mapper;

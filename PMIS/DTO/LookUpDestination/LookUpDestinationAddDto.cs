@@ -8,7 +8,7 @@ namespace PMIS.DTO.LookUpDestination
 {
     public class LookUpDestinationAddRequestDto
     {
-       // public int Id { get; set; }
+        // public int Id { get; set; }
 
         public int FkLookUpId { get; set; }
 
@@ -26,6 +26,13 @@ namespace PMIS.DTO.LookUpDestination
     }
     public class LookUpDestinationAddResponseDto
     {
+        public static async Task<LookUpDestinationAddResponseDto> map(LookUpDestinationAddRequestDto y)
+        {
+            // منطق متد Map  
+            await Task.Delay(1000); // شبیه‌سازی عملیات asynchronous  
+            Console.WriteLine("Mapping executed.");
+            return new LookUpDestinationAddResponseDto() { ErrorMessage = y.Description };
+        }
         public string ErrorMessage { get; set; }
     }
 }

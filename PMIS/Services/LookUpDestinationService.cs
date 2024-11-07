@@ -25,7 +25,7 @@ namespace PMIS.Services
         {
              mapper = _mapper;
             //_mapper.ExtraMap += ExtraMap;
-            this.mapper.MappingEvent += ExtraMap;
+            //this.mapper.MappingEvent += ExtraMap;
         }
 
         public override async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
