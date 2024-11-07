@@ -1,6 +1,7 @@
 ﻿using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map.Contract;
 using AutoMapper;
+using System.Reflection;
 
 namespace Generic.Base.Handler.Map.Concrete
 {
@@ -14,11 +15,26 @@ namespace Generic.Base.Handler.Map.Concrete
            // destination =await mapper.Map<TSource, TDestination>(source);
         }
 
-        public delegate Task<TDestination> MappingHandler<TSource, TDestination>(TSource source, TDestination destination);
-        public event MappingHandler<object, object> MappingEvent;
+        public override async Task<TDestination> Map<TSource, TDestination>(TSource source)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TSource, TDestination>();
+            });
+
+            var mapper = new Mapper(config);
+            var destination = Activator.CreateInstance<TDestination>();
+            var mappingOptions = new GenericMappingOperationOptions();
+
+            source = await BeforeMap(source, destination);
+            destination = mapper.Map<TSource, TDestination>(source);
+            destination = await AfterMap(source, destination);
+            
+            return await Task.FromResult(destination);
+        }
 
 
-        public async override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts = null)
+        public async override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts )
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -37,7 +53,7 @@ namespace Generic.Base.Handler.Map.Concrete
             if (mappingOptions.AfterMapAction != null)
             {
                 mappingOptions.AfterMapAction(source, destination);
-            }
+            }           
             return await Task.FromResult(destination);
         }
 
@@ -50,63 +66,84 @@ namespace Generic.Base.Handler.Map.Concrete
         {
             throw new NotImplementedException();
         }
-
-        public virtual async Task<TDestination> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-            where TSource : class
-            where TDestination : class
+        public async Task<TSource> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
+            where TDestination : class, new()
+            where TSource : class, new()
         {
-            try
+            TSource result = new TSource();
+            var mapMethodSource = typeof(TSource).GetMethod("BeforeMap", BindingFlags.Static | BindingFlags.Public);
+            if (mapMethodSource != null)
             {
-                if (MappingEvent != null)
+                var genericMethod = mapMethodSource.MakeGenericMethod(typeof(TSource), typeof(TDestination));
+
+                var task = (Task)genericMethod.Invoke(null, new object[] { source, destination });
+                await task.ConfigureAwait(false);
+
+                var resultProperty = task.GetType().GetProperty("Result");
+                if (resultProperty != null)
                 {
-                    await MappingEvent.Invoke(source, destination);
+                    result = (TSource)resultProperty.GetValue(task);
+
                 }
 
-                return await Task.FromResult(destination);
             }
-            catch (Exception ex)
+            var mapMethodDestination = typeof(TDestination).GetMethod("BeforeMap", BindingFlags.Static | BindingFlags.Public);
+            if (mapMethodDestination != null)
             {
-                throw;
+                var genericMethod = mapMethodDestination.MakeGenericMethod(typeof(TSource), typeof(TDestination));
+
+                var task = (Task)genericMethod.Invoke(null, new object[] { source, destination });
+                await task.ConfigureAwait(false);
+
+                var resultProperty = task.GetType().GetProperty("Result");
+                if (resultProperty != null)
+                {
+                    result = (TSource)resultProperty.GetValue(task);
+
+                }
+
             }
+            return result;
         }
-        public async Task<TDestination> Map<TSource, TDestination>(TSource source)
+        public async Task<TDestination> AfterMap<TSource,TDestination>(TSource source, TDestination destination)
+            where TDestination : class , new()
+            where TSource : class , new()
         {
-            var config = new MapperConfiguration(cfg =>
+            TDestination result = new TDestination();
+            var mapMethodSource = typeof(TSource).GetMethod("AfterMap", BindingFlags.Static | BindingFlags.Public);
+            if (mapMethodSource != null)
             {
-                cfg.CreateMap<TSource, TDestination>();
-            });
-            var mapper = new Mapper(config);
-            TDestination destination = Activator.CreateInstance<TDestination>();
-            destination = mapper.Map<TDestination>(source);
-            // return await ExtraMap(source, destination);
-            if (MappingEvent != null)
-            {
-                await MappingEvent.Invoke(source, destination);
+                var genericMethod = mapMethodSource.MakeGenericMethod(typeof(TSource), typeof(TDestination));
+
+                var task = (Task)genericMethod.Invoke(null, new object[] { source, destination });
+                await task.ConfigureAwait(false);
+
+                var resultProperty = task.GetType().GetProperty("Result");
+                if (resultProperty != null)
+                {
+                    result = (TDestination)resultProperty.GetValue(task);
+
+                }
+
             }
-
-            return await Task.FromResult(destination);
-        }
-        public async Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> opts)
-        {
-            var config = new MapperConfiguration(cfg =>
+            var mapMethodDestination = typeof(TDestination).GetMethod("AfterMap", BindingFlags.Static | BindingFlags.Public);
+            if (mapMethodDestination != null)
             {
-                cfg.CreateMap<TSource, TDestination>();
-            });
-            var mapper = new Mapper(config);
-            TDestination destination = Activator.CreateInstance<TDestination>();
-            destination = mapper.Map<TSource, TDestination>(source, opts);
-            // return await ExtraMap(source, destination);
-            //if (MappingEvent != null)
-            //{
-            //   await a<TSource, TDestination>.Invoke(source,destination);
-            //}
+                var genericMethod = mapMethodDestination.MakeGenericMethod(typeof(TSource), typeof(TDestination));
 
-            return await Task.FromResult(destination);
+                var task = (Task)genericMethod.Invoke(null, new object[] { source, destination });
+                await task.ConfigureAwait(false);
+
+                var resultProperty = task.GetType().GetProperty("Result");
+                if (resultProperty != null)
+                {
+                    result = (TDestination)resultProperty.GetValue(task);
+
+                }
+
+            }
+            return result;
         }
-
-        //public Task<bool> ExtraMap<TSource, TDestination>(TSource source, TDestination destination)
-        //{
-        //    return base.ExtraMap<TSource, TDestination>(source, destination);
-        //}
+        
     }
 }

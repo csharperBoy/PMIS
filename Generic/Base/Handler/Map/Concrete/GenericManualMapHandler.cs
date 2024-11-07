@@ -16,8 +16,8 @@ namespace Generic.Base.Handler.Map.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task<TDestination> Map<TSource, TDestination>(TSource source)
-        {
+       // public async Task<TDestination> Map<TSource, TDestination>(TSource source)
+       // {
             //    try
             //    {
             //        TEntityDestination destination = null ;
@@ -35,9 +35,15 @@ namespace Generic.Base.Handler.Map.Concrete
 
             //        throw;
             //    }
+        //    throw new NotImplementedException();
+       // }
+
+        public override Task<TDestination> Map<TSource, TDestination>(TSource source)
+        {
             throw new NotImplementedException();
         }
-        public override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts = null)
+
+        public override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts)
         {
             throw new NotImplementedException();
         }
