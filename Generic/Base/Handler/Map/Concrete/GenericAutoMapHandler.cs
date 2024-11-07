@@ -26,7 +26,7 @@ namespace Generic.Base.Handler.Map.Concrete
             var destination = Activator.CreateInstance<TDestination>();
             var mappingOptions = new GenericMappingOperationOptions();
 
-            source = await BeforeMap(source, destination);
+           // source = await BeforeMap(source, destination);
             destination = mapper.Map<TSource, TDestination>(source);
             destination = await AfterMap(source, destination);
             

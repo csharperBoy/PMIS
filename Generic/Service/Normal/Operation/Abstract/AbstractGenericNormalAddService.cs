@@ -67,47 +67,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                     try
                     {
                         entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
-                        //entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req, opts =>
-                        //{
-                        //    opts.BeforeMap(async (src, dest) =>
-                        //    {
-                        //        var mapMethod = typeof(TEntityAddRequestDto).GetMethod("BeforeMap", BindingFlags.Static | BindingFlags.Public);
-                        //        if (mapMethod != null)
-                        //        {
-                        //            var genericMethod = mapMethod.MakeGenericMethod(typeof(TEntityAddRequestDto), typeof(TEntity));
-
-                        //            var task = (Task)genericMethod.Invoke(null, new object[] { src, dest });
-                        //            await task.ConfigureAwait(false);
-
-                        //            var resultProperty = task.GetType().GetProperty("Result");
-                        //            if (resultProperty != null)
-                        //            {
-                        //                var result = (TEntity)resultProperty.GetValue(task);
-
-                        //            }
-                        //        }
-                        //    });
-
-                        //opts.AfterMap(async (src, dest) =>
-                        //{
-                        //    var mapMethod = typeof(TEntityAddRequestDto).GetMethod("AfterMap", BindingFlags.Static | BindingFlags.Public);
-                        //    if (mapMethod != null)
-                        //    {
-                        //        var genericMethod = mapMethod.MakeGenericMethod(typeof(TEntityAddRequestDto), typeof(TEntity));
-
-                        //        var task = (Task)genericMethod.Invoke(null, new object[] { src, dest });
-                        //        await task.ConfigureAwait(false);
-
-                        //        var resultProperty = task.GetType().GetProperty("Result");
-                        //        if (resultProperty != null)
-                        //        {
-                        //            var result = (TEntity)resultProperty.GetValue(task);
-
-                        //        }
-                        //    }
-                        //});
-                        //  });
-
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
                         repository.SetEntityStateAsync(entity,EntityState.Detached);

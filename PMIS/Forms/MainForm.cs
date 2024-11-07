@@ -221,16 +221,16 @@ namespace PMIS.Forms
                     recordCount = null,
                     sorts = null
                 };
-                //(bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
-                //List<LookUpValueTinyInfoDto> lst = new List<LookUpValueTinyInfoDto>();
-                //foreach (var item in res)
-                //{
-                //    lst.AddRange(item.FkLookUpInfo.LookUpValuesInfo.ToList()); 
-                //}
-                //dataGridView1.DataSource = lst;
-                //MessageBox.Show(IsSuccess.ToString());
+                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
+                List<LookUpValueTinyInfoDto> lst = new List<LookUpValueTinyInfoDto>();
+                foreach (var item in res)
+                {
+                    lst.AddRange(item.FkLookUpInfo.LookUpValuesInfo.ToList());
+                }
+                dataGridView1.DataSource = lst;
+                MessageBox.Show(IsSuccess.ToString());
 
-               
+
             }
             catch (Exception ex)
             {
