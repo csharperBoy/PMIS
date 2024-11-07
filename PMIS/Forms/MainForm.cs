@@ -62,11 +62,11 @@ namespace PMIS.Forms
                 List<LookUpDestinationAddRequestDto> lstReq = new List<LookUpDestinationAddRequestDto>() {
                 new LookUpDestinationAddRequestDto() {
                 FkLookUpId=60,
-                ColumnName="test",
-                Description="",
+                ColumnName=textBox1.Text,
+                Description=textBox3.Text,
                 FlgLogicalDelete = false,
                 SystemInfo="",
-                TableName = "test2"
+                TableName = textBox2.Text
                 }};
 
                 IEnumerable<LookUpDestinationAddResponseDto> response = new List<LookUpDestinationAddResponseDto>();
