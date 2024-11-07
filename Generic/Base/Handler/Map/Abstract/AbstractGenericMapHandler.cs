@@ -30,7 +30,39 @@ namespace Generic.Base.Handler.Map.Abstract
         public abstract Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts = null)
             where TSource : class, new()
             where TDestination : class, new();
+        //{
+        //   await BeforeMap(async (src, dest) =>
+        //    {
+        //        var mapMethodSrc = typeof(TSource).GetMethod("BeforeMap");
+        //        if (mapMethodSrc != null)
+        //        {
+        //            var result = await (Task<TSource>)mapMethodSrc.Invoke(null, new object[] { src,dest });
 
+        //        }
+        //        var mapMethodDest = typeof(TDestination).GetMethod("BeforeMap");
+        //        if (mapMethodDest != null)
+        //        {
+        //            var result = await (Task<TDestination>)mapMethodDest.Invoke(null, new object[] { src, dest });
+
+        //        }
+        //    });
+
+        //   await AfterMap(async (src, dest) =>
+        //    {
+        //        var mapMethodSrc = typeof(TSource).GetMethod("AfterMap");
+        //        if (mapMethodSrc != null)
+        //        {
+        //            var result = await (Task<TSource>)mapMethodSrc.Invoke(null, new object[] { src , dest });
+
+        //        }
+        //        var mapMethodDest = typeof(TDestination).GetMethod("AfterMap");
+        //        if (mapMethodDest != null)
+        //        {
+        //            var result = await (Task<TDestination>)mapMethodDest.Invoke(null, new object[] { src, dest });
+
+        //        }
+        //    });
+        //}
         public abstract Task BeforeMap(Action<object, object> beforeFunction);
 
         public abstract Task AfterMap(Action<object, object> afterFunction);

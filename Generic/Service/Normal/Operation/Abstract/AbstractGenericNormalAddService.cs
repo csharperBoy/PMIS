@@ -70,19 +70,22 @@ namespace Generic.Service.Normal.Operation.Abstract
                         {
                             opts.BeforeMap(async (src, dest) =>
                             {
-                                var mapMethod = typeof(TEntityAddResponseDto).GetMethod("map");
+                                var mapMethod = typeof(TEntityAddRequestDto).GetMethod("BeforeMap");
                                 if (mapMethod != null)
                                 {
-                                    // فراخوانی متد Map با استفاده از Invoke  
-                                    // var result =
-                                    var result = await (Task<TEntityAddResponseDto>)mapMethod.Invoke(null, new object[] { src });
-                                    Console.WriteLine("Mapping completed.");
+                                    var result = await (Task<TEntity>)mapMethod.Invoke(null, new object[] { src,dest });
+                                 
                                 }
                             });
 
-                            opts.AfterMap((src, dest) =>
+                            opts.AfterMap(async(src, dest) =>
                             {
-                                Console.WriteLine($"After mapping: Destination Id=");
+                                var mapMethod = typeof(TEntityAddRequestDto).GetMethod("AfterMap");
+                                if (mapMethod != null)
+                                {
+                                    var result = await (Task<TEntity>)mapMethod.Invoke(null, new object[] { src, dest });
+                                  
+                                }
                             });
                         });
 

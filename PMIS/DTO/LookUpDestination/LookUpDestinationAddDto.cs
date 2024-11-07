@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Base.Handler.Map.Contract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,11 @@ namespace PMIS.DTO.LookUpDestination
 {
     public class LookUpDestinationAddRequestDto
     {
+        public static async Task<Models.LookUpDestination> AfterMap(LookUpDestinationAddRequestDto src, Models.LookUpDestination dest)
+        {
+            dest.Description = "test des";
+            return dest;
+        }
         // public int Id { get; set; }
 
         public int FkLookUpId { get; set; }
@@ -24,15 +30,15 @@ namespace PMIS.DTO.LookUpDestination
 
       
     }
-    public class LookUpDestinationAddResponseDto
+    public class LookUpDestinationAddResponseDto 
     {
-        public static async Task<LookUpDestinationAddResponseDto> map(LookUpDestinationAddRequestDto y)
+        public static async Task<LookUpDestinationAddResponseDto> AfterMap(Models.LookUpDestination src , LookUpDestinationAddResponseDto dest)
         {
-            // منطق متد Map  
-            await Task.Delay(1000); // شبیه‌سازی عملیات asynchronous  
-            Console.WriteLine("Mapping executed.");
-            return new LookUpDestinationAddResponseDto() { ErrorMessage = y.Description };
+            dest.ErrorMessage = "test des";          
+            return dest;
         }
+
+      
         public string ErrorMessage { get; set; }
     }
 }
