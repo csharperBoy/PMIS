@@ -206,7 +206,7 @@ namespace PMIS.Forms
                             LogicalOperator = LogicalOperator.And,
                             operation = FilterOperator.Equals,
                             type = PhraseType.Condition,
-                            value = "Indicator"
+                            value = "IndicatorCategory"
                         },
                         new GenericSearchFilterDto()
                         {
@@ -214,7 +214,7 @@ namespace PMIS.Forms
                             LogicalOperator = LogicalOperator.And,
                             operation = FilterOperator.Equals,
                             type = PhraseType.Condition,
-                            value = "FkLkpUnitID"
+                            value = "FkLkpCategoryTypeID"
                         }
                     },
                     pageNumber = null,
@@ -222,10 +222,10 @@ namespace PMIS.Forms
                     sorts = null
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
-                List<LookUpValueTinyInfoDto> lst = new List<LookUpValueTinyInfoDto>();
+                List<LookUpValueShortInfoDto> lst = new List<LookUpValueShortInfoDto>();
                 foreach (var item in res)
                 {
-                    lst.AddRange(item.FkLookUpInfo.LookUpValuesInfo.ToList());
+                    lst.AddRange(item.LookUpValuesInfo.ToList());
                 }
                 dataGridView1.DataSource = lst;
                 MessageBox.Show(IsSuccess.ToString());

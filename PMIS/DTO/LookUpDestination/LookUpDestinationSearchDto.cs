@@ -25,8 +25,7 @@ namespace PMIS.DTO.LookUpDestination
             {
                 if (destination is LookUpDestinationSearchResponseDto destinationModel)
                 {
-                    destinationModel = await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(destinationModel.extraMapFromBaseModel(sourceModel));
-
+                     await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(destinationModel.extraMapFromBaseModel(sourceModel));                   
                 }
 
             }

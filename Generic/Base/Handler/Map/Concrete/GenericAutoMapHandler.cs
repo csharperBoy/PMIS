@@ -70,7 +70,7 @@ namespace Generic.Base.Handler.Map.Concrete
             where TDestination : class, new()
             where TSource : class, new()
         {
-            TSource result = new TSource();
+           // TSource result = new TSource();
             var mapMethodSource = typeof(TSource).GetMethod("BeforeMap", BindingFlags.Static | BindingFlags.Public);
             if (mapMethodSource != null)
             {
@@ -82,7 +82,7 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    result = (TSource)resultProperty.GetValue(task);
+                    source = (TSource)resultProperty.GetValue(task);
 
                 }
 
@@ -98,18 +98,18 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    result = (TSource)resultProperty.GetValue(task);
+                    source = (TSource)resultProperty.GetValue(task);
 
                 }
 
             }
-            return result;
+            return source;
         }
         public async Task<TDestination> AfterMap<TSource,TDestination>(TSource source, TDestination destination)
             where TDestination : class , new()
             where TSource : class , new()
         {
-            TDestination result = new TDestination();
+            //TDestination result = new TDestination();
             var mapMethodSource = typeof(TSource).GetMethod("AfterMap", BindingFlags.Static | BindingFlags.Public);
             if (mapMethodSource != null)
             {
@@ -121,7 +121,7 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    result = (TDestination)resultProperty.GetValue(task);
+                    destination = (TDestination)resultProperty.GetValue(task);
 
                 }
 
@@ -137,12 +137,12 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    result = (TDestination)resultProperty.GetValue(task);
+                    destination = (TDestination)resultProperty.GetValue(task);
 
                 }
 
             }
-            return result;
+            return destination;
         }
         
     }

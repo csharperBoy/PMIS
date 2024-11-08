@@ -15,11 +15,11 @@ namespace PMIS.DTO.LookUp.Info
     {
         public LookUpShortInfoDto extraMapFromBaseModel(PMIS.Models.LookUp baseModel)
         {
-            LookUpShortInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUp, LookUpShortInfoDto>(baseModel).Result;
+            //LookUpShortInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUp, LookUpShortInfoDto>(baseModel).Result;
 
-            temp.LookUpDestinationsInfo = baseModel.LookUpDestinations.Select(d => (new LookUpDestinationTinyInfoDto()).extraMapFromBaseModel(d)).ToList();
-            temp.LookUpValuesInfo = baseModel.LookUpValues.Select(v => (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(v)).ToList();
-            return temp;
+            this.LookUpDestinationsInfo = baseModel.LookUpDestinations.Select(d => (new LookUpDestinationTinyInfoDto()).extraMapFromBaseModel(d)).ToList();
+            this.LookUpValuesInfo = baseModel.LookUpValues.Select(v => (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(v)).ToList();
+            return this;
         }
         public int Id { get; set; }
 
