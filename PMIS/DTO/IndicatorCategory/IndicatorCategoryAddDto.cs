@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.IndicatorCategory
 {
-    public class IndicatorCategoryAddDto
+    public class IndicatorCategoryAddRequestDto
     {
       //  public int Id { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.User
 {
-    public class UserAddDto
+    public class UserAddRequestDto
     {
        // public int Id { get; set; }
 
@@ -30,7 +30,7 @@ namespace PMIS.DTO.User
 
         //public virtual LookUpValue FkLkpWorkCalenar { get; set; } = null!;
     }
-    public class ClaimAddResponseDto
+    public class UserAddResponseDto
     {
         public int Id { get; set; }
         public bool IsSuccess { get; set; }

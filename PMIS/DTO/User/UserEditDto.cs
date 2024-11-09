@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.User
 {
-       public class UserEditDto
+       public class UserEditRequestDto
     {
          public int Id { get; set; }
 
