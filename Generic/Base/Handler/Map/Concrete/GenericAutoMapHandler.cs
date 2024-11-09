@@ -32,6 +32,27 @@ namespace Generic.Base.Handler.Map.Concrete
             
             return await Task.FromResult(destination);
         }
+        //public override void Map<TSource, TDestination>(TSource source, TDestination destination)
+        //{
+        //    var config = new MapperConfiguration(cfg =>
+        //    {
+        //        cfg.CreateMap<TSource, TDestination>();
+        //    });
+        //    var mapper = new Mapper(config);
+        //    var mappingOptions = new GenericMappingOperationOptions();
+        //    destination =  Map<TSource, TDestination>(source).Result;
+            
+        //}
+        public override void Map<TSource, TDestination>(TSource source, TDestination destination)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TSource, TDestination>();
+            });
+            var mapper = new Mapper(config);
+
+            mapper.Map(source, destination);
+        }
 
 
         public async override Task<TDestination> Map<TSource, TDestination>(TSource source, Action<IGenericMappingOperationOptions> opts )
@@ -144,6 +165,7 @@ namespace Generic.Base.Handler.Map.Concrete
             }
             return destination;
         }
+
         
     }
 }
