@@ -28,6 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PMIS.Forms.UserControls;
 
 namespace PMIS.Forms
 {
@@ -35,7 +36,7 @@ namespace PMIS.Forms
     {
         IIndicatorService indicatorService;
         ILookUpService lookUpService;
-       ILookUpValueService lookUpValueService;
+        ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
         public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
@@ -59,94 +60,94 @@ namespace PMIS.Forms
         {
             try
             {
-                List<LookUpDestinationAddRequestDto> lstReq = new List<LookUpDestinationAddRequestDto>() {
-                new LookUpDestinationAddRequestDto() {
-                FkLookUpId=60,
-                ColumnName=textBox1.Text,
-                Description=textBox3.Text,
-                FlgLogicalDelete = false,
-                SystemInfo="",
-                TableName = textBox2.Text
-                }};
+                //List<LookUpDestinationAddRequestDto> lstReq = new List<LookUpDestinationAddRequestDto>() {
+                //new LookUpDestinationAddRequestDto() {
+                //FkLookUpId=60,
+                //ColumnName=textBox1.Text,
+                //Description=textBox3.Text,
+                //FlgLogicalDelete = false,
+                //SystemInfo="",
+                //TableName = textBox2.Text
+                //}};
 
-                IEnumerable<LookUpDestinationAddResponseDto> response = new List<LookUpDestinationAddResponseDto>();
-                bool IsSuccess;
-                (IsSuccess, response) = await lookUpDestinationService.AddGroup(lstReq);
-                MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
+                //IEnumerable<LookUpDestinationAddResponseDto> response = new List<LookUpDestinationAddResponseDto>();
+                //bool IsSuccess;
+                //(IsSuccess, response) = await lookUpDestinationService.AddGroup(lstReq);
+                //MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
                 //int a = 1;
                 //int b = 0;
                 //int aa = a / b;
 
-              //  List<IndicatorAddRequestDto> lstReq = new List<IndicatorAddRequestDto>() {
-              //  new IndicatorAddRequestDto() {
-              //  Code = textBox1.Text,
-              //  Description = textBox2.Text,
-              //  Formula = textBox3.Text,
-              //  Title = textBox4.Text,
-              //  FkLkpDesirabilityId = 500,
-              //  FkLkpFormId = 500,
-              //  FkLkpManualityId = 500,
-              //  FkLkpMeasureId = 500,
-              //  FkLkpPeriodId = 500,
-              //  FkLkpUnitId = 500,
-              //  SystemInfo = "{test : test}"
-              //  },
-              //  new IndicatorAddRequestDto() {
-              //  Code = textBox1.Text,
-              //  Description = textBox2.Text,
-              //  Formula = textBox3.Text,
-              //  Title = textBox4.Text,
-              //  FkLkpDesirabilityId = 550,
-              //  FkLkpFormId = 550,
-              //  FkLkpManualityId = 550,
-              //  FkLkpMeasureId = 550,
-              //  FkLkpPeriodId = 550,
-              //  FkLkpUnitId = 550,
-              //  SystemInfo = "{test : test2}"
-              //  }};
+                //  List<IndicatorAddRequestDto> lstReq = new List<IndicatorAddRequestDto>() {
+                //  new IndicatorAddRequestDto() {
+                //  Code = textBox1.Text,
+                //  Description = textBox2.Text,
+                //  Formula = textBox3.Text,
+                //  Title = textBox4.Text,
+                //  FkLkpDesirabilityId = 500,
+                //  FkLkpFormId = 500,
+                //  FkLkpManualityId = 500,
+                //  FkLkpMeasureId = 500,
+                //  FkLkpPeriodId = 500,
+                //  FkLkpUnitId = 500,
+                //  SystemInfo = "{test : test}"
+                //  },
+                //  new IndicatorAddRequestDto() {
+                //  Code = textBox1.Text,
+                //  Description = textBox2.Text,
+                //  Formula = textBox3.Text,
+                //  Title = textBox4.Text,
+                //  FkLkpDesirabilityId = 550,
+                //  FkLkpFormId = 550,
+                //  FkLkpManualityId = 550,
+                //  FkLkpMeasureId = 550,
+                //  FkLkpPeriodId = 550,
+                //  FkLkpUnitId = 550,
+                //  SystemInfo = "{test : test2}"
+                //  }};
 
-              //  IEnumerable<IndicatorAddResponseDto> response = new List<IndicatorAddResponseDto>();
-              //  bool IsSuccess;
-              //  (IsSuccess, response) = await indicatorService.AddGroup(lstReq);
-              //  MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
-              // // IsSuccess = await indicatorService.AddRange(lstReq);
-              ////  MessageBox.Show(IsSuccess.ToString());
+                //  IEnumerable<IndicatorAddResponseDto> response = new List<IndicatorAddResponseDto>();
+                //  bool IsSuccess;
+                //  (IsSuccess, response) = await indicatorService.AddGroup(lstReq);
+                //  MessageBox.Show(IsSuccess.ToString() + response.FirstOrDefault().ErrorMessage);
+                // // IsSuccess = await indicatorService.AddRange(lstReq);
+                ////  MessageBox.Show(IsSuccess.ToString());
 
 
 
-              //  List<IndicatorEditRequestDto> lstEditReq = new List<IndicatorEditRequestDto>() {
-              //  new IndicatorEditRequestDto() {
-              //      Id = 92,
-              //  Code = textBox1.Text,
-              //  Description = textBox2.Text,
-              //  Formula = textBox3.Text,
-              //  Title = textBox4.Text,
-              //  FkLkpDesirabilityId = 501,
-              //  FkLkpFormId = 501,
-              //  FkLkpManualityId = 501,
-              //  FkLkpMeasureId = 500,
-              //  FkLkpPeriodId = 500,
-              //  FkLkpUnitId = 500,
-              //  SystemInfo = "{test : test}"
-              //  },
-              //  new IndicatorEditRequestDto() {
-              //      Id=93,
-              //  Code = textBox1.Text,
-              //  Description = textBox2.Text,
-              //  Formula = textBox3.Text,
-              //  Title = textBox4.Text,
-              //  FkLkpDesirabilityId = 551,
-              //  FkLkpFormId = 551,
-              //  FkLkpManualityId = 550,
-              //  FkLkpMeasureId = 550,
-              //  FkLkpPeriodId = 550,
-              //  FkLkpUnitId = 551,
-              //  SystemInfo = "{test : test2}"
-              //  }};
-              //  IEnumerable<IndicatorEditResponseDto> response2 = new List<IndicatorEditResponseDto>();
-              //  bool IsSuccess2;
-              //  (IsSuccess2, response2) = await indicatorService.EditGroup(lstEditReq);
-             //   MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
+                //  List<IndicatorEditRequestDto> lstEditReq = new List<IndicatorEditRequestDto>() {
+                //  new IndicatorEditRequestDto() {
+                //      Id = 92,
+                //  Code = textBox1.Text,
+                //  Description = textBox2.Text,
+                //  Formula = textBox3.Text,
+                //  Title = textBox4.Text,
+                //  FkLkpDesirabilityId = 501,
+                //  FkLkpFormId = 501,
+                //  FkLkpManualityId = 501,
+                //  FkLkpMeasureId = 500,
+                //  FkLkpPeriodId = 500,
+                //  FkLkpUnitId = 500,
+                //  SystemInfo = "{test : test}"
+                //  },
+                //  new IndicatorEditRequestDto() {
+                //      Id=93,
+                //  Code = textBox1.Text,
+                //  Description = textBox2.Text,
+                //  Formula = textBox3.Text,
+                //  Title = textBox4.Text,
+                //  FkLkpDesirabilityId = 551,
+                //  FkLkpFormId = 551,
+                //  FkLkpManualityId = 550,
+                //  FkLkpMeasureId = 550,
+                //  FkLkpPeriodId = 550,
+                //  FkLkpUnitId = 551,
+                //  SystemInfo = "{test : test2}"
+                //  }};
+                //  IEnumerable<IndicatorEditResponseDto> response2 = new List<IndicatorEditResponseDto>();
+                //  bool IsSuccess2;
+                //  (IsSuccess2, response2) = await indicatorService.EditGroup(lstEditReq);
+                //   MessageBox.Show(IsSuccess2.ToString() + response2.FirstOrDefault().ErrorMessage);
                 //IsSuccess2 = await indicatorService.EditRange(lstEditReq);
                 //MessageBox.Show(IsSuccess2.ToString());
             }
@@ -158,7 +159,7 @@ namespace PMIS.Forms
         }
 
 
-   
+
         private async void button2_Click_1(object sender, EventArgs e)
         {
             try
@@ -188,47 +189,47 @@ namespace PMIS.Forms
                 //    recordCount = null,
                 //    sorts = null
                 //};
-                GenericSearchRequestDto requestDto = new GenericSearchRequestDto()
-                {
-                    filters = new List<GenericSearchFilterDto>()
-                    {
-                        new GenericSearchFilterDto()
-                        {
-                            columnName = "FlgLogicalDelete",
-                            LogicalOperator = LogicalOperator.Begin,
-                            operation = FilterOperator.Equals,
-                            type = PhraseType.Condition,
-                            value = "False"
-                        } ,
-                        new GenericSearchFilterDto()
-                        {
-                            columnName = "TableName",
-                            LogicalOperator = LogicalOperator.And,
-                            operation = FilterOperator.Equals,
-                            type = PhraseType.Condition,
-                            value = "IndicatorCategory"
-                        },
-                        new GenericSearchFilterDto()
-                        {
-                            columnName = "ColumnName",
-                            LogicalOperator = LogicalOperator.And,
-                            operation = FilterOperator.Equals,
-                            type = PhraseType.Condition,
-                            value = "FkLkpCategoryTypeID"
-                        }
-                    },
-                    pageNumber = null,
-                    recordCount = null,
-                    sorts = null
-                };
-                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
-                List<LookUpValueShortInfoDto> lst = new List<LookUpValueShortInfoDto>();
-                foreach (var item in res)
-                {
-                    lst.AddRange(item.LookUpValuesInfo.ToList());
-                }
-                dataGridView1.DataSource = lst;
-                MessageBox.Show(IsSuccess.ToString());
+                //GenericSearchRequestDto requestDto = new GenericSearchRequestDto()
+                //{
+                //    filters = new List<GenericSearchFilterDto>()
+                //    {
+                //        new GenericSearchFilterDto()
+                //        {
+                //            columnName = "FlgLogicalDelete",
+                //            LogicalOperator = LogicalOperator.Begin,
+                //            operation = FilterOperator.Equals,
+                //            type = PhraseType.Condition,
+                //            value = "False"
+                //        } ,
+                //        new GenericSearchFilterDto()
+                //        {
+                //            columnName = "TableName",
+                //            LogicalOperator = LogicalOperator.And,
+                //            operation = FilterOperator.Equals,
+                //            type = PhraseType.Condition,
+                //            value = "IndicatorCategory"
+                //        },
+                //        new GenericSearchFilterDto()
+                //        {
+                //            columnName = "ColumnName",
+                //            LogicalOperator = LogicalOperator.And,
+                //            operation = FilterOperator.Equals,
+                //            type = PhraseType.Condition,
+                //            value = "FkLkpCategoryTypeID"
+                //        }
+                //    },
+                //    pageNumber = null,
+                //    recordCount = null,
+                //    sorts = null
+                //};
+                //(bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> res) = await lookUpDestinationService.Search(requestDto);
+                //List<LookUpValueShortInfoDto> lst = new List<LookUpValueShortInfoDto>();
+                //foreach (var item in res)
+                //{
+                //    lst.AddRange(item.LookUpValuesInfo.ToList());
+                //}
+                //dataGridView1.DataSource = lst;
+                //MessageBox.Show(IsSuccess.ToString());
 
 
             }
@@ -237,6 +238,17 @@ namespace PMIS.Forms
                 //logHandler.Error(ex, "error log");
                 throw;
             }
+        }
+
+        private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UserControl ucForm = new IndicatorValueDataEntryOnForm();
+            TabPage tpForm = new TabPage("سیسشی");
+
+            tpForm.Controls.Add(ucForm);
+            tabControlMain.Controls.Add(tpForm);
+            flowLayoutPanelMain.Controls.Add(new TabControl());
+            ucForm.Show();
         }
     }
 }
