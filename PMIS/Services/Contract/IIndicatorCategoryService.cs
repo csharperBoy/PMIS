@@ -1,5 +1,5 @@
 ﻿using Generic.Service.Normal.Composition.Contract;
-using PMIS.DTO.Claim;
+using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.IndicatorCategory;
 using PMIS.Models;
 using System;

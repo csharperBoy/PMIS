@@ -1,5 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.Claim.Info;
+using PMIS.DTO.ClaimUserOnIndicator.Info;
 using PMIS.DTO.LookUpValue.Info;
 using System;
 using System.Collections.Generic;
@@ -16,12 +16,12 @@ namespace PMIS.DTO.User.Info
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
             this.FkLkpWorkCalenarInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpWorkCalenar);
-            this.ClaimsInfo = await Task.WhenAll(baseModel.Claims.Select(d => (new ClaimShortInfoDto()).extraMapFromBaseModel(d)).ToList());
+            this.ClaimUserOnIndicatorsInfo = await Task.WhenAll(baseModel.ClaimUserOnIndicators.Select(d => (new ClaimUserOnIndicatorShortInfoDto()).extraMapFromBaseModel(d)).ToList());
 
             return this;
         }
 
-        public virtual ICollection<ClaimShortInfoDto> ClaimsInfo { get; set; } = new List<ClaimShortInfoDto>();
+        public virtual ICollection<ClaimUserOnIndicatorShortInfoDto> ClaimUserOnIndicatorsInfo { get; set; } = new List<ClaimUserOnIndicatorShortInfoDto>();
 
         public virtual LookUpValueShortInfoDto FkLkpWorkCalenarInfo { get; set; } = null!;
     }

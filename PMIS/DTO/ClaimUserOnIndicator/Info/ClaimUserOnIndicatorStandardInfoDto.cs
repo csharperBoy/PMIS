@@ -8,16 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.Claim.Info
+namespace PMIS.DTO.ClaimUserOnIndicator.Info
 {
-    public class ClaimStandardInfoDto: ClaimTinyInfoDto
+    public class ClaimUserOnIndicatorStandardInfoDto: ClaimUserOnIndicatorTinyInfoDto
     {
-        public async Task<ClaimStandardInfoDto> extraMapFromBaseModel(PMIS.Models.Claim baseModel)
+        public async Task<ClaimUserOnIndicatorStandardInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimUserOnIndicator baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
             this.FkIndicatorInfo = await (new IndicatorShortInfoDto()).extraMapFromBaseModel(baseModel.FkIndicator);
-            this.FkLkpClaimInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaim);
+            this.FkLkpClaimUserOnIndicatorInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaimUserOnIndicator);
             this.FkUserInfo = await (new UserShortInfoDto()).extraMapFromBaseModel(baseModel.FkUser);
             return this;
         }
@@ -26,7 +26,7 @@ namespace PMIS.DTO.Claim.Info
 
         public virtual IndicatorShortInfoDto FkIndicatorInfo { get; set; } = null!;
 
-        public virtual LookUpValueShortInfoDto FkLkpClaimInfo { get; set; } = null!;
+        public virtual LookUpValueShortInfoDto FkLkpClaimUserOnIndicatorInfo { get; set; } = null!;
 
         public virtual UserShortInfoDto FkUserInfo { get; set; } = null!;
     }

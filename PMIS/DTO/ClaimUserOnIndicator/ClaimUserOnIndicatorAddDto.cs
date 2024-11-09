@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.Claim
+namespace PMIS.DTO.ClaimUserOnIndicator
 {
-    public class ClaimAddRequestDto
+    public class ClaimUserOnIndicatorAddRequestDto
     {
        // public int Id { get; set; }
 
-        public int FkLkpClaimId { get; set; }
+        public int FkLkpClaimUserOnIndicatorId { get; set; }
 
         public int FkUserId { get; set; }
 
@@ -24,11 +24,11 @@ namespace PMIS.DTO.Claim
 
         //public virtual Indicator FkIndicator { get; set; } = null!;
 
-        //public virtual LookUpValue FkLkpClaim { get; set; } = null!;
+        //public virtual LookUpValue FkLkpClaimUserOnIndicator { get; set; } = null!;
 
         //public virtual User FkUser { get; set; } = null!;
     }
-    public class ClaimAddResponseDto
+    public class ClaimUserOnIndicatorAddResponseDto
     {
         public int Id { get; set; }
         public bool IsSuccess { get; set; }

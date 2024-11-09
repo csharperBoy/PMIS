@@ -47,23 +47,23 @@ public partial class PmisContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkIndicatorId).HasColumnName("FkIndicatorID");
-            entity.Property(e => e.FkLkpClaimId).HasColumnName("FkLkpClaimID");
+            entity.Property(e => e.FkLkpClaimUserOnIndicatorId).HasColumnName("FkLkpClaimUserOnIndicatorID");
             entity.Property(e => e.FkUserId).HasColumnName("FkUserID");
 
             entity.HasOne(d => d.FkIndicator).WithMany(p => p.ClaimUserOnIndicators)
                 .HasForeignKey(d => d.FkIndicatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Claim_Indicator");
+                .HasConstraintName("FK_ClaimUserOnIndicator_Indicator");
 
-            entity.HasOne(d => d.FkLkpClaim).WithMany(p => p.ClaimUserOnIndicators)
-                .HasForeignKey(d => d.FkLkpClaimId)
+            entity.HasOne(d => d.FkLkpClaimUserOnIndicator).WithMany(p => p.ClaimUserOnIndicators)
+                .HasForeignKey(d => d.FkLkpClaimUserOnIndicatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Claim_LookUpValue");
+                .HasConstraintName("FK_ClaimUserOnIndicator_LookUpValue");
 
             entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimUserOnIndicators)
                 .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Claim_User");
+                .HasConstraintName("FK_ClaimUserOnIndicator_User");
         });
 
         modelBuilder.Entity<Indicator>(entity =>

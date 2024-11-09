@@ -1,6 +1,6 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.Claim.Info;
-using PMIS.DTO.Claim;
+using PMIS.DTO.ClaimUserOnIndicator.Info;
+using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.IndicatorValue.Info;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.Claim.Info;
+using PMIS.DTO.ClaimUserOnIndicator.Info;
 using PMIS.DTO.IndicatorCategory.Info;
 using PMIS.DTO.IndicatorValue.Info;
 using PMIS.DTO.LookUp.Info;
@@ -26,14 +26,14 @@ namespace PMIS.DTO.Indicator.Info
             this.FkLkpPeriodInfo= await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLkpPeriod);
             this.FkLkpUnitInfo= await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLkpUnit);
             
-            this.ClaimsInfo = await Task.WhenAll(baseModel.Claims.Select(d => (new ClaimTinyInfoDto()).extraMapFromBaseModel(d)).ToList());
+            this.ClaimUserOnIndicatorsInfo = await Task.WhenAll(baseModel.ClaimUserOnIndicators.Select(d => (new ClaimUserOnIndicatorTinyInfoDto()).extraMapFromBaseModel(d)).ToList());
             this.IndicatorCategoriesInfo =await Task.WhenAll(baseModel.IndicatorCategories.Select(d => (new IndicatorCategoryTinyInfoDto()).extraMapFromBaseModel(d)).ToList());
             this.IndicatorValuesInfo= await Task.WhenAll(baseModel.IndicatorValues.Select(d => (new IndicatorValueTinyInfoDto()).extraMapFromBaseModel(d)).ToList());
             return this;
         }
 
 
-        public virtual ICollection<ClaimTinyInfoDto> ClaimsInfo { get; set; } = new List<ClaimTinyInfoDto>();
+        public virtual ICollection<ClaimUserOnIndicatorTinyInfoDto> ClaimUserOnIndicatorsInfo { get; set; } = new List<ClaimUserOnIndicatorTinyInfoDto>();
 
         public virtual LookUpValueTinyInfoDto FkLkpDesirabilityInfo { get; set; } = null!;
 

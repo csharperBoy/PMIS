@@ -1,7 +1,7 @@
 ﻿using Generic.Base.Handler.Map.Abstract;
 using Generic.Service.Normal.Composition;
 using Generic.Service.Normal.Operation.Abstract;
-using PMIS.DTO.Claim;
+using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.Models;
 using PMIS.Services.Contract;
 using System;
@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services
 {
-    public class ClaimService
-        : GenericNormalService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto, ClaimEditRequestDto, ClaimEditResponseDto, ClaimDeleteRequestDto, ClaimDeleteResponseDto, ClaimSearchResponseDto>
-       , IClaimService
+    public class ClaimUserOnIndicatorService
+        : GenericNormalService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto>
+       , IClaimUserOnIndicatorService
     {
-        public ClaimService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Claim, ClaimEditRequestDto, ClaimEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, Claim, ClaimSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
+        public ClaimUserOnIndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
         }
     }

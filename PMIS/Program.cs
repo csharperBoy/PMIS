@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PMIS.DTO.Claim;
+using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.IndicatorCategory;
 using PMIS.DTO.IndicatorValue;
@@ -86,15 +86,15 @@ namespace PMIS
             services.AddTransient<LoginForm>();
             #endregion
 
-            #region Claim
-            services.AddScoped<AbstractGenericRepository<Claim, PmisContext>, GenericSqlServerRepository<Claim, PmisContext>>();
-            services.AddScoped<IClaimService, ClaimService>();
-            services.AddScoped<AbstractGenericNormalService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto, ClaimEditRequestDto, ClaimEditResponseDto, ClaimDeleteRequestDto, ClaimDeleteResponseDto, ClaimSearchResponseDto>, GenericNormalService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto, ClaimEditRequestDto, ClaimEditResponseDto, ClaimDeleteRequestDto, ClaimDeleteResponseDto, ClaimSearchResponseDto>>();
-            services.AddScoped<AbstractGenericNormalAddService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto>, GenericNormalAddService<PmisContext, Claim, ClaimAddRequestDto, ClaimAddResponseDto>>();
-            services.AddScoped<AbstractGenericNormalEditService<PmisContext, Claim, ClaimEditRequestDto, ClaimEditResponseDto>, GenericNormalEditService<PmisContext, Claim, ClaimEditRequestDto, ClaimEditResponseDto>>();
-            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, Claim, ClaimDeleteRequestDto, ClaimDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, Claim, ClaimSearchResponseDto>, GenericNormalSearchService<PmisContext, Claim, ClaimSearchResponseDto>>();
+            #region ClaimUserOnIndicator
+            services.AddScoped<AbstractGenericRepository<ClaimUserOnIndicator, PmisContext>, GenericSqlServerRepository<ClaimUserOnIndicator, PmisContext>>();
+            services.AddScoped<IClaimUserOnIndicatorService, ClaimUserOnIndicatorService>();
+            services.AddScoped<AbstractGenericNormalService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto>, GenericNormalService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto>>();
+            services.AddScoped<AbstractGenericNormalAddService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto>, GenericNormalAddService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto>>();
+            services.AddScoped<AbstractGenericNormalEditService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto>, GenericNormalEditService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto>>();
+            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorSearchResponseDto>, GenericNormalSearchService<PmisContext, ClaimUserOnIndicator, ClaimUserOnIndicatorSearchResponseDto>>();
             #endregion
 
             #region Indicator

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Claim = PMIS.Models.Claim;
+using ClaimUserOnIndicator = PMIS.Models.ClaimUserOnIndicator;
 using User = PMIS.Models.User;
 
 namespace PMIS.Repository.Contract
@@ -13,7 +13,7 @@ namespace PMIS.Repository.Contract
     public interface IUnitOfWork
     {
         public PmisContext context { get; set; }
-        public IGenericRepository<Claim> claimRepository { get; set; }
+        public IGenericRepository<ClaimUserOnIndicator> claimRepository { get; set; }
         public IGenericRepository<Indicator> indicatorRepository { get; set; }
         public IGenericRepository<IndicatorCategory> indicatorCategoryRepository { get; set; }
         public IGenericRepository<IndicatorValue> indicatorValueRepository { get; set; }

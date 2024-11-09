@@ -7,7 +7,7 @@ public partial class ClaimUserOnIndicator
 {
     public int Id { get; set; }
 
-    public int FkLkpClaimId { get; set; }
+    public int FkLkpClaimUserOnIndicatorId { get; set; }
 
     public int FkUserId { get; set; }
 
@@ -21,7 +21,7 @@ public partial class ClaimUserOnIndicator
 
     public virtual Indicator FkIndicator { get; set; } = null!;
 
-    public virtual LookUpValue FkLkpClaim { get; set; } = null!;
+    public virtual LookUpValue FkLkpClaimUserOnIndicator { get; set; } = null!;
 
     public virtual User FkUser { get; set; } = null!;
 }

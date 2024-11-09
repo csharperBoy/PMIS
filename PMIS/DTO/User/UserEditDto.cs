@@ -26,7 +26,7 @@ namespace PMIS.DTO.User
 
         //public bool? FlgLogicalDelete { get; set; }
 
-        //public virtual ICollection<Claim> Claims { get; set; } = new List<Claim>();
+        //public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
         //public virtual LookUpValue FkLkpWorkCalenar { get; set; } = null!;
     }

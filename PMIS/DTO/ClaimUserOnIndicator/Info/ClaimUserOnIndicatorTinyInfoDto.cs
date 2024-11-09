@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.Claim.Info
+namespace PMIS.DTO.ClaimUserOnIndicator.Info
 {
-    public class ClaimTinyInfoDto
+    public class ClaimUserOnIndicatorTinyInfoDto
     {
-        public async Task<ClaimTinyInfoDto> extraMapFromBaseModel(PMIS.Models.Claim baseModel)
+        public async Task<ClaimUserOnIndicatorTinyInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimUserOnIndicator baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             return this;

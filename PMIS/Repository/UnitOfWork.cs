@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Claim = PMIS.Models.Claim;
+using ClaimUserOnIndicator = PMIS.Models.ClaimUserOnIndicator;
 using User = PMIS.Models.User;
 
 namespace PMIS.Repository
@@ -13,7 +13,7 @@ namespace PMIS.Repository
     public class UnitOfWork : IUnitOfWork
     {
         public PmisContext context { get; set; }
-        public IGenericRepository<Claim> claimRepository { get; set; }
+        public IGenericRepository<ClaimUserOnIndicator> claimRepository { get; set; }
         public IGenericRepository<Indicator> indicatorRepository { get; set; }
         public IGenericRepository<IndicatorCategory> indicatorCategoryRepository { get; set; }
         public IGenericRepository<IndicatorValue> indicatorValueRepository { get; set; }
@@ -24,7 +24,7 @@ namespace PMIS.Repository
         public UnitOfWork()
         {
             this.context = new PmisContext();
-            this.claimRepository = new GenericRepository<Claim, PmisContext>(context);
+            this.claimRepository = new GenericRepository<ClaimUserOnIndicator, PmisContext>(context);
             this.indicatorRepository = new GenericRepository<Indicator, PmisContext>(context);
             this.indicatorCategoryRepository = new GenericRepository<IndicatorCategory, PmisContext>(context);
             this.indicatorValueRepository = new GenericRepository<IndicatorValue, PmisContext>(context);
