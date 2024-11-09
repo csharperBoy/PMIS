@@ -48,7 +48,7 @@ namespace Generic.Base.Handler.Map.Concrete
             throw new NotImplementedException();
         }
 
-        public override void Map<TSource, TDestination>(TSource source, TDestination destination)
+        public override Task Map<TSource, TDestination>(TSource source, TDestination destination)
         {
             throw new NotImplementedException();
         }

@@ -43,7 +43,7 @@ namespace Generic.Base.Handler.Map.Concrete
         //    destination =  Map<TSource, TDestination>(source).Result;
             
         //}
-        public override void Map<TSource, TDestination>(TSource source, TDestination destination)
+        public override async Task Map<TSource, TDestination>(TSource source, TDestination destination)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -52,6 +52,7 @@ namespace Generic.Base.Handler.Map.Concrete
             var mapper = new Mapper(config);
 
             mapper.Map(source, destination);
+           await Task.CompletedTask;
         }
 
 

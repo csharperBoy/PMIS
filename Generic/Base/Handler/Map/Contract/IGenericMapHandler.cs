@@ -6,7 +6,7 @@
             where TSource : class, new()
             where TDestination : class, new();
 
-        void Map<TSource, TDestination>(TSource source, TDestination destination)
+        Task Map<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class, new()
             where TDestination : class, new();
 

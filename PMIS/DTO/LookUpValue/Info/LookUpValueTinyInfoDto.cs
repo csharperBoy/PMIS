@@ -11,9 +11,9 @@ namespace PMIS.DTO.LookUpValue.Info
 {
     public class LookUpValueTinyInfoDto
     {
-        public LookUpValueTinyInfoDto extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
+        public async Task<LookUpValueTinyInfoDto> extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
         {
-            //LookUpValueTinyInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpValue, LookUpValueTinyInfoDto>(baseModel).Result;
+            await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             return this;
         }
         public int Id { get; set; }

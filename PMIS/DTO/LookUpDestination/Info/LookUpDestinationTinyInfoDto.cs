@@ -12,10 +12,9 @@ namespace PMIS.DTO.LookUpDestination.Info
 {
     public class LookUpDestinationTinyInfoDto
     {
-        public LookUpDestinationTinyInfoDto extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
+        public async Task<LookUpDestinationTinyInfoDto> extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-           // LookUpDestinationTinyInfoDto temp = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationTinyInfoDto>(baseModel).Result;
-
+            await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             return this;
         }
         public int Id { get; set; }

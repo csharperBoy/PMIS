@@ -16,7 +16,7 @@ namespace Generic.Base.Handler.Map.Abstract
 
         public abstract Task AfterMap(Action<object, object> afterFunction);
 
-        public abstract void Map<TSource, TDestination>(TSource source, TDestination destination)
+        public abstract Task Map<TSource, TDestination>(TSource source, TDestination destination)
             where TSource : class, new()
             where TDestination : class, new();
         
