@@ -27,9 +27,6 @@ namespace PMIS.DTO.LookUpDestination.Info
 
         public string? Description { get; set; }
 
-        //public string? SystemInfo { get; set; }
-
-        // public bool? FlgLogicalDelete { get; set; }
 
        
     }

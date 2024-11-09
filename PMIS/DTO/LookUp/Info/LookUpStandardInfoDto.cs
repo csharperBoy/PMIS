@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUp.Info
 {
-    public class LookUpStandardInfoDto
+    public class LookUpStandardInfoDto:LookUpTinyInfoDto
     {
         public async Task<LookUpStandardInfoDto> extraMapFromBaseModel(PMIS.Models.LookUp baseModel)
         {
@@ -19,17 +19,7 @@ namespace PMIS.DTO.LookUp.Info
             this.LookUpValuesInfo = await Task.WhenAll(baseModel.LookUpValues.Select(v => (new LookUpValueShortInfoDto()).extraMapFromBaseModel(v)).ToList());
             return this;
         }
-        public int Id { get; set; }
-
-        public string Code { get; set; } = null!;
-
-        public string Title { get; set; } = null!;
-
-        public string? Description { get; set; }
-
-        // public string? SystemInfo { get; set; }
-
-        //public bool? FlgLogicalDelete { get; set; }
+       
 
         public virtual ICollection<LookUpDestinationShortInfoDto> LookUpDestinationsInfo { get; set; } = new List<LookUpDestinationShortInfoDto>();
 

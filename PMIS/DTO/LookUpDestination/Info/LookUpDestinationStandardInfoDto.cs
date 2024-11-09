@@ -12,29 +12,16 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUpDestination.Info
 {
-    public class LookUpDestinationStandardInfoDto
+    public class LookUpDestinationStandardInfoDto: LookUpDestinationTinyInfoDto
     {
         public async Task<LookUpDestinationStandardInfoDto> extraMapFromBaseModel(PMIS.Models.LookUpDestination baseModel)
         {
-            await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<PMIS.Models.LookUpDestination, LookUpDestinationStandardInfoDto>(baseModel,this);            
+            await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             this.LookUpValuesInfo = await Task.WhenAll(baseModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueShortInfoDto()).extraMapFromBaseModel(v)).ToList());
+            this.FkLookUpInfo = this.FkLookUpInfo = await (new LookUpShortInfoDto()).extraMapFromBaseModel(baseModel.FkLookUp);
 
             return this;
         }
-        public int Id { get; set; }
-
-        public int FkLookUpId { get; set; }
-
-        public string TableName { get; set; } = null!;
-
-        public string ColumnName { get; set; } = null!;
-
-        public string? Description { get; set; }
-
-        //public string? SystemInfo { get; set; }
-
-        // public bool? FlgLogicalDelete { get; set; }
-
         public virtual LookUpShortInfoDto FkLookUpInfo { get; set; } = null!;
         public virtual ICollection<LookUpValueShortInfoDto> LookUpValuesInfo { get; set; } = new List<LookUpValueShortInfoDto>();
     }
