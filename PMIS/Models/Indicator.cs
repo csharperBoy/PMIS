@@ -31,7 +31,7 @@ public partial class Indicator
 
     public bool? FlgLogicalDelete { get; set; }
 
-    public virtual ICollection<Claim> Claims { get; set; } = new List<Claim>();
+    public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
     public virtual LookUpValue FkLkpDesirability { get; set; } = null!;
 

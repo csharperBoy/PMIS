@@ -15,7 +15,7 @@ public partial class PmisContext : DbContext
     {
     }
 
-    public virtual DbSet<Claim> Claims { get; set; }
+    public virtual DbSet<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; }
 
     public virtual DbSet<Indicator> Indicators { get; set; }
 
@@ -29,6 +29,8 @@ public partial class PmisContext : DbContext
 
     public virtual DbSet<LookUpValue> LookUpValues { get; set; }
 
+    public virtual DbSet<SerilogTable> SerilogTables { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,26 +39,28 @@ public partial class PmisContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Claim>(entity =>
+        modelBuilder.Entity<ClaimUserOnIndicator>(entity =>
         {
-            entity.ToTable("Claim");
+            entity.HasKey(e => e.Id).HasName("PK_Claim");
+
+            entity.ToTable("ClaimUserOnIndicator");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkIndicatorId).HasColumnName("FkIndicatorID");
             entity.Property(e => e.FkLkpClaimId).HasColumnName("FkLkpClaimID");
             entity.Property(e => e.FkUserId).HasColumnName("FkUserID");
 
-            entity.HasOne(d => d.FkIndicator).WithMany(p => p.Claims)
+            entity.HasOne(d => d.FkIndicator).WithMany(p => p.ClaimUserOnIndicators)
                 .HasForeignKey(d => d.FkIndicatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Claim_Indicator");
 
-            entity.HasOne(d => d.FkLkpClaim).WithMany(p => p.Claims)
+            entity.HasOne(d => d.FkLkpClaim).WithMany(p => p.ClaimUserOnIndicators)
                 .HasForeignKey(d => d.FkLkpClaimId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Claim_LookUpValue");
 
-            entity.HasOne(d => d.FkUser).WithMany(p => p.Claims)
+            entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimUserOnIndicators)
                 .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Claim_User");
@@ -196,6 +200,13 @@ public partial class PmisContext : DbContext
                 .HasForeignKey(d => d.FkLookUpId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_LookUpValue_LookUp");
+        });
+
+        modelBuilder.Entity<SerilogTable>(entity =>
+        {
+            entity.ToTable("SerilogTable");
+
+            entity.Property(e => e.TimeStamp).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<User>(entity =>

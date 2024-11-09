@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PMIS.Models;
 
-public partial class Claim
+public partial class ClaimUserOnIndicator
 {
     public int Id { get; set; }
 
