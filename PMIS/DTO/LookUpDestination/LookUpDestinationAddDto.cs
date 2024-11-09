@@ -19,7 +19,7 @@ namespace PMIS.DTO.LookUpDestination
             {
                 if (destination is Models.LookUpDestination destinationModel)
                 {
-                    sourceModel.Description = sourceModel.Description + "before map";
+                    sourceModel.Description = "(before map" + sourceModel.Description;
                 }
 
             }
@@ -33,7 +33,7 @@ namespace PMIS.DTO.LookUpDestination
             {
                 if (destination is Models.LookUpDestination destinationModel)
                 {
-                    destinationModel.Description = sourceModel.Description + "after map";
+                    destinationModel.Description = sourceModel.Description + "after map)";
                 }
 
             }
@@ -66,7 +66,7 @@ namespace PMIS.DTO.LookUpDestination
             {
                 if (destination is LookUpDestinationAddResponseDto destinationModel)
                 {
-                    sourceModel.Description = sourceModel.Description + "before map";
+                    sourceModel.Description = "(before map" + sourceModel.Description;
                 }
 
             }
@@ -80,7 +80,7 @@ namespace PMIS.DTO.LookUpDestination
             {
                 if (destination is LookUpDestinationAddResponseDto destinationModel)
                 {
-                    destinationModel.ErrorMessage = sourceModel.Description + "after map";
+                    destinationModel.ErrorMessage = sourceModel.Description + "after map)";
                 }
 
             }
