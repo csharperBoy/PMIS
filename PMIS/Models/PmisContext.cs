@@ -15,6 +15,8 @@ public partial class PmisContext : DbContext
     {
     }
 
+    public virtual DbSet<ClaimOnSystem> ClaimOnSystems { get; set; }
+
     public virtual DbSet<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; }
 
     public virtual DbSet<Indicator> Indicators { get; set; }
@@ -39,6 +41,21 @@ public partial class PmisContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ClaimOnSystem>(entity =>
+        {
+            entity.ToTable("ClaimOnSystem");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+
+            entity.HasOne(d => d.FkLkpClaimOnSystem).WithMany(p => p.ClaimOnSystems)
+                .HasForeignKey(d => d.FkLkpClaimOnSystemId)
+                .HasConstraintName("FK_ClaimOnSystem_LookUpValue");
+
+            entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimOnSystems)
+                .HasForeignKey(d => d.FkUserId)
+                .HasConstraintName("FK_ClaimOnSystem_User");
+        });
+
         modelBuilder.Entity<ClaimUserOnIndicator>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Claim");
