@@ -28,7 +28,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PMIS.Forms.UserControls;
 
 namespace PMIS.Forms
 {
@@ -241,53 +240,65 @@ namespace PMIS.Forms
         }
         private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControlMain.TabPages.Contains(tabPageOnForm))
-            {
-                tabPageOnForm.Controls.Clear();
-            }
-            else
-            {
-                tabControlMain.Controls.Add(tabPageOnForm);
-            }
-            UserControl userControlOnForm = new IndicatorValueDataEntryOnForm();
-            userControlOnForm.Dock = DockStyle.Fill;
-            tabPageOnForm.Controls.Add(userControlOnForm);
-            tabControlMain.Show();
-            tabControlMain.Refresh();
+            AddNewTabPage(tabPageOnForm, new IndicatorValueDataEntryOnForm());
         }
 
         private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControlMain.TabPages.Contains(tabPageOnDate))
-            {
-                tabPageOnDate.Controls.Clear();
-            }
-            else
-            {
-                tabControlMain.Controls.Add(tabPageOnDate);
-            }
-            UserControl userControlOnDate = new IndicatorValueDataEntryOnDate();
-            userControlOnDate.Dock = DockStyle.Fill;
-            tabPageOnDate.Controls.Add(userControlOnDate);
-            tabControlMain.Show();
-            tabControlMain.Refresh();
+            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate());
         }
 
         private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControlMain.TabPages.Contains(tabPageOnIndicator))
+            AddNewTabPage(tabPageOnIndicator, new IndicatorValueDataEntryOnIndicator());
+        }
+
+        private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void تخصیصشاخصبهدستهبندیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void تخصیصکاربربهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void تخصیصشاخصبهکاربرToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void AddNewTabPage(TabPage tabPage, Form form)
+        {
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            if (tabControlMain.TabPages.Contains(tabPage))
             {
-                tabPageOnIndicator.Controls.Clear();
+                tabPage.Controls.Clear();
             }
             else
             {
-                tabControlMain.Controls.Add(tabPageOnIndicator);
+                tabControlMain.Controls.Add(tabPage);
             }
-            UserControl userControlOnIndicator = new IndicatorValueDataEntryOnIndicator();
-            userControlOnIndicator.Dock = DockStyle.Fill;
-            tabPageOnIndicator.Controls.Add(userControlOnIndicator);
-            tabControlMain.Show();
-            tabControlMain.Refresh();
+            Panel panel = new Panel();
+            panel.Controls.Add(form);
+            panel.Dock = DockStyle.Fill;
+            tabPage.Controls.Add(panel);
+            form.Show();
         }
     }
 }

@@ -51,6 +51,13 @@
             tabPageOnForm = new TabPage();
             tabPageOnDate = new TabPage();
             tabPageOnIndicator = new TabPage();
+            tabPageUserDefine = new TabPage();
+            tabPageUserAccess = new TabPage();
+            tabPageIndicatorIdCard = new TabPage();
+            tabPageIndicatorAssignToCategory = new TabPage();
+            tabPageCategoryAssignToIndicator = new TabPage();
+            tabPageIndicatorAssignToUser = new TabPage();
+            tabPageUserAssignToIndicator = new TabPage();
             menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -110,14 +117,16 @@
             // تعریفکاربرانToolStripMenuItem
             // 
             تعریفکاربرانToolStripMenuItem.Name = "تعریفکاربرانToolStripMenuItem";
-            تعریفکاربرانToolStripMenuItem.Size = new Size(171, 22);
+            تعریفکاربرانToolStripMenuItem.Size = new Size(180, 22);
             تعریفکاربرانToolStripMenuItem.Text = "تعریف کاربران";
+            تعریفکاربرانToolStripMenuItem.Click += تعریفکاربرانToolStripMenuItem_Click;
             // 
             // دسترسیهایکاربرانToolStripMenuItem
             // 
             دسترسیهایکاربرانToolStripMenuItem.Name = "دسترسیهایکاربرانToolStripMenuItem";
-            دسترسیهایکاربرانToolStripMenuItem.Size = new Size(171, 22);
+            دسترسیهایکاربرانToolStripMenuItem.Size = new Size(180, 22);
             دسترسیهایکاربرانToolStripMenuItem.Text = "دسترسی‌های کاربران";
+            دسترسیهایکاربرانToolStripMenuItem.Click += دسترسیهایکاربرانToolStripMenuItem_Click;
             // 
             // اطلاعاتپایهToolStripMenuItem
             // 
@@ -131,6 +140,7 @@
             شناسنامهشاخصهاToolStripMenuItem.Name = "شناسنامهشاخصهاToolStripMenuItem";
             شناسنامهشاخصهاToolStripMenuItem.Size = new Size(221, 22);
             شناسنامهشاخصهاToolStripMenuItem.Text = "شناسنامه شاخص‌ها";
+            شناسنامهشاخصهاToolStripMenuItem.Click += شناسنامهشاخصهاToolStripMenuItem_Click;
             // 
             // دستهبندیهایشاخصهاToolStripMenuItem
             // 
@@ -144,12 +154,14 @@
             تخصیصدستهبندیبهشاخصToolStripMenuItem.Name = "تخصیصدستهبندیبهشاخصToolStripMenuItem";
             تخصیصدستهبندیبهشاخصToolStripMenuItem.Size = new Size(221, 22);
             تخصیصدستهبندیبهشاخصToolStripMenuItem.Text = "تخصیص دسته‌بندی به شاخص";
+            تخصیصدستهبندیبهشاخصToolStripMenuItem.Click += تخصیصدستهبندیبهشاخصToolStripMenuItem_Click;
             // 
             // تخصیصشاخصبهدستهبندیToolStripMenuItem
             // 
             تخصیصشاخصبهدستهبندیToolStripMenuItem.Name = "تخصیصشاخصبهدستهبندیToolStripMenuItem";
             تخصیصشاخصبهدستهبندیToolStripMenuItem.Size = new Size(221, 22);
             تخصیصشاخصبهدستهبندیToolStripMenuItem.Text = "تخصیص شاخص به دسته‌بندی";
+            تخصیصشاخصبهدستهبندیToolStripMenuItem.Click += تخصیصشاخصبهدستهبندیToolStripMenuItem_Click;
             // 
             // ادعاهایکاربرانرویشاخصهاToolStripMenuItem
             // 
@@ -163,12 +175,14 @@
             تخصیصکاربربهشاخصToolStripMenuItem.Name = "تخصیصکاربربهشاخصToolStripMenuItem";
             تخصیصکاربربهشاخصToolStripMenuItem.Size = new Size(195, 22);
             تخصیصکاربربهشاخصToolStripMenuItem.Text = "تخصیص کاربر به شاخص";
+            تخصیصکاربربهشاخصToolStripMenuItem.Click += تخصیصکاربربهشاخصToolStripMenuItem_Click;
             // 
             // تخصیصشاخصبهکاربرToolStripMenuItem
             // 
             تخصیصشاخصبهکاربرToolStripMenuItem.Name = "تخصیصشاخصبهکاربرToolStripMenuItem";
             تخصیصشاخصبهکاربرToolStripMenuItem.Size = new Size(195, 22);
             تخصیصشاخصبهکاربرToolStripMenuItem.Text = "تخصیص شاخص به کاربر";
+            تخصیصشاخصبهکاربرToolStripMenuItem.Click += تخصیصشاخصبهکاربرToolStripMenuItem_Click;
             // 
             // خروجToolStripMenuItem
             // 
@@ -224,6 +238,76 @@
             tabPageOnIndicator.Text = "ورود مقادیر بر اساس شاخص";
             tabPageOnIndicator.UseVisualStyleBackColor = true;
             // 
+            // tabPageUserDefine
+            // 
+            tabPageUserDefine.Location = new Point(4, 24);
+            tabPageUserDefine.Name = "tabPageUserDefine";
+            tabPageUserDefine.Padding = new Padding(3);
+            tabPageUserDefine.Size = new Size(192, 0);
+            tabPageUserDefine.TabIndex = 1;
+            tabPageUserDefine.Text = "تعریف کاربران";
+            tabPageUserDefine.UseVisualStyleBackColor = true;
+            // 
+            // tabPageUserAccess
+            // 
+            tabPageUserAccess.Location = new Point(4, 24);
+            tabPageUserAccess.Name = "tabPageUserAccess";
+            tabPageUserAccess.Padding = new Padding(3);
+            tabPageUserAccess.Size = new Size(192, 0);
+            tabPageUserAccess.TabIndex = 1;
+            tabPageUserAccess.Text = "دسترسی‌های کاربران";
+            tabPageUserAccess.UseVisualStyleBackColor = true;
+            // 
+            // tabPageIndicatorIdCard
+            // 
+            tabPageIndicatorIdCard.Location = new Point(4, 24);
+            tabPageIndicatorIdCard.Name = "tabPageIndicatorIdCard";
+            tabPageIndicatorIdCard.Padding = new Padding(3);
+            tabPageIndicatorIdCard.Size = new Size(192, 0);
+            tabPageIndicatorIdCard.TabIndex = 1;
+            tabPageIndicatorIdCard.Text = "شناسنامه شاخص";
+            tabPageIndicatorIdCard.UseVisualStyleBackColor = true;
+            // 
+            // tabPageIndicatorAssignToCategory
+            // 
+            tabPageIndicatorAssignToCategory.Location = new Point(4, 24);
+            tabPageIndicatorAssignToCategory.Name = "tabPageIndicatorAssignToCategory";
+            tabPageIndicatorAssignToCategory.Padding = new Padding(3);
+            tabPageIndicatorAssignToCategory.Size = new Size(192, 0);
+            tabPageIndicatorAssignToCategory.TabIndex = 1;
+            tabPageIndicatorAssignToCategory.Text = "تخصیص شاخص به دسته‌بندی";
+            tabPageIndicatorAssignToCategory.UseVisualStyleBackColor = true;
+            // 
+            // tabPageCategoryAssignToIndicator
+            // 
+            tabPageCategoryAssignToIndicator.Location = new Point(4, 24);
+            tabPageCategoryAssignToIndicator.Name = "tabPageCategoryAssignToIndicator";
+            tabPageCategoryAssignToIndicator.Padding = new Padding(3);
+            tabPageCategoryAssignToIndicator.Size = new Size(192, 0);
+            tabPageCategoryAssignToIndicator.TabIndex = 1;
+            tabPageCategoryAssignToIndicator.Text = "تخصیص دسته‌بندی به شاخص";
+            tabPageCategoryAssignToIndicator.UseVisualStyleBackColor = true;
+            // 
+            // tabPageIndicatorAssignToUser
+            // 
+            tabPageIndicatorAssignToUser.Location = new Point(4, 24);
+            tabPageIndicatorAssignToUser.Name = "tabPageIndicatorAssignToUser";
+            tabPageIndicatorAssignToUser.Padding = new Padding(3);
+            tabPageIndicatorAssignToUser.Size = new Size(192, 0);
+            tabPageIndicatorAssignToUser.TabIndex = 1;
+            tabPageIndicatorAssignToUser.Text = "تخصیص شاخص به کاربران";
+            tabPageIndicatorAssignToUser.UseVisualStyleBackColor = true;
+            // 
+            // tabPageUserAssignToIndicator
+            // 
+            tabPageUserAssignToIndicator.Location = new Point(4, 24);
+            tabPageUserAssignToIndicator.Name = "tabPageUserAssignToIndicator";
+            tabPageUserAssignToIndicator.Padding = new Padding(3);
+            tabPageUserAssignToIndicator.Size = new Size(192, 0);
+            tabPageUserAssignToIndicator.TabIndex = 1;
+            tabPageUserAssignToIndicator.Text = "تخصیص کاربران به شاخص";
+            tabPageUserAssignToIndicator.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -269,5 +353,12 @@
         private TabPage tabPageOnForm;
         private TabPage tabPageOnDate;
         private TabPage tabPageOnIndicator;
+        private TabPage tabPageUserDefine;
+        private TabPage tabPageUserAccess;
+        private TabPage tabPageIndicatorIdCard;
+        private TabPage tabPageIndicatorAssignToCategory;
+        private TabPage tabPageCategoryAssignToIndicator;
+        private TabPage tabPageIndicatorAssignToUser;
+        private TabPage tabPageUserAssignToIndicator;
     }
 }

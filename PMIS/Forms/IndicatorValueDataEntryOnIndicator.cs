@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PMIS.Forms.UserControls
+namespace PMIS.Forms
 {
-    public partial class IndicatorValueDataEntryOnIndicator : UserControl
+    public partial class IndicatorValueDataEntryOnIndicator : Form
     {
         public IndicatorValueDataEntryOnIndicator()
         {
