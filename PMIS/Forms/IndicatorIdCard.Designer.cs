@@ -34,6 +34,8 @@ namespace PMIS.Forms
             panel2 = new Panel();
             btnSearch = new Button();
             btnAdd = new Button();
+            btnEdit = new Button();
+            btnDelete = new Button();
             dgvIndicatorList = new DataGridView();
             dgvtbCode = new DataGridViewTextBoxColumn();
             dgvtbTitle = new DataGridViewTextBoxColumn();
@@ -45,6 +47,7 @@ namespace PMIS.Forms
             dgvcbLkpDesirability = new DataGridViewComboBoxColumn();
             dgvtbFormula = new DataGridViewTextBoxColumn();
             dgvtbDescription = new DataGridViewTextBoxColumn();
+            dgvchDelete = new DataGridViewCheckBoxColumn();
 
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -55,6 +58,8 @@ namespace PMIS.Forms
             // 
             panel1.Controls.Add(btnSearch);
             panel1.Controls.Add(btnAdd);
+            panel1.Controls.Add(btnEdit);
+            panel1.Controls.Add(btnDelete);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(3, 4, 3, 4);
@@ -88,7 +93,7 @@ namespace PMIS.Forms
             // 
             btnAdd.Dock = DockStyle.Left;
             btnAdd.Location = new Point(75, 0);
-            btnSearch.Margin = new Padding(3, 4, 3, 4);
+            btnAdd.Margin = new Padding(3, 4, 3, 4);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 74);
             btnAdd.TabIndex = 1;
@@ -96,9 +101,34 @@ namespace PMIS.Forms
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
+            // btnEdit
+            // 
+            btnEdit.Dock = DockStyle.Left;
+            btnEdit.Location = new Point(75, 0);
+            btnEdit.Margin = new Padding(3, 4, 3, 4);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(75, 74);
+            btnEdit.TabIndex = 1;
+            btnEdit.Text = "ویرایش";
+            btnEdit.UseVisualStyleBackColor = true;
+            btnEdit.Click += btnEdit_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Dock = DockStyle.Left;
+            btnDelete.Location = new Point(75, 0);
+            btnDelete.Margin = new Padding(3, 4, 3, 4);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(75, 74);
+            btnDelete.TabIndex = 1;
+            btnDelete.Text = "حذف";
+            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
+            // 
             // dgvIndicatorList
             // 
             dgvIndicatorList.AutoGenerateColumns = false;
+            dgvIndicatorList.AllowUserToAddRows = true;
             dgvIndicatorList.AllowUserToOrderColumns = true;
             dgvIndicatorList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvIndicatorList.Dock = DockStyle.Fill;
@@ -199,6 +229,14 @@ namespace PMIS.Forms
             dgvtbDescription.DataPropertyName = "Description";
             dgvtbDescription.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvIndicatorList.Columns.Add(dgvtbDescription);
+            //
+            // dgvchDelete
+            // 
+            dgvchDelete.HeaderText = "حذف";
+            dgvchDelete.Name = "FlgLogicalDelete";
+            dgvchDelete.DataPropertyName = "FlgLogicalDelete";
+            dgvchDelete.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvchDelete);
             // 
             // IndicatorIdCard
             // 
@@ -223,6 +261,8 @@ namespace PMIS.Forms
         private Panel panel2;
         private Button btnSearch;
         private Button btnAdd;
+        private Button btnEdit;
+        private Button btnDelete;
         private DataGridView dgvIndicatorList;
         private DataGridViewTextBoxColumn dgvtbCode;
         private DataGridViewTextBoxColumn dgvtbTitle;
@@ -234,6 +274,7 @@ namespace PMIS.Forms
         private DataGridViewComboBoxColumn dgvcbLkpDesirability;
         private DataGridViewTextBoxColumn dgvtbFormula;
         private DataGridViewTextBoxColumn dgvtbDescription;
+        private DataGridViewCheckBoxColumn dgvchDelete;
 
     }
 }

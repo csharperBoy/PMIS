@@ -47,6 +47,7 @@ namespace PMIS.Forms
             dgvcbLkpMeasure.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure");
             dgvcbLkpDesirability.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability");
         }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             await SearchIndicator();
@@ -84,8 +85,6 @@ namespace PMIS.Forms
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
                     if (row.IsNewRow) continue;
-                    string s = row.Cells["Code"].Value?.ToString();
-                    int a = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString());
                     addRequest.Add(new IndicatorAddRequestDto()
                     {
                         Code = row.Cells["Code"].Value?.ToString(),
@@ -109,7 +108,81 @@ namespace PMIS.Forms
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
 
+        private async void btnEdit_Click(object sender, EventArgs e)
+        {
+            await EditIndicator();
+        }
+
+        private async Task EditIndicator()
+        {
+            try
+            {
+                List<IndicatorEditRequestDto> editRequest = new List<IndicatorEditRequestDto>();
+                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    editRequest.Add(new IndicatorEditRequestDto()
+                    {
+                        // Id = int.Parse(row.Cells["Id"].Value?.ToString()),
+                        Code = row.Cells["Code"].Value?.ToString(),
+                        Title = row.Cells["Title"].Value?.ToString(),
+                        FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
+                        FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
+                        FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
+                        FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
+                        FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
+                        FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
+                        Formula = row.Cells["Formula"].Value?.ToString(),
+                        Description = row.Cells["Description"].Value?.ToString()
+                    });
+                }
+                (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(editRequest);
+
+                if (isSuccess)
+                {
+                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async void btnDelete_Click(object sender, EventArgs e)
+        {
+            await DeleteIndicator();
+        }
+
+        private async Task DeleteIndicator()
+        {
+            try
+            {
+                List<IndicatorDeleteRequestDto> deleteRequest = new List<IndicatorDeleteRequestDto>();
+                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    if (bool.Parse(row.Cells["FlgLogicalDelete"].Value?.ToString()))
+                    {
+                        deleteRequest.Add(new IndicatorDeleteRequestDto()
+                        {
+                            // Id = int.Parse(row.Cells["Id"].Value?.ToString())
+                        });
+                    }
+                }
+                (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(deleteRequest);
+
+                if (isSuccess)
+                {
+                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
