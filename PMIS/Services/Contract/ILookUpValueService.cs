@@ -1,5 +1,6 @@
 ﻿using Generic.Service.Normal.Composition.Contract;
 using PMIS.DTO.LookUp;
+using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.Models;
@@ -13,6 +14,8 @@ namespace PMIS.Services.Contract
 {
     public interface ILookUpValueService : IGenericNormalService<LookUpValue, LookUpValueAddRequestDto, LookUpValueAddResponseDto, LookUpValueEditRequestDto, LookUpValueEditResponseDto, LookUpValueDeleteRequestDto, LookUpValueDeleteResponseDto, LookUpValueSearchResponseDto>
     {
-        Task<List<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code);
+        Task<IEnumerable<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code);
+        Task<IEnumerable<LookUpValueShortInfoDto>> GetList(IEnumerable<LookUpDestinationSearchResponseDto> _tablelookUpList, string _columnName, string _code);
+        Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName);
     }
 }

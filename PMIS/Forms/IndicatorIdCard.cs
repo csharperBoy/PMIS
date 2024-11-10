@@ -2,6 +2,7 @@
 using Generic.Service.DTO;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUp.Info;
+using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.Services;
@@ -27,18 +28,37 @@ namespace PMIS.Forms
             InitializeComponent();
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
-        }
 
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
+           
 
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
-            List<LookUpValueShortInfoDto> lstLkpForm = await lookUpValueService.GetList("Indicator", "FkLkpFormId", "LkpForm");
-            List<LookUpValueShortInfoDto> lstLkpManuality = await lookUpValueService.GetList("Indicator", "FkLkpManualityId", "LkpManuality");
-            List<LookUpValueShortInfoDto> lstLkpUnit = await lookUpValueService.GetList("Indicator", "FkLkpUnitId", "LkpUnit");
-            List<LookUpValueShortInfoDto> lstLkpPeriod = await lookUpValueService.GetList("Indicator", "FkLkpPeriodId", "LkpPeriod");
-            List<LookUpValueShortInfoDto> lstLkpMeasure = await lookUpValueService.GetList("Indicator", "FkLkpMeasureId", "LkpMeasure");
-            List<LookUpValueShortInfoDto> lstLkpDesirability = await lookUpValueService.GetList("Indicator", "FkLkpDesirabilityId", "LkpDesirability");
+            //Task.Run(async () =>
+            //{
+            //    IEnumerable<LookUpDestinationSearchResponseDto> lstLookupsDestination = await lookUpValueService.GetList("Indicator");
+            //    IEnumerable<LookUpValueShortInfoDto> lstLkpForm = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpFormID", "LkpForm");
+            //    dgvcbLkpForm.DataSource = lstLkpForm;
+            //}).ContinueWith(task =>
+            //{
+            //    if (task.Exception != null)
+            //    {
+            //        // مدیریت استثنا
+            //        MessageBox.Show(task.Exception.Message);
+            //    }
+            //}, TaskScheduler.FromCurrentSynchronizationContext());
+
+
+        }
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            IEnumerable<LookUpDestinationSearchResponseDto> lstLookupsDestination = await lookUpValueService.GetList("Indicator");
+
+            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
+            IEnumerable<LookUpValueShortInfoDto> lstLkpForm = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpFormID", "LkpForm");
+            IEnumerable<LookUpValueShortInfoDto> lstLkpManuality = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpManualityID", "LkpManuality");
+            IEnumerable<LookUpValueShortInfoDto> lstLkpUnit = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpUnitID", "LkpUnit");
+            IEnumerable<LookUpValueShortInfoDto> lstLkpPeriod = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpPeriodID", "LkpPeriod");
+            IEnumerable<LookUpValueShortInfoDto> lstLkpMeasure = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpMeasureID", "LkpMeasure");
+            IEnumerable<LookUpValueShortInfoDto> lstLkpDesirability = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpDesirabilityID", "LkpDesirability");
             dgvcbLkpForm.DataSource = lstLkpForm;
             dgvcbLkpManuality.DataSource = lstLkpManuality;
             dgvcbLkpUnit.DataSource = lstLkpUnit;
@@ -61,7 +81,5 @@ namespace PMIS.Forms
                 MessageBox.Show("عملیات ناموفق بود!!!");
             }
         }
-
-
     }
 }

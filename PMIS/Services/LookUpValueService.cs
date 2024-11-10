@@ -29,7 +29,7 @@ namespace PMIS.Services
         {
             this.lookUpDestinationService = lookUpDestinationService;
         }
-        public async Task<List<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code)
+        public async Task<IEnumerable<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code)
         {
             try
             {
@@ -58,26 +58,52 @@ namespace PMIS.Services
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
                 list = list.Where(l => l.FkLookUpInfo.Code == _code);
 
-                return list.Single().LookUpValuesInfo.ToList();
-                //List<LookUpValue> lst1 = list.Single().LookUpValuesInfo.Select(h =>
-                //                GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<LookUpValueShortInfoDto, LookUpValue>(
-                //                h
-                //                ).Result
-                //            ).ToList();
-                //List<LookUpValueSearchResponseDto> lst2 = lst1.Select(h =>
-                //            GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<LookUpValue, LookUpValueSearchResponseDto>(
-                //                h
-                //                ).Result
-                //            ).ToList();
-                //List<LookUpValueSearchResponseDto> result = list.Single().LookUpValuesInfo.Select(h =>
-                //            GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<LookUpValue, LookUpValueSearchResponseDto>(
-                //                GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map<LookUpValueShortInfoDto, LookUpValue>(
-                //                h
-                //                ).Result
-                //                ).Result
-                            
-                //            ).ToList();
-                //return lst2;
+                return list.Single().LookUpValuesInfo;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public async Task<IEnumerable<LookUpValueShortInfoDto>> GetList(IEnumerable<LookUpDestinationSearchResponseDto> _tablelookUpList, string _columnName, string _code)
+        {
+            try
+            {
+                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code);
+
+                return await Task.FromResult(result.Single().LookUpValuesInfo);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public async Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName)
+        {
+            try
+            {
+
+
+                GenericSearchRequestDto req = new GenericSearchRequestDto()
+                {
+                    filters = new List<GenericSearchFilterDto>() {
+                     new GenericSearchFilterDto() {
+                    columnName = "TableName",
+                    LogicalOperator = LogicalOperator.Begin,
+                    operation = FilterOperator.Equals,
+                    type = PhraseType.Condition,
+                    value = _tableName
+                    }
+                }
+                };
+                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
+
+                return list;
+
             }
             catch (Exception)
             {
