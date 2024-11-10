@@ -89,6 +89,7 @@ namespace PMIS.Forms
 
         private void تخصیصکاربربهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AddNewTabPage(tabPageOnIndicator, new FormClaimUserOnIndicator());
         }
 
         private void تخصیصشاخصبهکاربرToolStripMenuItem_Click(object sender, EventArgs e)
