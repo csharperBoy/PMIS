@@ -29,29 +29,6 @@ namespace PMIS.Forms
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
         }
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
-            await SearchIndicator();
-        }
-
-        private async Task SearchIndicator()
-        {
-            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
-            (bool isSuccesst, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
-            if (isSuccesst)
-            {
-                if (list.Count() == 0)
-                { MessageBox.Show("موردی یافت نشد!!!"); }
-                else
-                {
-                    dgvIndicatorList.DataSource = list;
-                }
-            }
-            else
-            {
-                MessageBox.Show("عملیات ناموفق بود!!!");
-            }
-        }
 
         private async void IndicatorIdCard_Load(object sender, EventArgs e)
         {
@@ -69,6 +46,72 @@ namespace PMIS.Forms
             dgvcbLkpPeriod.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod");
             dgvcbLkpMeasure.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure");
             dgvcbLkpDesirability.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability");
+        }
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            await SearchIndicator();
+        }
+
+        private async Task SearchIndicator()
+        {
+            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
+            (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
+            if (isSuccess)
+            {
+                if (list.Count() == 0)
+                { MessageBox.Show("موردی یافت نشد!!!"); }
+                else
+                {
+                    dgvIndicatorList.DataSource = list;
+                }
+            }
+            else
+            {
+                MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!");
+            }
+        }
+
+        private async void btnAdd_Click(object sender, EventArgs e)
+        {
+            await AddIndicator();
+        }
+
+        private async Task AddIndicator()
+        {
+            try
+            {
+                List<IndicatorAddRequestDto> addRequest = new List<IndicatorAddRequestDto>();
+                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    string s = row.Cells["Code"].Value?.ToString();
+                    int a = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString());
+                    addRequest.Add(new IndicatorAddRequestDto()
+                    {
+                        Code = row.Cells["Code"].Value?.ToString(),
+                        Title = row.Cells["Title"].Value?.ToString(),
+                        FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
+                        FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
+                        FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
+                        FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
+                        FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
+                        FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
+                        Formula = row.Cells["Formula"].Value?.ToString(),
+                        Description = row.Cells["Description"].Value?.ToString()
+                    });
+                }
+                (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(addRequest);
+
+                if (isSuccess)
+                {
+                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

@@ -31,8 +31,9 @@ namespace PMIS.Forms
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            btnSearch = new Button();
             panel2 = new Panel();
+            btnSearch = new Button();
+            btnAdd = new Button();
             dgvIndicatorList = new DataGridView();
             dgvtbCode = new DataGridViewTextBoxColumn();
             dgvtbTitle = new DataGridViewTextBoxColumn();
@@ -53,12 +54,23 @@ namespace PMIS.Forms
             // panel1
             // 
             panel1.Controls.Add(btnSearch);
+            panel1.Controls.Add(btnAdd);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(914, 99);
+            panel1.Size = new Size(914, 100);
             panel1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(dgvIndicatorList);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 100);
+            panel2.Margin = new Padding(3, 4, 3, 4);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(914, 500);
+            panel2.TabIndex = 1;
             // 
             // btnSearch
             // 
@@ -66,21 +78,23 @@ namespace PMIS.Forms
             btnSearch.Location = new Point(0, 0);
             btnSearch.Margin = new Padding(3, 4, 3, 4);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(86, 99);
+            btnSearch.Size = new Size(86, 100);
             btnSearch.TabIndex = 0;
             btnSearch.Text = "جستجو";
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
-            // panel2
+            // btnAdd
             // 
-            panel2.Controls.Add(dgvIndicatorList);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 99);
-            panel2.Margin = new Padding(3, 4, 3, 4);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(914, 501);
-            panel2.TabIndex = 1;
+            btnAdd.Dock = DockStyle.Left;
+            btnAdd.Location = new Point(75, 0);
+            btnSearch.Margin = new Padding(3, 4, 3, 4);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(75, 74);
+            btnAdd.TabIndex = 1;
+            btnAdd.Text = "افزودن";
+            btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // dgvIndicatorList
             // 
@@ -92,12 +106,13 @@ namespace PMIS.Forms
             dgvIndicatorList.Margin = new Padding(3, 4, 3, 4);
             dgvIndicatorList.Name = "dgvIndicatorList";
             dgvIndicatorList.RowHeadersWidth = 51;
-            dgvIndicatorList.Size = new Size(914, 501);
+            dgvIndicatorList.Size = new Size(914, 500);
             dgvIndicatorList.TabIndex = 0;
             // 
             // dgvtbCode 
             // 
             dgvtbCode.HeaderText = "کد";
+            dgvtbCode.Name = "Code";
             dgvtbCode.DataPropertyName = "Code";
             dgvtbCode.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvIndicatorList.Columns.Add(dgvtbCode);
@@ -105,12 +120,14 @@ namespace PMIS.Forms
             // dgvtbTitle
             // 
             dgvtbTitle.HeaderText = "عنوان";
+            dgvtbTitle.Name = "Title";
             dgvtbTitle.DataPropertyName = "Title";
             dgvtbTitle.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvIndicatorList.Columns.Add(dgvtbTitle);
             // dgvcbLkpForm 
             // 
             dgvcbLkpForm.HeaderText = "فرم مربوطه";
+            dgvcbLkpForm.Name = "FkLkpFormId";
             dgvcbLkpForm.DataPropertyName = "FkLkpFormId";
             dgvcbLkpForm.DisplayMember = "Display";
             dgvcbLkpForm.ValueMember = "Id";
@@ -120,6 +137,7 @@ namespace PMIS.Forms
             // dgvcbLkpManuality 
             // 
             dgvcbLkpManuality.HeaderText = "دستی/اتوماتیک";
+            dgvcbLkpManuality.Name = "FkLkpManualityId";
             dgvcbLkpManuality.DataPropertyName = "FkLkpManualityId";
             dgvcbLkpManuality.DisplayMember = "Display";
             dgvcbLkpManuality.ValueMember = "Id";
@@ -129,6 +147,7 @@ namespace PMIS.Forms
             // dgvcbLkpUnit 
             // 
             dgvcbLkpUnit.HeaderText = "واحد عملیاتی";
+            dgvcbLkpUnit.Name = "FkLkpUnitId";
             dgvcbLkpUnit.DataPropertyName = "FkLkpUnitId";
             dgvcbLkpUnit.DisplayMember = "Display";
             dgvcbLkpUnit.ValueMember = "Id";
@@ -138,6 +157,7 @@ namespace PMIS.Forms
             // dgvcbLkpPeriod 
             // 
             dgvcbLkpPeriod.HeaderText = "دوره زمانی";
+            dgvcbLkpPeriod.Name = "FkLkpPeriodId";
             dgvcbLkpPeriod.DataPropertyName = "FkLkpPeriodId";
             dgvcbLkpPeriod.DisplayMember = "Display";
             dgvcbLkpPeriod.ValueMember = "Id";
@@ -147,6 +167,7 @@ namespace PMIS.Forms
             // dgvcbLkpMeasure 
             // 
             dgvcbLkpMeasure.HeaderText = "واحد اندازه‌گیری";
+            dgvcbLkpMeasure.Name = "FkLkpMeasureId";
             dgvcbLkpMeasure.DataPropertyName = "FkLkpMeasureId";
             dgvcbLkpMeasure.DisplayMember = "Display";
             dgvcbLkpMeasure.ValueMember = "Id";
@@ -156,6 +177,7 @@ namespace PMIS.Forms
             // dgvcbLkpDesirability 
             // 
             dgvcbLkpDesirability.HeaderText = "مطلوبیت";
+            dgvcbLkpDesirability.Name = "FkLkpDesirabilityId";
             dgvcbLkpDesirability.DataPropertyName = "FkLkpDesirabilityId";
             dgvcbLkpDesirability.DisplayMember = "Display";
             dgvcbLkpDesirability.ValueMember = "Id";
@@ -165,6 +187,7 @@ namespace PMIS.Forms
             // dgvtbFormula 
             // 
             dgvtbFormula.HeaderText = "فرمول";
+            dgvtbFormula.Name = "Formula";
             dgvtbFormula.DataPropertyName = "Formula";
             dgvtbFormula.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvIndicatorList.Columns.Add(dgvtbFormula);// 
@@ -172,6 +195,7 @@ namespace PMIS.Forms
             // dgvtbDescription
             // 
             dgvtbDescription.HeaderText = "توضیحات";
+            dgvtbDescription.Name = "Description";
             dgvtbDescription.DataPropertyName = "Description";
             dgvtbDescription.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvIndicatorList.Columns.Add(dgvtbDescription);
@@ -197,8 +221,9 @@ namespace PMIS.Forms
 
         private Panel panel1;
         private Panel panel2;
-        private DataGridView dgvIndicatorList;
         private Button btnSearch;
+        private Button btnAdd;
+        private DataGridView dgvIndicatorList;
         private DataGridViewTextBoxColumn dgvtbCode;
         private DataGridViewTextBoxColumn dgvtbTitle;
         private DataGridViewComboBoxColumn dgvcbLkpForm;
