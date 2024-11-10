@@ -29,6 +29,13 @@ namespace PMIS.DTO.LookUpDestination
                 }
 
             }
+            else if(source is LookUpDestinationSearchResponseDto sourceModel)
+            {
+                if (destination is Models.LookUpDestination destinationModel)
+                {
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(await sourceModel.extraMapToBaseModel(sourceModel));
+                }
+            }
             return destination;
         }
 

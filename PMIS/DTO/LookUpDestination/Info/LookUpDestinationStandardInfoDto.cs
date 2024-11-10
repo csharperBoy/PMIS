@@ -22,6 +22,16 @@ namespace PMIS.DTO.LookUpDestination.Info
 
             return this;
         }
+        public async Task<Models.LookUpDestination> extraMapToBaseModel(LookUpDestinationStandardInfoDto Model)
+        {
+            Models.LookUpDestination baseModel = new Models.LookUpDestination();
+            await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(Model, baseModel);
+            //this.LookUpValuesInfo = await Task.WhenAll(baseModel.FkLookUp.LookUpValues.Select(v => (new LookUpValueShortInfoDto()).extraMapFromBaseModel(v)).ToList());
+            //this.FkLookUpInfo = this.FkLookUpInfo = await (new LookUpShortInfoDto()).extraMapFromBaseModel(baseModel.FkLookUp);
+
+            baseModel.FkLookUp = await (new LookUpShortInfoDto()).extraMapToBaseModel(Model.FkLookUpInfo);
+            return baseModel;
+        }
         public virtual LookUpShortInfoDto FkLookUpInfo { get; set; } = null!;
         public virtual ICollection<LookUpValueShortInfoDto> LookUpValuesInfo { get; set; } = new List<LookUpValueShortInfoDto>();
     }
