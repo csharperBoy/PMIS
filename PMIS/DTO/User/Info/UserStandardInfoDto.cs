@@ -14,12 +14,14 @@ namespace PMIS.DTO.User.Info
         public async Task<UserStandardInfoDto> extraMapFromBaseModel(PMIS.Models.User baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
+            this.ClaimOnSystemsInfo = await Task.WhenAll(baseModel.ClaimOnSystems.Select(v => (new ClaimOnSystemShortInfoDto()).extraMapFromBaseModel(v)).ToList());
 
             this.FkLkpWorkCalenarInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpWorkCalenar);
             this.ClaimUserOnIndicatorsInfo = await Task.WhenAll(baseModel.ClaimUserOnIndicators.Select(d => (new ClaimUserOnIndicatorShortInfoDto()).extraMapFromBaseModel(d)).ToList());
 
             return this;
         }
+        public virtual ICollection<ClaimOnSystemShortInfoDto> ClaimOnSystemsInfo { get; set; } = new List<ClaimOnSystemShortInfoDto>();
 
         public virtual ICollection<ClaimUserOnIndicatorShortInfoDto> ClaimUserOnIndicatorsInfo { get; set; } = new List<ClaimUserOnIndicatorShortInfoDto>();
 
