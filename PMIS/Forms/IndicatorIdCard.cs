@@ -28,44 +28,15 @@ namespace PMIS.Forms
             InitializeComponent();
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
-
-           
-
-            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
-            //Task.Run(async () =>
-            //{
-            //    IEnumerable<LookUpDestinationSearchResponseDto> lstLookupsDestination = await lookUpValueService.GetList("Indicator");
-            //    IEnumerable<LookUpValueShortInfoDto> lstLkpForm = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpFormID", "LkpForm");
-            //    dgvcbLkpForm.DataSource = lstLkpForm;
-            //}).ContinueWith(task =>
-            //{
-            //    if (task.Exception != null)
-            //    {
-            //        // مدیریت استثنا
-            //        MessageBox.Show(task.Exception.Message);
-            //    }
-            //}, TaskScheduler.FromCurrentSynchronizationContext());
-
-
         }
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            IEnumerable<LookUpDestinationSearchResponseDto> lstLookupsDestination = await lookUpValueService.GetList("Indicator");
+            await SearchIndicator();
+        }
 
+        private async Task SearchIndicator()
+        {
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
-            IEnumerable<LookUpValueShortInfoDto> lstLkpForm = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpFormID", "LkpForm");
-            IEnumerable<LookUpValueShortInfoDto> lstLkpManuality = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpManualityID", "LkpManuality");
-            IEnumerable<LookUpValueShortInfoDto> lstLkpUnit = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpUnitID", "LkpUnit");
-            IEnumerable<LookUpValueShortInfoDto> lstLkpPeriod = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpPeriodID", "LkpPeriod");
-            IEnumerable<LookUpValueShortInfoDto> lstLkpMeasure = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpMeasureID", "LkpMeasure");
-            IEnumerable<LookUpValueShortInfoDto> lstLkpDesirability = await lookUpValueService.GetList(lstLookupsDestination, "FkLkpDesirabilityID", "LkpDesirability");
-            dgvcbLkpForm.DataSource = lstLkpForm;
-            dgvcbLkpManuality.DataSource = lstLkpManuality;
-            dgvcbLkpUnit.DataSource = lstLkpUnit;
-            dgvcbLkpPeriod.DataSource = lstLkpPeriod;
-            dgvcbLkpMeasure.DataSource = lstLkpMeasure;
-            dgvcbLkpDesirability.DataSource = lstLkpDesirability;
-
             (bool isSuccesst, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
             if (isSuccesst)
             {
@@ -80,6 +51,24 @@ namespace PMIS.Forms
             {
                 MessageBox.Show("عملیات ناموفق بود!!!");
             }
+        }
+
+        private async void IndicatorIdCard_Load(object sender, EventArgs e)
+        {
+            await InitializeLookUps();
+        }
+
+        private async Task InitializeLookUps()
+        {
+            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+
+            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
+            dgvcbLkpForm.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm");
+            dgvcbLkpManuality.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality");
+            dgvcbLkpUnit.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit");
+            dgvcbLkpPeriod.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod");
+            dgvcbLkpMeasure.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure");
+            dgvcbLkpDesirability.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability");
         }
     }
 }

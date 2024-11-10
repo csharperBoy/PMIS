@@ -29,41 +29,61 @@ namespace PMIS.Services
         {
             this.lookUpDestinationService = lookUpDestinationService;
         }
+        public async Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName)
+        {
+            try
+            {
+                GenericSearchRequestDto req = new GenericSearchRequestDto()
+                {
+                    filters = new List<GenericSearchFilterDto>() {
+                        new GenericSearchFilterDto() {
+                            columnName = "TableName",
+                            LogicalOperator = LogicalOperator.Begin,
+                            operation = FilterOperator.Equals,
+                            type = PhraseType.Condition,
+                            value = _tableName
+                        }
+                    }
+                };
+                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
+
+                return list;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<IEnumerable<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code)
         {
             try
             {
-
-
                 GenericSearchRequestDto req = new GenericSearchRequestDto()
                 {
                     filters = new List<GenericSearchFilterDto>() {
-                     new GenericSearchFilterDto() {
-                    columnName = "TableName",
-                    LogicalOperator = LogicalOperator.Begin,
-                    operation = FilterOperator.Equals,
-                    type = PhraseType.Condition,
-                    value = _tableName
-                    },
-                  new GenericSearchFilterDto() {
-                    columnName = "ColumnName",
-                    LogicalOperator = LogicalOperator.And,
-                    operation = FilterOperator.Equals,
-                    type = PhraseType.Condition,
-                    value = _columnName
-                    },
-
-                }
+                        new GenericSearchFilterDto() {
+                            columnName = "TableName",
+                            LogicalOperator = LogicalOperator.Begin,
+                            operation = FilterOperator.Equals,
+                            type = PhraseType.Condition,
+                            value = _tableName
+                        },
+                        new GenericSearchFilterDto() {
+                            columnName = "ColumnName",
+                            LogicalOperator = LogicalOperator.And,
+                            operation = FilterOperator.Equals,
+                            type = PhraseType.Condition,
+                            value = _columnName
+                        }
+                    }
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
                 list = list.Where(l => l.FkLookUpInfo.Code == _code);
 
                 return list.Single().LookUpValuesInfo;
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -74,40 +94,9 @@ namespace PMIS.Services
                 IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code);
 
                 return await Task.FromResult(result.Single().LookUpValuesInfo);
-
             }
             catch (Exception)
             {
-
-                throw;
-            }
-        }
-        public async Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName)
-        {
-            try
-            {
-
-
-                GenericSearchRequestDto req = new GenericSearchRequestDto()
-                {
-                    filters = new List<GenericSearchFilterDto>() {
-                     new GenericSearchFilterDto() {
-                    columnName = "TableName",
-                    LogicalOperator = LogicalOperator.Begin,
-                    operation = FilterOperator.Equals,
-                    type = PhraseType.Condition,
-                    value = _tableName
-                    }
-                }
-                };
-                (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
-
-                return list;
-
-            }
-            catch (Exception)
-            {
-
                 throw;
             }
         }

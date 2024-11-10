@@ -1,7 +1,4 @@
-﻿using Generic.Service.DTO;
-using PMIS.DTO.LookUpDestination;
-using PMIS.DTO.LookUpValue.Info;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace PMIS.Forms
 {
@@ -31,12 +28,23 @@ namespace PMIS.Forms
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private async void InitializeComponent()
+        private void InitializeComponent()
         {
             panel1 = new Panel();
             btnSearch = new Button();
             panel2 = new Panel();
             dgvIndicatorList = new DataGridView();
+            dgvtbCode = new DataGridViewTextBoxColumn();
+            dgvtbTitle = new DataGridViewTextBoxColumn();
+            dgvcbLkpForm = new DataGridViewComboBoxColumn();
+            dgvcbLkpManuality = new DataGridViewComboBoxColumn();
+            dgvcbLkpUnit = new DataGridViewComboBoxColumn();
+            dgvcbLkpPeriod = new DataGridViewComboBoxColumn();
+            dgvcbLkpMeasure = new DataGridViewComboBoxColumn();
+            dgvcbLkpDesirability = new DataGridViewComboBoxColumn();
+            dgvtbFormula = new DataGridViewTextBoxColumn();
+            dgvtbDescription = new DataGridViewTextBoxColumn();
+
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).BeginInit();
@@ -76,6 +84,7 @@ namespace PMIS.Forms
             // 
             // dgvIndicatorList
             // 
+            dgvIndicatorList.AutoGenerateColumns = false;
             dgvIndicatorList.AllowUserToOrderColumns = true;
             dgvIndicatorList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvIndicatorList.Dock = DockStyle.Fill;
@@ -85,6 +94,87 @@ namespace PMIS.Forms
             dgvIndicatorList.RowHeadersWidth = 51;
             dgvIndicatorList.Size = new Size(914, 501);
             dgvIndicatorList.TabIndex = 0;
+            // 
+            // dgvtbCode 
+            // 
+            dgvtbCode.HeaderText = "کد";
+            dgvtbCode.DataPropertyName = "Code";
+            dgvtbCode.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvtbCode);
+            //
+            // dgvtbTitle
+            // 
+            dgvtbTitle.HeaderText = "عنوان";
+            dgvtbTitle.DataPropertyName = "Title";
+            dgvtbTitle.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvtbTitle);
+            // dgvcbLkpForm 
+            // 
+            dgvcbLkpForm.HeaderText = "فرم مربوطه";
+            dgvcbLkpForm.DataPropertyName = "FkLkpFormId";
+            dgvcbLkpForm.DisplayMember = "Display";
+            dgvcbLkpForm.ValueMember = "Id";
+            dgvcbLkpForm.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpForm);
+            // 
+            // dgvcbLkpManuality 
+            // 
+            dgvcbLkpManuality.HeaderText = "دستی/اتوماتیک";
+            dgvcbLkpManuality.DataPropertyName = "FkLkpManualityId";
+            dgvcbLkpManuality.DisplayMember = "Display";
+            dgvcbLkpManuality.ValueMember = "Id";
+            dgvcbLkpManuality.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpManuality);
+            // 
+            // dgvcbLkpUnit 
+            // 
+            dgvcbLkpUnit.HeaderText = "واحد عملیاتی";
+            dgvcbLkpUnit.DataPropertyName = "FkLkpUnitId";
+            dgvcbLkpUnit.DisplayMember = "Display";
+            dgvcbLkpUnit.ValueMember = "Id";
+            dgvcbLkpUnit.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpUnit);
+            // 
+            // dgvcbLkpPeriod 
+            // 
+            dgvcbLkpPeriod.HeaderText = "دوره زمانی";
+            dgvcbLkpPeriod.DataPropertyName = "FkLkpPeriodId";
+            dgvcbLkpPeriod.DisplayMember = "Display";
+            dgvcbLkpPeriod.ValueMember = "Id";
+            dgvcbLkpPeriod.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpPeriod);
+            // 
+            // dgvcbLkpMeasure 
+            // 
+            dgvcbLkpMeasure.HeaderText = "واحد اندازه‌گیری";
+            dgvcbLkpMeasure.DataPropertyName = "FkLkpMeasureId";
+            dgvcbLkpMeasure.DisplayMember = "Display";
+            dgvcbLkpMeasure.ValueMember = "Id";
+            dgvcbLkpMeasure.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpMeasure);
+            // 
+            // dgvcbLkpDesirability 
+            // 
+            dgvcbLkpDesirability.HeaderText = "مطلوبیت";
+            dgvcbLkpDesirability.DataPropertyName = "FkLkpDesirabilityId";
+            dgvcbLkpDesirability.DisplayMember = "Display";
+            dgvcbLkpDesirability.ValueMember = "Id";
+            dgvcbLkpDesirability.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvcbLkpDesirability);
+            // 
+            // dgvtbFormula 
+            // 
+            dgvtbFormula.HeaderText = "فرمول";
+            dgvtbFormula.DataPropertyName = "Formula";
+            dgvtbFormula.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvtbFormula);// 
+            //
+            // dgvtbDescription
+            // 
+            dgvtbDescription.HeaderText = "توضیحات";
+            dgvtbDescription.DataPropertyName = "Description";
+            dgvtbDescription.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvtbDescription);
             // 
             // IndicatorIdCard
             // 
@@ -96,11 +186,11 @@ namespace PMIS.Forms
             Margin = new Padding(3, 4, 3, 4);
             Name = "IndicatorIdCard";
             Text = "IndicatorIdCard";
+            Load += IndicatorIdCard_Load;
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).EndInit();
             ResumeLayout(false);
-           
         }
 
         #endregion

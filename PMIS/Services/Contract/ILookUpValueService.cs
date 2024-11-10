@@ -14,8 +14,8 @@ namespace PMIS.Services.Contract
 {
     public interface ILookUpValueService : IGenericNormalService<LookUpValue, LookUpValueAddRequestDto, LookUpValueAddResponseDto, LookUpValueEditRequestDto, LookUpValueEditResponseDto, LookUpValueDeleteRequestDto, LookUpValueDeleteResponseDto, LookUpValueSearchResponseDto>
     {
+        Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName);
         Task<IEnumerable<LookUpValueShortInfoDto>> GetList(string _tableName, string _columnName, string _code);
         Task<IEnumerable<LookUpValueShortInfoDto>> GetList(IEnumerable<LookUpDestinationSearchResponseDto> _tablelookUpList, string _columnName, string _code);
-        Task<IEnumerable<LookUpDestinationSearchResponseDto>> GetList(string _tableName);
     }
 }
