@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUpValue.Info
 {
-    public class LookUpValueShortInfoDto
+    public class LookUpValueShortInfoDto : LookUpValueTinyInfoDto
     {
         public async Task<LookUpValueShortInfoDto> extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
         {

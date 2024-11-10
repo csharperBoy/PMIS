@@ -21,6 +21,7 @@ namespace PMIS.DTO.Indicator.Info
         public int Id { get; set; }
 
         public string Code { get; set; } = null!;
+        
 
         public string Title { get; set; } = null!;       
 
@@ -32,6 +33,17 @@ namespace PMIS.DTO.Indicator.Info
 
         public bool? FlgLogicalDelete { get; set; }
 
-       
+        public int FkLkpFormId { get; set; }
+
+        public int FkLkpManualityId { get; set; }
+
+        public int FkLkpUnitId { get; set; }
+
+        public int FkLkpPeriodId { get; set; }
+
+        public int FkLkpMeasureId { get; set; }
+
+        public int FkLkpDesirabilityId { get; set; }
+
     }
 }

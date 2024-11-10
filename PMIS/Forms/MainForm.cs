@@ -76,7 +76,7 @@ namespace PMIS.Forms
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageIndicatorIdCard, new IndicatorIdCard(indicatorService));
+            AddNewTabPage(tabPageIndicatorIdCard, new IndicatorIdCard(indicatorService,lookUpValueService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
