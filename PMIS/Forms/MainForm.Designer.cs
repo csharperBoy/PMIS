@@ -221,7 +221,7 @@
             tabPageOnIndicator.Padding = new Padding(3);
             tabPageOnIndicator.Size = new Size(192, 0);
             tabPageOnIndicator.TabIndex = 1;
-            tabPageOnIndicator.Text = "ورود مقادیر بر اسا شاخص";
+            tabPageOnIndicator.Text = "ورود مقادیر بر اساس شاخص";
             tabPageOnIndicator.UseVisualStyleBackColor = true;
             // 
             // MainForm
