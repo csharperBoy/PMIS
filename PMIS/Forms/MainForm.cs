@@ -66,14 +66,17 @@ namespace PMIS.Forms
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AddNewTabPage(tabPageOnIndicator, new UserDataEntry());
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //  AddNewTabPage(tabPageOnIndicator, new UserDataEntry());
         }
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AddNewTabPage(tabPageIndicatorIdCard, new IndicatorIdCard(indicatorService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
