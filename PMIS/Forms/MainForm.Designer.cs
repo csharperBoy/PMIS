@@ -47,7 +47,7 @@
             تخصیصشاخصبهکاربرToolStripMenuItem = new ToolStripMenuItem();
             خروجToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
-            tabControlMain = new TabControl();
+            tabControlMain = new TabControlWithCloseTab();
             tabPageOnForm = new TabPage();
             tabPageOnDate = new TabPage();
             tabPageOnIndicator = new TabPage();
@@ -322,7 +322,6 @@
             RightToLeftLayout = true;
             Text = "MainForm";
             WindowState = FormWindowState.Maximized;
-            Load += MainForm_Load;
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             ResumeLayout(false);
