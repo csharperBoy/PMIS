@@ -127,7 +127,7 @@ namespace PMIS.Forms
                     if (row.IsNewRow) continue;
                     editRequest.Add(new IndicatorEditRequestDto()
                     {
-                        // Id = int.Parse(row.Cells["Id"].Value?.ToString()),
+                        Id = int.Parse(row.Cells["Id"].Value?.ToString()),
                         Code = row.Cells["Code"].Value?.ToString(),
                         Title = row.Cells["Title"].Value?.ToString(),
                         FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
@@ -170,7 +170,7 @@ namespace PMIS.Forms
                     {
                         deleteRequest.Add(new IndicatorDeleteRequestDto()
                         {
-                            // Id = int.Parse(row.Cells["Id"].Value?.ToString())
+                            Id = int.Parse(row.Cells["Id"].Value?.ToString())
                         });
                     }
                 }

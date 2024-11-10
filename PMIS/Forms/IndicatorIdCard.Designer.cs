@@ -37,6 +37,7 @@ namespace PMIS.Forms
             btnEdit = new Button();
             btnDelete = new Button();
             dgvIndicatorList = new DataGridView();
+            dgvtbId = new DataGridViewTextBoxColumn();
             dgvtbCode = new DataGridViewTextBoxColumn();
             dgvtbTitle = new DataGridViewTextBoxColumn();
             dgvcbLkpForm = new DataGridViewComboBoxColumn();
@@ -47,7 +48,7 @@ namespace PMIS.Forms
             dgvcbLkpDesirability = new DataGridViewComboBoxColumn();
             dgvtbFormula = new DataGridViewTextBoxColumn();
             dgvtbDescription = new DataGridViewTextBoxColumn();
-            dgvchDelete = new DataGridViewCheckBoxColumn();
+            dgvchFlgLogicalDelete = new DataGridViewCheckBoxColumn();
 
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -138,6 +139,15 @@ namespace PMIS.Forms
             dgvIndicatorList.RowHeadersWidth = 51;
             dgvIndicatorList.Size = new Size(914, 500);
             dgvIndicatorList.TabIndex = 0;
+            // 
+            // dgvtbId 
+            // 
+            dgvtbId.HeaderText = "شناسه";
+            dgvtbId.Name = "Id";
+            dgvtbId.DataPropertyName = "Id";
+            dgvtbId.Visible = false;
+            dgvtbId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvtbId);
             // 
             // dgvtbCode 
             // 
@@ -232,11 +242,11 @@ namespace PMIS.Forms
             //
             // dgvchDelete
             // 
-            dgvchDelete.HeaderText = "حذف";
-            dgvchDelete.Name = "FlgLogicalDelete";
-            dgvchDelete.DataPropertyName = "FlgLogicalDelete";
-            dgvchDelete.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dgvIndicatorList.Columns.Add(dgvchDelete);
+            dgvchFlgLogicalDelete.HeaderText = "حذف";
+            dgvchFlgLogicalDelete.Name = "FlgLogicalDelete";
+            dgvchFlgLogicalDelete.DataPropertyName = "FlgLogicalDelete";
+            dgvchFlgLogicalDelete.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIndicatorList.Columns.Add(dgvchFlgLogicalDelete);
             // 
             // IndicatorIdCard
             // 
@@ -264,6 +274,7 @@ namespace PMIS.Forms
         private Button btnEdit;
         private Button btnDelete;
         private DataGridView dgvIndicatorList;
+        private DataGridViewTextBoxColumn dgvtbId;
         private DataGridViewTextBoxColumn dgvtbCode;
         private DataGridViewTextBoxColumn dgvtbTitle;
         private DataGridViewComboBoxColumn dgvcbLkpForm;
@@ -274,7 +285,7 @@ namespace PMIS.Forms
         private DataGridViewComboBoxColumn dgvcbLkpDesirability;
         private DataGridViewTextBoxColumn dgvtbFormula;
         private DataGridViewTextBoxColumn dgvtbDescription;
-        private DataGridViewCheckBoxColumn dgvchDelete;
+        private DataGridViewCheckBoxColumn dgvchFlgLogicalDelete;
 
     }
 }
