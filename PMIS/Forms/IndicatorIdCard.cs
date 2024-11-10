@@ -163,6 +163,7 @@ namespace PMIS.Forms
             try
             {
                 List<IndicatorDeleteRequestDto> deleteRequest = new List<IndicatorDeleteRequestDto>();
+                List<IndicatorDeleteRequestDto> recycleRequest = new List<IndicatorDeleteRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
                     if (row.IsNewRow) continue;
@@ -173,8 +174,16 @@ namespace PMIS.Forms
                             Id = int.Parse(row.Cells["Id"].Value?.ToString())
                         });
                     }
+                    else
+                    {
+                        recycleRequest.Add(new IndicatorDeleteRequestDto()
+                        {
+                            Id = int.Parse(row.Cells["Id"].Value?.ToString())
+                        });
+                    }
                 }
                 (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(deleteRequest);
+                (bool isSuccess2, IEnumerable<IndicatorDeleteResponseDto> list2) = await indicatorService.RecycleGroup(recycleRequest);
 
                 if (isSuccess)
                 {
