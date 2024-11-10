@@ -239,16 +239,55 @@ namespace PMIS.Forms
                 throw;
             }
         }
-
         private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UserControl ucForm = new IndicatorValueDataEntryOnForm();
-            TabPage tpForm = new TabPage("سیسشی");
+            if (tabControlMain.TabPages.Contains(tabPageOnForm))
+            {
+                tabPageOnForm.Controls.Clear();
+            }
+            else
+            {
+                tabControlMain.Controls.Add(tabPageOnForm);
+            }
+            UserControl userControlOnForm = new IndicatorValueDataEntryOnForm();
+            userControlOnForm.Dock = DockStyle.Fill;
+            tabPageOnForm.Controls.Add(userControlOnForm);
+            tabControlMain.Show();
+            tabControlMain.Refresh();
+        }
 
-            tpForm.Controls.Add(ucForm);
-            tabControlMain.Controls.Add(tpForm);
-            flowLayoutPanelMain.Controls.Add(new TabControl());
-            ucForm.Show();
+        private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControlMain.TabPages.Contains(tabPageOnDate))
+            {
+                tabPageOnDate.Controls.Clear();
+            }
+            else
+            {
+                tabControlMain.Controls.Add(tabPageOnDate);
+            }
+            UserControl userControlOnDate = new IndicatorValueDataEntryOnDate();
+            userControlOnDate.Dock = DockStyle.Fill;
+            tabPageOnDate.Controls.Add(userControlOnDate);
+            tabControlMain.Show();
+            tabControlMain.Refresh();
+        }
+
+        private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControlMain.TabPages.Contains(tabPageOnIndicator))
+            {
+                tabPageOnIndicator.Controls.Clear();
+            }
+            else
+            {
+                tabControlMain.Controls.Add(tabPageOnIndicator);
+            }
+            UserControl userControlOnIndicator = new IndicatorValueDataEntryOnIndicator();
+            userControlOnIndicator.Dock = DockStyle.Fill;
+            tabPageOnIndicator.Controls.Add(userControlOnIndicator);
+            tabControlMain.Show();
+            tabControlMain.Refresh();
         }
     }
 }

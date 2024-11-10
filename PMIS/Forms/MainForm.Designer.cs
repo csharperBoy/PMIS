@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
+            menuStripMain = new MenuStrip();
             ورودمقادیرToolStripMenuItem = new ToolStripMenuItem();
             ورودمقادیرToolStripMenuItem1 = new ToolStripMenuItem();
             براساسفرمToolStripMenuItem = new ToolStripMenuItem();
@@ -48,22 +48,21 @@
             خروجToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControl();
-            tabPage1 = new TabPage();
-            tabPage2 = new TabPage();
-            menuStrip1.SuspendLayout();
-            flowLayoutPanelMain.SuspendLayout();
-            tabControlMain.SuspendLayout();
+            tabPageOnForm = new TabPage();
+            tabPageOnDate = new TabPage();
+            tabPageOnIndicator = new TabPage();
+            menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip1
+            // menuStripMain
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { ورودمقادیرToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStripMain";
-            menuStrip1.TextDirection = ToolStripTextDirection.Vertical90;
+            menuStripMain.Items.AddRange(new ToolStripItem[] { ورودمقادیرToolStripMenuItem });
+            menuStripMain.Location = new Point(0, 0);
+            menuStripMain.Name = "menuStripMain";
+            menuStripMain.Size = new Size(800, 24);
+            menuStripMain.TabIndex = 1;
+            menuStripMain.Text = "menuStripMain";
+            menuStripMain.TextDirection = ToolStripTextDirection.Vertical90;
             // 
             // ورودمقادیرToolStripMenuItem
             // 
@@ -92,12 +91,14 @@
             براساستاریخToolStripMenuItem.Name = "براساستاریخToolStripMenuItem";
             براساستاریخToolStripMenuItem.Size = new Size(180, 22);
             براساستاریخToolStripMenuItem.Text = "بر اساس تاریخ";
+            براساستاریخToolStripMenuItem.Click += براساستاریخToolStripMenuItem_Click;
             // 
             // براساسشاخصToolStripMenuItem
             // 
             براساسشاخصToolStripMenuItem.Name = "براساسشاخصToolStripMenuItem";
             براساسشاخصToolStripMenuItem.Size = new Size(180, 22);
             براساسشاخصToolStripMenuItem.Text = "بر اساس شاخص";
+            براساسشاخصToolStripMenuItem.Click += براساسشاخصToolStripMenuItem_Click;
             // 
             // اطلاعاتکاربریToolStripMenuItem
             // 
@@ -177,7 +178,6 @@
             // 
             // flowLayoutPanelMain
             // 
-            flowLayoutPanelMain.Controls.Add(tabControlMain);
             flowLayoutPanelMain.Dock = DockStyle.Fill;
             flowLayoutPanelMain.Location = new Point(0, 24);
             flowLayoutPanelMain.Name = "flowLayoutPanelMain";
@@ -186,60 +186,67 @@
             // 
             // tabControlMain
             // 
-            //tabControlMain.Controls.Add(tabPage1);
-            //tabControlMain.Controls.Add(tabPage2);
             tabControlMain.Dock = DockStyle.Fill;
-            tabControlMain.Location = new Point(597, 3);
+            tabControlMain.Location = new Point(0, 24);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.RightToLeftLayout = true;
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(200, 0);
+            tabControlMain.Size = new Size(800, 426);
             tabControlMain.TabIndex = 0;
             // 
-            // tabPage1
+            // tabPageOnForm
             // 
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(192, 0);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
-            tabPage1.UseVisualStyleBackColor = true;
+            tabPageOnForm.Location = new Point(4, 24);
+            tabPageOnForm.Name = "tabPageOnForm";
+            tabPageOnForm.Padding = new Padding(3);
+            tabPageOnForm.Size = new Size(192, 0);
+            tabPageOnForm.TabIndex = 0;
+            tabPageOnForm.Text = "ورود مقادیر بر اساس فرم";
+            tabPageOnForm.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabPageOnDate
             // 
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(192, 0);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
+            tabPageOnDate.Location = new Point(4, 24);
+            tabPageOnDate.Name = "tabPageOnDate";
+            tabPageOnDate.Padding = new Padding(3);
+            tabPageOnDate.Size = new Size(192, 0);
+            tabPageOnDate.TabIndex = 1;
+            tabPageOnDate.Text = "ورود مقادیر بر اساس تاریخ";
+            tabPageOnDate.UseVisualStyleBackColor = true;
+            // 
+            // tabPageOnIndicator
+            // 
+            tabPageOnIndicator.Location = new Point(4, 24);
+            tabPageOnIndicator.Name = "tabPageOnIndicator";
+            tabPageOnIndicator.Padding = new Padding(3);
+            tabPageOnIndicator.Size = new Size(192, 0);
+            tabPageOnIndicator.TabIndex = 1;
+            tabPageOnIndicator.Text = "ورود مقادیر بر اسا شاخص";
+            tabPageOnIndicator.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(tabControlMain);
             Controls.Add(flowLayoutPanelMain);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
+            Controls.Add(menuStripMain);
+            MainMenuStrip = menuStripMain;
             Name = "MainForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Text = "MainForm";
             WindowState = FormWindowState.Maximized;
             Load += MainForm_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
-            flowLayoutPanelMain.ResumeLayout(false);
-            tabControlMain.ResumeLayout(false);
+            menuStripMain.ResumeLayout(false);
+            menuStripMain.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStripMain;
         private ToolStripMenuItem ورودمقادیرToolStripMenuItem;
         private ToolStripMenuItem ورودمقادیرToolStripMenuItem1;
         private ToolStripMenuItem براساسفرمToolStripMenuItem;
@@ -259,7 +266,8 @@
         private ToolStripMenuItem خروجToolStripMenuItem;
         private FlowLayoutPanel flowLayoutPanelMain;
         private TabControl tabControlMain;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
+        private TabPage tabPageOnForm;
+        private TabPage tabPageOnDate;
+        private TabPage tabPageOnIndicator;
     }
 }
