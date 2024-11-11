@@ -46,13 +46,13 @@ namespace Generic.Service.Normal.Operation.Abstract
             exceptionHandler = _exceptionHandler;
             logHandler = _logHandler.CreateLogger();
         }
-        
+
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                    return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
@@ -61,13 +61,12 @@ namespace Generic.Service.Normal.Operation.Abstract
                 {
                     TEntity entity = new TEntity();
                     TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
-                    responseTemp = new TEntityAddResponseDto();
                     try
                     {
                         entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
-                        result = await repository.InsertAsync(entity);                       
+                        result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityStateAsync(entity,EntityState.Detached);
+                        repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                     }
                     catch (Exception ex)
@@ -76,7 +75,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }
                     results.Add(responseTemp);
-                    
+
                     if (!result)
                         resultIsSuccess = false;
                 }
@@ -99,7 +98,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                      return true;
 
                 bool result = true;
                 List<TEntity> entityRequest = new List<TEntity>();

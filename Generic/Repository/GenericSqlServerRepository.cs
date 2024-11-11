@@ -947,8 +947,9 @@ namespace Generic.Repository
         {
             try
             {
-                dbSet.Attach(entityToUpdate);
                 dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+                dbSet.Attach(entityToUpdate);
+                dbContext.Entry(entityToUpdate).State = EntityState.Detached;
                 return Task.FromResult(true);
             }
             catch (Exception)

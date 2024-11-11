@@ -36,6 +36,19 @@ namespace PMIS.DTO.Indicator
     }
     public class IndicatorEditResponseDto
     {
+        public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
+           where TDestination : class
+           where TSource : class
+        {
+            if (source is Models.Indicator sourceModel)
+            {
+                if (destination is IndicatorEditResponseDto destinationModel)
+                {
+                    destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
+                }
+            }
+            return destination;
+        }
         public int Id { get; set; }
         public bool IsSuccess { get; set; }
         public string? ErrorMessage { get; set; }

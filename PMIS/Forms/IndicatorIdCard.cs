@@ -16,11 +16,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace PMIS.Forms
 {
     public partial class IndicatorIdCard : Form
     {
+        List<IndicatorAddRequestDto> lstAddRequest;
+        List<IndicatorEditRequestDto> lstEditRequest;
+        List<IndicatorDeleteRequestDto> lstDeleteRequest;
+        List<IndicatorDeleteRequestDto> lstRecycleRequest;
         IIndicatorService indicatorService;
         ILookUpValueService lookUpValueService;
         public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
@@ -28,14 +33,15 @@ namespace PMIS.Forms
             InitializeComponent();
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
-
+           
             CustomInitialize();
         }
         private async void CustomInitialize()
         {
             dgvIndicatorList.AutoGenerateColumns = false;
+
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
-            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
+
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "ردیف",
@@ -158,9 +164,16 @@ namespace PMIS.Forms
                 Name = "FlgLogicalDelete",
                 DataPropertyName = "FlgLogicalDelete",
                 ReadOnly = false,
-                Visible = true,
+                Visible = false,
             });
-
+            dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
+            {
+                HeaderText = "ویرایش شده",
+                Name = "FlgEdited",
+                ReadOnly = false,
+                Visible = false,
+                
+            });
             dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
             {
                 Name = "Edit",
@@ -179,6 +192,7 @@ namespace PMIS.Forms
                 Text = "حذف",
                 HeaderText = ""
             });
+            SearchIndicator();
         }
         private async void btnSearch_Click(object sender, EventArgs e)
         {
@@ -195,7 +209,7 @@ namespace PMIS.Forms
                 { MessageBox.Show("موردی یافت نشد!!!"); }
                 else
                 {
-                    dgvIndicatorList.DataSource = list;
+                    dgvIndicatorList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
                 }
             }
             else
@@ -204,37 +218,51 @@ namespace PMIS.Forms
             }
         }
 
-        private async void btnAdd_Click(object sender, EventArgs e)
+        private async void btnApply_Click(object sender, EventArgs e)
         {
-            await AddIndicator();
+            try
+            {
+                await AddIndicator();
+                await EditIndicator();
+                await DeleteIndicator();
+
+                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async Task AddIndicator()
         {
             try
             {
-                List<IndicatorAddRequestDto> addRequest = new List<IndicatorAddRequestDto>();
+                lstAddRequest = new List<IndicatorAddRequestDto>();
+                
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (row.Cells["Id"].Value == null)
+                    try
                     {
-                        if (row.IsNewRow) continue;
-                        addRequest.Add(new IndicatorAddRequestDto()
+                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
                         {
-                            Code = row.Cells["Code"].Value?.ToString(),
-                            Title = row.Cells["Title"].Value?.ToString(),
-                            FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
-                            FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
-                            FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
-                            FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
-                            FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
-                            FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
-                            Formula = row.Cells["Formula"].Value?.ToString(),
-                            Description = row.Cells["Description"].Value?.ToString()
-                        });
+                            IndicatorAddRequestDto addRequest = new IndicatorAddRequestDto();
+                            try { addRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
+                            try { addRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
+                            try { addRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { addRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
+                            try { addRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
+                            lstAddRequest.Add(addRequest);
+                        }
                     }
+                    catch (Exception) { }
                 }
-                (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(addRequest);
+                (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(lstAddRequest);
 
                 if (isSuccess)
                 {
@@ -242,7 +270,12 @@ namespace PMIS.Forms
                 }
                 else
                 {
-                    string errorMessage = String.Join("\n", list.Where(h => h.IsSuccess == false).Select((x, index) => (index + 1) + " " + x.ErrorMessage));
+                    string errorMessage = String.Join("\n", list.Select((x, index) => new
+                    {
+                        ErrorMessage = (index + 1) + " " + x.ErrorMessage,
+                        IsSuccess = x.IsSuccess
+                    })
+                    .Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
                     MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" + errorMessage);
                 }
             }
@@ -252,37 +285,36 @@ namespace PMIS.Forms
             }
         }
 
-        private async void btnEdit_Click(object sender, EventArgs e)
-        {
-            await EditIndicator();
-        }
-
         private async Task EditIndicator()
         {
             try
             {
-                List<IndicatorEditRequestDto> editRequest = new List<IndicatorEditRequestDto>();
+                lstEditRequest = new List<IndicatorEditRequestDto>();
+                
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (int.Parse(row.Cells["Id"].Value?.ToString()) != null)
+                    try
                     {
-                        editRequest.Add(new IndicatorEditRequestDto()
+                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
                         {
-                            Id = int.Parse(row.Cells["Id"].Value?.ToString()),
-                            Code = row.Cells["Code"].Value?.ToString(),
-                            Title = row.Cells["Title"].Value?.ToString(),
-                            FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
-                            FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
-                            FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
-                            FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
-                            FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
-                            FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
-                            Formula = row.Cells["Formula"].Value?.ToString(),
-                            Description = row.Cells["Description"].Value?.ToString()
-                        });
+                            IndicatorEditRequestDto editRequest = new IndicatorEditRequestDto();
+                            try { editRequest.Id = int.Parse(row.Cells["Id"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
+                            try { editRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
+                            try { editRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
+                            try { editRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
+                            try { editRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
+                            lstEditRequest.Add(editRequest);
+                        }
                     }
+                    catch (Exception) { }
                 }
-                (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(editRequest);
+                (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(lstEditRequest);
 
                 if (isSuccess)
                 {
@@ -295,39 +327,34 @@ namespace PMIS.Forms
             }
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
-        {
-            await DeleteIndicator();
-        }
-
         private async Task DeleteIndicator()
         {
             try
             {
-                List<IndicatorDeleteRequestDto> deleteRequest = new List<IndicatorDeleteRequestDto>();
-                List<IndicatorDeleteRequestDto> recycleRequest = new List<IndicatorDeleteRequestDto>();
+                lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
                     if (int.Parse(row.Cells["Id"].Value?.ToString()) != null)
                     {
                         if (bool.Parse(row.Cells["FlgLogicalDelete"].Value?.ToString()))
                         {
-                            deleteRequest.Add(new IndicatorDeleteRequestDto()
+                            lstDeleteRequest.Add(new IndicatorDeleteRequestDto()
                             {
                                 Id = int.Parse(row.Cells["Id"].Value?.ToString())
                             });
                         }
                         else
                         {
-                            recycleRequest.Add(new IndicatorDeleteRequestDto()
+                            lstRecycleRequest.Add(new IndicatorDeleteRequestDto()
                             {
                                 Id = int.Parse(row.Cells["Id"].Value?.ToString())
                             });
                         }
                     }
                 }
-                (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(deleteRequest);
-                (bool isSuccess2, IEnumerable<IndicatorDeleteResponseDto> list2) = await indicatorService.RecycleGroup(recycleRequest);
+                (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
+                (bool isSuccess2, IEnumerable<IndicatorDeleteResponseDto> list2) = await indicatorService.RecycleGroup(lstRecycleRequest);
 
                 if (isSuccess)
                 {
@@ -343,10 +370,21 @@ namespace PMIS.Forms
         private void dgvIndicatorList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].Value = (e.RowIndex + 1).ToString();
+
+            if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value == null)
+            {
+                foreach (DataGridViewCell cell in dgvIndicatorList.Rows[e.RowIndex].Cells)
+                {
+                    cell.ReadOnly = false;
+                }
+            }
+            dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
         private void dgvIndicatorList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (dgvIndicatorList.Rows[e.RowIndex].IsNewRow)
+                return;
             if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Edit" && e.RowIndex >= 0)
             {
                 var row = dgvIndicatorList.Rows[e.RowIndex];
@@ -355,6 +393,20 @@ namespace PMIS.Forms
                     cell.ReadOnly = false;
                 }
             }
+        }
+
+        private void dgvIndicatorList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+        }
+
+        private void dgvIndicatorList_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        private void dgvIndicatorList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value=true;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                     return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
@@ -104,7 +104,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                      return true;
 
                 bool result = true;
                 List<TEntity> entityRequest = new List<TEntity>();
@@ -145,7 +145,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                     return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
@@ -206,7 +206,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                    throw new Exception("لیست خالیست!!!");
+                      return true;
 
                 bool result = true;
                 List<TEntity> entityRequest = new List<TEntity>();
