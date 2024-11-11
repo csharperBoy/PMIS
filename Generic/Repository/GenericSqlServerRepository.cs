@@ -1,4 +1,373 @@
-﻿//using Generic.Repository.Abstract;
+﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
+using Generic.Helper;
+using Generic.Repository.Abstract;
+using Generic.Repository.Contract;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Helper = Generic.Helper;
+namespace Generic.Repository
+{
+    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
+        where TEntity : class
+        where TContext : DbContext
+    {
+        private DbContext dbContext;
+        private DbSet<TEntity> dbSet;
+        private IDbContextTransaction transaction;
+        private Serilog.ILogger logHandler;
+        private bool disposed;
+        private string entityName;
+
+        public GenericSqlServerRepository(TContext _dbContext, AbstractGenericLogWithSerilogHandler _logHandler)
+        {
+            dbContext = _dbContext;
+            dbSet = _dbContext.Set<TEntity>();
+            transaction = _dbContext.Database.BeginTransaction();
+            logHandler = _logHandler.CreateLogger();
+            disposed = false;
+            entityName = typeof(TEntity).Name;
+        }
+
+        public override async Task<bool> InsertAsync(TEntity entity)
+        {
+            bool result;
+            try
+            {
+                if (dbContext.Entry(entity).State == EntityState.Added)
+                {
+                    dbSet.Attach(entity);
+                }
+                await dbSet.AddAsync(entity);
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
+                logHandler.Information("Add {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
+        {
+            bool result;
+            try
+            {
+                //foreach (var item in entities)
+                //{
+                //    await InsertAsync(item);
+                //}
+                await dbSet.AddRangeAsync(entities);
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
+                logHandler.Information("Add range {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> UpdateAsync(TEntity entity)
+        {
+            bool result;
+            try
+            {
+                if (dbContext.Entry(entity).State == EntityState.Modified)
+                {
+                    dbSet.Attach(entity);
+                }
+                await Task.FromResult(dbSet.Update(entity));
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
+                logHandler.Information("Update {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entities)
+        {
+            bool result;
+            try
+            {
+                //dbSet.UpdateRange(entities);
+                foreach (var item in entities)
+                {
+                    await Task.FromResult(UpdateAsync(item));
+                }
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
+                logHandler.Information("UpdateRange {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> DeleteAsync(TEntity entity)
+        {
+            bool result;
+            try
+            {
+                if (dbContext.Entry(entity).State == EntityState.Deleted)
+                {
+                    dbSet.Attach(entity);
+                }
+                await Task.FromResult(dbSet.Remove(entity));
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
+                logHandler.Information("Delete by entity {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> DeleteAsync(object id)
+        {
+            bool result;
+            TEntity? entity = null;
+            try
+            {
+                entity = await GetByIdAsync(id);
+                if (entity != null)
+                {
+                    await DeleteAsync(entity);
+                }
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
+                logHandler.Information("Delete by id {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entities)
+        {
+            bool result;
+            try
+            {
+                foreach (var item in entities)
+                {
+                    await Task.FromResult(DeleteAsync(item));
+                }
+                //dbSet.RemoveRange(entities);
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            finally
+            {
+                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
+                logHandler.Information("DeleteRange {@entityJson} in {@entityName}", entityJson, entityName);
+            }
+            return result;
+        }
+
+        public override async Task SaveAsync()
+        {
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                await RollbackAsync();
+                throw;
+            }
+        }
+
+        public override async Task CommitAsync()
+        {
+            try
+            {
+                await dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after commit
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+
+                logHandler.Information("Commited in {@entityName}", entityName);
+            }
+        }
+
+        public override async Task SaveAndCommitAsync()
+        {
+            try
+            {
+                await SaveAsync();
+                await CommitAsync();
+            }
+            catch (Exception)
+            {
+                await RollbackAsync();
+                throw;
+            }
+        }
+
+        public async Task RollbackAsync()
+        {
+            try
+            {
+                await transaction.RollbackAsync();
+                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after rollback
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                logHandler.Information("Rollback in {@entityName}", entityName);
+            }
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    transaction.Dispose();
+                    dbContext.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public override void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public override async Task DisposeAsync()
+        {
+            if (!disposed)
+            {
+                await transaction.DisposeAsync();
+                await dbContext.DisposeAsync();
+                disposed = true;
+            }
+        }
+
+        public override Task SetEntityStateAsync<TEntity>(TEntity entity, EntityState state)
+        {
+            dbContext.Entry(entity).State = state;
+            return Task.CompletedTask;
+        }
+
+        public override Task SetCommandTimeoutAsync(int timeout)
+        {
+            try
+            {
+                dbContext.Database.SetCommandTimeout(timeout);
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public override async Task<TEntity?> GetByIdAsync(object id)
+        {
+            try
+            {
+                TEntity entity = await dbSet.FindAsync(id);
+                return entity;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            finally
+            {
+            }
+        }
+
+        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int? pageNumber = null, int? recordCount = null)
+        {
+            try
+            {
+                IQueryable<TEntity> query = dbSet;
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+               int count =await query.CountAsync();
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+                if (orderBy != null)
+                {
+                    query = orderBy(query).AsQueryable();
+                }
+                if (pageNumber != null  && recordCount !=null )
+                {
+                    int skip = ((int)pageNumber - 1) * (int)recordCount;
+                    query = query.Skip(skip).Take((int)recordCount);
+                }
+                var resultList = await query.ToListAsync();
+                return (resultList, count);
+            }
+            catch (Exception ex)
+            {
+                return (null, -2);
+            }
+        }
+    }
+}
+
+//using Generic.Repository.Abstract;
 //using Generic.Repository.Contract;
 //using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore.Storage;
@@ -680,344 +1049,3 @@
 //}
 
 #endregion
-using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
-using Generic.Helper;
-using Generic.Repository.Abstract;
-using Generic.Repository.Contract;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Helper = Generic.Helper;
-namespace Generic.Repository
-{
-    public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
-        where TEntity : class
-        where TContext : DbContext
-    {
-        protected DbContext dbContext;
-        internal DbSet<TEntity> dbSet;
-        private IDbContextTransaction transaction;
-        private bool disposed = false;
-        private Serilog.ILogger logHandler;
-        private string entityName = typeof(TEntity).Name;
-
-        public GenericSqlServerRepository(TContext dbContext, AbstractGenericLogWithSerilogHandler _logHandler)
-        {
-            this.dbContext = dbContext;
-            dbSet = dbContext.Set<TEntity>();
-            transaction = dbContext.Database.BeginTransaction();
-            logHandler = _logHandler.CreateLogger();
-        }
-
-        public override async Task<bool> InsertAsync(TEntity entity)
-        {
-            try
-            {
-                await dbSet.AddAsync(entity);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
-                logHandler.Information("Add {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override Task SetCommandTimeoutAsync(int timeout)
-        {
-            try
-            {
-                dbContext.Database.SetCommandTimeout(timeout);
-                return Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        public override async Task CommitAsync()
-        {
-            try
-            {
-                await dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after commit
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-
-                logHandler.Information("Commited in {@entityName}",  entityName);
-            }
-        }
-
-        public override Task SetEntityStateAsync<TEntity>(TEntity entity, EntityState state)
-        {
-            dbContext.Entry(entity).State = state;
-            return Task.CompletedTask;
-        }
-
-        public async Task RollbackAsync()
-        {
-            try
-            {
-                await transaction.RollbackAsync();
-                transaction = dbContext.Database.BeginTransaction(); // Restart transaction after rollback
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                logHandler.Information("Rollback in {@entityName}",  entityName);
-            }
-        }
-
-        public void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    transaction.Dispose();
-                    dbContext.Dispose();
-                }
-            }
-            disposed = true;
-        }
-
-        public override async Task DisposeAsync()
-        {
-            if (!disposed)
-            {
-                await transaction.DisposeAsync();
-                await dbContext.DisposeAsync();
-                disposed = true;
-            }
-        }
-
-        public override void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public override async Task SaveAsync()
-        {
-            try
-            {
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                await RollbackAsync();
-                throw;
-            }
-        }
-
-        public override async Task SaveAndCommitAsync()
-        {
-            try
-            {
-                await SaveAsync();
-                await CommitAsync();
-            }
-            catch (Exception)
-            {
-                await RollbackAsync();
-                throw;
-            }
-        }
-
-        public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
-        {
-            try
-            {
-                await dbSet.AddRangeAsync(entities);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
-                logHandler.Information("Add range {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override Task<bool> DeleteAsync(TEntity entityToDelete)
-        {
-            try
-            {
-                if (dbContext.Entry(entityToDelete).State == EntityState.Detached)
-                {
-                    dbSet.Attach(entityToDelete);
-                }
-                dbSet.Remove(entityToDelete);
-                return Task.FromResult(true);
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToDelete);
-                logHandler.Information("Delete by entity {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override async Task<bool> DeleteAsync(object id)
-        {
-            TEntity? entityToDelete = null;
-            try
-            {
-                entityToDelete = await GetByIdAsync(id);
-                if (entityToDelete != null)
-                {
-                    return await DeleteAsync(entityToDelete);
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToDelete);
-                logHandler.Information("Delete by id {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entitiesToDelete)
-        {
-            try
-            {
-                dbSet.RemoveRange(entitiesToDelete);
-                return Task.FromResult(true);
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entitiesToDelete);
-                logHandler.Information("DeleteRange {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override async Task<TEntity?> GetByIdAsync(object id)
-        {
-            try
-            {
-                TEntity entity = await dbSet.FindAsync(id);
-                return entity;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            finally
-            {
-            }
-        }
-
-        public override Task<bool> UpdateAsync(TEntity entityToUpdate)
-        {
-            try
-            {
-                dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-                dbSet.Attach(entityToUpdate);
-                dbContext.Entry(entityToUpdate).State = EntityState.Detached;
-                return Task.FromResult(true);
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entityToUpdate);
-                logHandler.Information("Update {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public  override async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entitiesToUpdate)
-        {
-            try
-            {
-                foreach (var item in entitiesToUpdate)
-                {
-                    await UpdateAsync(item);
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            finally
-            {
-                var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entitiesToUpdate);
-                logHandler.Information("UpdateRange {@entityJson} in {@entityName}", entityJson, entityName);
-            }
-        }
-
-        public override async Task<(IEnumerable<TEntity> entites, int count)> GetPagingAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int? pageNumber = null, int? recordCount = null)
-        {
-            try
-            {
-                IQueryable<TEntity> query = dbSet;
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
-               int count =await query.CountAsync();
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-                if (orderBy != null)
-                {
-                    query = orderBy(query).AsQueryable();
-                }
-                if (pageNumber != null  && recordCount !=null )
-                {
-                    int skip = ((int)pageNumber - 1) * (int)recordCount;
-                    query = query.Skip(skip).Take((int)recordCount);
-                }
-                var resultList = await query.ToListAsync();
-                return (resultList, count);
-            }
-            catch (Exception ex)
-            {
-                return (null, -2);
-            }
-        }
-    }
-}
-
-
-
-
