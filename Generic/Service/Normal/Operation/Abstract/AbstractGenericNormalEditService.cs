@@ -54,7 +54,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                     try
                     {
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
-
                         result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
                         repository.SetEntityStateAsync(entity, EntityState.Detached);
