@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PMIS.DTO.ClaimOnSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,19 @@ namespace PMIS.DTO.IndicatorCategory
     }
     public class IndicatorCategoryAddResponseDto
     {
+        public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
+          where TDestination : class
+          where TSource : class
+        {
+            if (source is Models.IndicatorCategory sourceModel)
+            {
+                if (destination is IndicatorCategoryAddResponseDto destinationModel)
+                {
+                    destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
+                }
+            }
+            return destination;
+        }
         public int Id { get; set; }
         public bool IsSuccess { get; set; }
         public string? ErrorMessage { get; set; }

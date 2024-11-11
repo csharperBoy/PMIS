@@ -208,6 +208,10 @@ namespace PMIS.Forms
                 if (isSuccess)
                 {
                     MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }else
+                {
+                    string errorMessage = String.Join("\n", list.Where(h => h.IsSuccess == false).Select((x, index) =>(index+1) + " " + x.ErrorMessage));
+                    MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" + errorMessage);
                 }
             }
             catch (Exception)

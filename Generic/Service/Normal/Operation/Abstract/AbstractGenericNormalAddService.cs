@@ -46,10 +46,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             exceptionHandler = _exceptionHandler;
             logHandler = _logHandler.CreateLogger();
         }
-
-
-
-
+        
         public async Task<(bool, IEnumerable<TEntityAddResponseDto>)> AddGroup(IEnumerable<TEntityAddRequestDto> requestInput)
         {
             try
@@ -64,30 +61,24 @@ namespace Generic.Service.Normal.Operation.Abstract
                 {
                     TEntity entity = new TEntity();
                     TEntityAddResponseDto responseTemp = new TEntityAddResponseDto();
+                    responseTemp = new TEntityAddResponseDto();
                     try
                     {
                         entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
-                        result = await repository.InsertAsync(entity);
+                        result = await repository.InsertAsync(entity);                       
                         await repository.SaveAsync();
                         repository.SetEntityStateAsync(entity,EntityState.Detached);
+                        responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                     }
                     catch (Exception ex)
                     {
-
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
-
-
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
-                        results.Add(responseTemp);
                     }
-
+                    results.Add(responseTemp);
+                    
                     if (!result)
                         resultIsSuccess = false;
-
-                    responseTemp = new TEntityAddResponseDto();
-                    responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
-                    results.Add(responseTemp);
-
                 }
                 await repository.CommitAsync();
 
@@ -102,8 +93,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                 Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
-
-        
 
         public async Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
         {
@@ -136,8 +125,5 @@ namespace Generic.Service.Normal.Operation.Abstract
                 Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
-
-
-
     }
 }

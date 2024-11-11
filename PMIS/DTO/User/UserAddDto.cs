@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PMIS.DTO.LookUpValue;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,19 @@ namespace PMIS.DTO.User
     }
     public class UserAddResponseDto
     {
+        public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
+         where TDestination : class
+         where TSource : class
+        {
+            if (source is Models.User sourceModel)
+            {
+                if (destination is UserAddResponseDto destinationModel)
+                {
+                    destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
+                }
+            }
+            return destination;
+        }
         public int Id { get; set; }
         public bool IsSuccess { get; set; }
         public string? ErrorMessage { get; set; }

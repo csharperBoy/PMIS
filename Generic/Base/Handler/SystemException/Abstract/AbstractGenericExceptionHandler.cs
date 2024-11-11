@@ -6,7 +6,7 @@ namespace Generic.Base.Handler.SystemException.Abstract
     {
         public async Task<object> AssignExceptionInfoToObject(object obj, Exception ex)
         {
-            var errorMessageProperty = typeof(object).GetProperty("ErrorMessage");
+            var errorMessageProperty = obj.GetType().GetProperty("ErrorMessage");
             if (errorMessageProperty != null)
             {
                 errorMessageProperty.SetValue(obj, ex.Message);
