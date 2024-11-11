@@ -149,12 +149,6 @@ namespace PMIS.Forms
                 Visible = true,
             });
         }
-       
-        
-
-
-        
-
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             await SearchIndicator();
