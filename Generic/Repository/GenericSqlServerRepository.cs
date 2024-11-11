@@ -186,11 +186,11 @@ namespace Generic.Repository
             bool result;
             try
             {
+                //dbSet.RemoveRange(entities);
                 foreach (var item in entities)
                 {
                     await Task.FromResult(DeleteAsync(item));
                 }
-                //dbSet.RemoveRange(entities);
                 result = true;
             }
             catch (Exception)

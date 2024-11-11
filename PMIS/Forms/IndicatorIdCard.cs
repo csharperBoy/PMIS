@@ -28,14 +28,16 @@ namespace PMIS.Forms
         List<IndicatorDeleteRequestDto> lstRecycleRequest;
         IIndicatorService indicatorService;
         ILookUpValueService lookUpValueService;
+
         public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
-           
+
             CustomInitialize();
         }
+
         private async void CustomInitialize()
         {
             dgvIndicatorList.AutoGenerateColumns = false;
@@ -65,7 +67,7 @@ namespace PMIS.Forms
                 DataPropertyName = "Code",
                 ReadOnly = true,
                 Visible = true,
-                Frozen = true
+                Frozen = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -74,7 +76,7 @@ namespace PMIS.Forms
                 DataPropertyName = "Title",
                 ReadOnly = true,
                 Visible = true,
-                Frozen = true
+                Frozen = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
             {
@@ -160,7 +162,7 @@ namespace PMIS.Forms
             });
             dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
             {
-                HeaderText = "حذف",
+                HeaderText = "حذف شده",
                 Name = "FlgLogicalDelete",
                 DataPropertyName = "FlgLogicalDelete",
                 ReadOnly = false,
@@ -172,28 +174,28 @@ namespace PMIS.Forms
                 Name = "FlgEdited",
                 ReadOnly = false,
                 Visible = false,
-                
             });
             dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
             {
+                HeaderText = "",
                 Name = "Edit",
+                Text = "ویرایش",
                 ReadOnly = false,
                 Visible = true,
                 UseColumnTextForButtonValue = true,
-                Text = "ویرایش",
-                HeaderText = ""
             });
             dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
             {
+                HeaderText = "",
                 Name = "Delete",
+                Text = "حذف",
                 ReadOnly = false,
                 Visible = true,
                 UseColumnTextForButtonValue = true,
-                Text = "حذف",
-                HeaderText = ""
             });
             SearchIndicator();
         }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             await SearchIndicator();
@@ -224,7 +226,7 @@ namespace PMIS.Forms
             {
                 await AddIndicator();
                 await EditIndicator();
-                await DeleteIndicator();
+                //await DeleteIndicator();
 
                 MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -239,7 +241,7 @@ namespace PMIS.Forms
             try
             {
                 lstAddRequest = new List<IndicatorAddRequestDto>();
-                
+
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
                     try
@@ -262,6 +264,7 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
+
                 (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(lstAddRequest);
 
                 if (isSuccess)
@@ -290,7 +293,7 @@ namespace PMIS.Forms
             try
             {
                 lstEditRequest = new List<IndicatorEditRequestDto>();
-                
+
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
                     try
@@ -314,6 +317,7 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
+
                 (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(lstEditRequest);
 
                 if (isSuccess)
@@ -390,6 +394,7 @@ namespace PMIS.Forms
                 var row = dgvIndicatorList.Rows[e.RowIndex];
                 foreach (DataGridViewCell cell in row.Cells)
                 {
+                    dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value = true;
                     cell.ReadOnly = false;
                 }
             }
@@ -406,7 +411,10 @@ namespace PMIS.Forms
 
         private void dgvIndicatorList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value=true;
+            if (dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()) == false)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

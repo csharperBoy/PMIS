@@ -65,24 +65,19 @@ namespace Generic.Service.Normal.Operation.Abstract
 
                         result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
-                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
+                        repository.SetEntityStateAsync(entity, EntityState.Detached);
+                        responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
                     }
                     catch (Exception ex)
                     {
-
                         responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
-
-
                         responseTemp = (TEntityDeleteResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
-                        results.Add(responseTemp);
                     }
+
+                    results.Add(responseTemp);
 
                     if (!result)
                         resultIsSuccess = false;
-
-                    responseTemp = new TEntityDeleteResponseDto();
-                    responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
-                    results.Add(responseTemp);
 
                 }
                 await repository.CommitAsync();

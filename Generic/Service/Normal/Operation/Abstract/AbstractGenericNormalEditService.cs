@@ -61,7 +61,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
-
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                         responseTemp = (TEntityEditResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }

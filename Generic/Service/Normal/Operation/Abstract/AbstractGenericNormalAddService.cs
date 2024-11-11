@@ -74,6 +74,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }
+
                     results.Add(responseTemp);
 
                     if (!result)
