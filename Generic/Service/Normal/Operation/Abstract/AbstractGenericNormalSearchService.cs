@@ -51,7 +51,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 if (requestInput.sorts == null)
                     orderBy = null;
                 else
-                     orderBy = query => ApplySorting(query, requestInput.sorts);
+                    orderBy = query => ApplySorting(query, requestInput.sorts);
 
                 (IEnumerable<TEntity> entities, int totalCount) = await repository.GetPagingAsync(
                    filter: filterExpression,
@@ -60,9 +60,12 @@ namespace Generic.Service.Normal.Operation.Abstract
                    pageNumber: requestInput.pageNumber,
                    recordCount: requestInput.recordCount
                );
-
-               List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
-
+                
+                List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
+                foreach (var entity in entities)
+                {
+                    await repository.SetEntityStateAsync<TEntity>(entity, EntityState.Detached);
+                }
                 return (true, results);
             }
             catch (Exception ex)
@@ -79,10 +82,10 @@ namespace Generic.Service.Normal.Operation.Abstract
             Expression<Func<TEntity, bool>> filterExpression = e => true;
             foreach (var filter in filters)
             {
-                if(filter.type == PhraseType.Condition)
+                if (filter.type == PhraseType.Condition)
                     filterExpression = CombineExpressions(filterExpression, BuildSingleFilterExpression(filter), filter.LogicalOperator);
                 if (filter.InternalFilters != null && filter.InternalFilters.Any())
-                    filterExpression = CombineExpressions(filterExpression, BuildFilterExpression(filter.InternalFilters) , filter.LogicalOperator);
+                    filterExpression = CombineExpressions(filterExpression, BuildFilterExpression(filter.InternalFilters), filter.LogicalOperator);
             }
             return filterExpression;
         }
@@ -134,7 +137,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
         }
 
-        
+
 
         private IOrderedQueryable<TEntity>? ApplySorting(IQueryable<TEntity> query, List<GenericSearchSortDto> sorts)
         {

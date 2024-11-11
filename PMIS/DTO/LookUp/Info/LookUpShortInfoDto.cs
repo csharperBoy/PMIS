@@ -27,8 +27,8 @@ namespace PMIS.DTO.LookUp.Info
             Models.LookUp baseModel = new Models.LookUp();
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(Model, baseModel);
 
-            baseModel.LookUpDestinations = await Task.WhenAll(Model.LookUpDestinationsInfo.Select(d => (new LookUpDestinationTinyInfoDto()).extraMapToBaseModel(d)).ToList());
-            baseModel.LookUpValues = await Task.WhenAll(Model.LookUpValuesInfo.Select(v => (new LookUpValueTinyInfoDto()).extraMapToBaseModel(v)).ToList());
+            //baseModel.LookUpDestinations = await Task.WhenAll(Model.LookUpDestinationsInfo.Select(d => (new LookUpDestinationTinyInfoDto()).extraMapToBaseModel(d)).ToList());
+            //baseModel.LookUpValues = await Task.WhenAll(Model.LookUpValuesInfo.Select(v => (new LookUpValueTinyInfoDto()).extraMapToBaseModel(v)).ToList());
             return baseModel;
         }
 

@@ -84,8 +84,9 @@ namespace PMIS.Forms
                 List<IndicatorAddRequestDto> addRequest = new List<IndicatorAddRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (int.Parse(row.Cells["Id"].Value?.ToString()) == null)
+                    if (row.Cells["Id"].Value == null)
                     {
+                        if (row.IsNewRow) continue;
                         addRequest.Add(new IndicatorAddRequestDto()
                         {
                             Code = row.Cells["Code"].Value?.ToString(),

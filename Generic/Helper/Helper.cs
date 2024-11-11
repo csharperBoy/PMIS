@@ -16,21 +16,29 @@ namespace Generic.Helper
     {
         public static class Convert
         {
-            public static string ConvertObjectToJson(object? obj)
+            public static string ConvertObjectToJson(object? _obj, ReferenceLoopHandling _referenceLoop = ReferenceLoopHandling.Serialize, PreserveReferencesHandling _PreserveReferencesHandling = PreserveReferencesHandling.Objects, int _maxDepth = 1)
             {
                 try
                 {
-                    if (obj == null)
+                    if (_obj == null)
                         return null;
-                    var entityJson = JsonConvert.SerializeObject(obj);
+
+                    var settings = new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                    };
+
+                    var entityJson = JsonConvert.SerializeObject(_obj, settings);
                     return entityJson;
                 }
                 catch (Exception ex)
                 {
-
-                    throw;
+                    Console.WriteLine(ex.Message);
+                    return null;
                 }
             }
+
         }
         public static class ServiceLog
         {
@@ -56,7 +64,7 @@ namespace Generic.Helper
                 }
             }
         }
-        
+
     }
     public static class PredicateBuilder
     {

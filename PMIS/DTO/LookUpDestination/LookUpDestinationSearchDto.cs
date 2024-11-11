@@ -21,19 +21,19 @@ namespace PMIS.DTO.LookUpDestination
             where TDestination : class
             where TSource : class
         {
-            if (source is Models.LookUpDestination sourceModel)
+            if (source is Models.LookUpDestination sourceModel1)
             {
-                if (destination is LookUpDestinationSearchResponseDto destinationModel)
+                if (destination is LookUpDestinationSearchResponseDto destinationModel1)
                 {
-                     await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(await destinationModel.extraMapFromBaseModel(sourceModel));                   
+                     await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(await destinationModel1.extraMapFromBaseModel(sourceModel1));                   
                 }
 
             }
-            else if(source is LookUpDestinationSearchResponseDto sourceModel)
+            else if(source is LookUpDestinationSearchResponseDto sourceModel2)
             {
-                if (destination is Models.LookUpDestination destinationModel)
+                if (destination is Models.LookUpDestination destinationModel2)
                 {
-                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<LookUpDestinationStandardInfoDto, LookUpDestinationSearchResponseDto>(await sourceModel.extraMapToBaseModel(sourceModel));
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.LookUpDestination, LookUpDestinationSearchResponseDto>(await sourceModel2.extraMapToBaseModel(sourceModel2));
                 }
             }
             return destination;
