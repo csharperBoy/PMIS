@@ -125,6 +125,7 @@ namespace PMIS.Forms
             dgvIndicatorList.RowHeadersWidth = 51;
             dgvIndicatorList.Size = new Size(914, 500);
             dgvIndicatorList.TabIndex = 0;
+            dgvIndicatorList.CellContentClick += dgvIndicatorList_CellContentClick;
             dgvIndicatorList.RowPostPaint += dgvIndicatorList_RowPostPaint;
             // 
             // IndicatorIdCard

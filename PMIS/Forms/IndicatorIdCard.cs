@@ -49,6 +49,7 @@ namespace PMIS.Forms
                 HeaderText = "شناسه",
                 Name = "Id",
                 DataPropertyName = "Id",
+                ReadOnly = true,
                 Visible = false,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
@@ -56,6 +57,7 @@ namespace PMIS.Forms
                 HeaderText = "کد",
                 Name = "Code",
                 DataPropertyName = "Code",
+                ReadOnly = true,
                 Visible = true,
                 Frozen = true
             });
@@ -64,6 +66,7 @@ namespace PMIS.Forms
                 HeaderText = "عنوان",
                 Name = "Title",
                 DataPropertyName = "Title",
+                ReadOnly = true,
                 Visible = true,
                 Frozen = true
             });
@@ -75,6 +78,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
@@ -85,6 +89,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
@@ -95,6 +100,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
@@ -105,6 +111,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
@@ -115,6 +122,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
@@ -125,6 +133,7 @@ namespace PMIS.Forms
                 DisplayMember = "Display",
                 ValueMember = "Id",
                 DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
@@ -132,6 +141,7 @@ namespace PMIS.Forms
                 HeaderText = "فرمول",
                 Name = "Formula",
                 DataPropertyName = "Formula",
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
@@ -139,6 +149,7 @@ namespace PMIS.Forms
                 HeaderText = "توضیحات",
                 Name = "Description",
                 DataPropertyName = "Description",
+                ReadOnly = true,
                 Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
@@ -146,7 +157,27 @@ namespace PMIS.Forms
                 HeaderText = "حذف",
                 Name = "FlgLogicalDelete",
                 DataPropertyName = "FlgLogicalDelete",
+                ReadOnly = false,
                 Visible = true,
+            });
+
+            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "Edit",
+                ReadOnly = false,
+                Visible = true,
+                UseColumnTextForButtonValue = true,
+                Text = "ویرایش",
+                HeaderText = ""
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "Delete",
+                ReadOnly = false,
+                Visible = true,
+                UseColumnTextForButtonValue = true,
+                Text = "حذف",
+                HeaderText = ""
             });
         }
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -208,9 +239,10 @@ namespace PMIS.Forms
                 if (isSuccess)
                 {
                     MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                }else
+                }
+                else
                 {
-                    string errorMessage = String.Join("\n", list.Where(h => h.IsSuccess == false).Select((x, index) =>(index+1) + " " + x.ErrorMessage));
+                    string errorMessage = String.Join("\n", list.Where(h => h.IsSuccess == false).Select((x, index) => (index + 1) + " " + x.ErrorMessage));
                     MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" + errorMessage);
                 }
             }
@@ -307,10 +339,22 @@ namespace PMIS.Forms
                 throw;
             }
         }
-        
+
         private void dgvIndicatorList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].Value = (e.RowIndex + 1).ToString();
+        }
+
+        private void dgvIndicatorList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Edit" && e.RowIndex >= 0)
+            {
+                var row = dgvIndicatorList.Rows[e.RowIndex];
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cell.ReadOnly = false;
+                }
+            }
         }
     }
 }
