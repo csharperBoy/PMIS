@@ -28,25 +28,132 @@ namespace PMIS.Forms
             InitializeComponent();
             indicatorService = _indicatorService;
             this.lookUpValueService = _lookUpValueService;
-        }
 
-        private async void IndicatorIdCard_Load(object sender, EventArgs e)
-        {
-            await InitializeLookUps();
+            CustomInitialize();
         }
-
-        private async Task InitializeLookUps()
+        private async void CustomInitialize()
         {
+            dgvIndicatorList.AutoGenerateColumns = false;
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
-
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
-            dgvcbLkpForm.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm");
-            dgvcbLkpManuality.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality");
-            dgvcbLkpUnit.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit");
-            dgvcbLkpPeriod.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod");
-            dgvcbLkpMeasure.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure");
-            dgvcbLkpDesirability.DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability");
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "ردیف",
+                Name = "RowNumber",
+                ReadOnly = true,
+                Visible = true,
+                Frozen = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "شناسه",
+                Name = "Id",
+                DataPropertyName = "Id",
+                Visible = false,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "کد",
+                Name = "Code",
+                DataPropertyName = "Code",
+                Visible = true,
+                Frozen = true
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "عنوان",
+                Name = "Title",
+                DataPropertyName = "Title",
+                Visible = true,
+                Frozen = true
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "فرم مربوطه",
+                Name = "FkLkpFormId",
+                DataPropertyName = "FkLkpFormId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "دستی/اتوماتیک",
+                Name = "FkLkpManualityId",
+                DataPropertyName = "FkLkpManualityId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "واحد عملیاتی",
+                Name = "FkLkpUnitId",
+                DataPropertyName = "FkLkpUnitId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "دوره زمانی",
+                Name = "FkLkpPeriodId",
+                DataPropertyName = "FkLkpPeriodId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "واحد اندازه‌گیری",
+                Name = "FkLkpMeasureId",
+                DataPropertyName = "FkLkpMeasureId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "مطلوبیت",
+                Name = "FkLkpDesirabilityId",
+                DataPropertyName = "FkLkpDesirabilityId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "فرمول",
+                Name = "Formula",
+                DataPropertyName = "Formula",
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "توضیحات",
+                Name = "Description",
+                DataPropertyName = "Description",
+                Visible = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
+            {
+                HeaderText = "حذف",
+                Name = "FlgLogicalDelete",
+                DataPropertyName = "FlgLogicalDelete",
+                Visible = true,
+            });
         }
+       
+        
+
+
+        
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
@@ -201,6 +308,11 @@ namespace PMIS.Forms
             {
                 throw;
             }
+        }
+        
+        private void dgvIndicatorList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].Value = (e.RowIndex + 1).ToString();
         }
     }
 }
