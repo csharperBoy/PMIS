@@ -84,20 +84,22 @@ namespace PMIS.Forms
                 List<IndicatorAddRequestDto> addRequest = new List<IndicatorAddRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (row.IsNewRow) continue;
-                    addRequest.Add(new IndicatorAddRequestDto()
+                    if (int.Parse(row.Cells["Id"].Value?.ToString()) == null)
                     {
-                        Code = row.Cells["Code"].Value?.ToString(),
-                        Title = row.Cells["Title"].Value?.ToString(),
-                        FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
-                        FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
-                        FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
-                        FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
-                        FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
-                        FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
-                        Formula = row.Cells["Formula"].Value?.ToString(),
-                        Description = row.Cells["Description"].Value?.ToString()
-                    });
+                        addRequest.Add(new IndicatorAddRequestDto()
+                        {
+                            Code = row.Cells["Code"].Value?.ToString(),
+                            Title = row.Cells["Title"].Value?.ToString(),
+                            FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
+                            FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
+                            FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
+                            FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
+                            FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
+                            FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
+                            Formula = row.Cells["Formula"].Value?.ToString(),
+                            Description = row.Cells["Description"].Value?.ToString()
+                        });
+                    }
                 }
                 (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(addRequest);
 
@@ -124,21 +126,23 @@ namespace PMIS.Forms
                 List<IndicatorEditRequestDto> editRequest = new List<IndicatorEditRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (row.IsNewRow) continue;
-                    editRequest.Add(new IndicatorEditRequestDto()
+                    if (int.Parse(row.Cells["Id"].Value?.ToString()) != null)
                     {
-                        Id = int.Parse(row.Cells["Id"].Value?.ToString()),
-                        Code = row.Cells["Code"].Value?.ToString(),
-                        Title = row.Cells["Title"].Value?.ToString(),
-                        FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
-                        FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
-                        FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
-                        FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
-                        FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
-                        FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
-                        Formula = row.Cells["Formula"].Value?.ToString(),
-                        Description = row.Cells["Description"].Value?.ToString()
-                    });
+                        editRequest.Add(new IndicatorEditRequestDto()
+                        {
+                            Id = int.Parse(row.Cells["Id"].Value?.ToString()),
+                            Code = row.Cells["Code"].Value?.ToString(),
+                            Title = row.Cells["Title"].Value?.ToString(),
+                            FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()),
+                            FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()),
+                            FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()),
+                            FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()),
+                            FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()),
+                            FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()),
+                            Formula = row.Cells["Formula"].Value?.ToString(),
+                            Description = row.Cells["Description"].Value?.ToString()
+                        });
+                    }
                 }
                 (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(editRequest);
 
@@ -166,20 +170,22 @@ namespace PMIS.Forms
                 List<IndicatorDeleteRequestDto> recycleRequest = new List<IndicatorDeleteRequestDto>();
                 foreach (DataGridViewRow row in dgvIndicatorList.Rows)
                 {
-                    if (row.IsNewRow) continue;
-                    if (bool.Parse(row.Cells["FlgLogicalDelete"].Value?.ToString()))
+                    if (int.Parse(row.Cells["Id"].Value?.ToString()) != null)
                     {
-                        deleteRequest.Add(new IndicatorDeleteRequestDto()
+                        if (bool.Parse(row.Cells["FlgLogicalDelete"].Value?.ToString()))
                         {
-                            Id = int.Parse(row.Cells["Id"].Value?.ToString())
-                        });
-                    }
-                    else
-                    {
-                        recycleRequest.Add(new IndicatorDeleteRequestDto()
+                            deleteRequest.Add(new IndicatorDeleteRequestDto()
+                            {
+                                Id = int.Parse(row.Cells["Id"].Value?.ToString())
+                            });
+                        }
+                        else
                         {
-                            Id = int.Parse(row.Cells["Id"].Value?.ToString())
-                        });
+                            recycleRequest.Add(new IndicatorDeleteRequestDto()
+                            {
+                                Id = int.Parse(row.Cells["Id"].Value?.ToString())
+                            });
+                        }
                     }
                 }
                 (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(deleteRequest);
