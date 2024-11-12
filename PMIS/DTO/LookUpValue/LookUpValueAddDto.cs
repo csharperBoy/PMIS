@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.LookUp;
+﻿using Generic.Service.DTO.Concrete;
+using PMIS.DTO.LookUp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUpValue
 {
-    public class LookUpValueAddRequestDto
+    public class LookUpValueAddRequestDto : GenericAddRequestDto
     {
        // public int Id { get; set; }
 
@@ -22,7 +23,7 @@ namespace PMIS.DTO.LookUpValue
         public string? Description { get; set; }
 
     }
-    public class LookUpValueAddResponseDto
+    public class LookUpValueAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
          where TDestination : class
@@ -38,7 +39,5 @@ namespace PMIS.DTO.LookUpValue
             return destination;
         }
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string ErrorMessage { get; set; }
     }
 }

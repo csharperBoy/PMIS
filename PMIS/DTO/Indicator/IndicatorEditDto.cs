@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.Indicator
 {
-    public class IndicatorEditRequestDto
+    public class IndicatorEditRequestDto : GenericEditRequestDto
     {
         public int Id { get; set; }
 
@@ -34,7 +35,7 @@ namespace PMIS.DTO.Indicator
 
         //public bool? FlgPhisycalDelete { get; set; }
     }
-    public class IndicatorEditResponseDto
+    public class IndicatorEditResponseDto : GenericEditResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
            where TDestination : class
@@ -50,7 +51,5 @@ namespace PMIS.DTO.Indicator
             return destination;
         }
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }

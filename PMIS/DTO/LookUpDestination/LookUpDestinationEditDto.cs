@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUpDestination
 {
-    public class LookUpDestinationEditRequestDto
+    public class LookUpDestinationEditRequestDto : GenericEditRequestDto
     {
         public int Id { get; set; }
 
@@ -18,8 +19,8 @@ namespace PMIS.DTO.LookUpDestination
 
         public string? Description { get; set; }
     }
-    public class LookUpDestinationEditResponseDto
+    public class LookUpDestinationEditResponseDto : GenericEditResponseDto
     {
-        public string ErrorMessage { get; set; }
+        public int Id { get; set; }
     }
 }

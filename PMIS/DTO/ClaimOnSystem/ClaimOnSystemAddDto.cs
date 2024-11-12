@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.Indicator;
+﻿using Generic.Service.DTO.Concrete;
+using PMIS.DTO.Indicator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.ClaimOnSystem
 {
-    public class ClaimOnSystemAddRequestDto
+    public class ClaimOnSystemAddRequestDto : GenericAddRequestDto
     {
        // public int Id { get; set; }
 
@@ -25,7 +26,7 @@ namespace PMIS.DTO.ClaimOnSystem
 
       //  public virtual User? FkUser { get; set; }
     }
-    public class ClaimOnSystemAddResponseDto
+    public class ClaimOnSystemAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
            where TDestination : class
@@ -42,8 +43,6 @@ namespace PMIS.DTO.ClaimOnSystem
         }
 
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
 
     }
 }

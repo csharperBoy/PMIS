@@ -14,9 +14,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Generic.Service.DTO;
 using PMIS.DTO.LookUpDestination;
 using Generic.Base.Handler.Map;
+using Generic.Service.DTO.Abstract;
+using Generic.Service.DTO.Concrete;
 
 namespace PMIS.Services
 {

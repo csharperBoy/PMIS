@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.User
 {
-       public class UserEditRequestDto
+       public class UserEditRequestDto : GenericEditRequestDto
     {
          public int Id { get; set; }
 
@@ -31,10 +32,8 @@ namespace PMIS.DTO.User
         //public virtual LookUpValue FkLkpWorkCalenar { get; set; } = null!;
     }
 
-    public class UserEditResponseDto
+    public class UserEditResponseDto : GenericEditResponseDto
     {
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }

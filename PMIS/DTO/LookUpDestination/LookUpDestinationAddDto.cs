@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Generic.Base.Handler.Map.Contract;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpDestination.Info;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.LookUpDestination
 {
-    public class LookUpDestinationAddRequestDto
+    public class LookUpDestinationAddRequestDto : GenericAddRequestDto
     {
         public static async Task<TSource> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
             where TDestination : class
@@ -57,7 +58,7 @@ namespace PMIS.DTO.LookUpDestination
 
       
     }
-    public class LookUpDestinationAddResponseDto 
+    public class LookUpDestinationAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
             where TDestination : class
@@ -74,7 +75,5 @@ namespace PMIS.DTO.LookUpDestination
         }
 
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string ErrorMessage { get; set; }
     }
 }

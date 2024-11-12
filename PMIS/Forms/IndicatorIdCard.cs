@@ -1,5 +1,6 @@
 ﻿using Generic.Base.Handler.Map;
-using Generic.Service.DTO;
+using Generic.Service.DTO.Abstract;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUp.Info;
 using PMIS.DTO.LookUpDestination;

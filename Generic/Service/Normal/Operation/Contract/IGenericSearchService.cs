@@ -1,4 +1,5 @@
-﻿using Generic.Service.DTO;
+﻿using Generic.Service.DTO.Abstract;
+using Generic.Service.DTO.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;

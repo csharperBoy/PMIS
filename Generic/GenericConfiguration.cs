@@ -23,6 +23,7 @@ using Generic.Base.Handler.SystemLog.WithSerilog;
 using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
 using Generic.Base.Handler.SystemLog.WithSerilog.DTO;
+using static Generic.Base.Handler.Map.GenericExceptionHandlerFactory;
 
 namespace Generic
 {
@@ -77,7 +78,15 @@ namespace Generic
         public static void ConfigureGenericSystemExceptionServices(IServiceCollection services)
         {
             #region SystemException
-            services.AddSingleton<AbstractGenericExceptionHandler, GenericMyExceptionHandler>();
+            services.AddScoped<GenericExceptionHandler>();
+            services.AddScoped<AbstractGenericExceptionHandler>(serviceProvider =>
+            {
+                return GetExceptionHandler(serviceProvider, ExceptionHandler.Generic);
+            });
+            services.AddScoped<Func<ExceptionHandler, AbstractGenericExceptionHandler>>(serviceProvider => key =>
+            {
+                return GetExceptionHandler(serviceProvider, key);
+            });
             #endregion
 
         }

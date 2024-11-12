@@ -1,4 +1,6 @@
-﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+﻿using Generic.Base.Handler.Map;
+using Generic.Base.Handler.SystemException.Abstract;
+using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
 using Generic.Helper;
 using Generic.Repository.Abstract;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Generic.Base.Handler.Map.GenericExceptionHandlerFactory;
 using Helper = Generic.Helper;
 namespace Generic.Repository
 {
@@ -22,15 +25,17 @@ namespace Generic.Repository
         private DbContext dbContext;
         private DbSet<TEntity> dbSet;
         private IDbContextTransaction transaction;
+        private AbstractGenericExceptionHandler exceptionHandler;
         private Serilog.ILogger logHandler;
         private bool disposed;
         private string entityName;
 
-        public GenericSqlServerRepository(TContext _dbContext, AbstractGenericLogWithSerilogHandler _logHandler)
+        public GenericSqlServerRepository(TContext _dbContext, AbstractGenericExceptionHandler _exceptionHandler, AbstractGenericLogWithSerilogHandler _logHandler)
         {
             dbContext = _dbContext;
             dbSet = _dbContext.Set<TEntity>();
             transaction = _dbContext.Database.BeginTransaction();
+            exceptionHandler = _exceptionHandler;
             logHandler = _logHandler.CreateLogger();
             disposed = false;
             entityName = typeof(TEntity).Name;
@@ -98,8 +103,9 @@ namespace Generic.Repository
 
                 result = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await exceptionHandler.HandleException(ex);
                 result = false;
             }
             finally

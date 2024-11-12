@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.LookUpValue;
+﻿using Generic.Service.DTO.Concrete;
+using PMIS.DTO.LookUpValue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.User
 {
-    public class UserAddRequestDto
+    public class UserAddRequestDto : GenericAddRequestDto
     {
        // public int Id { get; set; }
 
@@ -31,7 +32,7 @@ namespace PMIS.DTO.User
 
         //public virtual LookUpValue FkLkpWorkCalenar { get; set; } = null!;
     }
-    public class UserAddResponseDto
+    public class UserAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
          where TDestination : class
@@ -47,8 +48,6 @@ namespace PMIS.DTO.User
             return destination;
         }
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
 
     }
 }

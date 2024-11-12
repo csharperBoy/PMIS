@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.ClaimUserOnIndicator
 {
-    public class ClaimUserOnIndicatorEditRequestDto
+    public class ClaimUserOnIndicatorEditRequestDto : GenericEditRequestDto
     {
          public int Id { get; set; }
 
@@ -28,10 +29,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
 
         //public virtual User FkUser { get; set; } = null!;
     }
-    public class ClaimUserOnIndicatorEditResponseDto
+    public class ClaimUserOnIndicatorEditResponseDto : GenericEditResponseDto
     {
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }

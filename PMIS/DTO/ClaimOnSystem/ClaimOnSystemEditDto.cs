@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.ClaimOnSystem
 {
-    public class ClaimOnSystemEditRequestDto
+    public class ClaimOnSystemEditRequestDto : GenericEditRequestDto
     {
          public int Id { get; set; }
 
@@ -25,10 +26,8 @@ namespace PMIS.DTO.ClaimOnSystem
         //  public virtual User? FkUser { get; set; }
     }
 
-    public class ClaimOnSystemEditResponseDto
+    public class ClaimOnSystemEditResponseDto : GenericEditResponseDto
     {
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }

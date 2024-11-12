@@ -3,11 +3,11 @@ using Generic.Base.Handler.SystemException.Contract;
 
 namespace Generic.Base.Handler.SystemException.Concrete
 {
-    public class GenericMyExceptionHandler : AbstractGenericExceptionHandler
+    public class GenericExceptionHandler : AbstractGenericExceptionHandler
     {
         public override Task HandleException(Exception ex)
         {
-            throw new NotImplementedException();
+            return base.HandleException(ex);
         }
     }
 }

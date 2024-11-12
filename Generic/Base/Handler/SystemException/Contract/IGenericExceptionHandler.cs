@@ -5,5 +5,11 @@
         Task<object> AssignExceptionInfoToObject(object responseTemp, Exception ex);
 
         Task HandleException(Exception ex);
+
+        void PushException(Exception ex);
+
+        Exception PopException();
+
+        Stack<Exception> GetStack();
     }
 }

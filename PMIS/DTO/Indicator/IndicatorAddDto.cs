@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.Indicator.Info;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 
 namespace PMIS.DTO.Indicator
 {
-    public class IndicatorAddRequestDto
+    public class IndicatorAddRequestDto : GenericAddRequestDto
     {
         // public int Id { get; set; }
 
@@ -37,7 +38,7 @@ namespace PMIS.DTO.Indicator
 
         //public bool? FlgPhisycalDelete { get; set; }
     }
-    public class IndicatorAddResponseDto
+    public class IndicatorAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
            where TDestination : class
@@ -53,8 +54,6 @@ namespace PMIS.DTO.Indicator
             return destination;
         }
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 
 }

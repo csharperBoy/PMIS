@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Generic.Base.Handler.Map.GenericExceptionHandlerFactory;
 
 namespace Generic.Service.Normal.Operation.Abstract
 {
@@ -57,6 +58,8 @@ namespace Generic.Service.Normal.Operation.Abstract
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
                         await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.UpdateAsync(entity);
+                        if (!result)
+                            throw exceptionHandler.PopException();
                         await repository.SaveAsync();
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                     }
@@ -64,6 +67,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     {
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                         responseTemp = (TEntityEditResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
+                      //  responseTemp.
                     }
 
                     results.Add(responseTemp);

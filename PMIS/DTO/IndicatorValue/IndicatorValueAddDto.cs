@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.IndicatorCategory;
+﻿using Generic.Service.DTO.Concrete;
+using PMIS.DTO.IndicatorCategory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.IndicatorValue
 {
-    public class IndicatorValueAddRequestDto
+    public class IndicatorValueAddRequestDto : GenericAddRequestDto
     {
       //  public long Id { get; set; }
 
@@ -33,7 +34,7 @@ namespace PMIS.DTO.IndicatorValue
 
         //public virtual LookUpValue FkLkpValueType { get; set; } = null!;
     }
-    public class IndicatorValueAddResponseDto
+    public class IndicatorValueAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
          where TDestination : class
@@ -49,8 +50,6 @@ namespace PMIS.DTO.IndicatorValue
             return destination;
         }
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
 
     }
 }

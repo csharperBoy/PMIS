@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +8,12 @@ using System.Threading.Tasks;
 namespace PMIS.DTO.IndicatorValue
 {
     
-    public class IndicatorValueDeleteRequestDto
+    public class IndicatorValueDeleteRequestDto : GenericDeleteRequestDto
     {
         public int Id { get; set; }
     }
-    public class IndicatorValueDeleteResponseDto
+    public class IndicatorValueDeleteResponseDto : GenericDeleteResponseDto
     {
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }

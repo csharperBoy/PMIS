@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Generic.Service.DTO.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.IndicatorCategory
 {
-      public class IndicatorCategoryEditRequestDto
+      public class IndicatorCategoryEditRequestDto : GenericEditRequestDto
     {
           public int Id { get; set; }
 
@@ -35,10 +36,8 @@ namespace PMIS.DTO.IndicatorCategory
         //public virtual LookUpValue FkLkpCategoryType { get; set; } = null!;
     }
 
-    public class IndicatorCategoryEditResponseDto
+    public class IndicatorCategoryEditResponseDto : GenericEditResponseDto
     {
         public int Id { get; set; }
-        public bool IsSuccess { get; set; }
-        public string? ErrorMessage { get; set; }
     }
 }
