@@ -224,7 +224,7 @@ namespace PMIS.Forms
         {
             try
             {
-                await AddIndicator();
+                //await AddIndicator();
                 await EditIndicator();
                 //await DeleteIndicator();
 

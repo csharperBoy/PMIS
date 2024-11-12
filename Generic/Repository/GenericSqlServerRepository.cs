@@ -41,11 +41,11 @@ namespace Generic.Repository
             bool result;
             try
             {
-                if (dbContext.Entry(entity).State == EntityState.Added)
+                if (dbContext.Entry(entity).State == EntityState.Detached)
                 {
                     dbSet.Attach(entity);
+                    await dbSet.AddAsync(entity);
                 }
-                await dbSet.AddAsync(entity);
                 result = true;
             }
             catch (Exception)
@@ -69,6 +69,7 @@ namespace Generic.Repository
                 //{
                 //    await InsertAsync(item);
                 //}
+
                 await dbSet.AddRangeAsync(entities);
                 result = true;
             }
@@ -89,11 +90,12 @@ namespace Generic.Repository
             bool result;
             try
             {
-                if (dbContext.Entry(entity).State == EntityState.Modified)
+                if (dbContext.Entry(entity).State == EntityState.Detached)
                 {
                     dbSet.Attach(entity);
+                    await Task.FromResult(dbSet.Update(entity));
                 }
-                await Task.FromResult(dbSet.Update(entity));
+
                 result = true;
             }
             catch (Exception)
@@ -118,6 +120,7 @@ namespace Generic.Repository
                 {
                     await Task.FromResult(UpdateAsync(item));
                 }
+
                 result = true;
             }
             catch (Exception)
@@ -137,11 +140,12 @@ namespace Generic.Repository
             bool result;
             try
             {
-                if (dbContext.Entry(entity).State == EntityState.Deleted)
+                if (dbContext.Entry(entity).State == EntityState.Detached)
                 {
                     dbSet.Attach(entity);
+                    await Task.FromResult(dbSet.Remove(entity));
                 }
-                await Task.FromResult(dbSet.Remove(entity));
+
                 result = true;
             }
             catch (Exception)
@@ -191,6 +195,7 @@ namespace Generic.Repository
                 {
                     await Task.FromResult(DeleteAsync(item));
                 }
+
                 result = true;
             }
             catch (Exception)
@@ -252,7 +257,7 @@ namespace Generic.Repository
             }
         }
 
-        public async Task RollbackAsync()
+        public override async Task RollbackAsync()
         {
             try
             {
@@ -269,7 +274,7 @@ namespace Generic.Repository
             }
         }
 
-        public void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposed)
             {
@@ -298,7 +303,7 @@ namespace Generic.Repository
             }
         }
 
-        public override Task SetEntityStateAsync<TEntity>(TEntity entity, EntityState state)
+        public override Task SetEntityStateAsync(TEntity entity, EntityState state)
         {
             dbContext.Entry(entity).State = state;
             return Task.CompletedTask;
@@ -317,7 +322,7 @@ namespace Generic.Repository
             }
         }
 
-        public override async Task<TEntity?> GetByIdAsync(object id)
+        public override async Task<TEntity> GetByIdAsync(object id)
         {
             try
             {
@@ -342,7 +347,7 @@ namespace Generic.Repository
                 {
                     query = query.Where(filter);
                 }
-               int count =await query.CountAsync();
+                int count = await query.CountAsync();
                 foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProperty);
@@ -351,7 +356,7 @@ namespace Generic.Repository
                 {
                     query = orderBy(query).AsQueryable();
                 }
-                if (pageNumber != null  && recordCount !=null )
+                if (pageNumber != null && recordCount != null)
                 {
                     int skip = ((int)pageNumber - 1) * (int)recordCount;
                     query = query.Skip(skip).Take((int)recordCount);

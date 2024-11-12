@@ -63,9 +63,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                             fieldName.SetValue(entity, true);
                         }
 
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
                     }
                     catch (Exception ex)
@@ -122,7 +122,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-                await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+               // await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)
@@ -160,26 +160,21 @@ namespace Generic.Service.Normal.Operation.Abstract
                         {
                             fieldName.SetValue(entity, false);
                         }
-
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
-                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
+                        responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
                     }
                     catch (Exception ex)
                     {
-
                         responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
-
                         responseTemp = (TEntityDeleteResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
-                        results.Add(responseTemp);
                     }
+
+                    results.Add(responseTemp);
 
                     if (!result)
                         resultIsSuccess = false;
-
-                    responseTemp = new TEntityDeleteResponseDto();
-                    responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
-                    results.Add(responseTemp);
 
                 }
                 await repository.CommitAsync();
@@ -224,7 +219,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-                await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+               // await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)

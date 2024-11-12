@@ -64,9 +64,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                     try
                     {
                         entity = await mapper.Map<TEntityAddRequestDto, TEntity>(req);
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.InsertAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                     }
                     catch (Exception ex)
@@ -113,7 +113,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.InsertRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-                repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+                //repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)

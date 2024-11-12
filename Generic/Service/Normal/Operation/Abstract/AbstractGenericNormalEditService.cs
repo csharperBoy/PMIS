@@ -41,12 +41,13 @@ namespace Generic.Service.Normal.Operation.Abstract
         {
             try
             {
-                if (requestInput == null || requestInput.Count() == 0)
+                if (requestInput == null || !requestInput.Any())
                     return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
                 List<TEntityEditResponseDto> results = new List<TEntityEditResponseDto>();
+
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -54,9 +55,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                     try
                     {
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.UpdateAsync(entity);
                         await repository.SaveAsync();
-                        repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                     }
                     catch (Exception ex)
@@ -66,11 +67,10 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
 
                     results.Add(responseTemp);
-
                     if (!result)
                         resultIsSuccess = false;
-
                 }
+
                 await repository.CommitAsync();
 
                 return (resultIsSuccess, results);
@@ -84,8 +84,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                 Helper.Helper.ServiceLog.FinallyAction(logHandler);
             }
         }
-
-
 
         public async Task<bool> EditRange(IEnumerable<TEntityEditRequestDto> requestInput)
         {
@@ -106,7 +104,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-                repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+               // repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
                 return result;
             }
             catch (Exception ex)

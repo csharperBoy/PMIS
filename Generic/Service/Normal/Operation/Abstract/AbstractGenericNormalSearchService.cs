@@ -64,7 +64,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
                 foreach (var entity in entities)
                 {
-                    repository.SetEntityStateAsync<TEntity>(entity, EntityState.Detached);
+                    await repository.SetEntityStateAsync(entity, EntityState.Detached);
                 }
                 return (true, results);
             }
