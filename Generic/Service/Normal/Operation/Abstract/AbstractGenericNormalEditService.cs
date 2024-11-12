@@ -104,11 +104,17 @@ namespace Generic.Service.Normal.Operation.Abstract
                     TEntityEditResponseDto responseTemp = new TEntityEditResponseDto();
 
                     entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
+                    
                     entityRequest.Add(entity);
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-               // repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+
+                foreach (var item in entityRequest)
+                {
+
+                await repository.SetEntityStateAsync(item, EntityState.Detached);
+                }
                 return result;
             }
             catch (Exception ex)

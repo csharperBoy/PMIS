@@ -28,6 +28,8 @@ using PMIS.DTO.LookUpValue;
 using PMIS.DTO.User;
 using PMIS.Forms;
 using PMIS.Models;
+using PMIS.Repository;
+using PMIS.Repository.Contract;
 using PMIS.Services;
 using PMIS.Services.Contract;
 using Serilog;
@@ -110,14 +112,14 @@ namespace PMIS
             #endregion
 
             #region Indicator
-            services.AddScoped<AbstractGenericRepository<Indicator, PmisContext>, GenericSqlServerRepository<Indicator, PmisContext>>();
-            services.AddScoped<IIndicatorService, IndicatorService>();
-            services.AddScoped<AbstractGenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto>, GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto>>();
-            services.AddScoped<AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto>, GenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto>>();
-            services.AddScoped<AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>, GenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>>();
-            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto>, GenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto>>();
+            services.AddTransient<AbstractGenericRepository<Indicator, PmisContext>, GenericSqlServerRepository<Indicator, PmisContext>>();
+            services.AddTransient<IIndicatorService, IndicatorService>();
+            services.AddTransient<AbstractGenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto>, GenericNormalService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto>>();
+            services.AddTransient<AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto>, GenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto>>();
+            services.AddTransient<AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>, GenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto>>();
+            services.AddTransient<AbstractGenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>>();
+            services.AddTransient<AbstractGenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto>>();
+            services.AddTransient<AbstractGenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto>, GenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto>>();
             #endregion
 
             #region IndicatorCategory
@@ -185,6 +187,8 @@ namespace PMIS
             services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>>();
             services.AddScoped<AbstractGenericNormalSearchService<PmisContext, User, UserSearchResponseDto>, GenericNormalSearchService<PmisContext, User, UserSearchResponseDto>>();
             #endregion
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
         private static void ConfigureServicesProvider(IServiceProvider serviceProvider)
         {

@@ -19,7 +19,7 @@ using Helper = Generic.Helper;
 namespace Generic.Repository
 {
     public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
-        where TEntity : class
+        where TEntity : class,new()
         where TContext : DbContext
     {
         private DbContext dbContext;
@@ -46,11 +46,9 @@ namespace Generic.Repository
             bool result;
             try
             {
-                if (dbContext.Entry(entity).State == EntityState.Detached)
-                {
-                    dbSet.Attach(entity);
-                    await dbSet.AddAsync(entity);
-                }
+
+                await dbSet.AddAsync(entity);
+
                 result = true;
             }
             catch (Exception)
@@ -62,19 +60,14 @@ namespace Generic.Repository
                 var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
                 logHandler.Information("Add {@entityJson} in {@entityName}", entityJson, entityName);
             }
-            return result;
+            return await Task.FromResult(result);
         }
 
         public override async Task<bool> InsertRangeAsync(IEnumerable<TEntity> entities)
         {
             bool result;
             try
-            {
-                //foreach (var item in entities)
-                //{
-                //    await InsertAsync(item);
-                //}
-
+            {                
                 await dbSet.AddRangeAsync(entities);
                 result = true;
             }
@@ -95,25 +88,23 @@ namespace Generic.Repository
             bool result;
             try
             {
-                if (dbContext.Entry(entity).State == EntityState.Detached)
-                {
-                    dbSet.Attach(entity);
-                    await Task.FromResult(dbSet.Update(entity));
-                }
+                dbSet.Attach(entity);
+                dbContext.Entry(entity).State = EntityState.Modified;
 
                 result = true;
             }
             catch (Exception ex)
             {
-                await exceptionHandler.HandleException(ex);
                 result = false;
+                throw new NotImplementedException();
+
             }
             finally
             {
                 var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entity);
                 logHandler.Information("Update {@entityJson} in {@entityName}", entityJson, entityName);
             }
-            return result;
+            return await Task.FromResult(result);
         }
 
         public override async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entities)
@@ -121,15 +112,15 @@ namespace Generic.Repository
             bool result;
             try
             {
-                //dbSet.UpdateRange(entities);
-                foreach (var item in entities)
-                {
-                    await Task.FromResult(UpdateAsync(item));
-                }
+                dbSet.UpdateRange(entities);
+                //foreach (var item in entities)
+                //{
+                //    await Task.FromResult(UpdateAsync(item));
+                //}
 
                 result = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 result = false;
             }
@@ -138,7 +129,7 @@ namespace Generic.Repository
                 var entityJson = Helper.Helper.Convert.ConvertObjectToJson(entities);
                 logHandler.Information("UpdateRange {@entityJson} in {@entityName}", entityJson, entityName);
             }
-            return result;
+            return await Task.FromResult(result);
         }
 
         public override async Task<bool> DeleteAsync(TEntity entity)
@@ -332,7 +323,8 @@ namespace Generic.Repository
         {
             try
             {
-                TEntity entity = await dbSet.FindAsync(id);
+                TEntity? entity = new TEntity();
+                entity = await dbSet.FindAsync(id);
                 return entity;
             }
             catch (Exception)
@@ -373,6 +365,10 @@ namespace Generic.Repository
             catch (Exception ex)
             {
                 return (null, -2);
+            }
+            finally
+            {
+                // await CommitAsync();
             }
         }
     }

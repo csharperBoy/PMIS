@@ -42,7 +42,7 @@ namespace PMIS.Forms
         private async void CustomInitialize()
         {
             dgvIndicatorList.AutoGenerateColumns = false;
-
+            lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
 
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
@@ -167,7 +167,7 @@ namespace PMIS.Forms
                 Name = "FlgLogicalDelete",
                 DataPropertyName = "FlgLogicalDelete",
                 ReadOnly = false,
-                Visible = false,
+                Visible = true,
             });
             dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
             {
@@ -225,9 +225,10 @@ namespace PMIS.Forms
         {
             try
             {
-                //await AddIndicator();
                 await EditIndicator();
-                //await DeleteIndicator();
+                await DeleteIndicator();
+                await AddIndicator();               
+                
 
                 MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -266,7 +267,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                (bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(lstAddRequest);
+                //(bool isSuccess, IEnumerable<IndicatorAddResponseDto> list) = await indicatorService.AddGroup(lstAddRequest);
+                bool isSuccess = await indicatorService.AddRange(lstAddRequest);
 
                 if (isSuccess)
                 {
@@ -274,14 +276,15 @@ namespace PMIS.Forms
                 }
                 else
                 {
-                    string errorMessage = String.Join("\n", list.Select((x, index) => new
-                    {
-                        ErrorMessage = (index + 1) + " " + x.ErrorMessage,
-                        IsSuccess = x.IsSuccess
-                    })
-                    .Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" + errorMessage);
+                    //string errorMessage = String.Join("\n", list.Select((x, index) => new
+                    //{
+                    //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
+                    //    IsSuccess = x.IsSuccess
+                    //})
+                    //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
+                    MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
                 }
+                
             }
             catch (Exception)
             {
@@ -319,8 +322,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                (bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(lstEditRequest);
-
+                //(bool isSuccess, IEnumerable<IndicatorEditResponseDto> list) = await indicatorService.EditGroup(lstEditRequest);
+                bool isSuccess = await indicatorService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
                     MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
@@ -336,34 +339,13 @@ namespace PMIS.Forms
         {
             try
             {
-                lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
-                lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
-                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
-                {
-                    if (int.Parse(row.Cells["Id"].Value?.ToString()) != null)
-                    {
-                        if (bool.Parse(row.Cells["FlgLogicalDelete"].Value?.ToString()))
-                        {
-                            lstDeleteRequest.Add(new IndicatorDeleteRequestDto()
-                            {
-                                Id = int.Parse(row.Cells["Id"].Value?.ToString())
-                            });
-                        }
-                        else
-                        {
-                            lstRecycleRequest.Add(new IndicatorDeleteRequestDto()
-                            {
-                                Id = int.Parse(row.Cells["Id"].Value?.ToString())
-                            });
-                        }
-                    }
-                }
-                (bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
-                (bool isSuccess2, IEnumerable<IndicatorDeleteResponseDto> list2) = await indicatorService.RecycleGroup(lstRecycleRequest);
-
+               
+                //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await indicatorService.LogicalDeleteRange(lstDeleteRequest);                
                 if (isSuccess)
                 {
                     MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
                 }
             }
             catch (Exception)
@@ -397,6 +379,14 @@ namespace PMIS.Forms
                 {
                     dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value = true;
                     cell.ReadOnly = false;
+                }
+            }else if(dgvIndicatorList.Columns[e.ColumnIndex].Name == "Delete" && e.RowIndex >= 0)
+            {
+                var row = dgvIndicatorList.Rows[e.RowIndex];
+                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                {
+                    lstDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
                 }
             }
         }

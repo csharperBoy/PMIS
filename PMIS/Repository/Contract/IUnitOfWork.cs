@@ -1,4 +1,7 @@
-﻿using PMIS.Models;
+﻿using Generic.Repository;
+using Generic.Repository.Abstract;
+using Generic.Repository.Contract;
+using PMIS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +16,15 @@ namespace PMIS.Repository.Contract
     public interface IUnitOfWork
     {
         public PmisContext context { get; set; }
-        public IGenericRepository<ClaimUserOnIndicator> claimRepository { get; set; }
-        public IGenericRepository<Indicator> indicatorRepository { get; set; }
-        public IGenericRepository<IndicatorCategory> indicatorCategoryRepository { get; set; }
-        public IGenericRepository<IndicatorValue> indicatorValueRepository { get; set; }
-        public IGenericRepository<LookUp> lookUpRepository { get; set; }
-        public IGenericRepository<LookUpDestination> lookUpDestinationRepository { get; set; }
-        public IGenericRepository<LookUpValue> lookUpValueRepository { get; set; }
-        public IGenericRepository<User> userRepository { get; set; }
+        public AbstractGenericRepository<ClaimUserOnIndicator, PmisContext> claimUserOnIndicatorRepository { get; set; }
+        public AbstractGenericRepository<Indicator, PmisContext> indicatorRepository { get; set; }
+        public AbstractGenericRepository<IndicatorCategory, PmisContext> indicatorCategoryRepository { get; set; }
+        public AbstractGenericRepository<IndicatorValue, PmisContext> indicatorValueRepository { get; set; }
+        public AbstractGenericRepository<LookUp, PmisContext> lookUpRepository { get; set; }
+        public AbstractGenericRepository<LookUpDestination, PmisContext> lookUpDestinationRepository { get; set; }
+        public AbstractGenericRepository<LookUpValue, PmisContext> lookUpValueRepository { get; set; }
+        public AbstractGenericRepository<User, PmisContext> userRepository { get; set; }
+
 
     }
 }
