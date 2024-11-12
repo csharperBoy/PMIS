@@ -412,7 +412,7 @@ namespace PMIS.Forms
 
         private void dgvIndicatorList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()) == false)
+            if ((dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0))
             {
                 e.Cancel = true;
             }
