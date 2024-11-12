@@ -6,6 +6,7 @@ using PMIS.DTO.LookUp.Info;
 using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue;
 using PMIS.DTO.LookUpValue.Info;
+using PMIS.Helper;
 using PMIS.Services;
 using PMIS.Services.Contract;
 using System;
@@ -29,7 +30,7 @@ namespace PMIS.Forms
         List<IndicatorDeleteRequestDto> lstRecycleRequest;
         IIndicatorService indicatorService;
         ILookUpValueService lookUpValueService;
-
+        IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
         public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
@@ -37,13 +38,14 @@ namespace PMIS.Forms
             this.lookUpValueService = _lookUpValueService;
 
             CustomInitialize();
+
         }
 
         private async void CustomInitialize()
         {
             dgvIndicatorList.AutoGenerateColumns = false;
             lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
-            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+            lstLookUpDestination = await lookUpValueService.GetList("Indicator");
 
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -194,7 +196,23 @@ namespace PMIS.Forms
                 Visible = true,
                 UseColumnTextForButtonValue = true,
             });
+            FiltersInitialize();
             SearchIndicator();
+        }
+        private async void FiltersInitialize()
+        {
+            List<LookUpValueShortInfoDto> lstForm = new List<LookUpValueShortInfoDto>() {
+                new LookUpValueShortInfoDto()             {
+                Id = 0,
+                Display = "همه"
+            } };
+            lstForm.AddRange(await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"));
+            cbLkpForm.DataSource = lstForm;
+            cbLkpForm.DisplayMember = "Display";
+            cbLkpForm.ValueMember = "Id";
+            cbLkpForm.SelectedIndex = 0;
+
+
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -204,7 +222,39 @@ namespace PMIS.Forms
 
         private async Task SearchIndicator()
         {
-            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto();
+            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto() { 
+            filters = new List<GenericSearchFilterDto>()
+            {
+                new GenericSearchFilterDto()
+                {
+                    columnName = "Code",
+                    value=txtCode.Text,
+                    LogicalOperator = LogicalOperator.Begin,
+                    operation = FilterOperator.Contains,
+                    type = PhraseType.Condition,
+                },
+                new GenericSearchFilterDto()
+                {
+                    columnName = "Title",
+                    value=txtTitle.Text,
+                    LogicalOperator = LogicalOperator.And,
+                    operation = FilterOperator.Contains,
+                    type = PhraseType.Condition,
+                }               
+            }
+            };
+           if(cbLkpForm.SelectedValue.ToString() != "0")
+            {
+
+            searchRequest.filters.Add(new GenericSearchFilterDto()
+            {
+                columnName = "FkLkpFormId",
+                value = cbLkpForm.SelectedValue.ToString(),
+                LogicalOperator = LogicalOperator.And,
+                operation = FilterOperator.Equals,
+                type = PhraseType.Condition,
+            });
+            }
             (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
             if (isSuccess)
             {
@@ -213,6 +263,7 @@ namespace PMIS.Forms
                 else
                 {
                     dgvIndicatorList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
+                    
                 }
             }
             else
@@ -227,8 +278,8 @@ namespace PMIS.Forms
             {
                 await EditIndicator();
                 await DeleteIndicator();
-                await AddIndicator();               
-                
+                await AddIndicator();
+
 
                 MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -272,7 +323,7 @@ namespace PMIS.Forms
 
                 if (isSuccess)
                 {
-                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
                 }
                 else
                 {
@@ -284,7 +335,7 @@ namespace PMIS.Forms
                     //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
                     MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
                 }
-                
+
             }
             catch (Exception)
             {
@@ -339,12 +390,12 @@ namespace PMIS.Forms
         {
             try
             {
-               
+
                 //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await indicatorService.LogicalDeleteRange(lstDeleteRequest);                
+                bool isSuccess = await indicatorService.LogicalDeleteRange(lstDeleteRequest);
                 if (isSuccess)
                 {
-                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
                     lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
                 }
             }
@@ -380,7 +431,8 @@ namespace PMIS.Forms
                     dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value = true;
                     cell.ReadOnly = false;
                 }
-            }else if(dgvIndicatorList.Columns[e.ColumnIndex].Name == "Delete" && e.RowIndex >= 0)
+            }
+            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Delete" && e.RowIndex >= 0)
             {
                 var row = dgvIndicatorList.Rows[e.RowIndex];
                 if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)

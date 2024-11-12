@@ -1,4 +1,6 @@
-﻿namespace PMIS.Forms
+﻿using PMIS.Helper;
+
+namespace PMIS.Forms
 {
     partial class IndicatorValueDataEntryOnForm
     {
@@ -26,6 +28,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        
         private void InitializeComponent()
         {
             button1 = new Button();
@@ -33,21 +36,24 @@
             // 
             // button1
             // 
-            button1.Location = new Point(97, 42);
+            button1.Location = new Point(211, 155);
+            button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(86, 31);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "s";
             button1.UseVisualStyleBackColor = true;
             // 
             // IndicatorValueDataEntryOnForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
             Controls.Add(button1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "IndicatorValueDataEntryOnForm";
             Text = "IndicatorValueDataEntryOnForm";
+            Load += IndicatorValueDataEntryOnForm_Load;
             ResumeLayout(false);
         }
 

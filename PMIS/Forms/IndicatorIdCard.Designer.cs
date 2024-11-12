@@ -31,33 +31,114 @@ namespace PMIS.Forms
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            panel3 = new Panel();
+            cbLkpForm = new ComboBox();
+            label3 = new Label();
+            txtTitle = new TextBox();
+            label2 = new Label();
+            txtCode = new TextBox();
+            label1 = new Label();
             btnSearch = new Button();
             btnAdd = new Button();
             panel2 = new Panel();
             dgvIndicatorList = new DataGridView();
             panel1.SuspendLayout();
+            panel3.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(panel3);
             panel1.Controls.Add(btnSearch);
             panel1.Controls.Add(btnAdd);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(914, 54);
+            panel1.Padding = new Padding(5);
+            panel1.Size = new Size(914, 58);
             panel1.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(cbLkpForm);
+            panel3.Controls.Add(label3);
+            panel3.Controls.Add(txtTitle);
+            panel3.Controls.Add(label2);
+            panel3.Controls.Add(txtCode);
+            panel3.Controls.Add(label1);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(209, 5);
+            panel3.Name = "panel3";
+            panel3.Padding = new Padding(0, 10, 0, 0);
+            panel3.Size = new Size(700, 48);
+            panel3.TabIndex = 2;
+            // 
+            // cbLkpForm
+            // 
+            cbLkpForm.Dock = DockStyle.Right;
+            cbLkpForm.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbLkpForm.FormattingEnabled = true;
+            cbLkpForm.Location = new Point(198, 10);
+            cbLkpForm.Name = "cbLkpForm";
+            cbLkpForm.Size = new Size(151, 28);
+            cbLkpForm.TabIndex = 5;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Dock = DockStyle.Right;
+            label3.Location = new Point(349, 10);
+            label3.Name = "label3";
+            label3.Size = new Size(31, 20);
+            label3.TabIndex = 4;
+            label3.Text = "فرم";
+            // 
+            // txtTitle
+            // 
+            txtTitle.Dock = DockStyle.Right;
+            txtTitle.Location = new Point(380, 10);
+            txtTitle.Name = "txtTitle";
+            txtTitle.Size = new Size(125, 27);
+            txtTitle.TabIndex = 3;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Right;
+            label2.Location = new Point(505, 10);
+            label2.Name = "label2";
+            label2.Size = new Size(45, 20);
+            label2.TabIndex = 2;
+            label2.Text = "عنوان";
+            // 
+            // txtCode
+            // 
+            txtCode.Dock = DockStyle.Right;
+            txtCode.Location = new Point(550, 10);
+            txtCode.Name = "txtCode";
+            txtCode.Size = new Size(125, 27);
+            txtCode.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Dock = DockStyle.Right;
+            label1.Location = new Point(675, 10);
+            label1.Name = "label1";
+            label1.Size = new Size(25, 20);
+            label1.TabIndex = 0;
+            label1.Text = "کد";
             // 
             // btnSearch
             // 
             btnSearch.Dock = DockStyle.Left;
-            btnSearch.Location = new Point(115, 0);
+            btnSearch.Location = new Point(123, 5);
             btnSearch.Margin = new Padding(3, 4, 3, 4);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(86, 54);
+            btnSearch.Size = new Size(86, 48);
             btnSearch.TabIndex = 0;
             btnSearch.Text = "جستجو";
             btnSearch.UseVisualStyleBackColor = true;
@@ -66,10 +147,10 @@ namespace PMIS.Forms
             // btnAdd
             // 
             btnAdd.Dock = DockStyle.Left;
-            btnAdd.Location = new Point(0, 0);
+            btnAdd.Location = new Point(5, 5);
             btnAdd.Margin = new Padding(3, 4, 3, 4);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(115, 54);
+            btnAdd.Size = new Size(118, 48);
             btnAdd.TabIndex = 1;
             btnAdd.Text = "اعمال تغییرات";
             btnAdd.UseVisualStyleBackColor = true;
@@ -79,10 +160,10 @@ namespace PMIS.Forms
             // 
             panel2.Controls.Add(dgvIndicatorList);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 54);
+            panel2.Location = new Point(0, 58);
             panel2.Margin = new Padding(3, 4, 3, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(914, 546);
+            panel2.Size = new Size(914, 542);
             panel2.TabIndex = 1;
             // 
             // dgvIndicatorList
@@ -95,7 +176,7 @@ namespace PMIS.Forms
             dgvIndicatorList.Margin = new Padding(3, 4, 3, 4);
             dgvIndicatorList.Name = "dgvIndicatorList";
             dgvIndicatorList.RowHeadersWidth = 51;
-            dgvIndicatorList.Size = new Size(914, 546);
+            dgvIndicatorList.Size = new Size(914, 542);
             dgvIndicatorList.TabIndex = 0;
             dgvIndicatorList.CellBeginEdit += dgvIndicatorList_CellBeginEdit;
             dgvIndicatorList.CellContentClick += dgvIndicatorList_CellContentClick;
@@ -114,6 +195,8 @@ namespace PMIS.Forms
             Name = "IndicatorIdCard";
             Text = "IndicatorIdCard";
             panel1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).EndInit();
             ResumeLayout(false);
@@ -126,7 +209,12 @@ namespace PMIS.Forms
         private Button btnSearch;
         private Button btnAdd;
         private DataGridView dgvIndicatorList;
-       
-
+        private Panel panel3;
+        private Label label1;
+        private TextBox txtTitle;
+        private Label label2;
+        private TextBox txtCode;
+        private ComboBox cbLkpForm;
+        private Label label3;
     }
 }
