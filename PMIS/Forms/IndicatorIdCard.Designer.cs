@@ -30,207 +30,191 @@ namespace PMIS.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            panel3 = new Panel();
+            panelMenu = new Panel();
+            btnApply = new Button();
             chbRecycle = new CheckBox();
-            cbLkpForm = new ComboBox();
-            label3 = new Label();
-            txtTitle = new TextBox();
-            label2 = new Label();
-            txtCode = new TextBox();
-            label1 = new Label();
             btnSearch = new Button();
-            btnAdd = new Button();
-            panel2 = new Panel();
-            dgvIndicatorList = new DataGridView();
-            panel1.SuspendLayout();
-            panel3.SuspendLayout();
-            panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).BeginInit();
+            panelContent = new Panel();
+            panelResults = new Panel();
+            dgvResultsList = new DataGridView();
+            panelFilters = new Panel();
+            dgvFiltersList = new DataGridView();
+            btnUpload = new Button();
+            btnDownload = new Button();
+            panelMenu.SuspendLayout();
+            panelContent.SuspendLayout();
+            panelResults.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvResultsList).BeginInit();
+            panelFilters.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFiltersList).BeginInit();
             SuspendLayout();
             // 
-            // panel1
+            // panelMenu
             // 
-            panel1.Controls.Add(panel3);
-            panel1.Controls.Add(btnSearch);
-            panel1.Controls.Add(btnAdd);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Padding = new Padding(4);
-            panel1.Size = new Size(1264, 44);
-            panel1.TabIndex = 0;
+            panelMenu.Controls.Add(btnDownload);
+            panelMenu.Controls.Add(btnUpload);
+            panelMenu.Controls.Add(btnApply);
+            panelMenu.Dock = DockStyle.Top;
+            panelMenu.Location = new Point(0, 0);
+            panelMenu.Margin = new Padding(5);
+            panelMenu.Name = "panelMenu";
+            panelMenu.Padding = new Padding(5);
+            panelMenu.Size = new Size(1262, 44);
+            panelMenu.TabIndex = 0;
             // 
-            // panel3
+            // btnApply
             // 
-            panel3.Controls.Add(chbRecycle);
-            panel3.Controls.Add(cbLkpForm);
-            panel3.Controls.Add(label3);
-            panel3.Controls.Add(txtTitle);
-            panel3.Controls.Add(label2);
-            panel3.Controls.Add(txtCode);
-            panel3.Controls.Add(label1);
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(182, 4);
-            panel3.Margin = new Padding(3, 2, 3, 2);
-            panel3.Name = "panel3";
-            panel3.Padding = new Padding(0, 8, 0, 0);
-            panel3.Size = new Size(1078, 36);
-            panel3.TabIndex = 2;
+            btnApply.Dock = DockStyle.Right;
+            btnApply.Location = new Point(1139, 5);
+            btnApply.Margin = new Padding(5);
+            btnApply.Name = "btnApply";
+            btnApply.Size = new Size(118, 34);
+            btnApply.TabIndex = 1;
+            btnApply.Text = "اعمال تغییرات";
+            btnApply.UseVisualStyleBackColor = true;
+            btnApply.Click += btnApply_Click;
             // 
             // chbRecycle
             // 
             chbRecycle.AutoSize = true;
-            chbRecycle.Dock = DockStyle.Right;
-            chbRecycle.Location = new Point(587, 8);
-            chbRecycle.Margin = new Padding(3, 2, 3, 2);
+            chbRecycle.Dock = DockStyle.Left;
+            chbRecycle.Location = new Point(0, 0);
             chbRecycle.Name = "chbRecycle";
-            chbRecycle.Size = new Size(60, 28);
+            chbRecycle.Size = new Size(74, 65);
             chbRecycle.TabIndex = 6;
             chbRecycle.Text = "بازیابی";
             chbRecycle.UseVisualStyleBackColor = true;
             // 
-            // cbLkpForm
-            // 
-            cbLkpForm.Dock = DockStyle.Right;
-            cbLkpForm.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbLkpForm.FormattingEnabled = true;
-            cbLkpForm.Location = new Point(647, 8);
-            cbLkpForm.Margin = new Padding(3, 2, 3, 2);
-            cbLkpForm.Name = "cbLkpForm";
-            cbLkpForm.Size = new Size(133, 23);
-            cbLkpForm.TabIndex = 5;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Right;
-            label3.Location = new Point(780, 8);
-            label3.Name = "label3";
-            label3.Size = new Size(24, 15);
-            label3.TabIndex = 4;
-            label3.Text = "فرم";
-            // 
-            // txtTitle
-            // 
-            txtTitle.Dock = DockStyle.Right;
-            txtTitle.Location = new Point(804, 8);
-            txtTitle.Margin = new Padding(3, 2, 3, 2);
-            txtTitle.Name = "txtTitle";
-            txtTitle.Size = new Size(110, 23);
-            txtTitle.TabIndex = 3;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Right;
-            label2.Location = new Point(914, 8);
-            label2.Name = "label2";
-            label2.Size = new Size(35, 15);
-            label2.TabIndex = 2;
-            label2.Text = "عنوان";
-            // 
-            // txtCode
-            // 
-            txtCode.Dock = DockStyle.Right;
-            txtCode.Location = new Point(949, 8);
-            txtCode.Margin = new Padding(3, 2, 3, 2);
-            txtCode.Name = "txtCode";
-            txtCode.Size = new Size(110, 23);
-            txtCode.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Right;
-            label1.Location = new Point(1059, 8);
-            label1.Name = "label1";
-            label1.Size = new Size(19, 15);
-            label1.TabIndex = 0;
-            label1.Text = "کد";
-            // 
             // btnSearch
             // 
             btnSearch.Dock = DockStyle.Left;
-            btnSearch.Location = new Point(107, 4);
+            btnSearch.Location = new Point(74, 0);
+            btnSearch.Margin = new Padding(5);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(75, 36);
+            btnSearch.Size = new Size(86, 65);
             btnSearch.TabIndex = 0;
             btnSearch.Text = "جستجو";
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
             // 
-            // btnAdd
+            // panelContent
             // 
-            btnAdd.Dock = DockStyle.Left;
-            btnAdd.Location = new Point(4, 4);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(103, 36);
-            btnAdd.TabIndex = 1;
-            btnAdd.Text = "اعمال تغییرات";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnApply_Click;
+            panelContent.Controls.Add(panelResults);
+            panelContent.Controls.Add(panelFilters);
+            panelContent.Dock = DockStyle.Fill;
+            panelContent.Location = new Point(0, 44);
+            panelContent.Margin = new Padding(3, 4, 3, 4);
+            panelContent.Name = "panelContent";
+            panelContent.Size = new Size(1262, 677);
+            panelContent.TabIndex = 1;
             // 
-            // panel2
+            // panelResults
             // 
-            panel2.Controls.Add(dgvIndicatorList);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 44);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(1264, 685);
-            panel2.TabIndex = 1;
+            panelResults.Controls.Add(dgvResultsList);
+            panelResults.Dock = DockStyle.Fill;
+            panelResults.Location = new Point(0, 65);
+            panelResults.Name = "panelResults";
+            panelResults.Size = new Size(1262, 612);
+            panelResults.TabIndex = 2;
             // 
-            // dgvIndicatorList
+            // dgvResultsList
             // 
-            dgvIndicatorList.AllowUserToOrderColumns = true;
-            dgvIndicatorList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvIndicatorList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvIndicatorList.Dock = DockStyle.Fill;
-            dgvIndicatorList.Location = new Point(0, 0);
-            dgvIndicatorList.Name = "dgvIndicatorList";
-            dgvIndicatorList.RowHeadersWidth = 51;
-            dgvIndicatorList.Size = new Size(1264, 685);
-            dgvIndicatorList.TabIndex = 0;
-            dgvIndicatorList.CellBeginEdit += dgvIndicatorList_CellBeginEdit;
-            dgvIndicatorList.CellContentClick += dgvIndicatorList_CellContentClick;
-            dgvIndicatorList.DataError += dgvIndicatorList_DataError;
-            dgvIndicatorList.RowEnter += dgvIndicatorList_RowEnter;
-            dgvIndicatorList.RowLeave += dgvIndicatorList_RowLeave;
-            dgvIndicatorList.RowPostPaint += dgvIndicatorList_RowPostPaint;
-            dgvIndicatorList.RowsAdded += dgvIndicatorList_RowsAdded;
+            dgvResultsList.AllowUserToOrderColumns = true;
+            dgvResultsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvResultsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvResultsList.Dock = DockStyle.Fill;
+            dgvResultsList.Location = new Point(0, 0);
+            dgvResultsList.Margin = new Padding(3, 4, 3, 4);
+            dgvResultsList.Name = "dgvResultsList";
+            dgvResultsList.RowHeadersWidth = 51;
+            dgvResultsList.Size = new Size(1262, 612);
+            dgvResultsList.TabIndex = 0;
+            dgvResultsList.CellBeginEdit += dgvResultsList_CellBeginEdit;
+            dgvResultsList.CellContentClick += dgvResultsList_CellContentClick;
+            dgvResultsList.DataError += dgvResultsList_DataError;
+            dgvResultsList.RowEnter += dgvResultsList_RowEnter;
+            dgvResultsList.RowLeave += dgvResultsList_RowLeave;
+            dgvResultsList.RowPostPaint += dgvResultsList_RowPostPaint;
+            dgvResultsList.RowsAdded += dgvResultsList_RowsAdded;
+            // 
+            // panelFilters
+            // 
+            panelFilters.Controls.Add(dgvFiltersList);
+            panelFilters.Controls.Add(btnSearch);
+            panelFilters.Controls.Add(chbRecycle);
+            panelFilters.Dock = DockStyle.Top;
+            panelFilters.Location = new Point(0, 0);
+            panelFilters.Name = "panelFilters";
+            panelFilters.Size = new Size(1262, 65);
+            panelFilters.TabIndex = 1;
+            // 
+            // dgvFiltersList
+            // 
+            dgvFiltersList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvFiltersList.Dock = DockStyle.Fill;
+            dgvFiltersList.Location = new Point(160, 0);
+            dgvFiltersList.Name = "dgvFiltersList";
+            dgvFiltersList.RowHeadersWidth = 51;
+            dgvFiltersList.Size = new Size(1102, 65);
+            dgvFiltersList.TabIndex = 7;
+            // 
+            // btnUpload
+            // 
+            btnUpload.Dock = DockStyle.Right;
+            btnUpload.Location = new Point(1021, 5);
+            btnUpload.Margin = new Padding(5);
+            btnUpload.Name = "btnUpload";
+            btnUpload.Size = new Size(118, 34);
+            btnUpload.TabIndex = 2;
+            btnUpload.Text = "بارگزاری";
+            btnUpload.UseVisualStyleBackColor = true;
+            // 
+            // btnDownload
+            // 
+            btnDownload.Dock = DockStyle.Right;
+            btnDownload.Location = new Point(903, 5);
+            btnDownload.Margin = new Padding(5);
+            btnDownload.Name = "btnDownload";
+            btnDownload.Size = new Size(118, 34);
+            btnDownload.TabIndex = 3;
+            btnDownload.Text = "بارگیری";
+            btnDownload.UseVisualStyleBackColor = true;
             // 
             // IndicatorIdCard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1264, 729);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
+            ClientSize = new Size(1262, 721);
+            Controls.Add(panelContent);
+            Controls.Add(panelMenu);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "IndicatorIdCard";
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
             Text = "IndicatorIdCard";
             Load += IndicatorIdCard_Load;
-            panel1.ResumeLayout(false);
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
-            panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvIndicatorList).EndInit();
+            panelMenu.ResumeLayout(false);
+            panelContent.ResumeLayout(false);
+            panelResults.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvResultsList).EndInit();
+            panelFilters.ResumeLayout(false);
+            panelFilters.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFiltersList).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel panel1;
-        private Panel panel2;
-        private Button btnAdd;
-        private DataGridView dgvIndicatorList;
-        private Panel panel3;
-        private Label label1;
-        private TextBox txtTitle;
-        private Label label2;
-        private TextBox txtCode;
-        private ComboBox cbLkpForm;
-        private Label label3;
+        private Panel panelMenu;
+        private Panel panelContent;
+        private Panel panelFilters;
+        private Panel panelResults;
+        private Button btnApply;
         private Button btnSearch;
         private CheckBox chbRecycle;
+        private DataGridView dgvFiltersList;
+        private DataGridView dgvResultsList;
+        private Button btnDownload;
+        private Button btnUpload;
     }
 }

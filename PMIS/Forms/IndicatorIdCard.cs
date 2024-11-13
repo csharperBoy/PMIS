@@ -1,6 +1,7 @@
 ﻿using Generic.Base.Handler.Map;
 using Generic.Service.DTO.Abstract;
 using Generic.Service.DTO.Concrete;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUp.Info;
 using PMIS.DTO.LookUpDestination;
@@ -24,6 +25,8 @@ namespace PMIS.Forms
 {
     public partial class IndicatorIdCard : Form
     {
+        #region Variables
+        private IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
         private List<IndicatorAddRequestDto> lstAddRequest;
         private List<IndicatorEditRequestDto> lstEditRequest;
         private List<IndicatorDeleteRequestDto> lstLogicalDeleteRequest;
@@ -31,9 +34,9 @@ namespace PMIS.Forms
         private List<IndicatorDeleteRequestDto> lstRecycleRequest;
         private IIndicatorService indicatorService;
         private ILookUpValueService lookUpValueService;
-        private IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
-
         private bool isLoaded = false;
+        #endregion
+
         public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
@@ -41,18 +44,129 @@ namespace PMIS.Forms
             this.lookUpValueService = _lookUpValueService;
 
             CustomInitialize();
-
         }
 
         private async void CustomInitialize()
         {
-            dgvIndicatorList.AutoGenerateColumns = false;
+            dgvFiltersList.AllowUserToAddRows = false;
+            dgvResultsList.AutoGenerateColumns = false;
             lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
             lstLookUpDestination = await lookUpValueService.GetList("Indicator");
 
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            #region dgvFiltersListAddColumns
+            //dgvFiltersList.Columns.Add(new DataGridViewTextBoxColumn()
+            //{
+            //    HeaderText = "ردیف",
+            //    Name = "RowNumber",
+            //    ReadOnly = true,
+            //    Visible = false,
+            //    Frozen = true,
+            //});
+            dgvFiltersList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "کد",
+                Name = "Code",
+                DataPropertyName = "Code",
+                Visible = true,
+                Frozen = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "عنوان",
+                Name = "Title",
+                DataPropertyName = "Title",
+                Visible = true,
+                Frozen = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "فرم مربوطه",
+                Name = "FkLkpFormId",
+                DataPropertyName = "FkLkpFormId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm")),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "دستی/اتوماتیک",
+                Name = "FkLkpManualityId",
+                DataPropertyName = "FkLkpManualityId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "واحد عملیاتی",
+                Name = "FkLkpUnitId",
+                DataPropertyName = "FkLkpUnitId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "دوره زمانی",
+                Name = "FkLkpPeriodId",
+                DataPropertyName = "FkLkpPeriodId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "واحد اندازه‌گیری",
+                Name = "FkLkpMeasureId",
+                DataPropertyName = "FkLkpMeasureId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                HeaderText = "مطلوبیت",
+                Name = "FkLkpDesirabilityId",
+                DataPropertyName = "FkLkpDesirabilityId",
+                DisplayMember = "Display",
+                ValueMember = "Id",
+                DataSource = await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "فرمول",
+                Name = "Formula",
+                DataPropertyName = "Formula",
+                Visible = true,
+            });
+            dgvFiltersList.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                HeaderText = "توضیحات",
+                Name = "Description",
+                DataPropertyName = "Description",
+                Visible = true,
+            });
+            //dgvFiltersList.Columns.Add(new DataGridViewCheckBoxColumn()
+            //{
+            //    HeaderText = "بازیابی",
+            //    Name = "FlgLogicalDelete",
+            //    DataPropertyName = "FlgLogicalDelete",
+            //    ReadOnly = false,
+            //    Visible = true,
+            //    IndeterminateValue = false
+            //});
+            #endregion
+            dgvFiltersList.Rows.Add();
+            #region dgvResultsListAddColumns
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "ردیف",
                 Name = "RowNumber",
@@ -60,7 +174,7 @@ namespace PMIS.Forms
                 Visible = true,
                 Frozen = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "شناسه",
                 Name = "Id",
@@ -68,7 +182,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = false,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "کد",
                 Name = "Code",
@@ -77,7 +191,7 @@ namespace PMIS.Forms
                 Visible = true,
                 Frozen = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "عنوان",
                 Name = "Title",
@@ -86,7 +200,7 @@ namespace PMIS.Forms
                 Visible = true,
                 Frozen = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "فرم مربوطه",
                 Name = "FkLkpFormId",
@@ -97,7 +211,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "دستی/اتوماتیک",
                 Name = "FkLkpManualityId",
@@ -108,7 +222,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "واحد عملیاتی",
                 Name = "FkLkpUnitId",
@@ -119,7 +233,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "دوره زمانی",
                 Name = "FkLkpPeriodId",
@@ -130,7 +244,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "واحد اندازه‌گیری",
                 Name = "FkLkpMeasureId",
@@ -141,7 +255,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewComboBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 HeaderText = "مطلوبیت",
                 Name = "FkLkpDesirabilityId",
@@ -152,7 +266,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "فرمول",
                 Name = "Formula",
@@ -160,7 +274,7 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "توضیحات",
                 Name = "Description",
@@ -168,16 +282,16 @@ namespace PMIS.Forms
                 ReadOnly = true,
                 Visible = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
             {
                 HeaderText = "حذف شده",
                 Name = "FlgLogicalDelete",
                 DataPropertyName = "FlgLogicalDelete",
                 ReadOnly = false,
-                Visible = true,
+                Visible = false,
                 IndeterminateValue = false
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
+            dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
             {
                 HeaderText = "ویرایش شده",
                 Name = "FlgEdited",
@@ -185,7 +299,7 @@ namespace PMIS.Forms
                 Visible = false,
                 IndeterminateValue = false
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
                 Name = "Edit",
@@ -194,7 +308,7 @@ namespace PMIS.Forms
                 Visible = true,
                 UseColumnTextForButtonValue = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
                 Name = "LogicalDelete",
@@ -203,7 +317,7 @@ namespace PMIS.Forms
                 Visible = true,
                 UseColumnTextForButtonValue = true,
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
                 Name = "Recycle",
@@ -213,7 +327,7 @@ namespace PMIS.Forms
                 UseColumnTextForButtonValue = true,
 
             });
-            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
                 Name = "PhysicalDelete",
@@ -222,23 +336,28 @@ namespace PMIS.Forms
                 Visible = false,
                 UseColumnTextForButtonValue = true,
             });
+            #endregion
+
             FiltersInitialize();
             SearchIndicator();
         }
-        private async void FiltersInitialize()
+        private void FiltersInitialize()
         {
-            List<LookUpValueShortInfoDto> lstForm = new List<LookUpValueShortInfoDto>() {
-                new LookUpValueShortInfoDto()             {
-                Id = 0,
-                Display = "همه"
-            } };
-            lstForm.AddRange(await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"));
-            cbLkpForm.DataSource = lstForm;
-            cbLkpForm.DisplayMember = "Display";
-            cbLkpForm.ValueMember = "Id";
-            cbLkpForm.SelectedIndex = 0;
-
-
+            foreach (DataGridViewColumn column in dgvFiltersList.Columns)
+            {
+                if (column is DataGridViewComboBoxColumn comboBoxColumn)
+                {
+                    if (comboBoxColumn.DataSource is LookUpValueShortInfoDto[] array)
+                    {
+                        List<LookUpValueShortInfoDto> lstSourse = array.ToList();
+                        lstSourse.Insert(0, new LookUpValueShortInfoDto() { Id = 0, Display = "همه", });
+                        comboBoxColumn.DataSource = lstSourse;
+                        comboBoxColumn.DisplayMember = "Display";
+                        comboBoxColumn.ValueMember = "Id";
+                        //comboBoxColumn.SelectedIndex = 0;
+                    }
+                }
+            }
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -254,62 +373,52 @@ namespace PMIS.Forms
             lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
+
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
-                filters = new List<GenericSearchFilterDto>()
-            {
-                new GenericSearchFilterDto()
-                {
-                    columnName = "Code",
-                    value=txtCode.Text,
-                    LogicalOperator = LogicalOperator.Begin,
-                    operation = FilterOperator.Contains,
-                    type = PhraseType.Condition,
-                },
-                new GenericSearchFilterDto()
-                {
-                    columnName = "Title",
-                    value=txtTitle.Text,
-                    LogicalOperator = LogicalOperator.And,
-                    operation = FilterOperator.Contains,
-                    type = PhraseType.Condition,
-                }
-                ,
-                new GenericSearchFilterDto()
-                {
-                    columnName = "FlgLogicalDelete",
-                    value=chbRecycle.Checked.ToString(),
-                    LogicalOperator = LogicalOperator.And,
-                    operation = FilterOperator.Equals,
-                    type = PhraseType.Condition,
-                }
-            }
+                filters = new List<GenericSearchFilterDto>(),
             };
-            if (cbLkpForm.SelectedValue.ToString() != "0")
-            {
 
-                searchRequest.filters.Add(new GenericSearchFilterDto()
+            foreach (DataGridViewColumn column in dgvFiltersList.Columns)
+            {
+                foreach (DataGridViewRow row in dgvFiltersList.Rows)
                 {
-                    columnName = "FkLkpFormId",
-                    value = cbLkpForm.SelectedValue.ToString(),
-                    LogicalOperator = LogicalOperator.And,
-                    operation = FilterOperator.Equals,
-                    type = PhraseType.Condition,
-                });
+                    var cellValue = row.Cells[column.Name].Value == null ? "" : row.Cells[column.Name].Value.ToString();
+                    if (column is not DataGridViewComboBoxColumn || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
+                    {
+                        searchRequest.filters.Add(new GenericSearchFilterDto()
+                        {
+                            columnName = column.Name,
+                            value = cellValue,
+                            LogicalOperator = column.Index == 0 ? LogicalOperator.Begin : LogicalOperator.And,
+                            operation = column is DataGridViewTextBoxColumn ? FilterOperator.Contains : FilterOperator.Equals,
+                            type = PhraseType.Condition,
+                        });
+                    }
+                }
             }
+
+            searchRequest.filters.Add(new GenericSearchFilterDto()
+            {
+                columnName = "FlgLogicalDelete",
+                value = chbRecycle.Checked.ToString(),
+                LogicalOperator = LogicalOperator.And,
+                operation = FilterOperator.Equals,
+                type = PhraseType.Condition,
+            });
+
             (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
+
             if (isSuccess)
             {
                 if (list.Count() == 0)
                 {
-                    dgvIndicatorList.DataSource = null;
+                    dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!");
-
                 }
                 else
                 {
-                    dgvIndicatorList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
-
+                    dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
                 }
             }
             else
@@ -324,23 +433,23 @@ namespace PMIS.Forms
         {
             try
             {
-                dgvIndicatorList.Columns["Edit"].Visible = !chbRecycle.Checked;
-                dgvIndicatorList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
-                dgvIndicatorList.Columns["Recycle"].Visible = chbRecycle.Checked;
-                dgvIndicatorList.Columns["PhysicalDelete"].Visible = chbRecycle.Checked;
-                dgvIndicatorList.AllowUserToAddRows = !chbRecycle.Checked;
+                dgvResultsList.Columns["Edit"].Visible = !chbRecycle.Checked;
+                dgvResultsList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
+                dgvResultsList.Columns["Recycle"].Visible = chbRecycle.Checked;
+                dgvResultsList.Columns["PhysicalDelete"].Visible = chbRecycle.Checked;
+                dgvResultsList.AllowUserToAddRows = !chbRecycle.Checked;
 
-                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                     row.DefaultCellStyle.ForeColor = Color.Black;
 
                     row.Cells["FlgEdited"].Value = false;
-                    
+
                 }
-                if (dgvIndicatorList.Rows.Count > 0) 
-                { 
-                    dgvIndicatorList.CurrentCell = dgvIndicatorList.Rows[0].Cells[0]; 
+                if (dgvResultsList.Rows.Count > 0)
+                {
+                    dgvResultsList.CurrentCell = dgvResultsList.Rows[0].Cells[0];
                 }
             }
             catch (Exception)
@@ -378,7 +487,7 @@ namespace PMIS.Forms
             {
                 lstAddRequest = new List<IndicatorAddRequestDto>();
 
-                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
                     try
                     {
@@ -432,7 +541,7 @@ namespace PMIS.Forms
             {
                 lstEditRequest = new List<IndicatorEditRequestDto>();
 
-                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
                     try
                     {
@@ -542,91 +651,91 @@ namespace PMIS.Forms
             }
         }
 
-        private void dgvIndicatorList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void dgvResultsList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].Value = (e.RowIndex + 1).ToString();
+            dgvResultsList.Rows[e.RowIndex].Cells["RowNumber"].Value = (e.RowIndex + 1).ToString();
 
-            if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value == null)
+            if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value == null)
             {
-                foreach (DataGridViewCell cell in dgvIndicatorList.Rows[e.RowIndex].Cells)
+                foreach (DataGridViewCell cell in dgvResultsList.Rows[e.RowIndex].Cells)
                 {
                     cell.ReadOnly = false;
                 }
             }
-            dgvIndicatorList.Rows[e.RowIndex].Cells["RowNumber"].ReadOnly = true;
+            dgvResultsList.Rows[e.RowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
-        private void dgvIndicatorList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvResultsList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1)
                 return;
-            if (dgvIndicatorList.Rows[e.RowIndex].IsNewRow)
+            if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
                 return;
-            if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Edit" && e.RowIndex >= 0)
+            if (dgvResultsList.Columns[e.ColumnIndex].Name == "Edit" && e.RowIndex >= 0)
             {
-                var row = dgvIndicatorList.Rows[e.RowIndex];
+                var row = dgvResultsList.Rows[e.RowIndex];
                 foreach (DataGridViewCell cell in row.Cells)
                 {
-                    dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value = true;
+                    dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value = true;
                     cell.ReadOnly = false;
                 }
             }
-            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "LogicalDelete" && e.RowIndex >= 0)
+            else if (dgvResultsList.Columns[e.ColumnIndex].Name == "LogicalDelete" && e.RowIndex >= 0)
             {
-                var row = dgvIndicatorList.Rows[e.RowIndex];
-                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = dgvResultsList.Rows[e.RowIndex];
+                if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
-                    lstLogicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
-                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
+                    lstLogicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvResultsList.Rows.RemoveAt(e.RowIndex);
                 }
             }
 
-            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "PhysicalDelete" && e.RowIndex >= 0)
+            else if (dgvResultsList.Columns[e.ColumnIndex].Name == "PhysicalDelete" && e.RowIndex >= 0)
             {
-                var row = dgvIndicatorList.Rows[e.RowIndex];
-                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = dgvResultsList.Rows[e.RowIndex];
+                if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
-                    lstPhysicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
-                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
+                    lstPhysicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvResultsList.Rows.RemoveAt(e.RowIndex);
                 }
             }
-            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Recycle" && e.RowIndex >= 0)
+            else if (dgvResultsList.Columns[e.ColumnIndex].Name == "Recycle" && e.RowIndex >= 0)
             {
-                var row = dgvIndicatorList.Rows[e.RowIndex];
-                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = dgvResultsList.Rows[e.RowIndex];
+                if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
-                    lstRecycleRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
-                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
+                    lstRecycleRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvResultsList.Rows.RemoveAt(e.RowIndex);
                 }
             }
         }
 
-        private void dgvIndicatorList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        private void dgvResultsList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
         }
 
-        private void dgvIndicatorList_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
 
         }
 
-        private void dgvIndicatorList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void dgvResultsList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if ((dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0))
+            if ((dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0))
             {
                 e.Cancel = true;
             }
         }
 
-        private void dgvIndicatorList_RowLeave(object sender, DataGridViewCellEventArgs e)
+        private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow previousRow = dgvIndicatorList.Rows[e.RowIndex];
-            if (dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()))
+            DataGridViewRow previousRow = dgvResultsList.Rows[e.RowIndex];
+            if (dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()))
             {
                 previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
             }
-            else if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0)
+            else if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0)
             {
                 previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
@@ -639,11 +748,11 @@ namespace PMIS.Forms
             }
         }
 
-        private void dgvIndicatorList_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (isLoaded)
             {
-                DataGridViewRow selectedRow = dgvIndicatorList.Rows[e.RowIndex];
+                DataGridViewRow selectedRow = dgvResultsList.Rows[e.RowIndex];
                 selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
                 selectedRow.DefaultCellStyle.ForeColor = Color.White;
             }
