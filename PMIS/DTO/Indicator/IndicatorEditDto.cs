@@ -1,14 +1,50 @@
-﻿using Generic.Service.DTO.Concrete;
+﻿using Generic.Base.Handler.SystemException.Concrete;
+using Generic.Base.Handler.SystemLog.WithSerilog.Concrete;
+using Generic.Base.Handler.SystemLog.WithSerilog;
+using Generic.Repository;
+using Generic.Service.DTO.Concrete;
+using PMIS.DTO.LookUpDestination;
+using PMIS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Generic.Base.Handler.Map;
+using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 
 namespace PMIS.DTO.Indicator
 {
     public class IndicatorEditRequestDto : GenericEditRequestDto
     {
+        public static async Task<TDestination> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
+            where TDestination : class
+            where TSource : class
+        {
+            GenericSqlServerRepository<Models.Indicator, PmisContext> repository = new GenericSqlServerRepository<Models.Indicator, PmisContext>(new PmisContext(),
+               new GenericExceptionHandler()
+               ,
+               new GenericLogWithSerilogInFileHandler(
+                           new Generic.Base.Handler.SystemLog.WithSerilog.DTO.GenericConfigureLogWithSerilogRequestDto()
+                           {
+                               inFileConfig = new Generic.Base.Handler.SystemLog.WithSerilog.DTO.GenericConfigureLogWithSerilogInFileRequestDto()
+                               { filePath = "C:\\Users\\868\\source\\repos\\PMIS\\PMIS\\bin\\Debug\\net8.0-windows\\logs\\log20241108.txt" },
+                               logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.File,
+                               minimumLevel = Serilog.Events.LogEventLevel.Information,
+                               rollingInterval = Serilog.RollingInterval.Hour,
+                           }
+                       )
+               );
+            if (source is IndicatorEditRequestDto sourceModel)
+            {
+                if (destination is Models.Indicator destinationModel)
+                {
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.Indicator, Models.Indicator>(await repository.GetByIdAsync(sourceModel.Id), destinationModel);                                                      
+                }
+
+            }
+            return destination;
+        }
         public int Id { get; set; }
 
         public string Code { get; set; } = null!;
@@ -33,7 +69,7 @@ namespace PMIS.DTO.Indicator
 
         public string? SystemInfo { get; set; }
 
-        //public bool? FlgPhisycalDelete { get; set; }
+        //public bool? FlgLogicalDelete { get; set; }
     }
     public class IndicatorEditResponseDto : GenericEditResponseDto
     {

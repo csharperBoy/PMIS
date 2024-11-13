@@ -26,8 +26,8 @@ namespace Generic.Base.Handler.Map.Concrete
             var destination = Activator.CreateInstance<TDestination>();
             var mappingOptions = new GenericMappingOperationOptions();
 
-           // source = await BeforeMap(source, destination);
-            destination = mapper.Map<TSource, TDestination>(source);
+            destination = await BeforeMap(source, destination);
+            destination = mapper.Map<TSource, TDestination>(source, destination);
             destination = await AfterMap(source, destination);
             
             return await Task.FromResult(destination);
@@ -88,7 +88,7 @@ namespace Generic.Base.Handler.Map.Concrete
         {
             throw new NotImplementedException();
         }
-        public async Task<TSource> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
+        public async Task<TDestination> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
             where TDestination : class, new()
             where TSource : class, new()
         {
@@ -104,7 +104,7 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    source = (TSource)resultProperty.GetValue(task);
+                    destination = (TDestination)resultProperty.GetValue(task);
 
                 }
 
@@ -120,12 +120,12 @@ namespace Generic.Base.Handler.Map.Concrete
                 var resultProperty = task.GetType().GetProperty("Result");
                 if (resultProperty != null)
                 {
-                    source = (TSource)resultProperty.GetValue(task);
+                    destination = (TDestination)resultProperty.GetValue(task);
 
                 }
 
             }
-            return source;
+            return destination;
         }
         public async Task<TDestination> AfterMap<TSource,TDestination>(TSource source, TDestination destination)
             where TDestination : class , new()

@@ -12,7 +12,7 @@ namespace Generic.Service.Normal.Composition.Contract
         : IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>,
     IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>,
     IGenericLogicalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
-    IGenericPhisycalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
+    IGenericPhysicalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
     IGenericSearchService<TEntity, TEntitySearchResponseDto>
     where TEntity : class
     where TEntityAddRequestDto : class

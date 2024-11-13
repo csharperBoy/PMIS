@@ -19,7 +19,7 @@ using Helper = Generic.Helper;
 namespace Generic.Repository
 {
     public class GenericSqlServerRepository<TEntity, TContext> : AbstractGenericRepository<TEntity, TContext>, IDisposable
-        where TEntity : class,new()
+        where TEntity : class, new()
         where TContext : DbContext
     {
         private DbContext dbContext;
@@ -67,7 +67,7 @@ namespace Generic.Repository
         {
             bool result;
             try
-            {                
+            {
                 await dbSet.AddRangeAsync(entities);
                 result = true;
             }
@@ -305,7 +305,14 @@ namespace Generic.Repository
             dbContext.Entry(entity).State = state;
             return Task.CompletedTask;
         }
-
+        public override Task SetEntitiesStateAsync(IEnumerable<TEntity> entities, EntityState state)
+        {
+            foreach (var entity in entities)
+            {
+                SetEntityStateAsync(entity, state);
+            }
+            return Task.CompletedTask;
+        }
         public override Task SetCommandTimeoutAsync(int timeout)
         {
             try

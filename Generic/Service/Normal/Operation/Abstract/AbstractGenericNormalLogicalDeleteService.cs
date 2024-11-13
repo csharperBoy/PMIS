@@ -56,7 +56,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                         var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        var fieldName = entityFields.FirstOrDefault(f => f.Name == "FlgLogicalDelete");
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains( "FlgLogicalDelete"));
 
                         if (fieldName != null)
                         {
@@ -122,7 +122,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-               // await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+
                 return result;
             }
             catch (Exception ex)
@@ -154,7 +156,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                         var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        var fieldName = entityFields.FirstOrDefault(f => f.Name == "FlgLogicalDelete");
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains("FlgLogicalDelete"));
 
                         if (fieldName != null)
                         {
@@ -208,7 +210,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                     var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    var fieldName = entityFields.FirstOrDefault(f => f.Name == "FlgLogicalDelete");
+                    var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains("FlgLogicalDelete"));
 
                     if (fieldName != null)
                     {
@@ -219,7 +221,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-               // await repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+
                 return result;
             }
             catch (Exception ex)

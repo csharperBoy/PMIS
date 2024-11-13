@@ -36,7 +36,7 @@ namespace PMIS.DTO.Indicator
 
         public string? SystemInfo { get; set; }
 
-        //public bool? FlgPhisycalDelete { get; set; }
+        //public bool? FlgPhysicalDelete { get; set; }
     }
     public class IndicatorAddResponseDto : GenericAddResponseDto
     {

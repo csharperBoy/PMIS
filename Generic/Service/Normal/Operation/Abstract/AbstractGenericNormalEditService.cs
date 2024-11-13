@@ -110,11 +110,8 @@ namespace Generic.Service.Normal.Operation.Abstract
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
 
-                foreach (var item in entityRequest)
-                {
-
-                await repository.SetEntityStateAsync(item, EntityState.Detached);
-                }
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+                
                 return result;
             }
             catch (Exception ex)

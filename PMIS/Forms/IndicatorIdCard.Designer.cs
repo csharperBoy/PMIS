@@ -32,6 +32,7 @@ namespace PMIS.Forms
         {
             panel1 = new Panel();
             panel3 = new Panel();
+            chbRecycle = new CheckBox();
             cbLkpForm = new ComboBox();
             label3 = new Label();
             txtTitle = new TextBox();
@@ -58,11 +59,12 @@ namespace PMIS.Forms
             panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(5);
-            panel1.Size = new Size(914, 58);
+            panel1.Size = new Size(1025, 58);
             panel1.TabIndex = 0;
             // 
             // panel3
             // 
+            panel3.Controls.Add(chbRecycle);
             panel3.Controls.Add(cbLkpForm);
             panel3.Controls.Add(label3);
             panel3.Controls.Add(txtTitle);
@@ -73,15 +75,26 @@ namespace PMIS.Forms
             panel3.Location = new Point(209, 5);
             panel3.Name = "panel3";
             panel3.Padding = new Padding(0, 10, 0, 0);
-            panel3.Size = new Size(700, 48);
+            panel3.Size = new Size(811, 48);
             panel3.TabIndex = 2;
+            // 
+            // chbRecycle
+            // 
+            chbRecycle.AutoSize = true;
+            chbRecycle.Dock = DockStyle.Right;
+            chbRecycle.Location = new Point(235, 10);
+            chbRecycle.Name = "chbRecycle";
+            chbRecycle.Size = new Size(74, 38);
+            chbRecycle.TabIndex = 6;
+            chbRecycle.Text = "بازیابی";
+            chbRecycle.UseVisualStyleBackColor = true;
             // 
             // cbLkpForm
             // 
             cbLkpForm.Dock = DockStyle.Right;
             cbLkpForm.DropDownStyle = ComboBoxStyle.DropDownList;
             cbLkpForm.FormattingEnabled = true;
-            cbLkpForm.Location = new Point(198, 10);
+            cbLkpForm.Location = new Point(309, 10);
             cbLkpForm.Name = "cbLkpForm";
             cbLkpForm.Size = new Size(151, 28);
             cbLkpForm.TabIndex = 5;
@@ -90,7 +103,7 @@ namespace PMIS.Forms
             // 
             label3.AutoSize = true;
             label3.Dock = DockStyle.Right;
-            label3.Location = new Point(349, 10);
+            label3.Location = new Point(460, 10);
             label3.Name = "label3";
             label3.Size = new Size(31, 20);
             label3.TabIndex = 4;
@@ -99,7 +112,7 @@ namespace PMIS.Forms
             // txtTitle
             // 
             txtTitle.Dock = DockStyle.Right;
-            txtTitle.Location = new Point(380, 10);
+            txtTitle.Location = new Point(491, 10);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(125, 27);
             txtTitle.TabIndex = 3;
@@ -108,7 +121,7 @@ namespace PMIS.Forms
             // 
             label2.AutoSize = true;
             label2.Dock = DockStyle.Right;
-            label2.Location = new Point(505, 10);
+            label2.Location = new Point(616, 10);
             label2.Name = "label2";
             label2.Size = new Size(45, 20);
             label2.TabIndex = 2;
@@ -117,7 +130,7 @@ namespace PMIS.Forms
             // txtCode
             // 
             txtCode.Dock = DockStyle.Right;
-            txtCode.Location = new Point(550, 10);
+            txtCode.Location = new Point(661, 10);
             txtCode.Name = "txtCode";
             txtCode.Size = new Size(125, 27);
             txtCode.TabIndex = 1;
@@ -126,7 +139,7 @@ namespace PMIS.Forms
             // 
             label1.AutoSize = true;
             label1.Dock = DockStyle.Right;
-            label1.Location = new Point(675, 10);
+            label1.Location = new Point(786, 10);
             label1.Name = "label1";
             label1.Size = new Size(25, 20);
             label1.TabIndex = 0;
@@ -163,7 +176,7 @@ namespace PMIS.Forms
             panel2.Location = new Point(0, 58);
             panel2.Margin = new Padding(3, 4, 3, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(914, 542);
+            panel2.Size = new Size(1025, 542);
             panel2.TabIndex = 1;
             // 
             // dgvIndicatorList
@@ -176,7 +189,7 @@ namespace PMIS.Forms
             dgvIndicatorList.Margin = new Padding(3, 4, 3, 4);
             dgvIndicatorList.Name = "dgvIndicatorList";
             dgvIndicatorList.RowHeadersWidth = 51;
-            dgvIndicatorList.Size = new Size(914, 542);
+            dgvIndicatorList.Size = new Size(1025, 542);
             dgvIndicatorList.TabIndex = 0;
             dgvIndicatorList.CellBeginEdit += dgvIndicatorList_CellBeginEdit;
             dgvIndicatorList.CellContentClick += dgvIndicatorList_CellContentClick;
@@ -188,7 +201,7 @@ namespace PMIS.Forms
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(1025, 600);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Margin = new Padding(3, 4, 3, 4);
@@ -206,7 +219,6 @@ namespace PMIS.Forms
 
         private Panel panel1;
         private Panel panel2;
-        private Button btnSearch;
         private Button btnAdd;
         private DataGridView dgvIndicatorList;
         private Panel panel3;
@@ -216,5 +228,7 @@ namespace PMIS.Forms
         private TextBox txtCode;
         private ComboBox cbLkpForm;
         private Label label3;
+        private Button btnSearch;
+        private CheckBox chbRecycle;
     }
 }

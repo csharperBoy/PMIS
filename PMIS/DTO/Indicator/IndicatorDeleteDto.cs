@@ -27,7 +27,7 @@ namespace PMIS.DTO.Indicator
            where TDestination : class
            where TSource : class
         {
-            GenericSqlServerRepository<Models.Indicator, PmisContext> re = new GenericSqlServerRepository<Models.Indicator, PmisContext>(new PmisContext() ,
+            GenericSqlServerRepository<Models.Indicator, PmisContext> repository = new GenericSqlServerRepository<Models.Indicator, PmisContext>(new PmisContext() ,
                 new GenericExceptionHandler()
                 ,
                 new GenericLogWithSerilogInFileHandler(
@@ -45,7 +45,7 @@ namespace PMIS.DTO.Indicator
             {
                 if (destination is Models.Indicator destinationModel)
                 {
-                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.Indicator, Models.Indicator>(await re.GetByIdAsync(sourceModel.Id) , destinationModel);
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.Indicator, Models.Indicator>(await repository.GetByIdAsync(sourceModel.Id) , destinationModel);
 //                    destinationModel =await re.GetByIdAsync(sourceModel.Id);
                 }
 

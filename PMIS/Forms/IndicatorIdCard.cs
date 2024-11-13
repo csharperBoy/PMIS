@@ -26,7 +26,8 @@ namespace PMIS.Forms
     {
         List<IndicatorAddRequestDto> lstAddRequest;
         List<IndicatorEditRequestDto> lstEditRequest;
-        List<IndicatorDeleteRequestDto> lstDeleteRequest;
+        List<IndicatorDeleteRequestDto> lstLogicalDeleteRequest;
+        List<IndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
         List<IndicatorDeleteRequestDto> lstRecycleRequest;
         IIndicatorService indicatorService;
         ILookUpValueService lookUpValueService;
@@ -44,7 +45,9 @@ namespace PMIS.Forms
         private async void CustomInitialize()
         {
             dgvIndicatorList.AutoGenerateColumns = false;
-            lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
+            lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+            lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+            lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
             lstLookUpDestination = await lookUpValueService.GetList("Indicator");
 
             dgvIndicatorList.Columns.Add(new DataGridViewTextBoxColumn()
@@ -190,10 +193,29 @@ namespace PMIS.Forms
             dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
-                Name = "Delete",
-                Text = "حذف",
+                Name = "LogicalDelete",
+                Text = "حذف موقت",
                 ReadOnly = false,
                 Visible = true,
+                UseColumnTextForButtonValue = true,
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Name = "Recycle",
+                Text = "بازیابی",
+                ReadOnly = false,
+                Visible = false,
+                UseColumnTextForButtonValue = true,
+
+            });
+            dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Name = "PhysicalDelete",
+                Text = "حذف",
+                ReadOnly = false,
+                Visible = false,
                 UseColumnTextForButtonValue = true,
             });
             FiltersInitialize();
@@ -222,8 +244,14 @@ namespace PMIS.Forms
 
         private async Task SearchIndicator()
         {
-            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto() { 
-            filters = new List<GenericSearchFilterDto>()
+            lstAddRequest = new List<IndicatorAddRequestDto>();
+            lstEditRequest = new List<IndicatorEditRequestDto>();
+            lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+            lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+            lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
+            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
+            {
+                filters = new List<GenericSearchFilterDto>()
             {
                 new GenericSearchFilterDto()
                 {
@@ -240,35 +268,65 @@ namespace PMIS.Forms
                     LogicalOperator = LogicalOperator.And,
                     operation = FilterOperator.Contains,
                     type = PhraseType.Condition,
-                }               
+                }
+                ,
+                new GenericSearchFilterDto()
+                {
+                    columnName = "FlgLogicalDelete",
+                    value=chbRecycle.Checked.ToString(),
+                    LogicalOperator = LogicalOperator.And,
+                    operation = FilterOperator.Equals,
+                    type = PhraseType.Condition,
+                }
             }
             };
-           if(cbLkpForm.SelectedValue.ToString() != "0")
+            if (cbLkpForm.SelectedValue.ToString() != "0")
             {
 
-            searchRequest.filters.Add(new GenericSearchFilterDto()
-            {
-                columnName = "FkLkpFormId",
-                value = cbLkpForm.SelectedValue.ToString(),
-                LogicalOperator = LogicalOperator.And,
-                operation = FilterOperator.Equals,
-                type = PhraseType.Condition,
-            });
+                searchRequest.filters.Add(new GenericSearchFilterDto()
+                {
+                    columnName = "FkLkpFormId",
+                    value = cbLkpForm.SelectedValue.ToString(),
+                    LogicalOperator = LogicalOperator.And,
+                    operation = FilterOperator.Equals,
+                    type = PhraseType.Condition,
+                });
             }
             (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
             if (isSuccess)
             {
                 if (list.Count() == 0)
-                { MessageBox.Show("موردی یافت نشد!!!"); }
+                {
+                    dgvIndicatorList.DataSource = null;
+                    MessageBox.Show("موردی یافت نشد!!!");
+
+                }
                 else
                 {
                     dgvIndicatorList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
-                    
+
                 }
             }
             else
             {
                 MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!");
+            }
+            RefreshVisuals();
+        }
+
+        private void RefreshVisuals()
+        {
+            try
+            {
+                dgvIndicatorList.Columns["Edit"].Visible = !chbRecycle.Checked;
+                dgvIndicatorList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
+                dgvIndicatorList.Columns["Recycle"].Visible = chbRecycle.Checked;
+                dgvIndicatorList.Columns["PhysicalDelete"].Visible = chbRecycle.Checked;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
@@ -277,7 +335,9 @@ namespace PMIS.Forms
             try
             {
                 await EditIndicator();
-                await DeleteIndicator();
+                await LogicalDeleteIndicator();
+                await PhysicalDeleteIndicator();
+                await RecycleIndicator();
                 await AddIndicator();
 
 
@@ -288,6 +348,8 @@ namespace PMIS.Forms
                 MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         private async Task AddIndicator()
         {
@@ -377,7 +439,7 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
-                   // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
                 }
                 else
                 {
@@ -390,17 +452,63 @@ namespace PMIS.Forms
             }
         }
 
-        private async Task DeleteIndicator()
+        private async Task LogicalDeleteIndicator()
         {
             try
             {
 
                 //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await indicatorService.LogicalDeleteRange(lstDeleteRequest);
+                bool isSuccess = await indicatorService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                    lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                    lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task PhysicalDeleteIndicator()
+        {
+            try
+            {
+
+                //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await indicatorService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task RecycleIndicator()
+        {
+            try
+            {
+
+                //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await indicatorService.RecycleRange(lstRecycleRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
                 }
                 else
                 {
@@ -442,12 +550,31 @@ namespace PMIS.Forms
                     cell.ReadOnly = false;
                 }
             }
-            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Delete" && e.RowIndex >= 0)
+            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "LogicalDelete" && e.RowIndex >= 0)
             {
                 var row = dgvIndicatorList.Rows[e.RowIndex];
                 if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
-                    lstDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    lstLogicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
+                }
+            }
+
+            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "PhysicalDelete" && e.RowIndex >= 0)
+            {
+                var row = dgvIndicatorList.Rows[e.RowIndex];
+                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                {
+                    lstPhysicalDeleteRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
+                    dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
+                }
+            }
+            else if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Recycle" && e.RowIndex >= 0)
+            {
+                var row = dgvIndicatorList.Rows[e.RowIndex];
+                if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) != 0)
+                {
+                    lstRecycleRequest.Add(new IndicatorDeleteRequestDto() { Id = int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) });
                     dgvIndicatorList.Rows.RemoveAt(e.RowIndex);
                 }
             }

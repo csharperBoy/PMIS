@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Generic.Service.Normal.Operation.Abstract
 {
     public abstract class AbstractGenericNormalPhysicalDeleteService<TContext, TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
-        :  IGenericPhisycalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
+        :  IGenericPhysicalDeleteService<TEntity, TEntityDeleteRequestDto, TEntityDeleteResponseDto>
         where TContext : DbContext
         where TEntity : class, new()
         where TEntityDeleteRequestDto : class, new()
@@ -37,7 +37,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             logHandler = _logHandler.CreateLogger();
         }
 
-        public  async Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput)
+        public  async Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhysicalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
         }
 
-        public async Task<bool> PhisycalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
+        public async Task<bool> PhysicalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
             try
             {
@@ -104,7 +104,9 @@ namespace Generic.Service.Normal.Operation.Abstract
                 }
                 result = await repository.DeleteRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
-               // repository.SetEntityStateAsync(entityRequest, EntityState.Detached);
+
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+
                 return result;
             }
             catch (Exception ex)

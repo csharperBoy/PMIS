@@ -33,6 +33,8 @@ namespace Generic.Repository.Contract
 
         Task SetEntityStateAsync(TEntity entity, EntityState state);
 
+        Task SetEntitiesStateAsync(IEnumerable<TEntity> entities, EntityState state);
+
         Task SetCommandTimeoutAsync(int timeout);
 
         Task<TEntity> GetByIdAsync(object id);

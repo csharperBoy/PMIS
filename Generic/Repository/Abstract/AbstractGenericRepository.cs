@@ -37,6 +37,8 @@ namespace Generic.Repository.Abstract
 
         public abstract Task SetEntityStateAsync(TEntity entity, EntityState state);
 
+        public abstract Task SetEntitiesStateAsync(IEnumerable<TEntity> entities, EntityState state);
+
         public abstract Task SetCommandTimeoutAsync(int timeout);
 
         public abstract Task<TEntity> GetByIdAsync(object id);

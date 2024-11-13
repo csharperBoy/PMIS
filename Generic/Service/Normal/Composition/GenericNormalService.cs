@@ -120,14 +120,14 @@ namespace Generic.Service.Normal.Composition
             return await logicalDeleteService.RecycleRange(requestInput);
         }
 
-        public override async Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput)
+        public override async Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhysicalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
-            return await physicalDeleteService.PhisycalDeleteGroup(requestInput);
+            return await physicalDeleteService.PhysicalDeleteGroup(requestInput);
         }
 
-        public override async Task<bool> PhisycalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
+        public override async Task<bool> PhysicalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
-            return await physicalDeleteService.PhisycalDeleteRange(requestInput);
+            return await physicalDeleteService.PhysicalDeleteRange(requestInput);
         }
     }
 }

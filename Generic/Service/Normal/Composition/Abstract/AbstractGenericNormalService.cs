@@ -21,7 +21,7 @@ public abstract class AbstractGenericNormalService<TContext, TEntity, TEntityAdd
     IGenericAddService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto>,
     IGenericEditService<TEntity, TEntityEditRequestDto, TEntityEditResponseDto>,
     IGenericLogicalDeleteService<TEntity,  TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
-    IGenericPhisycalDeleteService<TEntity,  TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
+    IGenericPhysicalDeleteService<TEntity,  TEntityDeleteRequestDto, TEntityDeleteResponseDto>,
     IGenericSearchService<TEntity, TEntitySearchResponseDto>
     where TContext : DbContext
     where TEntity : class
@@ -70,10 +70,10 @@ public abstract class AbstractGenericNormalService<TContext, TEntity, TEntityAdd
     public abstract Task<bool> RecycleRange(IEnumerable<TEntityDeleteRequestDto> requestInput);
 
 
-    public abstract Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhisycalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput);
+    public abstract Task<(bool, IEnumerable<TEntityDeleteResponseDto>)> PhysicalDeleteGroup(IEnumerable<TEntityDeleteRequestDto> requestInput);
 
 
-    public abstract Task<bool> PhisycalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput);
+    public abstract Task<bool> PhysicalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput);
 
 
     public abstract Task<(bool, IEnumerable<TEntitySearchResponseDto>)> Search(GenericSearchRequestDto requestInput);
