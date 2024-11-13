@@ -333,7 +333,7 @@ namespace PMIS.Forms
                     //    IsSuccess = x.IsSuccess
                     //})
                     //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات برای ردیف های زیر موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
+                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
                 }
 
             }
@@ -377,7 +377,11 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
-                    MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                   // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }
+                else
+                {
+                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود");
                 }
             }
             catch (Exception)
@@ -397,6 +401,10 @@ namespace PMIS.Forms
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
                     lstDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
                 }
             }
             catch (Exception)
@@ -421,6 +429,8 @@ namespace PMIS.Forms
 
         private void dgvIndicatorList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+                return;
             if (dgvIndicatorList.Rows[e.RowIndex].IsNewRow)
                 return;
             if (dgvIndicatorList.Columns[e.ColumnIndex].Name == "Edit" && e.RowIndex >= 0)
