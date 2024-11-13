@@ -24,14 +24,16 @@ namespace PMIS.Forms
 {
     public partial class IndicatorIdCard : Form
     {
-        List<IndicatorAddRequestDto> lstAddRequest;
-        List<IndicatorEditRequestDto> lstEditRequest;
-        List<IndicatorDeleteRequestDto> lstLogicalDeleteRequest;
-        List<IndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
-        List<IndicatorDeleteRequestDto> lstRecycleRequest;
-        IIndicatorService indicatorService;
-        ILookUpValueService lookUpValueService;
-        IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
+        private List<IndicatorAddRequestDto> lstAddRequest;
+        private List<IndicatorEditRequestDto> lstEditRequest;
+        private List<IndicatorDeleteRequestDto> lstLogicalDeleteRequest;
+        private List<IndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
+        private List<IndicatorDeleteRequestDto> lstRecycleRequest;
+        private IIndicatorService indicatorService;
+        private ILookUpValueService lookUpValueService;
+        private IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
+
+        private bool isLoaded = false;
         public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
@@ -173,6 +175,7 @@ namespace PMIS.Forms
                 DataPropertyName = "FlgLogicalDelete",
                 ReadOnly = false,
                 Visible = true,
+                IndeterminateValue = false
             });
             dgvIndicatorList.Columns.Add(new DataGridViewCheckBoxColumn()
             {
@@ -180,6 +183,7 @@ namespace PMIS.Forms
                 Name = "FlgEdited",
                 ReadOnly = false,
                 Visible = false,
+                IndeterminateValue = false
             });
             dgvIndicatorList.Columns.Add(new DataGridViewButtonColumn()
             {
@@ -244,6 +248,7 @@ namespace PMIS.Forms
 
         private async Task SearchIndicator()
         {
+            isLoaded = false;
             lstAddRequest = new List<IndicatorAddRequestDto>();
             lstEditRequest = new List<IndicatorEditRequestDto>();
             lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
@@ -312,6 +317,7 @@ namespace PMIS.Forms
                 MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!");
             }
             RefreshVisuals();
+            isLoaded = true;
         }
 
         private void RefreshVisuals()
@@ -322,6 +328,20 @@ namespace PMIS.Forms
                 dgvIndicatorList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
                 dgvIndicatorList.Columns["Recycle"].Visible = chbRecycle.Checked;
                 dgvIndicatorList.Columns["PhysicalDelete"].Visible = chbRecycle.Checked;
+                dgvIndicatorList.AllowUserToAddRows = !chbRecycle.Checked;
+
+                foreach (DataGridViewRow row in dgvIndicatorList.Rows)
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+
+                    row.Cells["FlgEdited"].Value = false;
+                    
+                }
+                if (dgvIndicatorList.Rows.Count > 0) 
+                { 
+                    dgvIndicatorList.CurrentCell = dgvIndicatorList.Rows[0].Cells[0]; 
+                }
             }
             catch (Exception)
             {
@@ -342,6 +362,7 @@ namespace PMIS.Forms
 
 
                 MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RefreshVisuals();
             }
             catch (Exception ex)
             {
@@ -595,6 +616,42 @@ namespace PMIS.Forms
             {
                 e.Cancel = true;
             }
+        }
+
+        private void dgvIndicatorList_RowLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow previousRow = dgvIndicatorList.Rows[e.RowIndex];
+            if (dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()))
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
+            else if (dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvIndicatorList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0)
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+
+            }
+            else
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.White;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
+        }
+
+        private void dgvIndicatorList_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (isLoaded)
+            {
+                DataGridViewRow selectedRow = dgvIndicatorList.Rows[e.RowIndex];
+                selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
+                selectedRow.DefaultCellStyle.ForeColor = Color.White;
+            }
+        }
+
+        private void IndicatorIdCard_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

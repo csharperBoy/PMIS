@@ -194,6 +194,8 @@ namespace PMIS.Forms
             dgvIndicatorList.CellBeginEdit += dgvIndicatorList_CellBeginEdit;
             dgvIndicatorList.CellContentClick += dgvIndicatorList_CellContentClick;
             dgvIndicatorList.DataError += dgvIndicatorList_DataError;
+            dgvIndicatorList.RowEnter += dgvIndicatorList_RowEnter;
+            dgvIndicatorList.RowLeave += dgvIndicatorList_RowLeave;
             dgvIndicatorList.RowPostPaint += dgvIndicatorList_RowPostPaint;
             dgvIndicatorList.RowsAdded += dgvIndicatorList_RowsAdded;
             // 
@@ -207,6 +209,7 @@ namespace PMIS.Forms
             Margin = new Padding(3, 4, 3, 4);
             Name = "IndicatorIdCard";
             Text = "IndicatorIdCard";
+            Load += IndicatorIdCard_Load;
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
