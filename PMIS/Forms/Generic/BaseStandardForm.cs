@@ -1,11 +1,7 @@
-﻿using Generic.Base.Handler.Map;
-using Generic.Service.DTO.Concrete;
+﻿using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO;
-using PMIS.DTO.Indicator;
-using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.Services.Contract;
 using System.ComponentModel;
@@ -13,7 +9,22 @@ using System.Reflection;
 
 namespace PMIS.Forms
 {
-    public partial class BaseStandardForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto>
+    public abstract class AbstractBaseStandardForm
+    {
+        public abstract void RefreshVisuals();
+        public abstract Task SearchEntity();
+        public abstract Task AddEntity();
+        public abstract Task EditEntity();
+        public abstract Task LogicalDeleteEntity();
+        public abstract Task RecycleEntity();
+        public abstract Task PhysicalDeleteEntity();
+        public abstract void RowEnter(int rowIndex);
+        public abstract void RowLeave(int rowIndex);
+        public abstract void CellContentClick(int rowIndex, int columnIndex);
+        public abstract bool CellBeginEdit(int rowIndex);
+        public abstract void RowPostPaint(int rowIndex);
+    }
+    public partial class BaseStandardForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseStandardForm
      where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
      where TEntity : class, new()
      where TEntityAddRequestDto : GenericAddRequestDto, new()
@@ -184,7 +195,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void RefreshVisuals()
+        public override void RefreshVisuals()
         {
             try
             {
@@ -214,7 +225,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task SearchEntity()
+        public override async Task SearchEntity()
         {
             isLoaded = false;
             lstAddRequest = new List<TEntityAddRequestDto>();
@@ -291,7 +302,7 @@ namespace PMIS.Forms
             isLoaded = true;
         }
 
-        public async Task AddEntity()
+        public override async Task AddEntity()
         {
             try
             {
@@ -337,7 +348,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task EditEntity()
+        public override async Task EditEntity()
         {
             try
             {
@@ -375,7 +386,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task LogicalDeleteEntity()
+        public override async Task LogicalDeleteEntity()
         {
             try
             {
@@ -398,7 +409,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task RecycleEntity()
+        public override async Task RecycleEntity()
         {
             try
             {
@@ -421,7 +432,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task PhysicalDeleteEntity()
+        public override async Task PhysicalDeleteEntity()
         {
             try
             {
@@ -444,7 +455,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowEnter(int rowIndex)
+        public override void RowEnter(int rowIndex)
         {
             if (isLoaded)
             {
@@ -454,7 +465,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowLeave(int rowIndex)
+        public override void RowLeave(int rowIndex)
         {
             DataGridViewRow previousRow = formElements.dgvResultsList.Rows[rowIndex];
             if (formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
@@ -475,7 +486,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void CellContentClick(int rowIndex, int columnIndex)
+        public override void CellContentClick(int rowIndex, int columnIndex)
         {
             if (rowIndex == -1)
                 return;
@@ -546,7 +557,7 @@ namespace PMIS.Forms
             }
         }
 
-        public bool CellBeginEdit(int rowIndex)
+        public override bool CellBeginEdit(int rowIndex)
         {
             if ((formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value == null || bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0))
             {
@@ -555,7 +566,7 @@ namespace PMIS.Forms
             return false;
         }
 
-        public void RowPostPaint(int rowIndex)
+        public override void RowPostPaint(int rowIndex)
         {
             formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
 
@@ -569,21 +580,21 @@ namespace PMIS.Forms
             formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
-        public TEntityAddRequestDto AddMaping(DataGridViewRow row)
+        private TEntityAddRequestDto AddMaping(DataGridViewRow row)
         {
             try
             {
                 TEntityAddRequestDto addRequest = new TEntityAddRequestDto();
-                //try { addRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
-                //try { addRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
-                //try { addRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { addRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
-                //try { addRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
+
+                var entityFields = addRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (DataGridViewColumn column in formElements.dgvResultsList.Columns)
+                {
+                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
+                    if (fieldInfo != null)
+                    {
+                        fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
+                    }
+                }
                 return addRequest;
             }
             catch (Exception ex)
@@ -593,22 +604,20 @@ namespace PMIS.Forms
             }
         }
 
-        public TEntityEditRequestDto EditMaping(DataGridViewRow row)
+        private TEntityEditRequestDto EditMaping(DataGridViewRow row)
         {
             try
             {
                 TEntityEditRequestDto editRequest = new TEntityEditRequestDto();
-                //try { editRequest.Id = int.Parse(row.Cells["Id"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
-                //try { editRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
-                //try { editRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
-                //try { editRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
-                //try { editRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
+                var entityFields = editRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (DataGridViewColumn column in formElements.dgvResultsList.Columns)
+                {
+                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
+                    if (fieldInfo != null)
+                    {
+                        fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);
+                    }
+                }
                 return editRequest;
             }
             catch (Exception ex)

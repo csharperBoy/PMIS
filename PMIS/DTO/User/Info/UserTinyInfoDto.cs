@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.IndicatorValue.Info;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.User.Info
 {
-    public class UserTinyInfoDto
+    public class UserTinyInfoDto : GenericSearchResponseDto
     {
         public async Task<UserTinyInfoDto> extraMapFromBaseModel(PMIS.Models.User baseModel)
         {

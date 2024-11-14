@@ -34,15 +34,17 @@ namespace PMIS.Forms
     public partial class MainForm : Form
     {
         IIndicatorService indicatorService;
+        IUserService userService;
         ILookUpService lookUpService;
         ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
 
             InitializeComponent();
             indicatorService = _indicatorService;
+            userService = _userService;
             lookUpService = _lookUpService;
             lookUpValueService = _lookUpValueService;
             lookUpDestinationService = _lookUpDestinationService;
@@ -66,7 +68,7 @@ namespace PMIS.Forms
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnIndicator, new UserDataEntry());
+            AddNewTabPage(tabPageNormalForm, new NormalForm(userService, lookUpValueService));
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
