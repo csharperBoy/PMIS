@@ -21,7 +21,7 @@ public partial class IndicatorCategory
 
     public string? SystemInfo { get; set; }
 
-    public bool? FlgLogicalDelete { get; set; }
+    public bool FlgLogicalDelete { get; set; }
 
     public virtual Indicator FkIndicator { get; set; } = null!;
 

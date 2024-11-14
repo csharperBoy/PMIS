@@ -15,7 +15,7 @@ public partial class LookUp
 
     public string? SystemInfo { get; set; }
 
-    public bool? FlgLogicalDelete { get; set; }
+    public bool FlgLogicalDelete { get; set; }
 
     public virtual ICollection<LookUpDestination> LookUpDestinations { get; set; } = new List<LookUpDestination>();
 

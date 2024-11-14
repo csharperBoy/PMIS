@@ -29,7 +29,7 @@ public partial class Indicator
 
     public string? SystemInfo { get; set; }
 
-    public bool? FlgLogicalDelete { get; set; }
+    public bool FlgLogicalDelete { get; set; }
 
     public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 

@@ -17,7 +17,7 @@ public partial class LookUpDestination
 
     public string? SystemInfo { get; set; }
 
-    public bool? FlgLogicalDelete { get; set; }
+    public bool FlgLogicalDelete { get; set; }
 
     public virtual LookUp FkLookUp { get; set; } = null!;
 }

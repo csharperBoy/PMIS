@@ -21,7 +21,7 @@ public partial class User
 
     public string? SystemInfo { get; set; }
 
-    public bool? FlgLogicalDelete { get; set; }
+    public bool FlgLogicalDelete { get; set; }
 
     public virtual ICollection<ClaimOnSystem> ClaimOnSystems { get; set; } = new List<ClaimOnSystem>();
 
