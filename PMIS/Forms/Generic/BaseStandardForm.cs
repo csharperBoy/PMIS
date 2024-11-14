@@ -4,6 +4,7 @@ using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO;
+using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.Services.Contract;
@@ -12,9 +13,8 @@ using System.Reflection;
 
 namespace PMIS.Forms
 {
-    public partial class BaseStandardForm<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto, TEntityService>
-        //: Form
-       where TContext : DbContext
+    public partial class BaseStandardForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto>
+     where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
      where TEntity : class, new()
      where TEntityAddRequestDto : GenericAddRequestDto, new()
      where TEntityAddResponseDto : GenericAddResponseDto, new()
@@ -22,39 +22,33 @@ namespace PMIS.Forms
      where TEntityEditResponseDto : GenericEditResponseDto, new()
      where TEntityDeleteRequestDto : GenericDeleteRequestDto, new()
      where TEntityDeleteResponseDto : GenericDeleteResponseDto, new()
-     where TEntitySearchResponseDto : class, new()
+     where TEntitySearchResponseDto : GenericSearchResponseDto, new()
      where TEntityColumnsDto : GenericColumnsDto, new()
-     where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
-
     {
 
         #region Variables
-        public IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
+        private TEntityService entityService;
         private List<TEntityAddRequestDto> lstAddRequest;
         private List<TEntityEditRequestDto> lstEditRequest;
         private List<TEntityDeleteRequestDto> lstLogicalDeleteRequest;
         private List<TEntityDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<TEntityDeleteRequestDto> lstRecycleRequest;
         private TEntityColumnsDto columns;
-        private TEntityService entityService;
-        public ILookUpValueService lookUpValueService;
-        private bool isLoaded = false;
+        private ILookUpValueService lookUpValueService;
         private BaseStandardFormElements formElements;
+        private bool isLoaded = false;
         #endregion
-
 
         public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, BaseStandardFormElements _formElements)
         {
-            // InitializeComponent();
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
             formElements = _formElements;
-            // columns = _columns;
 
             CustomInitialize();
         }
 
-        public async void CustomInitialize()
+        private async void CustomInitialize()
         {
             // InitializeComponent();
             columns = new TEntityColumnsDto();
@@ -67,7 +61,22 @@ namespace PMIS.Forms
             FiltersInitialize();
             SearchEntity();
         }
-        public void GenerateDgvResultColumnsInitialize()
+
+        private void GenerateDgvFilterColumnsInitialize()
+        {
+            try
+            {
+                formElements.dgvFiltersList.AllowUserToAddRows = false;
+                AddColumnsToGridView(formElements.dgvFiltersList, "FilterColumns");
+                formElements.dgvFiltersList.Rows.Add();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private void GenerateDgvResultColumnsInitialize()
         {
             try
             {
@@ -80,7 +89,6 @@ namespace PMIS.Forms
                     Visible = true,
                     Frozen = true,
                 });
-
                 AddColumnsToGridView(formElements.dgvResultsList, "ResultColumns");
                 formElements.dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
                 {
@@ -136,31 +144,24 @@ namespace PMIS.Forms
                     Visible = false,
                     UseColumnTextForButtonValue = true,
                 });
-
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
 
-        public void GenerateDgvFilterColumnsInitialize()
+        private void AddColumnsToGridView(DataGridView dgv, string propName)
         {
-
-            try
+            var entityFields = columns.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(propName));
+            if (fieldInfo != null)
             {
-                formElements.dgvFiltersList.AllowUserToAddRows = false;
-
-                AddColumnsToGridView(formElements.dgvFiltersList, "FilterColumns");
-                formElements.dgvFiltersList.Rows.Add();
-
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
+                var tempColumns = (List<DataGridViewColumn>)fieldInfo.GetValue(columns);
+                if (tempColumns != null)
+                {
+                    dgv.Columns.AddRange(tempColumns.ToArray());
+                }
             }
         }
 
@@ -181,27 +182,35 @@ namespace PMIS.Forms
                     }
                 }
             }
-
         }
-        void AddColumnsToGridView(DataGridView dgv, string propName)
+
+        public void RefreshVisuals()
         {
-            // دریافت فیلدهای موجود در columns  
-            var entityFields = columns.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            // پیدا کردن فیلد با نام حاوی propName  
-            var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(propName));
-
-            // اگر فیلد مورد نظر پیدا شد  
-            if (fieldInfo != null)
+            try
             {
-                // حالا از GetValue بر روی شیء columns استفاده می‌کنید  
-                var tempColumns = (List<DataGridViewColumn>)fieldInfo.GetValue(columns); // اینجا columns به عنوان شیء استفاده شده است  
+                formElements.dgvResultsList.Columns["Edit"].Visible = !formElements.chbRecycle.Checked;
+                formElements.dgvResultsList.Columns["LogicalDelete"].Visible = !formElements.chbRecycle.Checked;
+                formElements.dgvResultsList.Columns["Recycle"].Visible = formElements.chbRecycle.Checked;
+                formElements.dgvResultsList.Columns["PhysicalDelete"].Visible = formElements.chbRecycle.Checked;
+                formElements.dgvResultsList.AllowUserToAddRows = !formElements.chbRecycle.Checked;
 
-                // بررسی مقدار tempColumns  
-                if (tempColumns != null)
+                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
                 {
-                    // می‌توانید اکنون tempColumns را به DataGridView خود اضافه کنید  
-                    dgv.Columns.AddRange(tempColumns.ToArray());
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+
+                    row.Cells["FlgEdited"].Value = false;
+
                 }
+                if (formElements.dgvResultsList.Rows.Count > 0)
+                {
+                    formElements.dgvResultsList.CurrentCell = formElements.dgvResultsList.Rows[0].Cells[0];
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
@@ -282,35 +291,6 @@ namespace PMIS.Forms
             isLoaded = true;
         }
 
-        public void RefreshVisuals()
-        {
-            try
-            {
-                formElements.dgvResultsList.Columns["Edit"].Visible = !formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["LogicalDelete"].Visible = !formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["Recycle"].Visible = formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["PhysicalDelete"].Visible = formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.AllowUserToAddRows = !formElements.chbRecycle.Checked;
-
-                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
-                {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                    row.DefaultCellStyle.ForeColor = Color.Black;
-
-                    row.Cells["FlgEdited"].Value = false;
-
-                }
-                if (formElements.dgvResultsList.Rows.Count > 0)
-                {
-                    formElements.dgvResultsList.CurrentCell = formElements.dgvResultsList.Rows[0].Cells[0];
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
         public async Task AddEntity()
         {
             try
@@ -357,18 +337,142 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowPostPaint(int rowIndex)
+        public async Task EditEntity()
         {
-            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
-
-            if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value == null)
+            try
             {
-                foreach (DataGridViewCell cell in formElements.dgvResultsList.Rows[rowIndex].Cells)
+                lstEditRequest = new List<TEntityEditRequestDto>();
+
+                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
                 {
-                    cell.ReadOnly = false;
+                    try
+                    {
+                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
+                        {
+                            TEntityEditRequestDto editRequest = new TEntityEditRequestDto();
+
+                            editRequest = EditMaping(row);
+                            lstEditRequest.Add(editRequest);
+                        }
+                    }
+                    catch (Exception) { }
+                }
+
+                //(bool isSuccess, IEnumerable<TEntityEditResponseDto> list) = await TEntityService.EditGroup(lstEditRequest);
+                bool isSuccess = await entityService.EditRange(lstEditRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                }
+                else
+                {
+                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود");
                 }
             }
-            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task LogicalDeleteEntity()
+        {
+            try
+            {
+
+                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await entityService.LogicalDeleteRange(lstLogicalDeleteRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstLogicalDeleteRequest = new List<TEntityDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task RecycleEntity()
+        {
+            try
+            {
+
+                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await entityService.RecycleRange(lstRecycleRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstRecycleRequest = new List<TEntityDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task PhysicalDeleteEntity()
+        {
+            try
+            {
+
+                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await entityService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
+                if (isSuccess)
+                {
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    lstPhysicalDeleteRequest = new List<TEntityDeleteRequestDto>();
+                }
+                else
+                {
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void RowEnter(int rowIndex)
+        {
+            if (isLoaded)
+            {
+                DataGridViewRow selectedRow = formElements.dgvResultsList.Rows[rowIndex];
+                selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
+                selectedRow.DefaultCellStyle.ForeColor = Color.White;
+            }
+        }
+
+        public void RowLeave(int rowIndex)
+        {
+            DataGridViewRow previousRow = formElements.dgvResultsList.Rows[rowIndex];
+            if (formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
+            else if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+
+            }
+            else
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.White;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
         }
 
         public void CellContentClick(int rowIndex, int columnIndex)
@@ -442,7 +546,6 @@ namespace PMIS.Forms
             }
         }
 
-
         public bool CellBeginEdit(int rowIndex)
         {
             if ((formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value == null || bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0))
@@ -452,149 +555,18 @@ namespace PMIS.Forms
             return false;
         }
 
-        public void RowLeave(int rowIndex)
+        public void RowPostPaint(int rowIndex)
         {
-            DataGridViewRow previousRow = formElements.dgvResultsList.Rows[rowIndex];
-            if (formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
+            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
+
+            if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value == null)
             {
-                previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
-                previousRow.DefaultCellStyle.ForeColor = Color.Black;
-            }
-            else if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
-            {
-                previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
-                previousRow.DefaultCellStyle.ForeColor = Color.Black;
-
-            }
-            else
-            {
-                previousRow.DefaultCellStyle.BackColor = Color.White;
-                previousRow.DefaultCellStyle.ForeColor = Color.Black;
-            }
-        }
-
-        public void RowEnter(int rowIndex)
-        {
-            if (isLoaded)
-            {
-                DataGridViewRow selectedRow = formElements.dgvResultsList.Rows[rowIndex];
-                selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
-                selectedRow.DefaultCellStyle.ForeColor = Color.White;
-            }
-        }
-
-
-
-        public async Task EditEntity()
-        {
-            try
-            {
-                lstEditRequest = new List<TEntityEditRequestDto>();
-
-                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
+                foreach (DataGridViewCell cell in formElements.dgvResultsList.Rows[rowIndex].Cells)
                 {
-                    try
-                    {
-                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
-                        {
-                            TEntityEditRequestDto editRequest = new TEntityEditRequestDto();
-
-                            editRequest = EditMaping(row);
-                            lstEditRequest.Add(editRequest);
-                        }
-                    }
-                    catch (Exception) { }
-                }
-
-                //(bool isSuccess, IEnumerable<TEntityEditResponseDto> list) = await TEntityService.EditGroup(lstEditRequest);
-                bool isSuccess = await entityService.EditRange(lstEditRequest);
-                if (isSuccess)
-                {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                }
-                else
-                {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود");
+                    cell.ReadOnly = false;
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        public async Task LogicalDeleteEntity()
-        {
-            try
-            {
-
-                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await entityService.LogicalDeleteRange(lstLogicalDeleteRequest);
-                if (isSuccess)
-                {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                    lstLogicalDeleteRequest = new List<TEntityDeleteRequestDto>();
-                }
-                else
-                {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task PhysicalDeleteEntity()
-        {
-            try
-            {
-
-                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await entityService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
-                if (isSuccess)
-                {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                    lstPhysicalDeleteRequest = new List<TEntityDeleteRequestDto>();
-                }
-                else
-                {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task RecycleEntity()
-        {
-            try
-            {
-
-                //(bool isSuccess, IEnumerable<TEntityDeleteResponseDto> list) = await TEntityService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await entityService.RecycleRange(lstRecycleRequest);
-                if (isSuccess)
-                {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
-                    lstRecycleRequest = new List<TEntityDeleteRequestDto>();
-                }
-                else
-                {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
-        private void IndicatorIdCard_Load(object sender, EventArgs e)
-        {
-
+            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
         public TEntityAddRequestDto AddMaping(DataGridViewRow row)
@@ -646,6 +618,7 @@ namespace PMIS.Forms
             }
         }
     }
+
     public class BaseStandardFormElements
     {
         public DataGridView dgvFiltersList;

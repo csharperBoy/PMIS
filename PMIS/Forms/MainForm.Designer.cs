@@ -53,7 +53,7 @@
             tabPageOnIndicator = new TabPage();
             tabPageUserDefine = new TabPage();
             tabPageUserAccess = new TabPage();
-            tabPageIndicatorIdCard = new TabPage();
+            tabPageNormalForm = new TabPage();
             tabPageIndicatorAssignToCategory = new TabPage();
             tabPageCategoryAssignToIndicator = new TabPage();
             tabPageIndicatorAssignToUser = new TabPage();
@@ -258,15 +258,15 @@
             tabPageUserAccess.Text = "دسترسی‌های کاربران";
             tabPageUserAccess.UseVisualStyleBackColor = true;
             // 
-            // tabPageIndicatorIdCard
+            // tabPageNormalForm
             // 
-            tabPageIndicatorIdCard.Location = new Point(4, 24);
-            tabPageIndicatorIdCard.Name = "tabPageIndicatorIdCard";
-            tabPageIndicatorIdCard.Padding = new Padding(3);
-            tabPageIndicatorIdCard.Size = new Size(192, 0);
-            tabPageIndicatorIdCard.TabIndex = 1;
-            tabPageIndicatorIdCard.Text = "شناسنامه شاخص";
-            tabPageIndicatorIdCard.UseVisualStyleBackColor = true;
+            tabPageNormalForm.Location = new Point(4, 24);
+            tabPageNormalForm.Name = "tabPageNormalForm";
+            tabPageNormalForm.Padding = new Padding(3);
+            tabPageNormalForm.Size = new Size(192, 0);
+            tabPageNormalForm.TabIndex = 1;
+            tabPageNormalForm.Text = "شناسنامه شاخص";
+            tabPageNormalForm.UseVisualStyleBackColor = true;
             // 
             // tabPageIndicatorAssignToCategory
             // 
@@ -354,7 +354,7 @@
         private TabPage tabPageOnIndicator;
         private TabPage tabPageUserDefine;
         private TabPage tabPageUserAccess;
-        private TabPage tabPageIndicatorIdCard;
+        private TabPage tabPageNormalForm;
         private TabPage tabPageIndicatorAssignToCategory;
         private TabPage tabPageCategoryAssignToIndicator;
         private TabPage tabPageIndicatorAssignToUser;

@@ -2,7 +2,7 @@
 
 namespace PMIS.Forms
 {
-    partial class IndicatorIdCard
+    partial class NormalForm
     {
         /// <summary>
         /// Required designer variable.
@@ -180,7 +180,7 @@ namespace PMIS.Forms
             btnDownload.Text = "بارگیری";
             btnDownload.UseVisualStyleBackColor = true;
             // 
-            // IndicatorIdCard
+            // NormalForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -188,11 +188,11 @@ namespace PMIS.Forms
             Controls.Add(panelContent);
             Controls.Add(panelMenu);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "IndicatorIdCard";
+            Name = "NormalForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
-            Text = "IndicatorIdCard";
-            Load += IndicatorIdCard_Load;
+            Text = "NormalForm";
+            Load += NormalForm_Load;
             panelMenu.ResumeLayout(false);
             panelContent.ResumeLayout(false);
             panelResults.ResumeLayout(false);

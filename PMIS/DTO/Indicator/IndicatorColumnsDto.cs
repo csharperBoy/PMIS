@@ -13,16 +13,16 @@ namespace PMIS.DTO.Indicator
     {
         public override async Task Initialize(ILookUpValueService lookUpValueService)
         {
-            IEnumerable<LookUpDestinationSearchResponseDto>  lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
-                
+
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "کد",
                    Name = "Code",
                    DataPropertyName = "Code",
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                    Frozen = true,
                },
@@ -31,7 +31,7 @@ namespace PMIS.DTO.Indicator
                    HeaderText = "عنوان",
                    Name = "Title",
                    DataPropertyName = "Title",
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                    Frozen = true,
                },
@@ -43,7 +43,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewComboBoxColumn()
@@ -54,7 +54,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewComboBoxColumn()
@@ -65,7 +65,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewComboBoxColumn()
@@ -76,7 +76,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewComboBoxColumn()
@@ -87,7 +87,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewComboBoxColumn()
@@ -98,7 +98,7 @@ namespace PMIS.DTO.Indicator
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewTextBoxColumn()
@@ -106,7 +106,7 @@ namespace PMIS.DTO.Indicator
                    HeaderText = "فرمول",
                    Name = "Formula",
                    DataPropertyName = "Formula",
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewTextBoxColumn()
@@ -114,7 +114,7 @@ namespace PMIS.DTO.Indicator
                    HeaderText = "توضیحات",
                    Name = "Description",
                    DataPropertyName = "Description",
-                   ReadOnly = true,
+                   ReadOnly = false,
                    Visible = true,
                }
         });
@@ -228,8 +228,7 @@ namespace PMIS.DTO.Indicator
                    ReadOnly = true,
                    Visible = true,
                }
-        }); 
-           
+        });
         }
 
         public List<DataGridViewColumn> FilterColumns { get; set; } = new List<DataGridViewColumn>();
