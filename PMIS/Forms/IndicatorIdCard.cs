@@ -7,7 +7,6 @@ using PMIS.DTO.LookUp.Info;
 using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue;
 using PMIS.DTO.LookUpValue.Info;
-using PMIS.Forms.Generic;
 using PMIS.Helper;
 using PMIS.Models;
 using PMIS.Services;
@@ -18,6 +17,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,115 +25,85 @@ using System.Windows.Forms.VisualStyles;
 
 namespace PMIS.Forms
 {
-    public partial class IndicatorIdCard : BaseStandardForm<PmisContext,Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto,IndicatorEditRequestDto,IndicatorEditResponseDto,IndicatorDeleteRequestDto,IndicatorDeleteResponseDto,IndicatorSearchResponseDto, IndicatorColumnsDto, IIndicatorService>
+    public partial class IndicatorIdCard : Form
     {
-       
-        public IndicatorIdCard(IIndicatorService _entityService, ILookUpValueService _lookUpValueService) : base(_entityService, _lookUpValueService , new IndicatorColumnsDto(_lookUpValueService))
+        BaseStandardForm<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto, IIndicatorService> standard;
+
+        public IndicatorIdCard(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
-            //InitializeComponent();         
+            InitializeComponent();
+            CustomInitialize();
+            standard = new BaseStandardForm<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto, IIndicatorService>(_indicatorService, _lookUpValueService, new BaseStandardFormElements() { dgvFiltersList = dgvFiltersList, dgvResultsList = dgvResultsList, chbRecycle = chbRecycle});
         }
 
-        private async void btnSearch_Click(object sender, EventArgs e)
+        private void CustomInitialize()
         {
-            await SearchEntity();
+           
         }
-
-        
-
-        private async void btnApply_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                await EditEntity();
-                await LogicalDeleteEntity();
-                await PhysicalDeleteEntity();
-                await RecycleEntity();
-                await AddEntity();
-
-
-                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefreshVisuals();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
 
         private void IndicatorIdCard_Load(object sender, EventArgs e)
         {
 
         }
 
-        protected override IndicatorAddRequestDto AddMaping(DataGridViewRow row)
+        public void dgvResultsList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            try
-            {
-                IndicatorAddRequestDto addRequest = new IndicatorAddRequestDto();
-                try { addRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
-                try { addRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
-                try { addRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
-                try { addRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
-                try { addRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
-                return addRequest;
-            }
-            catch (Exception ex)
-            {
+            standard.RowPostPaint(e.RowIndex);
+        }
 
-                throw;
+        protected void dgvResultsList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            standard.CellContentClick(e.RowIndex, e.ColumnIndex);
+        }
+
+        protected void dgvResultsList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+        }
+
+        protected void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+
+        }
+
+        protected void dgvResultsList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (standard.CellBeginEdit(e.RowIndex))
+            {
+                e.Cancel = true;
             }
         }
 
-        protected override IndicatorEditRequestDto EditMaping(DataGridViewRow row)
+        protected void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            standard.RowLeave(e.RowIndex);
+        }
+
+        protected void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            standard.RowEnter(e.RowIndex);
+        }
+        private async void btnApply_Click(object sender, EventArgs e)
         {
             try
             {
-                IndicatorEditRequestDto editRequest = new IndicatorEditRequestDto();
-                try { editRequest.Id = int.Parse(row.Cells["Id"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.Code = row.Cells["Code"].Value?.ToString(); } catch (Exception ex) { }
-                try { editRequest.Title = row.Cells["Title"].Value?.ToString(); } catch (Exception ex) { }
-                try { editRequest.FkLkpFormId = int.Parse(row.Cells["FkLkpFormId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.FkLkpManualityId = int.Parse(row.Cells["FkLkpManualityId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.FkLkpUnitId = int.Parse(row.Cells["FkLkpUnitId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.FkLkpPeriodId = int.Parse(row.Cells["FkLkpPeriodId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.FkLkpMeasureId = int.Parse(row.Cells["FkLkpMeasureId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.FkLkpDesirabilityId = int.Parse(row.Cells["FkLkpDesirabilityId"].Value?.ToString()); } catch (Exception ex) { }
-                try { editRequest.Formula = row.Cells["Formula"].Value?.ToString(); } catch (Exception ex) { }
-                try { editRequest.Description = row.Cells["Description"].Value?.ToString(); } catch (Exception ex) { }
-                return editRequest;
+                await standard.EditEntity();
+                await standard.LogicalDeleteEntity();
+                await standard.PhysicalDeleteEntity();
+                await standard.RecycleEntity();
+                await standard.AddEntity();
+
+
+                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                standard.RefreshVisuals();
             }
             catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        protected override void CustomInitializeComponent()
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
-        }
-
-       
-       
-
-        public override async Task<(DataGridView, DataGridView, CheckBox)> SetDataControls()
-        {
-            try
-            {
-                return await Task.FromResult((dgvFiltersList, dgvResultsList, chbRecycle));
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            await standard.SearchEntity();
         }
     }
 }

@@ -38,15 +38,15 @@ namespace PMIS.Forms
         ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, AbstractGenericLogWithSerilogHandler _logHandler, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService)
+        public MainForm(IIndicatorService _indicatorService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
 
             InitializeComponent();
-            this.indicatorService = _indicatorService;
-            this.logHandler = _logHandler.CreateLogger();
-            this.lookUpService = _lookUpService;
-            this.lookUpDestinationService = _lookUpDestinationService;
-            this.lookUpValueService = _lookUpValueService;
+            indicatorService = _indicatorService;
+            lookUpService = _lookUpService;
+            lookUpValueService = _lookUpValueService;
+            lookUpDestinationService = _lookUpDestinationService;
+            logHandler = _logHandler.CreateLogger();
         }
 
         private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
@@ -76,7 +76,7 @@ namespace PMIS.Forms
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageIndicatorIdCard, new IndicatorIdCard(indicatorService,lookUpValueService));
+            AddNewTabPage(tabPageIndicatorIdCard, new IndicatorIdCard(indicatorService, lookUpValueService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)

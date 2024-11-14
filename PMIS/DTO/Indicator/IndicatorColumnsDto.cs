@@ -9,19 +9,11 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.Indicator
 {
-    public class IndicatorColumnsDto
+    public class IndicatorColumnsDto : GenericColumnsDto
     {
-        private ILookUpValueService lookUpValueService;
-        IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination;
-        public IndicatorColumnsDto(ILookUpValueService _lookUpValueService)
+        public override async Task Initialize(ILookUpValueService lookUpValueService)
         {
-            lookUpValueService = _lookUpValueService;
-            // Initialize()
-        }
-
-        public async Task Initialize()
-        {
-            lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+            IEnumerable<LookUpDestinationSearchResponseDto>  lstLookUpDestination = await lookUpValueService.GetList("Indicator");
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
                 
@@ -239,6 +231,7 @@ namespace PMIS.DTO.Indicator
         }); 
            
         }
+
         public List<DataGridViewColumn> FilterColumns { get; set; } = new List<DataGridViewColumn>();
         public List<DataGridViewColumn> ResultColumns { get; set; } = new List<DataGridViewColumn>();
 
