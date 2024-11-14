@@ -17,9 +17,10 @@ using Generic.Service.Normal.Composition.Contract;
 using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PMIS.DTO.Indicator;
 namespace PMIS.Forms.Generic
 {
-    public abstract class BaseStandardForm<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityService>
+    public abstract class BaseStandardForm<TContext, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto, TEntityService>
         : Form
        where TContext : DbContext
      where TEntity : class, new()
@@ -30,6 +31,7 @@ namespace PMIS.Forms.Generic
      where TEntityDeleteRequestDto : GenericDeleteRequestDto, new()
      where TEntityDeleteResponseDto : GenericDeleteResponseDto, new()
      where TEntitySearchResponseDto : class, new()
+     where TEntityColumnsDto : class
      where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
 
     {
@@ -46,16 +48,17 @@ namespace PMIS.Forms.Generic
         DataGridView dgvFiltersList;
         DataGridView dgvResultsList;
         CheckBox chbRecycle;
+        TEntityColumnsDto columns;
         #endregion
 
-        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService)
+        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, TEntityColumnsDto _columns)
         {
 
 
 
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
-
+            columns = _columns;
 
 
             CustomInitialize();
@@ -90,13 +93,14 @@ namespace PMIS.Forms.Generic
         public async void CustomInitialize()
         {
             CustomInitializeComponent();
+            columns.ini
             (dgvFiltersList, dgvResultsList, chbRecycle) = await SetDataControls();
             #region MyRegion1
 
             lstLogicalDeleteRequest = new List<TEntityDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<TEntityDeleteRequestDto>();
             lstRecycleRequest = new List<TEntityDeleteRequestDto>();
-            lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+            //lstLookUpDestination = await lookUpValueService.GetList("Indicator");
             dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 HeaderText = "ردیف",
@@ -106,8 +110,8 @@ namespace PMIS.Forms.Generic
                 Frozen = true,
             });
             #endregion
-            await GenerateDgvFilterColumnsInitialize();
-            await GenerateDgvResultColumnsInitialize();
+            GenerateDgvFilterColumnsInitialize();
+            GenerateDgvResultColumnsInitialize();
             FiltersInitialize();
             #region MyRegion2
 
@@ -168,9 +172,81 @@ namespace PMIS.Forms.Generic
             #endregion
             SearchEntity();
         }
-        protected abstract Task GenerateDgvResultColumnsInitialize();
+        protected void GenerateDgvResultColumnsInitialize()
+        {
+            try
+            {
+                dgvResultsList.AutoGenerateColumns = false;
 
-        protected abstract Task GenerateDgvFilterColumnsInitialize();
+                AddColumnsToGridView(dgvResultsList, "ResultColumns");
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        protected void GenerateDgvFilterColumnsInitialize()
+        {
+
+            try
+            {
+                dgvFiltersList.AllowUserToAddRows = false;
+
+                AddColumnsToGridView(dgvFiltersList, "FilterColumns");
+                //dgvFiltersList.Rows.Add();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        //void AddColumnsToGridView(DataGridView dgv, string propName)
+        //{
+        //    var entityFields = columns.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        //    var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains(propName));
+
+        //    DataGridViewColumn[] tempColumns = null;
+        //    if (fieldName != null)
+        //    {
+        //        fieldName.GetValue(tempColumns);
+        //    }
+        //    dgv.Columns.AddRange(tempColumns);
+        //}
+        void AddColumnsToGridView(DataGridView dgv, string propName)
+        {
+            // دریافت فیلدهای موجود در columns  
+            var entityFields = columns.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            // پیدا کردن فیلد با نام حاوی propName  
+            var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(propName));
+
+            // بررسی وجود فیلد  
+            if (fieldInfo != null)
+            {
+                // دریافت مقدار فیلد و تبدیل به آرایه DataGridViewColumn  
+                var tempColumns = fieldInfo.GetValue(columns) as DataGridViewColumn[];
+
+                // بررسی اینکه tempColumns null نیست  
+                if (tempColumns != null)
+                {
+                    dgv.Columns.AddRange(tempColumns);
+                }
+                else
+                {
+                  
+                }
+            }
+            else
+            {
+              
+            }
+        }
 
         protected async Task SearchEntity()
         {
@@ -196,7 +272,7 @@ namespace PMIS.Forms.Generic
             GenericSearchFilterDto filter = new GenericSearchFilterDto()
             {
                 InternalFilters = new List<GenericSearchFilterDto>(),
-                LogicalOperator =  LogicalOperator.And ,
+                LogicalOperator = LogicalOperator.And,
                 type = PhraseType.Parentheses,
             };
             foreach (DataGridViewRow row in dgvFiltersList.Rows)
@@ -204,13 +280,13 @@ namespace PMIS.Forms.Generic
                 GenericSearchFilterDto tempFilter = new GenericSearchFilterDto()
                 {
                     InternalFilters = new List<GenericSearchFilterDto>(),
-                    LogicalOperator = row.Index == 0 ? LogicalOperator.Begin: LogicalOperator.Or,
+                    LogicalOperator = row.Index == 0 ? LogicalOperator.Begin : LogicalOperator.Or,
                     type = PhraseType.Parentheses,
                 };
                 foreach (DataGridViewColumn column in dgvFiltersList.Columns)
                 {
                     var cellValue = row.Cells[column.Name].Value == null ? "" : row.Cells[column.Name].Value.ToString();
-                    if ((column is not DataGridViewComboBoxColumn  && !cellValue.IsNullOrEmpty()) || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
+                    if ((column is not DataGridViewComboBoxColumn && !cellValue.IsNullOrEmpty()) || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
                     {
                         tempFilter.InternalFilters.Add(new GenericSearchFilterDto()
                         {
@@ -291,7 +367,7 @@ namespace PMIS.Forms.Generic
                         if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
                         {
                             TEntityAddRequestDto addRequest = new TEntityAddRequestDto();
-                            
+
                             addRequest = AddMaping(row);
                             lstAddRequest.Add(addRequest);
                         }
