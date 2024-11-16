@@ -2,7 +2,7 @@
 
 namespace PMIS.Forms
 {
-    partial class ClaimOnIndicatorForm
+    partial class ClaimUserOnIndicatorForm
     {
         /// <summary>
         /// Required designer variable.

@@ -565,7 +565,7 @@ namespace PMIS.Forms.Generic
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimOnIndicatorForm frm = new ClaimOnIndicatorForm(claimUserOnIndicatorService, lookUpValueService);
+                 //   ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, lookUpValueService);
                 }
             }
         }

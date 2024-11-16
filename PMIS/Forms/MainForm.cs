@@ -1,33 +1,5 @@
-﻿using Generic.Base.Handler.Map;
-using Generic.Base.Handler.Map.Abstract;
-using Generic.Base.Handler.Map.Concrete;
-using Generic.Base.Handler.SystemException;
-using Generic.Base.Handler.SystemException.Abstract;
-using Generic.Base.Handler.SystemException.Concrete;
-using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using Generic.Service.DTO;
-using Generic.Repository;
-using Generic.Repository.Abstract;
-using Microsoft.EntityFrameworkCore;
-using PMIS.DTO.Indicator;
-using PMIS.DTO.LookUp;
-using PMIS.DTO.LookUpDestination;
-using PMIS.DTO.LookUpValue;
-using PMIS.DTO.LookUpValue.Info;
-using PMIS.Models;
-using PMIS.Repository;
-using PMIS.Services;
+﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using PMIS.Services.Contract;
-using Serilog.Core;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PMIS.Forms
 {
@@ -38,8 +10,9 @@ namespace PMIS.Forms
         ILookUpService lookUpService;
         ILookUpValueService lookUpValueService;
         ILookUpDestinationService lookUpDestinationService;
+        IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
 
             InitializeComponent();
@@ -48,6 +21,7 @@ namespace PMIS.Forms
             lookUpService = _lookUpService;
             lookUpValueService = _lookUpValueService;
             lookUpDestinationService = _lookUpDestinationService;
+            claimUserOnIndicatorService = _claimUserOnIndicatorService;
             logHandler = _logHandler.CreateLogger();
         }
 
@@ -68,7 +42,7 @@ namespace PMIS.Forms
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new ClaimOnIndicatorForm(userService, lookUpValueService));
+            AddNewTabPage(tabPageNormalForm, new ClaimUserOnIndicatorForm( claimUserOnIndicatorService, userService,indicatorService, lookUpValueService));
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
@@ -78,7 +52,7 @@ namespace PMIS.Forms
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new ClaimOnIndicatorForm(indicatorService, lookUpValueService));
+            AddNewTabPage(tabPageNormalForm, new IndicatorForm(indicatorService, lookUpValueService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
