@@ -27,15 +27,6 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد",
-                   Name = "PasswordHash",
-                   DataPropertyName = "PasswordHash",
-                   ReadOnly = false,
-                   Visible = true,
-                   Frozen = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
                    HeaderText = "نام کامل",
                    Name = "FullName",
                    DataPropertyName = "FullName",
@@ -98,6 +89,7 @@ namespace PMIS.DTO.User
                    ReadOnly = true,
                    Visible = true,
                    Frozen = true,
+                   
                },
                new DataGridViewTextBoxColumn()
                {
