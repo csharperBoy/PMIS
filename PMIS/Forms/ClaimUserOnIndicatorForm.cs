@@ -654,6 +654,7 @@ namespace PMIS.Forms
                         fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
                     }
                 }
+                addRequest = AfterAddMapping(addRequest);
                 return addRequest;
             }
             catch (Exception ex)
@@ -661,6 +662,12 @@ namespace PMIS.Forms
 
                 throw;
             }
+        }
+
+        private ClaimUserOnIndicatorAddRequestDto AfterAddMapping(ClaimUserOnIndicatorAddRequestDto addRequest)
+        {
+            addRequest.FkIndicatorId = fkId;
+            return addRequest;
         }
 
         private ClaimUserOnIndicatorEditRequestDto EditMaping(DataGridViewRow row)
@@ -677,6 +684,7 @@ namespace PMIS.Forms
                         fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);
                     }
                 }
+                editRequest = AfterEditMapping(editRequest);
                 return editRequest;
             }
             catch (Exception ex)
@@ -684,6 +692,12 @@ namespace PMIS.Forms
 
                 throw;
             }
+        }
+
+        private ClaimUserOnIndicatorEditRequestDto AfterEditMapping(ClaimUserOnIndicatorEditRequestDto addRequest)
+        {
+            addRequest.FkIndicatorId = fkId;
+            return addRequest;
         }
     }
 
