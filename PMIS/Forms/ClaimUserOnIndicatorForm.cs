@@ -115,7 +115,7 @@ namespace PMIS.Forms
         {
             // InitializeComponent();
             columns = new ClaimUserOnIndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService,indicatorService,userService,fkId);
+            await columns.Initialize(lookUpValueService,userService, indicatorService, fkId);
             lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();

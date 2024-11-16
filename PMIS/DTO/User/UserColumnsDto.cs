@@ -83,22 +83,53 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد",
-                   Name = "PasswordHash",
-                   DataPropertyName = "PasswordHash",
-                   ReadOnly = true,
-                   Visible = true,
-                   Frozen = true,
-                   
-               },
-               new DataGridViewTextBoxColumn()
-               {
                    HeaderText = "نام کامل",
                    Name = "FullName",
                    DataPropertyName = "FullName",
                    ReadOnly = true,
                    Visible = true,
                    Frozen = true,
+               },
+               new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "پسورد تمپ 1",
+                   Name = "PasswordHashTemp1",
+                   DataPropertyName = "PasswordHashTemp1",
+                   ReadOnly = true,
+                   Visible = true,
+                   Frozen = true,
+               },
+               new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "پسورد تمپ 2",
+                   Name = "PasswordHashTemp2",
+                   DataPropertyName = "PasswordHashTemp2",
+                   ReadOnly = true,
+                   Visible = true,
+               },
+               new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "پسورد",
+                   Name = "PasswordHash",
+                   DataPropertyName = "PasswordHash",
+                   ReadOnly = true,
+                   Visible = true,
+               },
+               new DataGridViewCheckBoxColumn()
+               {
+                   HeaderText = "پسورد",
+                   Name = "FlgEditPasswordHash",
+                   DataPropertyName = "FlgEditPasswordHash",
+                   ReadOnly = true,
+                   Visible = true,
+               },
+               new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "تلفن",
+                   Name = "Phone",
+                   DataPropertyName = "Phone",
+                   ReadOnly = true,
+                   Visible = true,
                },
                new DataGridViewComboBoxColumn()
                {
@@ -108,14 +139,6 @@ namespace PMIS.DTO.User
                    DisplayMember = "Display",
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar"),
-                   ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "تلفن",
-                   Name = "Phone",
-                   DataPropertyName = "Phone",
                    ReadOnly = true,
                    Visible = true,
                },

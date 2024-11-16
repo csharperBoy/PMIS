@@ -13,7 +13,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
 {
     public class ClaimUserOnIndicatorColumnsDto //: GenericColumnsDto
     {
-        public async Task Initialize(ILookUpValueService lookUpValueService, IIndicatorService indicatorService, IUserService userService, int fkId)
+        public async Task Initialize(ILookUpValueService lookUpValueService, IUserService userService, IIndicatorService indicatorService, int fkId)
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimUserOnIndicator");
             (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
@@ -46,7 +46,6 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = false,
                    Visible = true,
-
                },
                 new DataGridViewComboBoxColumn()
                {
@@ -78,7 +77,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    Visible = true,
                }
         });
-            
+
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
                 new DataGridViewTextBoxColumn()
@@ -100,9 +99,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = true,
                    Visible = true,
-
                },
-
                new DataGridViewComboBoxColumn()
                {
                    HeaderText = "کاربر",
@@ -113,7 +110,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource = lstUser,
                    ReadOnly = true,
                    Visible = true,
-               },new DataGridViewComboBoxColumn()
+               },
+                new DataGridViewComboBoxColumn()
                {
                    HeaderText = "شاخص",
                    Name = "FkIndicatorId",

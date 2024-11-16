@@ -237,7 +237,6 @@ namespace PMIS.DTO.Indicator
                     ReadOnly = false,
                     Visible = true,
                     UseColumnTextForButtonValue = true,
-
                 }
         });
         }

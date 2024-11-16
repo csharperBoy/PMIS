@@ -11,6 +11,11 @@ using PMIS.Services;
 using PMIS.Services.Contract;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows.Forms;
+using PMIS.Bases;
+using System.Net;
+using System.Security;
+using System.Runtime.InteropServices;
 
 namespace PMIS.Forms
 {
@@ -72,12 +77,12 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            RowEnter(e.RowIndex);
+            RowEnter(e.RowIndex, e.ColumnIndex);
         }
 
         private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
-            RowLeave(e.RowIndex);
+            RowLeave(e.RowIndex, e.ColumnIndex);
         }
 
         private void dgvResultsList_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -87,10 +92,15 @@ namespace PMIS.Forms
 
         private void dgvResultsList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (CellBeginEdit(e.RowIndex))
+            if (CellBeginEdit(e.RowIndex, e.ColumnIndex))
             {
                 e.Cancel = true;
             }
+        }
+
+        private void dgvResultsList_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            CellValidated(e.RowIndex, e.ColumnIndex);
         }
 
         private void dgvResultsList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -100,6 +110,7 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
+
         }
 
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -505,7 +516,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowEnter(int rowIndex)
+        public void RowEnter(int rowIndex, int columnIndex)
         {
             if (isLoaded)
             {
@@ -515,7 +526,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowLeave(int rowIndex)
+        public void RowLeave(int rowIndex, int columnIndex)
         {
             DataGridViewRow previousRow = dgvResultsList.Rows[rowIndex];
             if (dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
@@ -608,19 +619,34 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                   // ClaimIndicatorOnUserForm frm = new ClaimIndicatorOnUserForm(claimUserOnIndicatorService, userService, UserService, lookUpValueService, tempId);
+                    // ClaimIndicatorOnUserForm frm = new ClaimIndicatorOnUserForm(claimUserOnIndicatorService, userService, UserService, lookUpValueService, tempId);
                     //frm.Show();
                 }
             }
         }
 
-        public bool CellBeginEdit(int rowIndex)
+        public bool CellBeginEdit(int rowIndex, int columnIndex)
         {
             if ((dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value == null || bool.Parse(dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0))
             {
                 return true;
             }
             return false;
+        }
+
+        private void CellValidated(int rowIndex, int columnIndex)
+        {
+            if (dgvResultsList.Columns[columnIndex].Name == "PasswordHashTemp1" && rowIndex >= 0)
+            {
+                if (dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value != null && (bool)dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value == false)
+                {
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value;
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value = new string('*', dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].ToString().Length);
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value + "+" + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
+                    dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value = true;
+                }
+            }
         }
 
         public void RowPostPaint(int rowIndex)
@@ -635,6 +661,12 @@ namespace PMIS.Forms
                 }
             }
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
+
+            if (dgvResultsList.Rows[rowIndex].Cells["UserName"].Value != null && dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value != null)
+            {
+                dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value = new string('*', dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].ToString().Length);
+                dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
+            }
         }
 
         private UserAddRequestDto AddMaping(DataGridViewRow row)

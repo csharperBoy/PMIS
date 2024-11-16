@@ -50,13 +50,15 @@ namespace PMIS.Forms
         private ILookUpValueService lookUpValueService;
         private AbstractFormElements NormalFormElements;
         private bool isLoaded = false;
+        private int fkId;
         #endregion
 
-        public BaseDetailForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, AbstractFormElements _NormalFormElements)
+        public BaseDetailForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, AbstractFormElements _NormalFormElements, int _fkId)
         {
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
             NormalFormElements = _NormalFormElements;
+            fkId = _fkId;
 
             CustomInitialize();
         }
@@ -560,7 +562,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    // NormalForm frm = new NormalForm(indicatorService, lookUpValueService);
+                    // NormalForm frm = new NormalForm(indicatorService, lookUpValueService, tempId);
                 }
             }
         }
@@ -603,6 +605,7 @@ namespace PMIS.Forms
                         fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
                     }
                 }
+                addRequest = AfterAddMapping(addRequest);
                 return addRequest;
             }
             catch (Exception ex)
@@ -610,6 +613,11 @@ namespace PMIS.Forms
 
                 throw;
             }
+        }
+
+        private TEntityAddRequestDto AfterAddMapping(TEntityAddRequestDto addRequest)
+        {
+            throw new NotImplementedException();
         }
 
         private TEntityEditRequestDto EditMaping(DataGridViewRow row)
@@ -626,6 +634,7 @@ namespace PMIS.Forms
                         fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);
                     }
                 }
+                editRequest = AfterEditMapping(editRequest);
                 return editRequest;
             }
             catch (Exception ex)
@@ -633,6 +642,11 @@ namespace PMIS.Forms
 
                 throw;
             }
+        }
+
+        private TEntityEditRequestDto AfterEditMapping(TEntityEditRequestDto editRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }
