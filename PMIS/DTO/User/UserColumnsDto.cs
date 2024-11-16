@@ -92,7 +92,7 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد تمپ 1",
+                   HeaderText = "پسورد ستاره‌ای",
                    Name = "PasswordHashTemp1",
                    DataPropertyName = "PasswordHashTemp1",
                    ReadOnly = true,
@@ -101,7 +101,7 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد تمپ 2",
+                   HeaderText = "پسورد ورودی",
                    Name = "PasswordHashTemp2",
                    DataPropertyName = "PasswordHashTemp2",
                    ReadOnly = true,
