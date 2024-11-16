@@ -441,7 +441,6 @@ namespace PMIS.Forms
         {
             try
             {
-
                 //(bool isSuccess, IEnumerable<IndicatorDeleteResponseDto> list) = await indicatorService.LogicalDeleteGroup(lstDeleteRequest);
                 bool isSuccess = await indicatorService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
