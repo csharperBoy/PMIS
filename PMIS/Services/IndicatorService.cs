@@ -25,5 +25,21 @@ namespace PMIS.Services
         public IndicatorService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, Indicator, IndicatorEditRequestDto, IndicatorEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, Indicator, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, Indicator, IndicatorSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
         }
+
+        public Task<IEnumerable<IndicatorSearchResponseDto>> SearchByExternaFilter(IEnumerable<IndicatorSearchResponseDto> list, int userId)
+        {
+            try
+            {
+                var filteredList = list
+                    .Where(l => l.ClaimUserOnIndicatorsInfo.Any(c => c.FkUserId == userId));
+
+                return Task.FromResult(filteredList);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

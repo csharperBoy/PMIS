@@ -51,6 +51,7 @@ namespace PMIS.Forms
                 //    context.Dispose();
                 //};
                 GlobalVariable.username = "Admin";
+                GlobalVariable.userId = 13;
                 this.Hide();
 
 

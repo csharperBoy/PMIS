@@ -23,7 +23,11 @@ namespace PMIS.DTO.IndicatorValue.Info
         public decimal Value { get; set; }
 
         public string? Description { get; set; }
+        public int FkIndicatorId { get; set; }
 
-      
+        public int FkLkpValueTypeId { get; set; }
+
+        public int FkLkpShiftId { get; set; }
+
     }
 }

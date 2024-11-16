@@ -13,6 +13,6 @@ namespace PMIS.Services.Contract
 {
     public interface IIndicatorService : IGenericNormalService<Indicator,IndicatorAddRequestDto,IndicatorAddResponseDto,IndicatorEditRequestDto,IndicatorEditResponseDto,IndicatorDeleteRequestDto,IndicatorDeleteResponseDto,IndicatorSearchResponseDto>
     {
-         
+        Task<IEnumerable<IndicatorSearchResponseDto>> SearchByExternaFilter(IEnumerable<IndicatorSearchResponseDto> list , int userId);
     }
 }
