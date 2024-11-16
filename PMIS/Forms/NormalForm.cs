@@ -8,17 +8,20 @@ namespace PMIS.Forms
     public partial class NormalForm : Form
     {
         private AbstractBaseStandardForm standard;
+        public readonly NormalFormElements NormalFormElements;
 
         public NormalForm(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
-            standard = new BaseStandardForm<IIndicatorService, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto>(_indicatorService, _lookUpValueService, new BaseStandardFormElements() { dgvFiltersList = dgvFiltersList, dgvResultsList = dgvResultsList, chbRecycle = chbRecycle });
+            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseStandardForm<IIndicatorService, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto>(_indicatorService, _lookUpValueService, NormalFormElements);
         }
 
         public NormalForm(IUserService _userService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
-            standard = new BaseStandardForm<IUserService, User, UserAddRequestDto, UserAddResponseDto, UserEditRequestDto, UserEditResponseDto, UserDeleteRequestDto, UserDeleteResponseDto, UserSearchResponseDto, UserColumnsDto>(_userService, _lookUpValueService, new BaseStandardFormElements() { dgvFiltersList = dgvFiltersList, dgvResultsList = dgvResultsList, chbRecycle = chbRecycle });
+            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseStandardForm<IUserService, User, UserAddRequestDto, UserAddResponseDto, UserEditRequestDto, UserEditResponseDto, UserDeleteRequestDto, UserDeleteResponseDto, UserSearchResponseDto, UserColumnsDto>(_userService, _lookUpValueService, NormalFormElements);
         }
 
         private void NormalForm_Load(object sender, EventArgs e)
@@ -85,6 +88,20 @@ namespace PMIS.Forms
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
 
+        }
+    }
+
+    public class NormalFormElements
+    {
+        public readonly DataGridView dgvFiltersList;
+        public readonly DataGridView dgvResultsList;
+        public readonly CheckBox chbRecycle;
+
+        public NormalFormElements(DataGridView _dgvFiltersList, DataGridView _dgvResultsList, CheckBox _chbRecycle)
+        {
+            dgvFiltersList = _dgvFiltersList;
+            dgvResultsList = _dgvResultsList;
+            chbRecycle = _chbRecycle;
         }
     }
 }

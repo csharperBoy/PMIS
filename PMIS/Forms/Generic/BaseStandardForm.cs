@@ -46,15 +46,15 @@ namespace PMIS.Forms
         private List<TEntityDeleteRequestDto> lstRecycleRequest;
         private TEntityColumnsDto columns;
         private ILookUpValueService lookUpValueService;
-        private BaseStandardFormElements formElements;
+        private NormalFormElements NormalFormElements;
         private bool isLoaded = false;
         #endregion
 
-        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, BaseStandardFormElements _formElements)
+        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, NormalFormElements _NormalFormElements)
         {
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
-            formElements = _formElements;
+            NormalFormElements = _NormalFormElements;
 
             CustomInitialize();
         }
@@ -77,9 +77,9 @@ namespace PMIS.Forms
         {
             try
             {
-                formElements.dgvFiltersList.AllowUserToAddRows = false;
-                AddColumnsToGridView(formElements.dgvFiltersList, "FilterColumns");
-                formElements.dgvFiltersList.Rows.Add();
+                NormalFormElements.dgvFiltersList.AllowUserToAddRows = false;
+                AddColumnsToGridView(NormalFormElements.dgvFiltersList, "FilterColumns");
+                NormalFormElements.dgvFiltersList.Rows.Add();
             }
             catch (Exception ex)
             {
@@ -91,8 +91,8 @@ namespace PMIS.Forms
         {
             try
             {
-                formElements.dgvResultsList.AutoGenerateColumns = false;
-                formElements.dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
+                NormalFormElements.dgvResultsList.AutoGenerateColumns = false;
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewTextBoxColumn()
                 {
                     HeaderText = "ردیف",
                     Name = "RowNumber",
@@ -100,8 +100,8 @@ namespace PMIS.Forms
                     Visible = true,
                     Frozen = true,
                 });
-                AddColumnsToGridView(formElements.dgvResultsList, "ResultColumns");
-                formElements.dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
+                AddColumnsToGridView(NormalFormElements.dgvResultsList, "ResultColumns");
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
                 {
                     HeaderText = "حذف شده",
                     Name = "FlgLogicalDelete",
@@ -110,7 +110,7 @@ namespace PMIS.Forms
                     Visible = false,
                     IndeterminateValue = false
                 });
-                formElements.dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewCheckBoxColumn()
                 {
                     HeaderText = "ویرایش شده",
                     Name = "FlgEdited",
@@ -118,7 +118,7 @@ namespace PMIS.Forms
                     Visible = false,
                     IndeterminateValue = false
                 });
-                formElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
                 {
                     HeaderText = "",
                     Name = "Edit",
@@ -127,7 +127,7 @@ namespace PMIS.Forms
                     Visible = true,
                     UseColumnTextForButtonValue = true,
                 });
-                formElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
                 {
                     HeaderText = "",
                     Name = "LogicalDelete",
@@ -136,7 +136,7 @@ namespace PMIS.Forms
                     Visible = true,
                     UseColumnTextForButtonValue = true,
                 });
-                formElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
                 {
                     HeaderText = "",
                     Name = "Recycle",
@@ -146,7 +146,7 @@ namespace PMIS.Forms
                     UseColumnTextForButtonValue = true,
 
                 });
-                formElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
+                NormalFormElements.dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
                 {
                     HeaderText = "",
                     Name = "PhysicalDelete",
@@ -178,7 +178,7 @@ namespace PMIS.Forms
 
         private void FiltersInitialize()
         {
-            foreach (DataGridViewColumn column in formElements.dgvFiltersList.Columns)
+            foreach (DataGridViewColumn column in NormalFormElements.dgvFiltersList.Columns)
             {
                 if (column is DataGridViewComboBoxColumn comboBoxColumn)
                 {
@@ -199,13 +199,13 @@ namespace PMIS.Forms
         {
             try
             {
-                formElements.dgvResultsList.Columns["Edit"].Visible = !formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["LogicalDelete"].Visible = !formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["Recycle"].Visible = formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.Columns["PhysicalDelete"].Visible = formElements.chbRecycle.Checked;
-                formElements.dgvResultsList.AllowUserToAddRows = !formElements.chbRecycle.Checked;
+                NormalFormElements.dgvResultsList.Columns["Edit"].Visible = !NormalFormElements.chbRecycle.Checked;
+                NormalFormElements.dgvResultsList.Columns["LogicalDelete"].Visible = !NormalFormElements.chbRecycle.Checked;
+                NormalFormElements.dgvResultsList.Columns["Recycle"].Visible = NormalFormElements.chbRecycle.Checked;
+                NormalFormElements.dgvResultsList.Columns["PhysicalDelete"].Visible = NormalFormElements.chbRecycle.Checked;
+                NormalFormElements.dgvResultsList.AllowUserToAddRows = !NormalFormElements.chbRecycle.Checked;
 
-                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
+                foreach (DataGridViewRow row in NormalFormElements.dgvResultsList.Rows)
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                     row.DefaultCellStyle.ForeColor = Color.Black;
@@ -213,9 +213,9 @@ namespace PMIS.Forms
                     row.Cells["FlgEdited"].Value = false;
 
                 }
-                if (formElements.dgvResultsList.Rows.Count > 0)
+                if (NormalFormElements.dgvResultsList.Rows.Count > 0)
                 {
-                    formElements.dgvResultsList.CurrentCell = formElements.dgvResultsList.Rows[0].Cells[0];
+                    NormalFormElements.dgvResultsList.CurrentCell = NormalFormElements.dgvResultsList.Rows[0].Cells[0];
                 }
             }
             catch (Exception)
@@ -241,7 +241,7 @@ namespace PMIS.Forms
             searchRequest.filters.Add(new GenericSearchFilterDto()
             {
                 columnName = "FlgLogicalDelete",
-                value = formElements.chbRecycle.Checked.ToString(),
+                value = NormalFormElements.chbRecycle.Checked.ToString(),
                 LogicalOperator = LogicalOperator.Begin,
                 operation = FilterOperator.Equals,
                 type = PhraseType.Condition,
@@ -252,7 +252,7 @@ namespace PMIS.Forms
                 LogicalOperator = LogicalOperator.And,
                 type = PhraseType.Parentheses,
             };
-            foreach (DataGridViewRow row in formElements.dgvFiltersList.Rows)
+            foreach (DataGridViewRow row in NormalFormElements.dgvFiltersList.Rows)
             {
                 GenericSearchFilterDto tempFilter = new GenericSearchFilterDto()
                 {
@@ -260,7 +260,7 @@ namespace PMIS.Forms
                     LogicalOperator = row.Index == 0 ? LogicalOperator.Begin : LogicalOperator.Or,
                     type = PhraseType.Parentheses,
                 };
-                foreach (DataGridViewColumn column in formElements.dgvFiltersList.Columns)
+                foreach (DataGridViewColumn column in NormalFormElements.dgvFiltersList.Columns)
                 {
                     var cellValue = row.Cells[column.Name].Value == null ? "" : row.Cells[column.Name].Value.ToString();
                     if ((column is not DataGridViewComboBoxColumn && !cellValue.IsNullOrEmpty()) || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
@@ -286,12 +286,12 @@ namespace PMIS.Forms
             {
                 if (list.Count() == 0)
                 {
-                    formElements.dgvResultsList.DataSource = null;
+                    NormalFormElements.dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!");
                 }
                 else
                 {
-                    formElements.dgvResultsList.DataSource = new BindingList<TEntitySearchResponseDto>(list.ToList());
+                    NormalFormElements.dgvResultsList.DataSource = new BindingList<TEntitySearchResponseDto>(list.ToList());
                 }
             }
             else
@@ -308,7 +308,7 @@ namespace PMIS.Forms
             {
                 lstAddRequest = new List<TEntityAddRequestDto>();
 
-                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
+                foreach (DataGridViewRow row in NormalFormElements.dgvResultsList.Rows)
                 {
                     try
                     {
@@ -354,7 +354,7 @@ namespace PMIS.Forms
             {
                 lstEditRequest = new List<TEntityEditRequestDto>();
 
-                foreach (DataGridViewRow row in formElements.dgvResultsList.Rows)
+                foreach (DataGridViewRow row in NormalFormElements.dgvResultsList.Rows)
                 {
                     try
                     {
@@ -459,7 +459,7 @@ namespace PMIS.Forms
         {
             if (isLoaded)
             {
-                DataGridViewRow selectedRow = formElements.dgvResultsList.Rows[rowIndex];
+                DataGridViewRow selectedRow = NormalFormElements.dgvResultsList.Rows[rowIndex];
                 selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
                 selectedRow.DefaultCellStyle.ForeColor = Color.White;
             }
@@ -467,13 +467,13 @@ namespace PMIS.Forms
 
         public override void RowLeave(int rowIndex)
         {
-            DataGridViewRow previousRow = formElements.dgvResultsList.Rows[rowIndex];
-            if (formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
+            DataGridViewRow previousRow = NormalFormElements.dgvResultsList.Rows[rowIndex];
+            if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
             {
                 previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
             }
-            else if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
+            else if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
             {
                 previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
@@ -490,21 +490,21 @@ namespace PMIS.Forms
         {
             if (rowIndex == -1)
                 return;
-            if (formElements.dgvResultsList.Rows[rowIndex].IsNewRow)
+            if (NormalFormElements.dgvResultsList.Rows[rowIndex].IsNewRow)
                 return;
-            if (formElements.dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
+            if (NormalFormElements.dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
             {
-                var row = formElements.dgvResultsList.Rows[rowIndex];
+                var row = NormalFormElements.dgvResultsList.Rows[rowIndex];
                 foreach (DataGridViewCell cell in row.Cells)
                 {
-                    formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value = true;
+                    NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value = true;
                     cell.ReadOnly = false;
                 }
             }
-            else if (formElements.dgvResultsList.Columns[columnIndex].Name == "LogicalDelete" && rowIndex >= 0)
+            else if (NormalFormElements.dgvResultsList.Columns[columnIndex].Name == "LogicalDelete" && rowIndex >= 0)
             {
-                var row = formElements.dgvResultsList.Rows[rowIndex];
-                if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = NormalFormElements.dgvResultsList.Rows[rowIndex];
+                if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
                     TEntityDeleteRequestDto deleteRequest = new TEntityDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -512,17 +512,17 @@ namespace PMIS.Forms
 
                     if (fieldName != null)
                     {
-                        fieldName.SetValue(deleteRequest, int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
+                        fieldName.SetValue(deleteRequest, int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
                     }
                     lstLogicalDeleteRequest.Add(deleteRequest);
-                    formElements.dgvResultsList.Rows.RemoveAt(rowIndex);
+                    NormalFormElements.dgvResultsList.Rows.RemoveAt(rowIndex);
                 }
             }
 
-            else if (formElements.dgvResultsList.Columns[columnIndex].Name == "PhysicalDelete" && rowIndex >= 0)
+            else if (NormalFormElements.dgvResultsList.Columns[columnIndex].Name == "PhysicalDelete" && rowIndex >= 0)
             {
-                var row = formElements.dgvResultsList.Rows[rowIndex];
-                if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = NormalFormElements.dgvResultsList.Rows[rowIndex];
+                if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
                     TEntityDeleteRequestDto deleteRequest = new TEntityDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -530,17 +530,17 @@ namespace PMIS.Forms
 
                     if (fieldName != null)
                     {
-                        fieldName.SetValue(deleteRequest, int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
+                        fieldName.SetValue(deleteRequest, int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
                     }
                     lstPhysicalDeleteRequest.Add(deleteRequest);
 
-                    formElements.dgvResultsList.Rows.RemoveAt(rowIndex);
+                    NormalFormElements.dgvResultsList.Rows.RemoveAt(rowIndex);
                 }
             }
-            else if (formElements.dgvResultsList.Columns[columnIndex].Name == "Recycle" && rowIndex >= 0)
+            else if (NormalFormElements.dgvResultsList.Columns[columnIndex].Name == "Recycle" && rowIndex >= 0)
             {
-                var row = formElements.dgvResultsList.Rows[rowIndex];
-                if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
+                var row = NormalFormElements.dgvResultsList.Rows[rowIndex];
+                if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0)
                 {
                     TEntityDeleteRequestDto deleteRequest = new TEntityDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -548,18 +548,18 @@ namespace PMIS.Forms
 
                     if (fieldName != null)
                     {
-                        fieldName.SetValue(deleteRequest, int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
+                        fieldName.SetValue(deleteRequest, int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()));
                     }
                     lstRecycleRequest.Add(deleteRequest);
 
-                    formElements.dgvResultsList.Rows.RemoveAt(rowIndex);
+                    NormalFormElements.dgvResultsList.Rows.RemoveAt(rowIndex);
                 }
             }
         }
 
         public override bool CellBeginEdit(int rowIndex)
         {
-            if ((formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value == null || bool.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0))
+            if ((NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value == null || bool.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()) == false) && (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) != 0))
             {
                 return true;
             }
@@ -568,16 +568,16 @@ namespace PMIS.Forms
 
         public override void RowPostPaint(int rowIndex)
         {
-            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
+            NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
 
-            if (formElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value == null)
+            if (NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["Id"].Value == null)
             {
-                foreach (DataGridViewCell cell in formElements.dgvResultsList.Rows[rowIndex].Cells)
+                foreach (DataGridViewCell cell in NormalFormElements.dgvResultsList.Rows[rowIndex].Cells)
                 {
                     cell.ReadOnly = false;
                 }
             }
-            formElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
+            NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
         private TEntityAddRequestDto AddMaping(DataGridViewRow row)
@@ -587,7 +587,7 @@ namespace PMIS.Forms
                 TEntityAddRequestDto addRequest = new TEntityAddRequestDto();
 
                 var entityFields = addRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                foreach (DataGridViewColumn column in formElements.dgvResultsList.Columns)
+                foreach (DataGridViewColumn column in NormalFormElements.dgvResultsList.Columns)
                 {
                     var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
                     if (fieldInfo != null)
@@ -610,7 +610,7 @@ namespace PMIS.Forms
             {
                 TEntityEditRequestDto editRequest = new TEntityEditRequestDto();
                 var entityFields = editRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                foreach (DataGridViewColumn column in formElements.dgvResultsList.Columns)
+                foreach (DataGridViewColumn column in NormalFormElements.dgvResultsList.Columns)
                 {
                     var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
                     if (fieldInfo != null)
@@ -626,12 +626,5 @@ namespace PMIS.Forms
                 throw;
             }
         }
-    }
-
-    public class BaseStandardFormElements
-    {
-        public DataGridView dgvFiltersList;
-        public DataGridView dgvResultsList;
-        public CheckBox chbRecycle;
     }
 }
