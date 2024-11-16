@@ -13,7 +13,7 @@ public partial class User
 
     public string FullName { get; set; } = null!;
 
-    public int FkLkpWorkCalenarId { get; set; }
+    public int FkLkpWorkCalendarId { get; set; }
 
     public string? Phone { get; set; }
 
@@ -27,5 +27,5 @@ public partial class User
 
     public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
-    public virtual LookUpValue FkLkpWorkCalenar { get; set; } = null!;
+    public virtual LookUpValue FkLkpWorkCalendar { get; set; } = null!;
 }

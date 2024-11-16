@@ -481,7 +481,7 @@ namespace PMIS.Bases
                     #region PrimaryUsers
                     //add user
                     //------------------------------------
-                    user.Add(new Models.User { UserName = "Admin", PasswordHash = Hasher.HasherHMACSHA512.Hash("Admin+123"), FullName = "فرمانروا", FkLkpWorkCalenarId = context.LookUpValues.Where(x => x.Value == "Nothing" && x.FkLookUp.Code == "LkpWorkCalendar").First().Id });
+                    user.Add(new Models.User { UserName = "Admin", PasswordHash = Hasher.HasherHMACSHA512.Hash("Admin+123"), FullName = "فرمانروا", FkLkpWorkCalendarId = context.LookUpValues.Where(x => x.Value == "Nothing" && x.FkLookUp.Code == "LkpWorkCalendar").First().Id });
                     context.Users.AddRange(user);
                     context.SaveChanges();
                     //------------------------------------

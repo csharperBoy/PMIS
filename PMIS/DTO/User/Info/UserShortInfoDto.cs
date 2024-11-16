@@ -19,7 +19,7 @@ namespace PMIS.DTO.User.Info
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             this.ClaimOnSystemsInfo = await Task.WhenAll(baseModel.ClaimOnSystems.Select(v => (new ClaimOnSystemTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
 
-            this.FkLkpWorkCalenarInfo = await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLkpWorkCalenar);
+            this.FkLkpWorkCalendarInfo = await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLkpWorkCalendar);
             this.ClaimUserOnIndicatorsInfo = await Task.WhenAll(baseModel.ClaimUserOnIndicators.Select(d => (new ClaimUserOnIndicatorTinyInfoDto()).extraMapFromBaseModel(d)).ToList());
 
             return this;
@@ -28,6 +28,6 @@ namespace PMIS.DTO.User.Info
 
         public virtual ICollection<ClaimUserOnIndicatorTinyInfoDto> ClaimUserOnIndicatorsInfo { get; set; } = new List<ClaimUserOnIndicatorTinyInfoDto>();
 
-        public virtual LookUpValueTinyInfoDto FkLkpWorkCalenarInfo { get; set; } = null!;
+        public virtual LookUpValueTinyInfoDto FkLkpWorkCalendarInfo { get; set; } = null!;
     }
 }

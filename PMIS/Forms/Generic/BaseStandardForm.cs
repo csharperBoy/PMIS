@@ -589,7 +589,7 @@ namespace PMIS.Forms
                 var entityFields = addRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in NormalFormElements.dgvResultsList.Columns)
                 {
-                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
+                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Equals("<" + column.Name + ">k__BackingField"));
                     if (fieldInfo != null)
                     {
                         fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
@@ -612,7 +612,7 @@ namespace PMIS.Forms
                 var entityFields = editRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in NormalFormElements.dgvResultsList.Columns)
                 {
-                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Contains(column.Name));
+                    var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Equals("<" + column.Name + ">k__BackingField"));
                     if (fieldInfo != null)
                     {
                         fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);

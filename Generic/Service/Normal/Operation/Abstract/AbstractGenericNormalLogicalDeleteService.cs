@@ -4,6 +4,7 @@ using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
 using Generic.Repository.Abstract;
 using Generic.Service.Normal.Operation.Contract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                         var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains( "FlgLogicalDelete"));
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "FlgLogicalDelete" + ">k__BackingField"));
 
                         if (fieldName != null)
                         {
@@ -111,7 +112,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                     var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains( "FlgLogicalDelete"));
+                    var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "FlgLogicalDelete" + ">k__BackingField"));
 
                     if (fieldName != null)
                     {
@@ -156,7 +157,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                         entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                         var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains("FlgLogicalDelete"));
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "FlgLogicalDelete" + ">k__BackingField"));
 
                         if (fieldName != null)
                         {
@@ -210,7 +211,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     entity = await mapper.Map<TEntityDeleteRequestDto, TEntity>(req);
 
                     var entityFields = entity.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    var fieldName = entityFields.FirstOrDefault(f => f.Name.Contains("FlgLogicalDelete"));
+                    var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "FlgLogicalDelete" + ">k__BackingField"));
 
                     if (fieldName != null)
                     {

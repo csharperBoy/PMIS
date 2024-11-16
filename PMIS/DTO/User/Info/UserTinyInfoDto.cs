@@ -29,6 +29,9 @@ namespace PMIS.DTO.User.Info
 
         public string? Description { get; set; }
 
-       
+
+        public int FkLkpWorkCalendarId { get; set; }
+
+
     }
 }

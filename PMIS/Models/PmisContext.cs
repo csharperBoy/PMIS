@@ -233,7 +233,6 @@ public partial class PmisContext : DbContext
             entity.ToTable("User");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.FkLkpWorkCalenarId).HasColumnName("FkLkpWorkCalenarID");
             entity.Property(e => e.PasswordHash).IsUnicode(false);
             entity.Property(e => e.Phone)
                 .HasMaxLength(13)
@@ -241,8 +240,8 @@ public partial class PmisContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.UserName).IsUnicode(false);
 
-            entity.HasOne(d => d.FkLkpWorkCalenar).WithMany(p => p.Users)
-                .HasForeignKey(d => d.FkLkpWorkCalenarId)
+            entity.HasOne(d => d.FkLkpWorkCalendar).WithMany(p => p.Users)
+                .HasForeignKey(d => d.FkLkpWorkCalendarId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_User_LookUpValue");
         });
