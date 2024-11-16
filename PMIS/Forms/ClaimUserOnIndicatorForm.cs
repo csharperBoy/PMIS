@@ -28,17 +28,18 @@ namespace PMIS.Forms
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IUserService userService;
         private IIndicatorService indicatorService;
+        private int fkId;
         private bool isLoaded = false;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService)
+        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService,int _fkId)
         {
             InitializeComponent();
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
-
+            fkId = _fkId;
             CustomInitialize();
         }
 
@@ -114,7 +115,7 @@ namespace PMIS.Forms
         {
             // InitializeComponent();
             columns = new ClaimUserOnIndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService);
+            await columns.Initialize(lookUpValueService,indicatorService,userService,fkId);
             lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
@@ -131,6 +132,7 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
+                ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value =((IndicatorSearchResponseDto) ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
             }
             catch (Exception ex)
             {

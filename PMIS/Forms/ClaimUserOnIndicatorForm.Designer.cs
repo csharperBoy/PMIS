@@ -31,6 +31,8 @@ namespace PMIS.Forms
         private void InitializeComponent()
         {
             panelMenu = new Panel();
+            btnDownload = new Button();
+            btnUpload = new Button();
             btnApply = new Button();
             chbRecycle = new CheckBox();
             btnSearch = new Button();
@@ -39,8 +41,6 @@ namespace PMIS.Forms
             dgvResultsList = new DataGridView();
             panelFilters = new Panel();
             dgvFiltersList = new DataGridView();
-            btnUpload = new Button();
-            btnDownload = new Button();
             panelMenu.SuspendLayout();
             panelContent.SuspendLayout();
             panelResults.SuspendLayout();
@@ -61,6 +61,28 @@ namespace PMIS.Forms
             panelMenu.Padding = new Padding(5);
             panelMenu.Size = new Size(1262, 44);
             panelMenu.TabIndex = 0;
+            // 
+            // btnDownload
+            // 
+            btnDownload.Dock = DockStyle.Right;
+            btnDownload.Location = new Point(903, 5);
+            btnDownload.Margin = new Padding(5);
+            btnDownload.Name = "btnDownload";
+            btnDownload.Size = new Size(118, 34);
+            btnDownload.TabIndex = 3;
+            btnDownload.Text = "بارگیری";
+            btnDownload.UseVisualStyleBackColor = true;
+            // 
+            // btnUpload
+            // 
+            btnUpload.Dock = DockStyle.Right;
+            btnUpload.Location = new Point(1021, 5);
+            btnUpload.Margin = new Padding(5);
+            btnUpload.Name = "btnUpload";
+            btnUpload.Size = new Size(118, 34);
+            btnUpload.TabIndex = 2;
+            btnUpload.Text = "بارگزاری";
+            btnUpload.UseVisualStyleBackColor = true;
             // 
             // btnApply
             // 
@@ -150,6 +172,7 @@ namespace PMIS.Forms
             // 
             // dgvFiltersList
             // 
+            dgvFiltersList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvFiltersList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvFiltersList.Dock = DockStyle.Fill;
             dgvFiltersList.Location = new Point(160, 0);
@@ -158,29 +181,7 @@ namespace PMIS.Forms
             dgvFiltersList.Size = new Size(1102, 65);
             dgvFiltersList.TabIndex = 7;
             // 
-            // btnUpload
-            // 
-            btnUpload.Dock = DockStyle.Right;
-            btnUpload.Location = new Point(1021, 5);
-            btnUpload.Margin = new Padding(5);
-            btnUpload.Name = "btnUpload";
-            btnUpload.Size = new Size(118, 34);
-            btnUpload.TabIndex = 2;
-            btnUpload.Text = "بارگزاری";
-            btnUpload.UseVisualStyleBackColor = true;
-            // 
-            // btnDownload
-            // 
-            btnDownload.Dock = DockStyle.Right;
-            btnDownload.Location = new Point(903, 5);
-            btnDownload.Margin = new Padding(5);
-            btnDownload.Name = "btnDownload";
-            btnDownload.Size = new Size(118, 34);
-            btnDownload.TabIndex = 3;
-            btnDownload.Text = "بارگیری";
-            btnDownload.UseVisualStyleBackColor = true;
-            // 
-            // NormalForm
+            // ClaimUserOnIndicatorForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -188,7 +189,7 @@ namespace PMIS.Forms
             Controls.Add(panelContent);
             Controls.Add(panelMenu);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "NormalForm";
+            Name = "ClaimUserOnIndicatorForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Text = "NormalForm";

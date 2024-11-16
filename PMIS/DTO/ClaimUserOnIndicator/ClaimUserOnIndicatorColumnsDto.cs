@@ -1,4 +1,7 @@
-﻿using PMIS.DTO.LookUpDestination;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using PMIS.DTO.Indicator;
+using PMIS.DTO.LookUpDestination;
+using PMIS.DTO.User;
 using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
@@ -8,15 +11,31 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.ClaimUserOnIndicator
 {
-    public class ClaimUserOnIndicatorColumnsDto : GenericColumnsDto
+    public class ClaimUserOnIndicatorColumnsDto //: GenericColumnsDto
     {
-        public override async Task Initialize(ILookUpValueService lookUpValueService)
+        public async Task Initialize(ILookUpValueService lookUpValueService, IIndicatorService indicatorService, IUserService userService, int fkId)
         {
-            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("Indicator");
+            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimUserOnIndicator");
+            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+            {
+                filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
+                {
+                    new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                    {
+                        columnName = "ID",
+                        LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.Begin,
+                        operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                        type = Generic.Service.DTO.Concrete.PhraseType.Condition,
+                        value = fkId.ToString()
+                    }
+                }
+            });
+            (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());
+
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
 
-               
+
                new DataGridViewComboBoxColumn()
                {
                    HeaderText = "نوع ادعا",
@@ -27,69 +46,27 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = false,
                    Visible = true,
-                   
+
                },
-               new DataGridViewComboBoxColumn()
+                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دستی/اتوماتیک",
-                   Name = "FkLkpManualityId",
-                   DataPropertyName = "FkLkpManualityId",
-                   DisplayMember = "Display",
+                   HeaderText = "کاربر",
+                   Name = "FkUserId",
+                   DataPropertyName = "FkUserId",
+                   DisplayMember = "Username",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                   DataSource = lstUser,
                    ReadOnly = false,
                    Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
+               },new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد عملیاتی",
-                   Name = "FkLkpUnitId",
-                   DataPropertyName = "FkLkpUnitId",
-                   DisplayMember = "Display",
+                   HeaderText = "شاخص",
+                   Name = "FkIndicatorId",
+                   DataPropertyName = "FkIndicatorId",
+                   DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
-                   ReadOnly = false,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "دوره زمانی",
-                   Name = "FkLkpPeriodId",
-                   DataPropertyName = "FkLkpPeriodId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
-                   ReadOnly = false,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "واحد اندازه‌گیری",
-                   Name = "FkLkpMeasureId",
-                   DataPropertyName = "FkLkpMeasureId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
-                   ReadOnly = false,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "مطلوبیت",
-                   Name = "FkLkpDesirabilityId",
-                   DataPropertyName = "FkLkpDesirabilityId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
-                   ReadOnly = false,
-                   Visible = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "فرمول",
-                   Name = "Formula",
-                   DataPropertyName = "Formula",
-                   ReadOnly = false,
+                   DataSource = lstIndicator,
+                   ReadOnly = true,
                    Visible = true,
                },
                new DataGridViewTextBoxColumn()
@@ -99,18 +76,9 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-               },
-               new DataGridViewButtonColumn()
-                {
-                    HeaderText = "",
-                    Name = "Claims",
-                    Text = "ادعاها",
-                    ReadOnly = false,
-                    Visible = true,
-                    UseColumnTextForButtonValue = true,
-
-                }
+               }
         });
+            
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
                 new DataGridViewTextBoxColumn()
@@ -121,97 +89,40 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                     ReadOnly = true,
                     Visible = false,
                 },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "کد",
-                   Name = "Code",
-                   DataPropertyName = "Code",
-                   ReadOnly = true,
-                   Visible = true,
-                   Frozen = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "عنوان",
-                   Name = "Title",
-                   DataPropertyName = "Title",
-                   ReadOnly = true,
-                   Visible = true,
-                   Frozen = true,
-               },
+
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم مربوطه",
-                   Name = "FkLkpFormId",
-                   DataPropertyName = "FkLkpFormId",
+                   HeaderText = "نوع ادعا",
+                   Name = "FkLkpClaimUserOnIndicatorId",
+                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = true,
                    Visible = true,
+
                },
+
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دستی/اتوماتیک",
-                   Name = "FkLkpManualityId",
-                   DataPropertyName = "FkLkpManualityId",
-                   DisplayMember = "Display",
+                   HeaderText = "کاربر",
+                   Name = "FkUserId",
+                   DataPropertyName = "FkUserId",
+                   DisplayMember = "Username",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                   DataSource = lstUser,
                    ReadOnly = true,
                    Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
+               },new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد عملیاتی",
-                   Name = "FkLkpUnitId",
-                   DataPropertyName = "FkLkpUnitId",
-                   DisplayMember = "Display",
+                   HeaderText = "شاخص",
+                   Name = "FkIndicatorId",
+                   DataPropertyName = "FkIndicatorId",
+                   DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                   DataSource = lstIndicator,
                    ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "دوره زمانی",
-                   Name = "FkLkpPeriodId",
-                   DataPropertyName = "FkLkpPeriodId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
-                   ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "واحد اندازه‌گیری",
-                   Name = "FkLkpMeasureId",
-                   DataPropertyName = "FkLkpMeasureId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
-                   ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "مطلوبیت",
-                   Name = "FkLkpDesirabilityId",
-                   DataPropertyName = "FkLkpDesirabilityId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
-                   ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "فرمول",
-                   Name = "Formula",
-                   DataPropertyName = "Formula",
-                   ReadOnly = true,
-                   Visible = true,
+                   Visible = false,
                },
                new DataGridViewTextBoxColumn()
                {

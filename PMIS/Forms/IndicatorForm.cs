@@ -25,18 +25,19 @@ namespace PMIS.Forms
         private List<IndicatorDeleteRequestDto> lstRecycleRequest;
         private IndicatorColumnsDto columns;
         private ILookUpValueService lookUpValueService;
-        private IIndicatorService IndicatorService;
         private IUserService userService;
         private IIndicatorService indicatorService;
+        private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private bool isLoaded = false;
         #endregion
 
-        public IndicatorForm(IIndicatorService _indicatorService,  ILookUpValueService _lookUpValueService)
+        public IndicatorForm(IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
             indicatorService = _indicatorService;           
             lookUpValueService = _lookUpValueService;
-
+            claimUserOnIndicatorService = _claimUserOnIndicatorService;
+            userService = _userService;
             CustomInitialize();
         }
 
@@ -608,7 +609,8 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    // NormalForm frm = new NormalForm(indicatorService, lookUpValueService);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService,userService, indicatorService, lookUpValueService, tempId);
+                    frm.Show();
                 }
             }
         }

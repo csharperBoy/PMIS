@@ -42,7 +42,7 @@ namespace PMIS.Forms
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new ClaimUserOnIndicatorForm( claimUserOnIndicatorService, userService,indicatorService, lookUpValueService));
+           // AddNewTabPage(tabPageNormalForm, new ClaimUserOnIndicatorForm( claimUserOnIndicatorService, userService,indicatorService, lookUpValueService));
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace PMIS.Forms
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new IndicatorForm(indicatorService, lookUpValueService));
+            AddNewTabPage(tabPageNormalForm, new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
