@@ -3,6 +3,7 @@ using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO;
 using PMIS.DTO.LookUpValue.Info;
+using PMIS.Forms.Generic;
 using PMIS.Services;
 using PMIS.Services.Contract;
 using System.ComponentModel;
@@ -25,7 +26,7 @@ namespace PMIS.Forms
         public abstract bool CellBeginEdit(int rowIndex);
         public abstract void RowPostPaint(int rowIndex);
     }
-    public partial class BaseStandardForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseStandardForm
+    public partial class BaseDetailForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseStandardForm
      where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
      where TEntity : class, new()
      where TEntityAddRequestDto : GenericAddRequestDto, new()
@@ -47,11 +48,11 @@ namespace PMIS.Forms
         private List<TEntityDeleteRequestDto> lstRecycleRequest;
         private TEntityColumnsDto columns;
         private ILookUpValueService lookUpValueService;
-        private NormalFormElements NormalFormElements;
+        private AbstractFormElements NormalFormElements;
         private bool isLoaded = false;
         #endregion
 
-        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, NormalFormElements _NormalFormElements)
+        public BaseDetailForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, AbstractFormElements _NormalFormElements)
         {
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
@@ -559,7 +560,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                   // NormalForm frm = new NormalForm(indicatorService, lookUpValueService);
+                    // NormalForm frm = new NormalForm(indicatorService, lookUpValueService);
                 }
             }
         }
@@ -586,7 +587,7 @@ namespace PMIS.Forms
             }
             NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
-       
+
         private TEntityAddRequestDto AddMaping(DataGridViewRow row)
         {
             try

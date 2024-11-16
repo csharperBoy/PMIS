@@ -2,34 +2,35 @@
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.User;
+using PMIS.Forms.Generic;
 using PMIS.Models;
 using PMIS.Services.Contract;
 
 namespace PMIS.Forms
 {
-    public partial class NormalForm : Form
+    public partial class IndicatorForm : Form
     {
         private AbstractBaseStandardForm standard;
-        public readonly NormalFormElements NormalFormElements;
+        public readonly IndicatorFormElements indicatorFormElements;
 
-        public NormalForm(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
+        public IndicatorForm(IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
-            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
-            standard = new BaseStandardForm<IIndicatorService, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto>(_indicatorService, _lookUpValueService, NormalFormElements);
+            indicatorFormElements = new IndicatorFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseStandardForm<IIndicatorService, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto>(_indicatorService, _lookUpValueService, this);
         }
-        public NormalForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, ILookUpValueService _lookUpValueService)
+        public IndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
-            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
-            standard = new BaseStandardForm<IClaimUserOnIndicatorService, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto, ClaimUserOnIndicatorColumnsDto>(_claimUserOnIndicatorService, _lookUpValueService, NormalFormElements);
+            indicatorFormElements = new IndicatorFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseDetaildForm<IClaimUserOnIndicatorService, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto, ClaimUserOnIndicatorColumnsDto>(_claimUserOnIndicatorService, _lookUpValueService, indicatorFormElements);
         }
 
-        public NormalForm(IUserService _userService, ILookUpValueService _lookUpValueService)
+        public IndicatorForm(IUserService _userService, ILookUpValueService _lookUpValueService)
         {
             InitializeComponent();
-            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
-            standard = new BaseStandardForm<IUserService, User, UserAddRequestDto, UserAddResponseDto, UserEditRequestDto, UserEditResponseDto, UserDeleteRequestDto, UserDeleteResponseDto, UserSearchResponseDto, UserColumnsDto>(_userService, _lookUpValueService, NormalFormElements);
+            indicatorFormElements = new IndicatorFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseDetaildForm<IUserService, User, UserAddRequestDto, UserAddResponseDto, UserEditRequestDto, UserEditResponseDto, UserDeleteRequestDto, UserDeleteResponseDto, UserSearchResponseDto, UserColumnsDto>(_userService, _lookUpValueService, indicatorFormElements);
         }
 
         private void NormalForm_Load(object sender, EventArgs e)
@@ -98,20 +99,13 @@ namespace PMIS.Forms
 
         }
 
-       
+
     }
 
-    public class NormalFormElements
+    public class IndicatorFormElements : AbstractFormElements
     {
-        public readonly DataGridView dgvFiltersList;
-        public readonly DataGridView dgvResultsList;
-        public readonly CheckBox chbRecycle;
-
-        public NormalFormElements(DataGridView _dgvFiltersList, DataGridView _dgvResultsList, CheckBox _chbRecycle)
+        public IndicatorFormElements(DataGridView _dgvFiltersList, DataGridView _dgvResultsList, CheckBox _chbRecycle) : base(_dgvFiltersList, _dgvResultsList, _chbRecycle)
         {
-            dgvFiltersList = _dgvFiltersList;
-            dgvResultsList = _dgvResultsList;
-            chbRecycle = _chbRecycle;
         }
     }
 }

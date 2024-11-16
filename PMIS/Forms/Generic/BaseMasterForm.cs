@@ -30,7 +30,7 @@ namespace PMIS.Forms.Generic
         public abstract bool CellBeginEdit(int rowIndex);
         public abstract void RowPostPaint(int rowIndex);
     }
-    public partial class BaseMasterDetailForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseMasterDetailForm
+    public partial class BaseMasterForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseMasterDetailForm
      where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
      where TEntity : class, new()
      where TEntityAddRequestDto : GenericAddRequestDto, new()
@@ -53,11 +53,11 @@ namespace PMIS.Forms.Generic
         private TEntityColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
-        private NormalFormElements NormalFormElements;
+        private AbstractFormElements NormalFormElements;
         private bool isLoaded = false;
         #endregion
 
-        public BaseMasterDetailForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, NormalFormElements _NormalFormElements)
+        public BaseMasterForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractFormElements _NormalFormElements)
         {
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
@@ -565,7 +565,7 @@ namespace PMIS.Forms.Generic
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    NormalForm frm = new NormalForm(claimUserOnIndicatorService, lookUpValueService);
+                    ClaimOnIndicatorForm frm = new ClaimOnIndicatorForm(claimUserOnIndicatorService, lookUpValueService);
                 }
             }
         }

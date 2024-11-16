@@ -2,7 +2,7 @@
 
 namespace PMIS.Forms
 {
-    partial class NormalForm
+    partial class IndicatorForm
     {
         /// <summary>
         /// Required designer variable.
