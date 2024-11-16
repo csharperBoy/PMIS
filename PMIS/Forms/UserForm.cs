@@ -619,8 +619,8 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    // ClaimIndicatorOnUserForm frm = new ClaimIndicatorOnUserForm(claimUserOnIndicatorService, userService, UserService, lookUpValueService, tempId);
-                    //frm.Show();
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0);
+                    frm.Show();
                 }
             }
         }
@@ -638,13 +638,12 @@ namespace PMIS.Forms
         {
             if (dgvResultsList.Columns[columnIndex].Name == "PasswordHashTemp1" && rowIndex >= 0)
             {
-                if (dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value != null && (bool)dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value == false)
+                if (dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value != null && dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value.ToString().Length != dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value.ToString().Count(c => c == '*'))
                 {
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value;
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value = new string('*', dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].ToString().Length);
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value + "+" + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
-                    dgvResultsList.Rows[rowIndex].Cells["FlgEditPasswordHash"].Value = true;
                 }
             }
         }

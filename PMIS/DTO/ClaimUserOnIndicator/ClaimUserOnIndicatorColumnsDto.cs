@@ -13,10 +13,10 @@ namespace PMIS.DTO.ClaimUserOnIndicator
 {
     public class ClaimUserOnIndicatorColumnsDto //: GenericColumnsDto
     {
-        public async Task Initialize(ILookUpValueService lookUpValueService, IUserService userService, IIndicatorService indicatorService, int fkId)
+        public async Task Initialize(ILookUpValueService lookUpValueService, IUserService userService, IIndicatorService indicatorService, int fkUserId, int fkIndicatorId)
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimUserOnIndicator");
-            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+            (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
             {
                 filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
                 {
@@ -24,29 +24,29 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                     {
                         columnName = "ID",
                         LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.Begin,
-                        operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                        operation = fkUserId != 0 ? Generic.Service.DTO.Concrete.FilterOperator.Equals : Generic.Service.DTO.Concrete.FilterOperator.NotEquals,
                         type = Generic.Service.DTO.Concrete.PhraseType.Condition,
-                        value = fkId.ToString()
+                        value = fkUserId.ToString()
                     }
                 }
             });
-            (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());
+            (bool isSuccessIndicator, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+            {
+                filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
+                {
+                    new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                    {
+                        columnName = "ID",
+                        LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.Begin,
+                        operation = fkIndicatorId != 0 ? Generic.Service.DTO.Concrete.FilterOperator.Equals : Generic.Service.DTO.Concrete.FilterOperator.NotEquals,
+                        type = Generic.Service.DTO.Concrete.PhraseType.Condition,
+                        value = fkIndicatorId.ToString()
+                    }
+                }
+            });
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
-
-
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "نوع ادعا",
-                   Name = "FkLkpClaimUserOnIndicatorId",
-                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
-                   ReadOnly = false,
-                   Visible = true,
-               },
                 new DataGridViewComboBoxColumn()
                {
                    HeaderText = "کاربر",
@@ -65,7 +65,18 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DisplayMember = "Title",
                    ValueMember = "Id",
                    DataSource = lstIndicator,
-                   ReadOnly = true,
+                   ReadOnly = false,
+                   Visible = true,
+               },
+               new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = "نوع ادعا",
+                   Name = "FkLkpClaimUserOnIndicatorId",
+                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
+                   ReadOnly = false,
                    Visible = true,
                },
                new DataGridViewTextBoxColumn()
@@ -88,18 +99,6 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                     ReadOnly = true,
                     Visible = false,
                 },
-
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = "نوع ادعا",
-                   Name = "FkLkpClaimUserOnIndicatorId",
-                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
-                   ReadOnly = true,
-                   Visible = true,
-               },
                new DataGridViewComboBoxColumn()
                {
                    HeaderText = "کاربر",
@@ -120,7 +119,18 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    ValueMember = "Id",
                    DataSource = lstIndicator,
                    ReadOnly = true,
-                   Visible = false,
+                   Visible = true,
+               },
+               new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = "نوع ادعا",
+                   Name = "FkLkpClaimUserOnIndicatorId",
+                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
+                   ReadOnly = true,
+                   Visible = true,
                },
                new DataGridViewTextBoxColumn()
                {

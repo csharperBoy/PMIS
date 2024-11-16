@@ -28,18 +28,20 @@ namespace PMIS.Forms
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IUserService userService;
         private IIndicatorService indicatorService;
-        private int fkId;
+        private int fkUserId;
+        private int fkIndicatorId;
         private bool isLoaded = false;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService,int _fkId)
+        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId)
         {
             InitializeComponent();
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
-            fkId = _fkId;
+            fkUserId = _fkUserId;
+            fkIndicatorId = _fkIndicatorId;
             CustomInitialize();
         }
 
@@ -115,7 +117,7 @@ namespace PMIS.Forms
         {
             // InitializeComponent();
             columns = new ClaimUserOnIndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService,userService, indicatorService, fkId);
+            await columns.Initialize(lookUpValueService,userService, indicatorService, fkUserId, fkIndicatorId);
             lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
@@ -132,7 +134,14 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
-                ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value =((IndicatorSearchResponseDto) ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
+                if (fkUserId != 0)
+                {
+                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Value = ((UserSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Items[0]).Id;
+                }
+                if (fkIndicatorId != 0)
+                {
+                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value = ((IndicatorSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
+                }
             }
             catch (Exception ex)
             {
@@ -666,7 +675,8 @@ namespace PMIS.Forms
 
         private ClaimUserOnIndicatorAddRequestDto AfterAddMapping(ClaimUserOnIndicatorAddRequestDto addRequest)
         {
-            addRequest.FkIndicatorId = fkId;
+            addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
+            addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
             return addRequest;
         }
 
@@ -696,7 +706,8 @@ namespace PMIS.Forms
 
         private ClaimUserOnIndicatorEditRequestDto AfterEditMapping(ClaimUserOnIndicatorEditRequestDto addRequest)
         {
-            addRequest.FkIndicatorId = fkId;
+            addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
+            addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
             return addRequest;
         }
     }

@@ -92,7 +92,7 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد ستاره‌ای",
+                   HeaderText = "پسورد",
                    Name = "PasswordHashTemp1",
                    DataPropertyName = "PasswordHashTemp1",
                    ReadOnly = true,
@@ -101,11 +101,11 @@ namespace PMIS.DTO.User
                },
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "پسورد ورودی",
+                   HeaderText = "پسورد",
                    Name = "PasswordHashTemp2",
                    DataPropertyName = "PasswordHashTemp2",
                    ReadOnly = true,
-                   Visible = true,
+                   Visible = false,
                },
                new DataGridViewTextBoxColumn()
                {
@@ -113,15 +113,7 @@ namespace PMIS.DTO.User
                    Name = "PasswordHash",
                    DataPropertyName = "PasswordHash",
                    ReadOnly = true,
-                   Visible = true,
-               },
-               new DataGridViewCheckBoxColumn()
-               {
-                   HeaderText = "پسورد",
-                   Name = "FlgEditPasswordHash",
-                   DataPropertyName = "FlgEditPasswordHash",
-                   ReadOnly = true,
-                   Visible = true,
+                   Visible = false,
                },
                new DataGridViewTextBoxColumn()
                {
@@ -149,7 +141,16 @@ namespace PMIS.DTO.User
                    DataPropertyName = "Description",
                    ReadOnly = true,
                    Visible = true,
-               }
+               },
+               new DataGridViewButtonColumn()
+                {
+                    HeaderText = "",
+                    Name = "Claims",
+                    Text = "ادعاها",
+                    ReadOnly = false,
+                    Visible = true,
+                    UseColumnTextForButtonValue = true,
+                }
         });
         }
 

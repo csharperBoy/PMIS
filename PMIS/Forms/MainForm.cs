@@ -32,27 +32,26 @@ namespace PMIS.Forms
 
         private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate());
+            //AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate());
         }
 
         private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnIndicator, new IndicatorValueDataEntryOnIndicator());
+            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnIndicator());
         }
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new UserForm( userService, claimUserOnIndicatorService, indicatorService, lookUpValueService));
+            AddNewTabPage(tabPageUserForm, new UserForm(userService, claimUserOnIndicatorService, indicatorService, lookUpValueService));
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //  AddNewTabPage(tabPageOnIndicator, new UserDataEntry());
         }
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageNormalForm, new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService));
+            AddNewTabPage(tabPageIndicatorForm, new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService));
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
@@ -65,7 +64,6 @@ namespace PMIS.Forms
 
         private void تخصیصکاربربهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnIndicator, new FormClaimUserOnIndicator());
         }
 
         private void تخصیصشاخصبهکاربرToolStripMenuItem_Click(object sender, EventArgs e)
