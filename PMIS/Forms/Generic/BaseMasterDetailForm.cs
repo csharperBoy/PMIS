@@ -1,16 +1,21 @@
 ﻿using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
-using PMIS.DTO;
 using PMIS.DTO.LookUpValue.Info;
-using PMIS.Services;
+using PMIS.DTO;
 using PMIS.Services.Contract;
-using System.ComponentModel;
+using PMIS.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
-namespace PMIS.Forms
+namespace PMIS.Forms.Generic
 {
-    public abstract class AbstractBaseStandardForm
+    public abstract class AbstractBaseMasterDetailForm
     {
         public abstract void RefreshVisuals();
         public abstract Task SearchEntity();
@@ -25,7 +30,7 @@ namespace PMIS.Forms
         public abstract bool CellBeginEdit(int rowIndex);
         public abstract void RowPostPaint(int rowIndex);
     }
-    public partial class BaseStandardForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseStandardForm
+    public partial class BaseMasterDetailForm<TEntityService, TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto, TEntityColumnsDto> : AbstractBaseMasterDetailForm
      where TEntityService : IGenericNormalService<TEntity, TEntityAddRequestDto, TEntityAddResponseDto, TEntityEditRequestDto, TEntityEditResponseDto, TEntityDeleteRequestDto, TEntityDeleteResponseDto, TEntitySearchResponseDto>
      where TEntity : class, new()
      where TEntityAddRequestDto : GenericAddRequestDto, new()
@@ -47,16 +52,17 @@ namespace PMIS.Forms
         private List<TEntityDeleteRequestDto> lstRecycleRequest;
         private TEntityColumnsDto columns;
         private ILookUpValueService lookUpValueService;
+        private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private NormalFormElements NormalFormElements;
         private bool isLoaded = false;
         #endregion
 
-        public BaseStandardForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, NormalFormElements _NormalFormElements)
+        public BaseMasterDetailForm(TEntityService _entityService, ILookUpValueService _lookUpValueService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, NormalFormElements _NormalFormElements)
         {
             entityService = _entityService;
             lookUpValueService = _lookUpValueService;
             NormalFormElements = _NormalFormElements;
-
+            claimUserOnIndicatorService = _claimUserOnIndicatorService;
             CustomInitialize();
         }
 
@@ -559,7 +565,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                   // NormalForm frm = new NormalForm(indicatorService, lookUpValueService);
+                    NormalForm frm = new NormalForm(claimUserOnIndicatorService, lookUpValueService);
                 }
             }
         }
@@ -586,7 +592,7 @@ namespace PMIS.Forms
             }
             NormalFormElements.dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
-       
+
         private TEntityAddRequestDto AddMaping(DataGridViewRow row)
         {
             try
@@ -634,4 +640,5 @@ namespace PMIS.Forms
             }
         }
     }
+
 }

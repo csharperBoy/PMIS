@@ -1,6 +1,4 @@
 ﻿using PMIS.DTO.LookUpDestination;
-using PMIS.Forms;
-using PMIS.Services;
 using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
@@ -8,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.Indicator
+namespace PMIS.DTO.ClaimUserOnIndicator
 {
-    public class IndicatorColumnsDto : GenericColumnsDto
+    public class ClaimUserOnIndicatorColumnsDto : GenericColumnsDto
     {
         public override async Task Initialize(ILookUpValueService lookUpValueService)
         {
@@ -18,34 +16,18 @@ namespace PMIS.DTO.Indicator
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
 
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "کد",
-                   Name = "Code",
-                   DataPropertyName = "Code",
-                   ReadOnly = false,
-                   Visible = true,
-                   Frozen = true,
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "عنوان",
-                   Name = "Title",
-                   DataPropertyName = "Title",
-                   ReadOnly = false,
-                   Visible = true,
-                   Frozen = true,
-               },
+               
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم مربوطه",
-                   Name = "FkLkpFormId",
-                   DataPropertyName = "FkLkpFormId",
+                   HeaderText = "نوع ادعا",
+                   Name = "FkLkpClaimUserOnIndicatorId",
+                   DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = false,
                    Visible = true,
+                   
                },
                new DataGridViewComboBoxColumn()
                {
@@ -117,7 +99,17 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-               }
+               },
+               new DataGridViewButtonColumn()
+                {
+                    HeaderText = "",
+                    Name = "Claims",
+                    Text = "ادعاها",
+                    ReadOnly = false,
+                    Visible = true,
+                    UseColumnTextForButtonValue = true,
+
+                }
         });
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
@@ -228,17 +220,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "Description",
                    ReadOnly = true,
                    Visible = true,
-               },
-               new DataGridViewButtonColumn()
-                {
-                    HeaderText = "",
-                    Name = "Claims",
-                    Text = "ادعاها",
-                    ReadOnly = false,
-                    Visible = true,
-                    UseColumnTextForButtonValue = true,
-
-                }
+               }
         });
         }
 

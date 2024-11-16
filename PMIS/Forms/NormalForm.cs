@@ -1,4 +1,6 @@
-﻿using PMIS.DTO.Indicator;
+﻿using Generic.Service.Normal.Composition.Contract;
+using PMIS.DTO.ClaimUserOnIndicator;
+using PMIS.DTO.Indicator;
 using PMIS.DTO.User;
 using PMIS.Models;
 using PMIS.Services.Contract;
@@ -15,6 +17,12 @@ namespace PMIS.Forms
             InitializeComponent();
             NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
             standard = new BaseStandardForm<IIndicatorService, Indicator, IndicatorAddRequestDto, IndicatorAddResponseDto, IndicatorEditRequestDto, IndicatorEditResponseDto, IndicatorDeleteRequestDto, IndicatorDeleteResponseDto, IndicatorSearchResponseDto, IndicatorColumnsDto>(_indicatorService, _lookUpValueService, NormalFormElements);
+        }
+        public NormalForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, ILookUpValueService _lookUpValueService)
+        {
+            InitializeComponent();
+            NormalFormElements = new NormalFormElements(dgvFiltersList, dgvResultsList, chbRecycle);
+            standard = new BaseStandardForm<IClaimUserOnIndicatorService, ClaimUserOnIndicator, ClaimUserOnIndicatorAddRequestDto, ClaimUserOnIndicatorAddResponseDto, ClaimUserOnIndicatorEditRequestDto, ClaimUserOnIndicatorEditResponseDto, ClaimUserOnIndicatorDeleteRequestDto, ClaimUserOnIndicatorDeleteResponseDto, ClaimUserOnIndicatorSearchResponseDto, ClaimUserOnIndicatorColumnsDto>(_claimUserOnIndicatorService, _lookUpValueService, NormalFormElements);
         }
 
         public NormalForm(IUserService _userService, ILookUpValueService _lookUpValueService)
@@ -89,6 +97,8 @@ namespace PMIS.Forms
         {
 
         }
+
+       
     }
 
     public class NormalFormElements

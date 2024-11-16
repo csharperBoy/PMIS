@@ -1,4 +1,5 @@
 ﻿using Generic.Service.DTO.Concrete;
+using PMIS.DTO.Indicator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,19 @@ namespace PMIS.DTO.ClaimUserOnIndicator
     }
     public class ClaimUserOnIndicatorAddResponseDto : GenericAddResponseDto
     {
+        public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
+          where TDestination : class
+          where TSource : class
+        {
+            if (source is Models.ClaimUserOnIndicator sourceModel)
+            {
+                if (destination is ClaimUserOnIndicatorAddResponseDto destinationModel)
+                {
+                    destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
+                }
+            }
+            return destination;
+        }
         public int Id { get; set; }
 
     }
