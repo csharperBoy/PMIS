@@ -30,8 +30,8 @@ namespace PMIS.Services
         {
             try
             {
-                var filteredList = list
-                    .Where(l => l.ClaimUserOnIndicatorsInfo.Any(c => c.FkUserId == userId));
+                IEnumerable<IndicatorSearchResponseDto> filteredList = list
+                    .Where(l => l.ClaimUserOnIndicatorsInfo.Any(c => c.FkUserId == userId)).ToList();
 
                 return Task.FromResult(filteredList);
             }

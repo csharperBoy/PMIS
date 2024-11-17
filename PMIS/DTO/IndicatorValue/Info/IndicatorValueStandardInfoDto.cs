@@ -18,9 +18,10 @@ namespace PMIS.DTO.IndicatorValue.Info
             this.FkIndicatorInfo = await (new IndicatorShortInfoDto()).extraMapFromBaseModel(baseModel.FkIndicator);
             this.FkLkpShiftInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpShift);
             this.FkLkpValueTypeInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpValueType);
+            this.VrtLkpPeriodId = this.FkIndicatorInfo.FkLkpPeriodId;
             return this;
         }
-
+       
         public virtual IndicatorShortInfoDto FkIndicatorInfo { get; set; } = null!;
 
         public virtual LookUpValueShortInfoDto FkLkpShiftInfo { get; set; } = null!;

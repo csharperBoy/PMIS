@@ -9,14 +9,16 @@ namespace PMIS.Forms
         IUserService userService;
         ILookUpService lookUpService;
         ILookUpValueService lookUpValueService;
+        IIndicatorValueService indicatorValueService;
         ILookUpDestinationService lookUpDestinationService;
         IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
 
             InitializeComponent();
             indicatorService = _indicatorService;
+            indicatorValueService = _indicatorValueService;
             userService = _userService;
             lookUpService = _lookUpService;
             lookUpValueService = _lookUpValueService;
@@ -32,7 +34,7 @@ namespace PMIS.Forms
 
         private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate());
+            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate(indicatorValueService,indicatorService,claimUserOnIndicatorService,userService,lookUpValueService));
         }
 
         private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)

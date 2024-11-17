@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.Indicator.Info;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.IndicatorValue.Info
 {
-    public class IndicatorValueTinyInfoDto
+    public class IndicatorValueTinyInfoDto : GenericSearchResponseDto
     {
         public async Task<IndicatorValueTinyInfoDto> extraMapFromBaseModel(PMIS.Models.IndicatorValue baseModel)
         {
@@ -16,7 +17,6 @@ namespace PMIS.DTO.IndicatorValue.Info
             return this;
         }
         public long Id { get; set; }
-
 
         public DateTime DateTime { get; set; }
 
@@ -28,6 +28,7 @@ namespace PMIS.DTO.IndicatorValue.Info
         public int FkLkpValueTypeId { get; set; }
 
         public int FkLkpShiftId { get; set; }
+        public virtual int? VrtLkpPeriodId { get; set; }=null;
 
     }
 }
