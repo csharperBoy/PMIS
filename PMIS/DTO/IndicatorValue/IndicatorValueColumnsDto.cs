@@ -28,8 +28,7 @@ namespace PMIS.DTO.IndicatorValue
                    Name = "DateTime",
                    DataPropertyName = "DateTime",
                    ReadOnly = false,
-                   Visible = true,
-                   Frozen = true,
+                   Visible = true,                   
                },
                 new DataGridViewComboBoxColumn()
                {
@@ -41,19 +40,20 @@ namespace PMIS.DTO.IndicatorValue
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"),
                    ReadOnly = false,
                    Visible = true,
+               },new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = "فرم",
+                   Name = "VrtLkpForm",
+                   DataPropertyName = "VrtLkpFormId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"),
+                   ReadOnly = false,
+                   Visible = true,
                },
-               //new DataGridViewTextBoxColumn()
-               //{
-               //    HeaderText = "مقدار",
-               //    Name = "Value",
-               //    DataPropertyName = "Value",
-               //    ReadOnly = false,
-               //    Visible = true,
-               //    Frozen = true,
-               //},
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع شاخص",
+                   HeaderText = "دوره زمانی",
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
@@ -122,10 +122,22 @@ namespace PMIS.DTO.IndicatorValue
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"),
                    ReadOnly = true,
                    Visible = true,
+                   Frozen = true,
+               },
+              new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = "فرم",
+                   Name = "VrtLkpForm",
+                   DataPropertyName = "VrtLkpFormId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"),
+                   ReadOnly = true,
+                   Visible = true,
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع شاخص",
+                   HeaderText = "دوره زمانی",
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
@@ -134,6 +146,7 @@ namespace PMIS.DTO.IndicatorValue
                    ReadOnly = true,
                    Visible = true,
                },
+
                 new DataGridViewComboBoxColumn()
                {
                    HeaderText = "شاخص",
@@ -162,8 +175,7 @@ namespace PMIS.DTO.IndicatorValue
                    Name = "Value",
                    DataPropertyName = "Value",
                    ReadOnly = true,
-                   Visible = true,
-                   Frozen = true,
+                   Visible = true,                 
                },
                new DataGridViewTextBoxColumn()
                {

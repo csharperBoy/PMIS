@@ -28,6 +28,9 @@ namespace PMIS.DTO.IndicatorValue.Info
         public int FkLkpValueTypeId { get; set; }
 
         public int FkLkpShiftId { get; set; }
+
+        public virtual int? VrtLkpFormId { get; set; }=null;
+
         public virtual int? VrtLkpPeriodId { get; set; }=null;
 
     }
