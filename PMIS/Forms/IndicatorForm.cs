@@ -283,6 +283,7 @@ namespace PMIS.Forms
         {
             try
             {
+                dgvResultsList.Columns["Claims"].Visible = !chbRecycle.Checked;
                 dgvResultsList.Columns["Edit"].Visible = !chbRecycle.Checked;
                 dgvResultsList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
                 dgvResultsList.Columns["Recycle"].Visible = chbRecycle.Checked;

@@ -137,6 +137,7 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
+
         }
 
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -408,7 +409,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<IndicatorValueSearchResponseDto> list) = await indicatorValueService.Search(searchRequest);
-
+           // list = await GenerateRows(list);
             if (isSuccess)
             {
                 if (list.Count() == 0)
@@ -428,6 +429,19 @@ namespace PMIS.Forms
             RefreshVisuals();
             isLoaded = true;
         }
+
+        //private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRows(IEnumerable<IndicatorValueSearchResponseDto> _indicatorlist)
+        //{
+        //    try
+        //    {
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+        //}
 
         public async Task AddEntity()
         {
