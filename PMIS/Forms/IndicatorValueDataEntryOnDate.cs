@@ -11,6 +11,7 @@ using PMIS.Models;
 using PMIS.Services;
 using PMIS.Services.Contract;
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 
 namespace PMIS.Forms
@@ -134,6 +135,8 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
+
+
             }
             catch (Exception ex)
             {
@@ -317,17 +320,54 @@ namespace PMIS.Forms
                 foreach (DataGridViewColumn column in dgvFiltersList.Columns)
                 {
                     var cellValue = row.Cells[column.Name].Value == null ? "" : row.Cells[column.Name].Value.ToString();
+
                     if ((column is not DataGridViewComboBoxColumn && !cellValue.IsNullOrEmpty()) || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
                     {
+                        string columnName = column.Name;
+                        FilterOperator filterOperator = FilterOperator.Contains;
+                        if (column.Name == "DateTimeFrom")
+                        {
+                            PersianCalendar pc = new PersianCalendar();
+                            var parts = cellValue.Split('/');
+                            int year = int.Parse(parts[0]);
+                            int month = int.Parse(parts[1]); 
+                            int day = int.Parse(parts[2]);
+                            cellValue = pc.ToDateTime(year, month, day, 0, 0, 0, 0).ToShortDateString();
+
+                            columnName = "DateTime";
+                            filterOperator = FilterOperator.GreaterThanOrEqual;
+                        }
+                        else if (column.Name == "DateTimeTo")
+                        {
+                            PersianCalendar pc = new PersianCalendar();
+                            var parts = cellValue.Split('/');
+                            int year = int.Parse(parts[0]);
+                            int month = int.Parse(parts[1]);
+                            int day = int.Parse(parts[2]);
+                            cellValue = pc.ToDateTime(year, month, day, 0, 0, 0, 0).ToShortDateString();
+
+                            columnName = "DateTime";
+                            filterOperator = FilterOperator.LessThanOrEqual;
+
+                        }
+                        else if (column is DataGridViewTextBoxColumn)
+                        {
+                            filterOperator = FilterOperator.Contains;
+                        }
+                        else
+                        {
+                            filterOperator = FilterOperator.Equals;
+                        }
                         tempFilter.InternalFilters.Add(new GenericSearchFilterDto()
                         {
-                            columnName = column.Name,
+                            columnName = columnName,
                             value = cellValue,
                             LogicalOperator = column.Index == 0 ? LogicalOperator.Begin : LogicalOperator.And,
-                            operation = column is DataGridViewTextBoxColumn ? FilterOperator.Contains : FilterOperator.Equals,
+                            operation = filterOperator,
                             type = PhraseType.Condition,
                         });
                     }
+
                 }
                 filter.InternalFilters.Add(tempFilter);
             }

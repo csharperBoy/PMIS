@@ -25,15 +25,15 @@ namespace PMIS.DTO.IndicatorValue
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "از تاریخ",
-                   Name = "DateTime From",
+                   Name = "DateTimeFrom",
                    DataPropertyName = "DateTimeFrom",
                    ReadOnly = false,
-                   Visible = true,                   
+                   Visible = true, 
                },
                 new DataGridViewTextBoxColumn()
                {
                    HeaderText = "تا تاریخ",
-                   Name = "DateTime To",
+                   Name = "DateTimeTo",
                    DataPropertyName = "DateTimeTo",
                    ReadOnly = false,
                    Visible = true,
