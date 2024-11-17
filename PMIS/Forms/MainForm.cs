@@ -29,22 +29,22 @@ namespace PMIS.Forms
 
         private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnForm, new IndicatorValueDataEntryOnForm());
+            new IndicatorValueDataEntryOnForm();
         }
 
         private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnDate(indicatorValueService,indicatorService,claimUserOnIndicatorService,userService,lookUpValueService));
+            new IndicatorValueDataEntryOnDate(indicatorValueService,indicatorService,claimUserOnIndicatorService,userService,lookUpValueService, tabControlMain);
         }
 
         private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageOnDate, new IndicatorValueDataEntryOnIndicator());
+            new IndicatorValueDataEntryOnIndicator();
         }
 
         private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageUserForm, new UserForm(userService, claimUserOnIndicatorService, indicatorService, lookUpValueService));
+            new UserForm(userService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
         }
 
         private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
@@ -53,7 +53,7 @@ namespace PMIS.Forms
 
         private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTabPage(tabPageIndicatorForm, new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService));
+            new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,26 +70,6 @@ namespace PMIS.Forms
 
         private void تخصیصشاخصبهکاربرToolStripMenuItem_Click(object sender, EventArgs e)
         {
-        }
-
-        private void AddNewTabPage(TabPage tabPage, Form form)
-        {
-            form.TopLevel = false;
-            form.FormBorderStyle = FormBorderStyle.None;
-            form.Dock = DockStyle.Fill;
-            if (tabControlMain.TabPages.Contains(tabPage))
-            {
-                tabPage.Controls.Clear();
-            }
-            else
-            {
-                tabControlMain.Controls.Add(tabPage);
-            }
-            Panel panel = new Panel();
-            panel.Controls.Add(form);
-            panel.Dock = DockStyle.Fill;
-            tabPage.Controls.Add(panel);
-            form.Show();
         }
     }
 }

@@ -34,9 +34,10 @@ namespace PMIS.Forms
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private bool isLoaded = false;
+        private TabControl tabControl;
         #endregion
 
-        public UserForm(IUserService _userService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService)
+        public UserForm(IUserService _userService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             lookUpValueService = _lookUpValueService;
@@ -44,6 +45,37 @@ namespace PMIS.Forms
             userService = _userService;
             indicatorService = _indicatorService;
             CustomInitialize();
+            tabControl = _tabControl;
+            AddNewTabPage(tabControl, this);
+        }
+
+        private void AddNewTabPage(TabControl tabControl, Form form)
+        {
+            TabPage tabPage = new TabPage();
+            tabPage.Location = new Point(4, 24);
+            tabPage.Name = "tabPageUserForm";
+            tabPage.Padding = new Padding(3);
+            tabPage.Size = new Size(192, 0);
+            tabPage.TabIndex = 0;
+            tabPage.Text = "شناسنامه کاربران";
+            tabPage.UseVisualStyleBackColor = true;
+
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            if (tabControl.TabPages.Contains(tabPage))
+            {
+                tabPage.Controls.Clear();
+            }
+            else
+            {
+                tabControl.Controls.Add(tabPage);
+            }
+            Panel panel = new Panel();
+            panel.Controls.Add(form);
+            panel.Dock = DockStyle.Fill;
+            tabPage.Controls.Add(panel);
+            form.Show();
         }
 
         private void NormalForm_Load(object sender, EventArgs e)
@@ -619,7 +651,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
                     frm.Show();
                 }
             }

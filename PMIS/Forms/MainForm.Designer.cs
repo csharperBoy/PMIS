@@ -48,16 +48,6 @@
             خروجToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControlWithCloseTab();
-            tabPageOnForm = new TabPage();
-            tabPageOnDate = new TabPage();
-            tabPageOnIndicator = new TabPage();
-            tabPageUserForm = new TabPage();
-            tabPageUserAccess = new TabPage();
-            tabPageIndicatorForm = new TabPage();
-            tabPageIndicatorAssignToCategory = new TabPage();
-            tabPageCategoryAssignToIndicator = new TabPage();
-            tabPageIndicatorAssignToUser = new TabPage();
-            tabPageUserAssignToIndicator = new TabPage();
             menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -208,106 +198,6 @@
             tabControlMain.Size = new Size(800, 426);
             tabControlMain.TabIndex = 0;
             // 
-            // tabPageOnForm
-            // 
-            tabPageOnForm.Location = new Point(4, 24);
-            tabPageOnForm.Name = "tabPageOnForm";
-            tabPageOnForm.Padding = new Padding(3);
-            tabPageOnForm.Size = new Size(192, 0);
-            tabPageOnForm.TabIndex = 0;
-            tabPageOnForm.Text = "ورود مقادیر بر اساس فرم";
-            tabPageOnForm.UseVisualStyleBackColor = true;
-            // 
-            // tabPageOnDate
-            // 
-            tabPageOnDate.Location = new Point(4, 24);
-            tabPageOnDate.Name = "tabPageOnDate";
-            tabPageOnDate.Padding = new Padding(3);
-            tabPageOnDate.Size = new Size(192, 0);
-            tabPageOnDate.TabIndex = 1;
-            tabPageOnDate.Text = "ورود مقادیر بر اساس تاریخ";
-            tabPageOnDate.UseVisualStyleBackColor = true;
-            // 
-            // tabPageOnIndicator
-            // 
-            tabPageOnIndicator.Location = new Point(4, 24);
-            tabPageOnIndicator.Name = "tabPageOnIndicator";
-            tabPageOnIndicator.Padding = new Padding(3);
-            tabPageOnIndicator.Size = new Size(192, 0);
-            tabPageOnIndicator.TabIndex = 1;
-            tabPageOnIndicator.Text = "ورود مقادیر بر اساس شاخص";
-            tabPageOnIndicator.UseVisualStyleBackColor = true;
-            // 
-            // tabPageUserForm
-            // 
-            tabPageUserForm.Location = new Point(4, 24);
-            tabPageUserForm.Name = "tabPageUserForm";
-            tabPageUserForm.Padding = new Padding(3);
-            tabPageUserForm.Size = new Size(192, 0);
-            tabPageUserForm.TabIndex = 1;
-            tabPageUserForm.Text = "تعریف کاربران";
-            tabPageUserForm.UseVisualStyleBackColor = true;
-            // 
-            // tabPageUserAccess
-            // 
-            tabPageUserAccess.Location = new Point(4, 24);
-            tabPageUserAccess.Name = "tabPageUserAccess";
-            tabPageUserAccess.Padding = new Padding(3);
-            tabPageUserAccess.Size = new Size(192, 0);
-            tabPageUserAccess.TabIndex = 1;
-            tabPageUserAccess.Text = "دسترسی‌های کاربران";
-            tabPageUserAccess.UseVisualStyleBackColor = true;
-            // 
-            // tabPageIndicatorForm
-            // 
-            tabPageIndicatorForm.Location = new Point(4, 24);
-            tabPageIndicatorForm.Name = "tabPageIndicatorForm";
-            tabPageIndicatorForm.Padding = new Padding(3);
-            tabPageIndicatorForm.Size = new Size(192, 0);
-            tabPageIndicatorForm.TabIndex = 1;
-            tabPageIndicatorForm.Text = "شناسنامه شاخص";
-            tabPageIndicatorForm.UseVisualStyleBackColor = true;
-            // 
-            // tabPageIndicatorAssignToCategory
-            // 
-            tabPageIndicatorAssignToCategory.Location = new Point(4, 24);
-            tabPageIndicatorAssignToCategory.Name = "tabPageIndicatorAssignToCategory";
-            tabPageIndicatorAssignToCategory.Padding = new Padding(3);
-            tabPageIndicatorAssignToCategory.Size = new Size(192, 0);
-            tabPageIndicatorAssignToCategory.TabIndex = 1;
-            tabPageIndicatorAssignToCategory.Text = "تخصیص شاخص به دسته‌بندی";
-            tabPageIndicatorAssignToCategory.UseVisualStyleBackColor = true;
-            // 
-            // tabPageCategoryAssignToIndicator
-            // 
-            tabPageCategoryAssignToIndicator.Location = new Point(4, 24);
-            tabPageCategoryAssignToIndicator.Name = "tabPageCategoryAssignToIndicator";
-            tabPageCategoryAssignToIndicator.Padding = new Padding(3);
-            tabPageCategoryAssignToIndicator.Size = new Size(192, 0);
-            tabPageCategoryAssignToIndicator.TabIndex = 1;
-            tabPageCategoryAssignToIndicator.Text = "تخصیص دسته‌بندی به شاخص";
-            tabPageCategoryAssignToIndicator.UseVisualStyleBackColor = true;
-            // 
-            // tabPageIndicatorAssignToUser
-            // 
-            tabPageIndicatorAssignToUser.Location = new Point(4, 24);
-            tabPageIndicatorAssignToUser.Name = "tabPageIndicatorAssignToUser";
-            tabPageIndicatorAssignToUser.Padding = new Padding(3);
-            tabPageIndicatorAssignToUser.Size = new Size(192, 0);
-            tabPageIndicatorAssignToUser.TabIndex = 1;
-            tabPageIndicatorAssignToUser.Text = "تخصیص شاخص به کاربران";
-            tabPageIndicatorAssignToUser.UseVisualStyleBackColor = true;
-            // 
-            // tabPageUserAssignToIndicator
-            // 
-            tabPageUserAssignToIndicator.Location = new Point(4, 24);
-            tabPageUserAssignToIndicator.Name = "tabPageUserAssignToIndicator";
-            tabPageUserAssignToIndicator.Padding = new Padding(3);
-            tabPageUserAssignToIndicator.Size = new Size(192, 0);
-            tabPageUserAssignToIndicator.TabIndex = 1;
-            tabPageUserAssignToIndicator.Text = "تخصیص کاربران به شاخص";
-            tabPageUserAssignToIndicator.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -349,15 +239,5 @@
         private ToolStripMenuItem خروجToolStripMenuItem;
         private FlowLayoutPanel flowLayoutPanelMain;
         private TabControl tabControlMain;
-        private TabPage tabPageOnForm;
-        private TabPage tabPageOnDate;
-        private TabPage tabPageOnIndicator;
-        private TabPage tabPageUserForm;
-        private TabPage tabPageUserAccess;
-        private TabPage tabPageIndicatorForm;
-        private TabPage tabPageIndicatorAssignToCategory;
-        private TabPage tabPageCategoryAssignToIndicator;
-        private TabPage tabPageIndicatorAssignToUser;
-        private TabPage tabPageUserAssignToIndicator;
     }
 }

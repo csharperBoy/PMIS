@@ -11,6 +11,7 @@ using PMIS.Services;
 using PMIS.Services.Contract;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace PMIS.Forms
 {
@@ -31,9 +32,10 @@ namespace PMIS.Forms
         private int fkUserId;
         private int fkIndicatorId;
         private bool isLoaded = false;
+        private TabControl tabControl;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId)
+        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
             InitializeComponent();
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
@@ -43,6 +45,37 @@ namespace PMIS.Forms
             fkUserId = _fkUserId;
             fkIndicatorId = _fkIndicatorId;
             CustomInitialize();
+            tabControl = _tabControl;
+            AddNewTabPage(tabControl, this);
+        }
+
+        private void AddNewTabPage(TabControl tabControl, Form form)
+        {
+            TabPage tabPage = new TabPage();
+            tabPage.Location = new Point(4, 24);
+            tabPage.Name = "tabPageClaimUserOnIndicatorForm";
+            tabPage.Padding = new Padding(3);
+            tabPage.Size = new Size(192, 0);
+            tabPage.TabIndex = 0;
+            tabPage.Text = "ادعاهای کاربران روی شاخص‌ها";
+            tabPage.UseVisualStyleBackColor = true;
+
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            if (tabControl.TabPages.Contains(tabPage))
+            {
+                tabPage.Controls.Clear();
+            }
+            else
+            {
+                tabControl.Controls.Add(tabPage);
+            }
+            Panel panel = new Panel();
+            panel.Controls.Add(form);
+            panel.Dock = DockStyle.Fill;
+            tabPage.Controls.Add(panel);
+            form.Show();
         }
 
         private void NormalForm_Load(object sender, EventArgs e)

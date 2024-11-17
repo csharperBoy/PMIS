@@ -13,6 +13,7 @@ using PMIS.Services.Contract;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace PMIS.Forms
 {
@@ -32,9 +33,10 @@ namespace PMIS.Forms
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorValueService;
         private bool isLoaded = false;
+        private TabControl tabControl;
         #endregion
 
-        public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorValueService, IUserService _userService, ILookUpValueService _lookUpValueService)
+        public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorValueService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             indicatorValueService = _IndicatorValueService;
@@ -43,6 +45,37 @@ namespace PMIS.Forms
             claimUserOnIndicatorValueService = _claimUserOnIndicatorValueService;
             userService = _userService;
             CustomInitialize();
+            tabControl = _tabControl;
+            AddNewTabPage(tabControl, this);
+        }
+
+        private void AddNewTabPage(TabControl tabControl, Form form)
+        {
+            TabPage tabPage = new TabPage();
+            tabPage.Location = new Point(4, 24);
+            tabPage.Name = "tabPageIndicatorValueDataEntryOnDate";
+            tabPage.Padding = new Padding(3);
+            tabPage.Size = new Size(192, 0);
+            tabPage.TabIndex = 0;
+            tabPage.Text = "ورود مقادیر";
+            tabPage.UseVisualStyleBackColor = true;
+
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            if (tabControl.TabPages.Contains(tabPage))
+            {
+                tabPage.Controls.Clear();
+            }
+            else
+            {
+                tabControl.Controls.Add(tabPage);
+            }
+            Panel panel = new Panel();
+            panel.Controls.Add(form);
+            panel.Dock = DockStyle.Fill;
+            tabPage.Controls.Add(panel);
+            form.Show();
         }
 
         private void NormalForm_Load(object sender, EventArgs e)
