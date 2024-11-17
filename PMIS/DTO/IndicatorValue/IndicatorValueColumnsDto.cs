@@ -24,11 +24,19 @@ namespace PMIS.DTO.IndicatorValue
 
                new DataGridViewTextBoxColumn()
                {
-                   HeaderText = "تاریخ",
-                   Name = "DateTime",
-                   DataPropertyName = "DateTime",
+                   HeaderText = "از تاریخ",
+                   Name = "DateTime From",
+                   DataPropertyName = "DateTimeFrom",
                    ReadOnly = false,
                    Visible = true,                   
+               },
+                new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "تا تاریخ",
+                   Name = "DateTime To",
+                   DataPropertyName = "DateTimeTo",
+                   ReadOnly = false,
+                   Visible = true,
                },
                 new DataGridViewComboBoxColumn()
                {
