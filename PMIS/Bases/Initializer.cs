@@ -288,7 +288,7 @@ namespace PMIS.Bases
 
                     //add values
                     //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "0", Display = "روزکار", OrderNum = 1 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "0", Display = "هیچ کدام", OrderNum = 1 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "1", Display = "شیفت 1", OrderNum = 2 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "2", Display = "شیفت 2", OrderNum = 3 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "3", Display = "شیفت 3", OrderNum = 4 });
