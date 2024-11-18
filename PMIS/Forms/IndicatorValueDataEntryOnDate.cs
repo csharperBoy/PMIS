@@ -18,6 +18,8 @@ using Generic.Helper;
 using PMIS.DTO.Indicator;
 using System.Collections.Generic;
 using PMIS.DTO.LookUpValue;
+using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PMIS.Forms
 {
@@ -432,19 +434,33 @@ namespace PMIS.Forms
                 foreach (DataGridViewRow row in dgvFiltersList.Rows)
                 {
                     IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
-                    DateTime dateTimeFrom = Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString());
-                    DateTime dateTimeTo = Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString());
+                    DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(- 365);
+                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(365);
                     if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
                     {
                         indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                     }
                     for (DateTime date = dateTimeFrom; date <= dateTimeTo; date.AddDays(1))
                     {
+                        IndicatorValueSearchResponseDto indicatorValue1 = new IndicatorValueSearchResponseDto()
+                        {
+                            DateTime = date,
+                        };
                         foreach (IndicatorSearchResponseDto indicator in indicators)
                         {
-                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForDateOnIndicator(date, indicator);
-                            blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
-                            result.AddRange(blankIndicatorValues);
+                            IndicatorValueSearchResponseDto indicatorValue = new IndicatorValueSearchResponseDto()
+                            {
+                                DateTime = indicatorValue1.DateTime,
+                                FkIndicatorId = indicator.Id,
+                            };
+                            bool isNeedValueForIndicatorInDate = await IsNeedValueForIndicatorInDate(date, indicator);
+                            if (isNeedValueForIndicatorInDate)
+                            {
+                                IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForDateOnIndicator(indicatorValue, indicator);
+                                blankIndicatorValues = await GenerateRowsForValueType(blankIndicatorValues, indicator);
+                                blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
+                                result.AddRange(blankIndicatorValues);
+                            }
                         }
                     }
                 }
@@ -457,59 +473,152 @@ namespace PMIS.Forms
             }
         }
 
-        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForDateOnIndicator(DateTime date, IndicatorSearchResponseDto indicator)
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForDateOnIndicator(IndicatorValueSearchResponseDto indicatorValue, IndicatorSearchResponseDto indicator)
         {
             try
             {
-                IEnumerable<IndicatorValueSearchResponseDto> result = null;
-                PersianCalendar persianCalendar = new PersianCalendar();
-                switch (indicator.FkLkpPeriodInfo.FkLookUpInfo.Code)
+                List<IndicatorValueSearchResponseDto> result = new List<IndicatorValueSearchResponseDto>();
+                IEnumerable<LookUpValueShortInfoDto> valueTypes = (IEnumerable<LookUpValueShortInfoDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkLkpValueTypeId"]).DataSource;
+                switch (indicator.FkLkpManualityInfo.Value)
                 {
-                    case "Annually":
-                        if (persianCalendar.GetDayOfYear(date) == 1)
-                        {
-
-                        }
+                    case "Nothing":
                         break;
-                    case "Biannual":
-                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 187)
-                        {
-
-                        }
+                    case "Foresight":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Seasonal":
-                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 94 || persianCalendar.GetDayOfYear(date) == 187 || persianCalendar.GetDayOfYear(date) == 277)
-                        {
-
-                        }
+                    case "Target":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Monthly":
-                        if (persianCalendar.GetDayOfMonth(date) == 1)
-                        {
-
-                        }
+                    case "Performance":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Weekly":
-                        if (persianCalendar.GetDayOfWeek(date) == DayOfWeek.Saturday)
-                        {
-
-                        }
+                    case "FT":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                        result.Add(indicatorValue);
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Dayly":
+                    case "FP":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                        result.Add(indicatorValue);
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Shiftly":
-                        IEnumerable<LookUpValueSearchResponseDto> lookUpValues = (IEnumerable<LookUpValueSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkShiftId"]).DataSource;
-                        foreach (LookUpValueSearchResponseDto lookUpValue in lookUpValues)
-                        {
-
-                        }
+                    case "TP":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                        result.Add(indicatorValue);
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                        result.Add(indicatorValue);
                         break;
-                    case "Hourly":
+                    case "FTP":
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                        result.Add(indicatorValue);
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                        result.Add(indicatorValue);
+                        indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                        result.Add(indicatorValue);
                         break;
                     default:
                         break;
                 }
                 return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForValueType(IEnumerable<IndicatorValueSearchResponseDto> indicatorValues, IndicatorSearchResponseDto indicator)
+        {
+            try
+            {
+                List<IndicatorValueSearchResponseDto> result = new List<IndicatorValueSearchResponseDto>();
+                IEnumerable<LookUpValueShortInfoDto> shifts = (IEnumerable<LookUpValueShortInfoDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkLkpShiftId"]).DataSource;
+                foreach (IndicatorValueSearchResponseDto indicatorValue in indicatorValues)
+                {
+                    switch (indicator.FkLkpPeriodInfo.Value)
+                    {
+                        case "Shiftly":
+                            foreach (LookUpValueShortInfoDto shift in shifts)
+                            {
+
+                                indicatorValue.FkLkpShiftId = shift.Id;
+                                result.Add(indicatorValue);
+                            }
+                            break;
+                        case "Hourly":
+                            for (int i = 0; i < 24; i++)
+                            {
+                                indicatorValue.DateTime.AddHours(i);
+                                result.Add(indicatorValue);
+                            }
+                            break;
+                        default:
+                            result.Add(indicatorValue);
+                            break;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        private async Task<bool> IsNeedValueForIndicatorInDate(DateTime date, IndicatorSearchResponseDto indicator)
+        {
+            try
+            {
+                PersianCalendar persianCalendar = new PersianCalendar();
+                switch (indicator.FkLkpPeriodInfo.Value)
+                {
+                    case "Annually":
+                        if (persianCalendar.GetDayOfYear(date) == 1)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "Biannual":
+                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 187)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "Seasonal":
+                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 94 || persianCalendar.GetDayOfYear(date) == 187 || persianCalendar.GetDayOfYear(date) == 277)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "Monthly":
+                        if (persianCalendar.GetDayOfMonth(date) == 1)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "Weekly":
+                        if (persianCalendar.GetDayOfWeek(date) == DayOfWeek.Saturday)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "Dayly":
+                        return true;
+                    case "Shiftly":
+                        return true;
+                    case "Hourly":
+                        return true;
+                    default:
+                        return false;
+                }
+                return false;
             }
             catch (Exception ex)
             {
