@@ -405,7 +405,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<IndicatorValueSearchResponseDto> list) = await indicatorValueService.Search(searchRequest);
-            list = await GenerateRows(list);
+            //list = await GenerateRows(list);
             if (isSuccess)
             {
                 if (list.Count() == 0)
