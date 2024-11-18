@@ -14,6 +14,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
+using Generic.Helper;
+using PMIS.DTO.Indicator;
+using System.Collections.Generic;
+using PMIS.DTO.LookUpValue;
 
 namespace PMIS.Forms
 {
@@ -361,24 +365,14 @@ namespace PMIS.Forms
                         FilterOperator filterOperator = FilterOperator.Contains;
                         if (column.Name == "DateTimeFrom")
                         {
-                            PersianCalendar pc = new PersianCalendar();
-                            var parts = cellValue.Split('/');
-                            int year = int.Parse(parts[0]);
-                            int month = int.Parse(parts[1]); 
-                            int day = int.Parse(parts[2]);
-                            cellValue = pc.ToDateTime(year, month, day, 0, 0, 0, 0).ToShortDateString();
+                            cellValue = Helper.Convert.ConvertShamsiToGregorian(cellValue).ToString();
 
                             columnName = "DateTime";
                             filterOperator = FilterOperator.GreaterThanOrEqual;
                         }
                         else if (column.Name == "DateTimeTo")
                         {
-                            PersianCalendar pc = new PersianCalendar();
-                            var parts = cellValue.Split('/');
-                            int year = int.Parse(parts[0]);
-                            int month = int.Parse(parts[1]);
-                            int day = int.Parse(parts[2]);
-                            cellValue = pc.ToDateTime(year, month, day, 0, 0, 0, 0).ToShortDateString();
+                            cellValue = Helper.Convert.ConvertShamsiToGregorian(cellValue).ToString();
 
                             columnName = "DateTime";
                             filterOperator = FilterOperator.LessThanOrEqual;
@@ -409,7 +403,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<IndicatorValueSearchResponseDto> list) = await indicatorValueService.Search(searchRequest);
-           // list = await GenerateRows(list);
+            list = await GenerateRows(list);
             if (isSuccess)
             {
                 if (list.Count() == 0)
@@ -430,18 +424,99 @@ namespace PMIS.Forms
             isLoaded = true;
         }
 
-        //private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRows(IEnumerable<IndicatorValueSearchResponseDto> _indicatorlist)
-        //{
-        //    try
-        //    {
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRows(IEnumerable<IndicatorValueSearchResponseDto> _indicatorValueList)
+        {
+            try
+            {
+                List<IndicatorValueSearchResponseDto> result = _indicatorValueList.ToList();
+                foreach (DataGridViewRow row in dgvFiltersList.Rows)
+                {
+                    IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
+                    DateTime dateTimeFrom = Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString());
+                    DateTime dateTimeTo = Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString());
+                    if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
+                    {
+                        indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                    }
+                    for (DateTime date = dateTimeFrom; date <= dateTimeTo; date.AddDays(1))
+                    {
+                        foreach (IndicatorSearchResponseDto indicator in indicators)
+                        {
+                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForDateOnIndicator(date, indicator);
+                            blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
+                            result.AddRange(blankIndicatorValues);
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
 
-        //    }
-        //    catch (Exception ex)
-        //    {
+                throw;
+            }
+        }
 
-        //        throw;
-        //    }
-        //}
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForDateOnIndicator(DateTime date, IndicatorSearchResponseDto indicator)
+        {
+            try
+            {
+                IEnumerable<IndicatorValueSearchResponseDto> result = null;
+                PersianCalendar persianCalendar = new PersianCalendar();
+                switch (indicator.FkLkpPeriodInfo.FkLookUpInfo.Code)
+                {
+                    case "Annually":
+                        if (persianCalendar.GetDayOfYear(date) == 1)
+                        {
+
+                        }
+                        break;
+                    case "Biannual":
+                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 187)
+                        {
+
+                        }
+                        break;
+                    case "Seasonal":
+                        if (persianCalendar.GetDayOfYear(date) == 1 || persianCalendar.GetDayOfYear(date) == 94 || persianCalendar.GetDayOfYear(date) == 187 || persianCalendar.GetDayOfYear(date) == 277)
+                        {
+
+                        }
+                        break;
+                    case "Monthly":
+                        if (persianCalendar.GetDayOfMonth(date) == 1)
+                        {
+
+                        }
+                        break;
+                    case "Weekly":
+                        if (persianCalendar.GetDayOfWeek(date) == DayOfWeek.Saturday)
+                        {
+
+                        }
+                        break;
+                    case "Dayly":
+                        break;
+                    case "Shiftly":
+                        IEnumerable<LookUpValueSearchResponseDto> lookUpValues = (IEnumerable<LookUpValueSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkShiftId"]).DataSource;
+                        foreach (LookUpValueSearchResponseDto lookUpValue in lookUpValues)
+                        {
+
+                        }
+                        break;
+                    case "Hourly":
+                        break;
+                    default:
+                        break;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
 
         public async Task AddEntity()
         {

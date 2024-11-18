@@ -4,6 +4,7 @@ using Serilog.Core;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -39,6 +40,23 @@ namespace Generic.Helper
                 }
             }
 
+            public static DateTime ConvertShamsiToGregorian(string _shamsiDateString)
+            {
+                PersianCalendar persianCalendar = new PersianCalendar();
+                var parts = _shamsiDateString.Split('/');
+                int year = int.Parse(parts[0]);
+                int month = int.Parse(parts[1]);
+                int day = int.Parse(parts[2]);
+                return persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0);
+            }
+            public static string ConvertGregorianToShamsi(DateTime _gregorianDate)
+            {
+                PersianCalendar persianCalendar = new PersianCalendar();
+                int year = persianCalendar.GetYear(_gregorianDate);
+                int month = persianCalendar.GetMonth(_gregorianDate);
+                int day = persianCalendar.GetDayOfMonth(_gregorianDate);
+                return year + "/" + month + "/" + day;
+            }
         }
         public static class ServiceLog
         {
