@@ -109,9 +109,9 @@ namespace PMIS.Forms
             try
             {
                 await EdiIndicatorValue();
-                await LogicalDeleteEntity();
-                await PhysicalDeleteEntity();
-                await RecycleEntity();
+               // await LogicalDeleteEntity();
+                //await PhysicalDeleteEntity();
+               // await RecycleEntity();
                 await AddEntity();
                 RefreshVisuals();
 
@@ -450,7 +450,7 @@ namespace PMIS.Forms
                 {
                     IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
                     DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-3);
-                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(3);
+                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(-3);
                     if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
                     {
                         indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
@@ -661,6 +661,14 @@ namespace PMIS.Forms
                 {
                     try
                     {
+                        var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
+                        string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
+                        bool hasPermission = await HasAccess("Add", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        if (!hasPermission)
+                        {
+                            //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
+                            continue;
+                        }
                         if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
                         {
                             IndicatorValueAddRequestDto addRequest = new IndicatorValueAddRequestDto();
@@ -707,6 +715,14 @@ namespace PMIS.Forms
                 {
                     try
                     {
+                        var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
+                        string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
+                        bool hasPermission = await HasAccess("Edit", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        if (!hasPermission)
+                        {
+                            //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
+                            continue;
+                        }
                         if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
                         {
                             IndicatorValueEditRequestDto editRequest = new IndicatorValueEditRequestDto();
@@ -834,7 +850,7 @@ namespace PMIS.Forms
             }
         }
 
-        public void CellContentClick(int rowIndex, int columnIndex)
+        public async void CellContentClick(int rowIndex, int columnIndex)
         {
             if (rowIndex == -1)
                 return;
@@ -843,33 +859,11 @@ namespace PMIS.Forms
             var row = dgvResultsList.Rows[rowIndex];
             if (dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
             {
-                string accessMode = null;
-                string lkpValueType = ((LookUpValueShortInfoDto)((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource).Value;
-                if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Foresight")
-                {
-                    accessMode = "AddForesight";
-                }
-                else if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Target")
-                {
-                    accessMode = "AddTarget";
-                }
-                else if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Performance")
-                {
-                    accessMode = "AddPerformance";
-                }
-                if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Foresight")
-                {
-                    accessMode = "EditForesight";
-                }
-                else if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Target")
-                {
-                    accessMode = "EditTarget";
-                }
-                else if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Performance")
-                {
-                    accessMode = "EditPerformance";
-                }
-                if (!HasAccess(accessMode, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString())))
+                string operationMode = row.Cells["Id"].Value.ToString() == "0" ? "Add" : "Edit";
+                var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
+                string lkpValueType = tempLst.Where(l=>l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
+                bool hasPermission = await HasAccess(operationMode, lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                if (!hasPermission)
                 {
                     MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
                     return;
@@ -939,7 +933,7 @@ namespace PMIS.Forms
             //}
         }
 
-        private async bool HasAccess(string _accessMode, int _userId, int _indicatorId)
+        private async Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _userId, int _indicatorId)
         {
             try
             {
@@ -969,31 +963,13 @@ namespace PMIS.Forms
                     }
                     );
 
-                //if (true)
-                //{
-                //    if (IsSuccess && userClaims.Count() > 0)
-                //    {
-                //        switch (_accessMode)
-                //        {
-                //            case "Add":
-                //                switch (userClaims.)
-                //                {
-                //                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value = ""))
-                //                    default:
-                //                        break;
-                //        }
+                if (IsSuccess && userClaims.Count() > 0)
+                {
+                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value == (_operationMode + _lkpValueType)).Count() > 0)
+                        return await Task.FromResult(true);
+                }
 
-                //        break;
-                //            case "Edit":
-
-
-                //            break;
-                //        default:
-                //            break;
-                //        }
-                //    }
-                //}
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
             catch (Exception ex)
             {
