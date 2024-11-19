@@ -844,7 +844,7 @@ namespace PMIS.Forms
             if (dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
             {
                 string accessMode = null;
-                string  lkpValueType = ((LookUpValueShortInfoDto)((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource).Value;
+                string lkpValueType = ((LookUpValueShortInfoDto)((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource).Value;
                 if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Foresight")
                 {
                     accessMode = "AddForesight";
@@ -943,7 +943,7 @@ namespace PMIS.Forms
         {
             try
             {
-                (bool IsSuccess,IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) =await claimUserOnIndicatorService.Search
+                (bool IsSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) = await claimUserOnIndicatorService.Search
                     (
                     new GenericSearchRequestDto()
                     {
@@ -969,28 +969,31 @@ namespace PMIS.Forms
                     }
                     );
 
-                if ()
-                {
-                    if (IsSuccess && userClaims.Count() > 0)
-                    {
-                        switch (_accessMode)
-                        {
-                            case "Add":
-                                switch (userClaims.)
-                                {
-                                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value = ""))
-                                    default:
-                                        break;
-                                }
-                                break;
-                            case "Edit":
+                //if (true)
+                //{
+                //    if (IsSuccess && userClaims.Count() > 0)
+                //    {
+                //        switch (_accessMode)
+                //        {
+                //            case "Add":
+                //                switch (userClaims.)
+                //                {
+                //                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value = ""))
+                //                    default:
+                //                        break;
+                //        }
 
-                                
-                                break;
-                            default:
-                                break;
-                        }
-                    }                
+                //        break;
+                //            case "Edit":
+
+
+                //            break;
+                //        default:
+                //            break;
+                //        }
+                //    }
+                //}
+                return Task.FromResult(false);
             }
             catch (Exception ex)
             {
