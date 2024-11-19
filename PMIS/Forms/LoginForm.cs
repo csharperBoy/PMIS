@@ -28,7 +28,7 @@ namespace PMIS.Forms
         private async void LoginForm_Load(object sender, EventArgs e)
         {
            // IndicatorAddRequestDto a = await GenericMapHandler.StaticMap<AutoMapHandler,Indicator, IndicatorAddRequestDto>(new AutoMapHandler(), new Indicator() { Code = "Ali"});
-            new PMIS.Bases.Initializer().Initialize();
+           
         }
 
         private void buttonEntry_Click(object sender, EventArgs e)

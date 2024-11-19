@@ -141,7 +141,7 @@ namespace PMIS.DTO.IndicatorValue
                    ValueMember = "Id",
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"),
                    ReadOnly = true,
-                   Visible = true,
+                   Visible = false,
                },
                 new DataGridViewComboBoxColumn()
                {

@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace PMIS.Bases
 {
@@ -29,7 +32,11 @@ namespace PMIS.Bases
             {
                 try
                 {
-                    throw new NotImplementedException("عدم پیاده سازی تابع ساخت اولیه پایگاه داده از روی مدل‌ها!");
+                    using (var dbContext = new PmisContext())
+                    {
+                        dbContext.Database.EnsureCreated();
+                        dbContext.Database.Migrate();
+                    }
                 }
                 catch (Exception ex)
                 {

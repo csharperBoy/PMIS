@@ -16,6 +16,7 @@ using Generic.Service.Normal.Operation.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PMIS.DTO.ClaimOnSystem;
 using PMIS.DTO.ClaimUserOnIndicator;
@@ -50,7 +51,7 @@ namespace PMIS
         {
          
             ApplicationConfiguration.Initialize();
-
+            new PMIS.Bases.Initializer().Initialize();
             var serviceCollection = new ServiceCollection();
             ConfigureGenericServicesContainer(serviceCollection);
 
@@ -190,6 +191,7 @@ namespace PMIS
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
+        
         private static void ConfigureServicesProvider(IServiceProvider serviceProvider)
         {
             var logHandler = serviceProvider.GetRequiredService<AbstractGenericLogWithSerilogHandler>().CreateLogger();

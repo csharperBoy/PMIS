@@ -24,6 +24,9 @@ using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map;
 using AutoMapper;
+using Castle.Components.DictionaryAdapter;
+using PMIS.Bases;
+using PMIS.DTO.ClaimUserOnIndicator;
 
 namespace PMIS.Forms
 {
@@ -36,23 +39,26 @@ namespace PMIS.Forms
         private List<IndicatorValueDeleteRequestDto> lstLogicalDeleteRequest;
         private List<IndicatorValueDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorValueDeleteRequestDto> lstRecycleRequest;
+        private IEnumerable<IndicatorValueSearchResponseDto> lstSearchResponse;
+        private BindingSource resultBindingSource;
         private IndicatorValueColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
         private IIndicatorValueService indicatorValueService;
         private IIndicatorService indicatorService;
-        private IClaimUserOnIndicatorService claimUserOnIndicatorValueService;
+        private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private bool isLoaded = false;
         private TabControl tabControl;
+
         #endregion
 
-        public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorValueService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             indicatorValueService = _IndicatorValueService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
-            claimUserOnIndicatorValueService = _claimUserOnIndicatorValueService;
+            claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
             CustomInitialize();
             tabControl = _tabControl;
@@ -159,7 +165,6 @@ namespace PMIS.Forms
 
         private async void CustomInitialize()
         {
-
             // InitializeComponent();
             columns = new IndicatorValueColumnsDto();
             await columns.Initialize(lookUpValueService, indicatorService);
@@ -169,6 +174,8 @@ namespace PMIS.Forms
             GenerateDgvFilterColumnsInitialize();
             GenerateDgvResultColumnsInitialize();
             FiltersInitialize();
+            dgvResultsList.DataSource = resultBindingSource;
+
             SearchEntity();
         }
 
@@ -334,7 +341,7 @@ namespace PMIS.Forms
             lstLogicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
-
+            lstSearchResponse = new List<IndicatorValueSearchResponseDto>();
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
                 filters = new List<GenericSearchFilterDto>(),
@@ -408,18 +415,22 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<IndicatorValueSearchResponseDto> list) = await indicatorValueService.Search(searchRequest);
-            list = await GenerateRows(list);
+            (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
+            lstSearchResponse = await GenerateRows(lstSearchResponse);
             if (isSuccess)
             {
-                if (list.Count() == 0)
+                if (lstSearchResponse.Count() == 0)
                 {
                     dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!");
                 }
                 else
                 {
-                    dgvResultsList.DataSource = new BindingList<IndicatorValueSearchResponseDto>(list.ToList());
+
+                    // dgvResultsList.DataSource = new BindingList<IndicatorValueSearchResponseDto>(list.ToList());
+                    var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+                    resultBindingSource = new BindingSource(bindingList, null);
+                    dgvResultsList.DataSource = resultBindingSource;
                 }
             }
             else
@@ -444,20 +455,18 @@ namespace PMIS.Forms
                     {
                         indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                     }
-                    foreach (IndicatorSearchResponseDto indicator in indicators)
+                    for (DateTime date = dateTimeFrom; date <= dateTimeTo; date = date.AddDays(1))
                     {
-                        IndicatorValueSearchResponseDto indicatorValue1 = new IndicatorValueSearchResponseDto()
-                        {
-                            FkIndicatorId = indicator.Id,
-                        };
-                        for (DateTime date = dateTimeFrom; date <= dateTimeTo; date = date.AddDays(1))
+                        foreach (IndicatorSearchResponseDto indicator in indicators)
                         {
                             IndicatorValueSearchResponseDto indicatorValue = new IndicatorValueSearchResponseDto()
                             {
-                                DateTime = date,
                                 FkIndicatorId = indicator.Id,
+                                VrtLkpFormId = indicator.FkLkpFormId,
+                                VrtLkpPeriodId = indicator.FkLkpPeriodId,
+                                DateTime = date,
                             };
-                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForValueType(indicatorValue, indicator); 
+                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForValueType(indicatorValue, indicator);
                             blankIndicatorValues = await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator);
                             blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
                             result.AddRange(blankIndicatorValues);
@@ -560,79 +569,79 @@ namespace PMIS.Forms
                 IEnumerable<LookUpValueShortInfoDto> shifts = (IEnumerable<LookUpValueShortInfoDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkLkpShiftId"]).DataSource;
                 AbstractGenericMapHandler mapper = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto);
                 IndicatorValueSearchResponseDto temp;
-                    PersianCalendar persianCalendar = new PersianCalendar();
-                    switch (indicator.FkLkpPeriodInfo.Value)
-                    {
-                        case "Annually":
-                            if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1)
-                            {
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                                break;
-                            }
-                            break;
-                        case "Biannual":
-                            if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187)
-                            {
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                                break;
-                            }
-                            break;
-                        case "Seasonal":
-                            if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 94 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 277)
-                            {
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                                break;
-                            }
-                            break;
-                        case "Monthly":
-                            if (persianCalendar.GetDayOfMonth(indicatorValue.DateTime) == 1)
-                            {
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                                break;
-                            }
-                            break;
-                        case "Weekly":
-                            if (persianCalendar.GetDayOfWeek(indicatorValue.DateTime) == DayOfWeek.Saturday)
-                            {
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                                break;
-                            }
-                            break;
-                        case "Dayly":
+                PersianCalendar persianCalendar = new PersianCalendar();
+                switch (indicator.FkLkpPeriodInfo.Value)
+                {
+                    case "Annually":
+                        if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1)
+                        {
                             indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                             break;
-                        case "Shiftly":
-                            foreach (LookUpValueShortInfoDto shift in shifts.Where(s => s.Id != 0 && s.Value != "0"))
-                            {
-                                indicatorValue.FkLkpShiftId = shift.Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                            }
+                        }
+                        break;
+                    case "Biannual":
+                        if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187)
+                        {
+                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
                             break;
-                        case "Hourly":
-                            for (int i = 0; i < 24; i++)
-                            {
-                                indicatorValue.DateTime.AddHours(i);
-                                indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
-                                temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
-                                result.Add(temp);
-                            }
+                        }
+                        break;
+                    case "Seasonal":
+                        if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 94 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 277)
+                        {
+                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
                             break;
-                        default:
+                        }
+                        break;
+                    case "Monthly":
+                        if (persianCalendar.GetDayOfMonth(indicatorValue.DateTime) == 1)
+                        {
+                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
                             break;
-                    }
+                        }
+                        break;
+                    case "Weekly":
+                        if (persianCalendar.GetDayOfWeek(indicatorValue.DateTime) == DayOfWeek.Saturday)
+                        {
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
+                            break;
+                        }
+                        break;
+                    case "Dayly":
+                        indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
+                        temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                        result.Add(temp);
+                        break;
+                    case "Shiftly":
+                        foreach (LookUpValueShortInfoDto shift in shifts.Where(s => s.Id != 0 && s.Value != "0"))
+                        {
+                            indicatorValue.FkLkpShiftId = shift.Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
+                        }
+                        break;
+                    case "Hourly":
+                        for (int i = 0; i < 24; i++)
+                        {
+                            indicatorValue.DateTime.AddHours(i);
+                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
+                            result.Add(temp);
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 return result;
             }
             catch (Exception ex)
@@ -834,12 +843,39 @@ namespace PMIS.Forms
             var row = dgvResultsList.Rows[rowIndex];
             if (dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
             {
-
-                foreach (DataGridViewCell cell in row.Cells)
+                string accessMode = null;
+                string  lkpValueType = ((LookUpValueShortInfoDto)((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource).Value;
+                if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Foresight")
                 {
-                    dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value = true;
-                    cell.ReadOnly = false;
+                    accessMode = "AddForesight";
                 }
+                else if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Target")
+                {
+                    accessMode = "AddTarget";
+                }
+                else if (row.Cells["Id"].Value.ToString() == "0" && lkpValueType == "Performance")
+                {
+                    accessMode = "AddPerformance";
+                }
+                if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Foresight")
+                {
+                    accessMode = "EditForesight";
+                }
+                else if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Target")
+                {
+                    accessMode = "EditTarget";
+                }
+                else if (row.Cells["Id"].Value.ToString() != "0" && lkpValueType == "Performance")
+                {
+                    accessMode = "EditPerformance";
+                }
+                if (!HasAccess(accessMode, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString())))
+                {
+                    MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
+                    return;
+                }
+                dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value = true;
+                dgvResultsList.Rows[rowIndex].Cells["Value"].ReadOnly = false;
             }
             else if (dgvResultsList.Columns[columnIndex].Name == "LogicalDelete" && rowIndex >= 0)
             {
@@ -897,10 +933,70 @@ namespace PMIS.Forms
             //    if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
             //    {
             //        int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-            //        ClaimUserOnIndicatorValueForm frm = new ClaimUserOnIndicatorValueForm(claimUserOnIndicatorValueService, userService, IndicatorValueService, lookUpValueService, tempId);
+            //        ClaimUserOnIndicatorValueForm frm = new ClaimUserOnIndicatorValueForm(claimUserOnIndicatorService, userService, IndicatorValueService, lookUpValueService, tempId);
             //        frm.Show();
             //    }
             //}
+        }
+
+        private async bool HasAccess(string _accessMode, int _userId, int _indicatorId)
+        {
+            try
+            {
+                (bool IsSuccess,IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) =await claimUserOnIndicatorService.Search
+                    (
+                    new GenericSearchRequestDto()
+                    {
+                        filters = new List<GenericSearchFilterDto>()
+                        {
+                            new GenericSearchFilterDto()
+                            {
+                                columnName = "FkUserId",
+                                value = _userId.ToString(),
+                                LogicalOperator = LogicalOperator.Begin,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition
+                            },
+                            new GenericSearchFilterDto()
+                            {
+                                columnName = "FkIndicatorId",
+                                value = _indicatorId.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition
+                            }
+                        }
+                    }
+                    );
+
+                if ()
+                {
+                    if (IsSuccess && userClaims.Count() > 0)
+                    {
+                        switch (_accessMode)
+                        {
+                            case "Add":
+                                switch (userClaims.)
+                                {
+                                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value = ""))
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case "Edit":
+
+                                
+                                break;
+                            default:
+                                break;
+                        }
+                    }                
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public bool CellBeginEdit(int rowIndex)
@@ -972,6 +1068,7 @@ namespace PMIS.Forms
                 throw;
             }
         }
+
     }
 
 
