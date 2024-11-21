@@ -126,6 +126,8 @@ namespace PMIS.Forms
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             RowEnter(e.RowIndex);
+            if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
+                MessageBox.Show("1");
         }
 
         private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)

@@ -115,7 +115,7 @@ namespace PMIS.DTO.IndicatorValue
                {
                    HeaderText = "تاریخ",
                    Name = "DateTime",
-                   DataPropertyName = "DateTime",
+                   DataPropertyName = "shamsiDateTime",
                    ReadOnly = true,
                    Visible = true,
                    Frozen = true,

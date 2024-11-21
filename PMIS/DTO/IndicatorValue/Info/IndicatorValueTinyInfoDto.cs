@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using Generic.Helper;
 using Generic.Service.DTO.Concrete;
 using PMIS.DTO.Indicator.Info;
 using System;
@@ -14,11 +15,13 @@ namespace PMIS.DTO.IndicatorValue.Info
         public async Task<IndicatorValueTinyInfoDto> extraMapFromBaseModel(PMIS.Models.IndicatorValue baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
+            this.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(this.DateTime);
             return this;
         }
         public long Id { get; set; }
 
         public DateTime DateTime { get; set; }
+        public string shamsiDateTime { get; set; }
 
         public decimal Value { get; set; }
 
