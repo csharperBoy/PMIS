@@ -1,5 +1,6 @@
 ﻿using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
@@ -407,9 +408,10 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
-                        {
-                            ClaimUserOnIndicatorAddRequestDto addRequest = new ClaimUserOnIndicatorAddRequestDto();
+                        
+                            if((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
+                            {
+                                ClaimUserOnIndicatorAddRequestDto addRequest = new ClaimUserOnIndicatorAddRequestDto();
 
                             addRequest = AddMaping(row);
                             lstAddRequest.Add(addRequest);

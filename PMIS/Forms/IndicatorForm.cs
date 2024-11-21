@@ -397,7 +397,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
+                        if ((row.Cells["Id"].Value == null && row.Index+1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
                         {
                             IndicatorAddRequestDto addRequest = new IndicatorAddRequestDto();
 
