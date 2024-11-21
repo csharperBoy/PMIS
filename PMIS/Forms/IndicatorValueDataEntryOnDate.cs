@@ -40,6 +40,7 @@ namespace PMIS.Forms
         private List<IndicatorValueDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorValueDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<IndicatorValueSearchResponseDto> lstSearchResponse;
+        private List<DateTime> lstDates;
         private BindingSource resultBindingSource;
         private IndicatorValueColumnsDto columns;
         private ILookUpValueService lookUpValueService;
@@ -125,9 +126,8 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            RowEnter(e.RowIndex);
-            if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
-                MessageBox.Show("1");
+            RowEnter( sender,  e);
+          
         }
 
         private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
@@ -177,8 +177,8 @@ namespace PMIS.Forms
             GenerateDgvResultColumnsInitialize();
             FiltersInitialize();
             dgvResultsList.DataSource = resultBindingSource;
-
-            SearchEntity();
+            //SearchEntity();
+            btnSearch_Click(this, new EventArgs());
         }
 
         private void GenerateDgvFilterColumnsInitialize()
@@ -334,7 +334,6 @@ namespace PMIS.Forms
                 throw;
             }
         }
-
         public async Task SearchEntity()
         {
             isLoaded = false;
@@ -344,6 +343,7 @@ namespace PMIS.Forms
             lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
             lstSearchResponse = new List<IndicatorValueSearchResponseDto>();
+            lstDates = new List<DateTime>();
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
                 filters = new List<GenericSearchFilterDto>(),
@@ -388,7 +388,6 @@ namespace PMIS.Forms
                         else if (column.Name == "DateTimeTo")
                         {
                             cellValue = Helper.Convert.ConvertShamsiToGregorian(cellValue).ToString();
-
                             columnName = "DateTime";
                             filterOperator = FilterOperator.LessThanOrEqual;
 
@@ -418,7 +417,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
-            //lstSearchResponse = await GenerateRows(lstSearchResponse);
+            lstSearchResponse = await GenerateRows2(lstSearchResponse);
             if (isSuccess)
             {
                 if (lstSearchResponse.Count() == 0)
@@ -442,6 +441,7 @@ namespace PMIS.Forms
             RefreshVisuals();
             isLoaded = true;
         }
+        #region Generate Row 1
 
         private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRows(IEnumerable<IndicatorValueSearchResponseDto> _indicatorValueList)
         {
@@ -475,6 +475,61 @@ namespace PMIS.Forms
                         }
                     }
                 }
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        private async Task<List<IndicatorValueSearchResponseDto>> GenerateRows2(IEnumerable<IndicatorValueSearchResponseDto> _indicatorValueList)
+        {
+            try
+            {
+                
+                List<IndicatorValueSearchResponseDto> result = _indicatorValueList.ToList();
+                foreach (DataGridViewRow row in dgvFiltersList.Rows)
+                {
+                    IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
+                    DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
+                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
+                    lstDates.AddRange(Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo));
+                    if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
+                    {
+                        indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                    }
+
+                    //var blankDate = lstDates
+                    //                   .Where(date => !_indicatorValueList.Any(sr => sr.DateTime.Date == date.Date))
+                    //                   .ToList();
+                    //for (DateTime date = dateTimeFrom; date <= dateTimeTo; date = date.AddDays(1))
+                    //{
+                    foreach (IndicatorSearchResponseDto indicator in indicators)
+                    {
+                        foreach (var date in lstDates)
+                        {
+
+                            IndicatorValueSearchResponseDto indicatorValue = new IndicatorValueSearchResponseDto()
+                            {
+                                FkIndicatorId = indicator.Id,
+                                VrtLkpFormId = indicator.FkLkpFormId,
+                                VrtLkpPeriodId = indicator.FkLkpPeriodId,
+                                DateTime = date,
+                                shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
+                            };
+                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForValueType(indicatorValue, indicator);
+                            blankIndicatorValues = await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator);
+                            blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
+                            if (blankIndicatorValues.Count() > 0)
+                            {
+                                result.AddRange(blankIndicatorValues);
+                                break;
+                            }
+                        }
+                    }
+                }
+              
                 return result;
             }
             catch (Exception ex)
@@ -652,6 +707,7 @@ namespace PMIS.Forms
                 throw;
             }
         }
+        #endregion
 
         public async Task AddEntity()
         {
@@ -826,13 +882,26 @@ namespace PMIS.Forms
             }
         }
 
-        public void RowEnter(int rowIndex)
+        public async void RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (isLoaded)
             {
-                DataGridViewRow selectedRow = dgvResultsList.Rows[rowIndex];
+                DataGridViewRow selectedRow = dgvResultsList.Rows[e.RowIndex];
                 selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
                 selectedRow.DefaultCellStyle.ForeColor = Color.White;
+            }
+            if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
+            {
+                await Task.Run(async () =>
+                {
+                    lstSearchResponse = await GenerateRows2(lstSearchResponse);
+                    this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
+                    {
+                        var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+                        resultBindingSource.DataSource = bindingList; 
+                        dgvResultsList.DataSource = resultBindingSource;
+                    });
+                });
             }
         }
 

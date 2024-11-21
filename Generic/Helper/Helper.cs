@@ -57,6 +57,19 @@ namespace Generic.Helper
                 int day = persianCalendar.GetDayOfMonth(_gregorianDate);
                 return year + "/" + month + "/" + day;
             }
+            public static List<DateTime> GetDatesBetween(DateTime start, DateTime end)
+            {
+                List<DateTime> dates = new List<DateTime>();
+                DateTime currentDate = start;
+
+                while (currentDate <= end)
+                {
+                    dates.Add(currentDate);
+                    currentDate = currentDate.AddDays(1);
+                }
+
+                return dates;
+            }
         }
         public static class ServiceLog
         {
