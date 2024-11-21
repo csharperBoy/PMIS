@@ -416,7 +416,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
-            lstSearchResponse = await GenerateRows(lstSearchResponse);
+            //lstSearchResponse = await GenerateRows(lstSearchResponse);
             if (isSuccess)
             {
                 if (lstSearchResponse.Count() == 0)
