@@ -1,4 +1,5 @@
-﻿using Generic.Service.DTO.Concrete;
+﻿using Generic.Helper;
+using Generic.Service.DTO.Concrete;
 using PMIS.DTO.IndicatorCategory;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,21 @@ namespace PMIS.DTO.IndicatorValue
 {
     public class IndicatorValueAddRequestDto : GenericAddRequestDto
     {
-      //  public long Id { get; set; }
+        public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
+        where TDestination : class
+        where TSource : class
+        {
+            
+            if (source is IndicatorValueAddRequestDto sourceModel2)
+            {
+                if (destination is Models.IndicatorValue destinationModel2)
+                {
+                    destinationModel2.DateTime = Helper.Convert.ConvertShamsiToGregorian(sourceModel2.shamsiDateTime);
+                }
+            }
+            return destination;
+        }
+        //  public long Id { get; set; }
 
         public int FkIndicatorId { get; set; }
 
@@ -20,6 +35,7 @@ namespace PMIS.DTO.IndicatorValue
 
         public DateTime DateTime { get; set; }
 
+        public string shamsiDateTime { get; set; }
         public decimal Value { get; set; }
 
         public string? Description { get; set; }
@@ -47,6 +63,7 @@ namespace PMIS.DTO.IndicatorValue
                     destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
                 }
             }
+           
             return destination;
         }
         public int Id { get; set; }

@@ -109,9 +109,9 @@ namespace PMIS.Forms
             try
             {
                 await EdiIndicatorValue();
-               // await LogicalDeleteEntity();
+                // await LogicalDeleteEntity();
                 //await PhysicalDeleteEntity();
-               // await RecycleEntity();
+                // await RecycleEntity();
                 await AddEntity();
                 RefreshVisuals();
 
@@ -663,6 +663,8 @@ namespace PMIS.Forms
                 {
                     try
                     {
+                        if (row.IsNewRow)
+                            continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
                         bool hasPermission = await HasAccess("Add", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
@@ -717,7 +719,10 @@ namespace PMIS.Forms
                 {
                     try
                     {
+                        if (row.IsNewRow)
+                            continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
+
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
                         bool hasPermission = await HasAccess("Edit", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                         if (!hasPermission)
@@ -863,7 +868,7 @@ namespace PMIS.Forms
             {
                 string operationMode = row.Cells["Id"].Value.ToString() == "0" ? "Add" : "Edit";
                 var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
-                string lkpValueType = tempLst.Where(l=>l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
+                string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
                 bool hasPermission = await HasAccess(operationMode, lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                 if (!hasPermission)
                 {
@@ -1015,7 +1020,8 @@ namespace PMIS.Forms
                     var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Equals("<" + column.Name + ">k__BackingField"));
                     if (fieldInfo != null)
                     {
-                        fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
+                        //fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
+                        fieldInfo.SetValue(addRequest, Convert.ChangeType(row.Cells[column.Name].Value, fieldInfo.FieldType));
                     }
                 }
                 return addRequest;

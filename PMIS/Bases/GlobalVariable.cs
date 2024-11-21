@@ -9,6 +9,6 @@ namespace PMIS.Bases
     public class GlobalVariable
     {
         public static string username { get; set; } = "Admin";
-        public static int userId { get; set; } = 13;
+        public static int userId { get; set; } = 1;
     }
 }

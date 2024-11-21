@@ -114,7 +114,7 @@ namespace PMIS.DTO.IndicatorValue
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "تاریخ",
-                   Name = "DateTime",
+                   Name = "shamsiDateTime",
                    DataPropertyName = "shamsiDateTime",
                    ReadOnly = true,
                    Visible = true,

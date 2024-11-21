@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
+using Generic.Helper;
 
 namespace PMIS.DTO.IndicatorValue
 {
@@ -22,6 +23,7 @@ namespace PMIS.DTO.IndicatorValue
                 if (destination is IndicatorValueSearchResponseDto destinationModel)
                 {
                     await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<IndicatorValueStandardInfoDto, IndicatorValueSearchResponseDto>(await destinationModel.extraMapFromBaseModel(sourceModel));
+                    destinationModel.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(sourceModel.DateTime);
                 }
 
             }

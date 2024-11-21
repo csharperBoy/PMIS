@@ -404,7 +404,7 @@ namespace PMIS.Bases
                     context.SaveChanges();
                     //------------------------------------
 
-                    //add destinations
+                     //add destinations
                     //------------------------------------
                     lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimUserOnIndicator", ColumnName = "FkLkpClaimUserOnIndicatorID" });
                     context.LookUpDestinations.AddRange(lookUpDestination);
@@ -413,15 +413,15 @@ namespace PMIS.Bases
                     //add values
                     //------------------------------------
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Owner", Display = "مالک", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ResponsibleForesight", Display = "مسئول پیش‌بینی", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ResponsibleTarget", Display = "مسئول هدف", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ResponsiblePerformance", Display = "مسئول عملکرد", OrderNum = 4 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "MonitorForesight", Display = "ویرایشگر پیش‌بینی", OrderNum = 5 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "MonitorTarget", Display = "ویرایشگر هدف", OrderNum = 6 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "MonitorPerformance", Display = "ویرایشگر عملکرد", OrderNum = 7 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "WriterForesight", Display = "نگارنده پیش‌بینی", OrderNum = 8 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "WriterTarget", Display = "نگارنده هدف", OrderNum = 9 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "WriterPerformance", Display = "نگارنده عملکرد", OrderNum = 10 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadForesight", Display = "مسئول پیش‌بینی", OrderNum = 2 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadTarget", Display = "مسئول هدف", OrderNum = 3 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadPerformance", Display = "مسئول عملکرد", OrderNum = 4 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditForesight", Display = "ویرایشگر پیش‌بینی", OrderNum = 5 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditTarget", Display = "ویرایشگر هدف", OrderNum = 6 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditPerformance", Display = "ویرایشگر عملکرد", OrderNum = 7 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "AddForesight", Display = "نگارنده پیش‌بینی", OrderNum = 8 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "AddTarget", Display = "نگارنده هدف", OrderNum = 9 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "AddPerformance", Display = "نگارنده عملکرد", OrderNum = 10 });
                     context.LookUpValues.AddRange(lookUpValue);
                     //------------------------------------
                     context.SaveChanges();
