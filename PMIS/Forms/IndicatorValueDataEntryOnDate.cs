@@ -27,6 +27,7 @@ using AutoMapper;
 using Castle.Components.DictionaryAdapter;
 using PMIS.Bases;
 using PMIS.DTO.ClaimUserOnIndicator;
+using System.Linq;
 
 namespace PMIS.Forms
 {
@@ -494,7 +495,7 @@ namespace PMIS.Forms
                     IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
                     DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
                     DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
-                    lstDates.AddRange(Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo));
+                    lstDates=Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo);
                     if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
                     {
                         indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
@@ -518,9 +519,12 @@ namespace PMIS.Forms
                                 DateTime = date,
                                 shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
                             };
-                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForValueType(indicatorValue, indicator);
-                            blankIndicatorValues = await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator);
-                            blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
+                            List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
+                            blankIndicatorValues = (await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator)).ToList();
+                            //blankIndicatorValues = blankIndicatorValues.Except(result).ToList();
+                            //  blankIndicatorValues.RemoveAll(x => result.Contains(x));
+                            blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime ==x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId ));
+                           
                             if (blankIndicatorValues.Count() > 0)
                             {
                                 result.AddRange(blankIndicatorValues);
