@@ -127,8 +127,8 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            RowEnter( sender,  e);
-          
+            RowEnter(sender, e);
+
         }
 
         private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
@@ -335,6 +335,9 @@ namespace PMIS.Forms
                 throw;
             }
         }
+        DateTime dateTimeFrom;
+        DateTime dateTimeTo;
+        IEnumerable<IndicatorSearchResponseDto> indicators;
         public async Task SearchEntity()
         {
             isLoaded = false;
@@ -345,6 +348,17 @@ namespace PMIS.Forms
             lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
             lstSearchResponse = new List<IndicatorValueSearchResponseDto>();
             lstDates = new List<DateTime>();
+            foreach (DataGridViewRow row in dgvFiltersList.Rows)
+            {
+                indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
+                dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
+                dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
+                lstDates.AddRange(Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo));
+                if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
+                {
+                    indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                }
+            }
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
                 filters = new List<GenericSearchFilterDto>(),
@@ -488,52 +502,51 @@ namespace PMIS.Forms
         {
             try
             {
-                
-                List<IndicatorValueSearchResponseDto> result = _indicatorValueList.ToList();
-                foreach (DataGridViewRow row in dgvFiltersList.Rows)
-                {
-                    IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
-                    DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
-                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
-                    lstDates=Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo);
-                    if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
-                    {
-                        indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
-                    }
 
-                    //var blankDate = lstDates
-                    //                   .Where(date => !_indicatorValueList.Any(sr => sr.DateTime.Date == date.Date))
-                    //                   .ToList();
-                    //for (DateTime date = dateTimeFrom; date <= dateTimeTo; date = date.AddDays(1))
-                    //{
+                List<IndicatorValueSearchResponseDto> result = _indicatorValueList.ToList();
+
+
+                //var blankDate = lstDates
+                //                   .Where(date => !_indicatorValueList.Any(sr => sr.DateTime.Date == date.Date))
+                //                   .ToList();
+                //for (DateTime date = dateTimeFrom; date <= dateTimeTo; date = date.AddDays(1))
+                //{
+                var datesToRemove = new List<DateTime>();
+                foreach (var date in lstDates)
+                {
                     foreach (IndicatorSearchResponseDto indicator in indicators)
                     {
-                        foreach (var date in lstDates)
-                        {
 
-                            IndicatorValueSearchResponseDto indicatorValue = new IndicatorValueSearchResponseDto()
-                            {
-                                FkIndicatorId = indicator.Id,
-                                VrtLkpFormId = indicator.FkLkpFormId,
-                                VrtLkpPeriodId = indicator.FkLkpPeriodId,
-                                DateTime = date,
-                                shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
-                            };
-                            List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
-                            blankIndicatorValues = (await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator)).ToList();
-                            //blankIndicatorValues = blankIndicatorValues.Except(result).ToList();
-                            //  blankIndicatorValues.RemoveAll(x => result.Contains(x));
-                            blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime ==x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId ));
-                           
-                            if (blankIndicatorValues.Count() > 0)
-                            {
-                                result.AddRange(blankIndicatorValues);
-                                break;
-                            }
+                        IndicatorValueSearchResponseDto indicatorValue = new IndicatorValueSearchResponseDto()
+                        {
+                            FkIndicatorId = indicator.Id,
+                            VrtLkpFormId = indicator.FkLkpFormId,
+                            VrtLkpPeriodId = indicator.FkLkpPeriodId,
+                            DateTime = date,
+                            shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
+                        };
+                        List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
+                        blankIndicatorValues = (await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator)).ToList();
+                        //blankIndicatorValues = blankIndicatorValues.Except(result).ToList();
+                        //  blankIndicatorValues.RemoveAll(x => result.Contains(x));
+                        blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime == x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId));
+
+                        if (blankIndicatorValues.Count() > 0)
+                        {
+                            result.AddRange(blankIndicatorValues);
+                            datesToRemove.Add(date);
+                            
                         }
                     }
+                    if(result.Count > 0) 
+                        break;
                 }
-              
+
+                foreach (var dateToRemove in datesToRemove)
+                {
+                    lstDates.Remove(dateToRemove);
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -902,7 +915,7 @@ namespace PMIS.Forms
                     this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
                     {
                         var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
-                        resultBindingSource.DataSource = bindingList; 
+                        resultBindingSource.DataSource = bindingList;
                         dgvResultsList.DataSource = resultBindingSource;
                     });
                 });
