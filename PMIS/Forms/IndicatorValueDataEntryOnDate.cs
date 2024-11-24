@@ -94,6 +94,7 @@ namespace PMIS.Forms
             panel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(panel);
             form.Show();
+            tabControl.SelectedTab = tabPage;
         }
 
         private void NormalForm_Load(object sender, EventArgs e)
