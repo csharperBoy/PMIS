@@ -467,8 +467,8 @@ namespace PMIS.Forms
                 foreach (DataGridViewRow row in dgvFiltersList.Rows)
                 {
                     IEnumerable<IndicatorSearchResponseDto> indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
-                    DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-3);
-                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(-3);
+                    DateTime dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
+                    DateTime dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(+30);
                     if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
                     {
                         indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
@@ -515,6 +515,7 @@ namespace PMIS.Forms
                 var datesToRemove = new List<DateTime>();
                 foreach (var date in lstDates)
                 {
+                    List<IndicatorValueSearchResponseDto> blankIndicatorValues = new List<IndicatorValueSearchResponseDto>();
                     foreach (IndicatorSearchResponseDto indicator in indicators)
                     {
 
@@ -523,10 +524,10 @@ namespace PMIS.Forms
                             FkIndicatorId = indicator.Id,
                             VrtLkpFormId = indicator.FkLkpFormId,
                             VrtLkpPeriodId = indicator.FkLkpPeriodId,
-                            DateTime = date,
+                            DateTime = date,                            
                             shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
                         };
-                        List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
+                        blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
                         blankIndicatorValues = (await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator)).ToList();
                         //blankIndicatorValues = blankIndicatorValues.Except(result).ToList();
                         //  blankIndicatorValues.RemoveAll(x => result.Contains(x));
@@ -539,7 +540,7 @@ namespace PMIS.Forms
                             
                         }
                     }
-                    if(result.Count > 0) 
+                    if(blankIndicatorValues.Count > 0) 
                         break;
                 }
 
@@ -737,7 +738,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.IsNewRow)
+                        if (row.IsNewRow || row.Cells["Value"].Value == null)
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
@@ -793,7 +794,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.IsNewRow)
+                        if (row.IsNewRow || row.Cells["Value"].Value == null)
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
 

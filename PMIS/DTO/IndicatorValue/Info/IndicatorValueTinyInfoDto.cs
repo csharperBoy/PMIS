@@ -23,7 +23,7 @@ namespace PMIS.DTO.IndicatorValue.Info
         public DateTime DateTime { get; set; }
         public string shamsiDateTime { get; set; }
 
-        public decimal Value { get; set; }
+        public decimal? Value { get; set; }
 
         public string? Description { get; set; }
         public int FkIndicatorId { get; set; }
