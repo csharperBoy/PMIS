@@ -2,7 +2,7 @@
 
 namespace PMIS.Forms
 {
-    partial class IndicatorValueDataEntryOnDate
+    partial class IndicatorValueForm
     {
         /// <summary>
         /// Required designer variable.
@@ -183,7 +183,7 @@ namespace PMIS.Forms
             dgvFiltersList.Size = new Size(1102, 65);
             dgvFiltersList.TabIndex = 7;
             // 
-            // IndicatorValueDataEntryOnDate
+            // IndicatorValueForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -191,7 +191,7 @@ namespace PMIS.Forms
             Controls.Add(panelContent);
             Controls.Add(panelMenu);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "IndicatorValueDataEntryOnDate";
+            Name = "IndicatorValueForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Text = "NormalForm";

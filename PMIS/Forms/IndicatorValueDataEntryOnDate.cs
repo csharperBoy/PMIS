@@ -32,7 +32,7 @@ using Microsoft.AspNetCore.Components.RenderTree;
 
 namespace PMIS.Forms
 {
-    public partial class IndicatorValueDataEntryOnDate : Form
+    public partial class IndicatorValueForm : Form
     {
 
         #region Variables
@@ -58,7 +58,7 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorValueForm(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             indicatorValueService = _IndicatorValueService;
@@ -75,7 +75,7 @@ namespace PMIS.Forms
         {
             TabPage tabPage = new TabPage();
             tabPage.Location = new Point(4, 24);
-            tabPage.Name = "tabPageIndicatorValueDataEntryOnDate";
+            tabPage.Name = "tabPageIndicatorValueForm";
             tabPage.Padding = new Padding(3);
             tabPage.Size = new Size(192, 0);
             tabPage.TabIndex = 0;

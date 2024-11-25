@@ -27,49 +27,24 @@ namespace PMIS.Forms
             logHandler = _logHandler.CreateLogger();
         }
 
-        private void براساسفرمToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new IndicatorValueDataEntryOnForm();
-        }
-
-        private void براساستاریخToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new IndicatorValueDataEntryOnDate(indicatorValueService,indicatorService,claimUserOnIndicatorService,userService,lookUpValueService, tabControlMain);
-        }
-
-        private void براساسشاخصToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new IndicatorValueDataEntryOnIndicator();
-        }
-
-        private void تعریفکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new UserForm(userService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
         }
 
-        private void دسترسیهایکاربرانToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void شناسنامهشاخصهاToolStripMenuItem_Click(object sender, EventArgs e)
+        private void IndicatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
-        private void تخصیصدستهبندیبهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClaimsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+           new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
         }
 
-        private void تخصیصشاخصبهدستهبندیToolStripMenuItem_Click(object sender, EventArgs e)
+        private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-        }
-
-        private void تخصیصکاربربهشاخصToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void تخصیصشاخصبهکاربرToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            new IndicatorValueForm(indicatorValueService, indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
     }
 }

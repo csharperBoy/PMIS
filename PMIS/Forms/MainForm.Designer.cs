@@ -29,23 +29,14 @@
         private void InitializeComponent()
         {
             menuStripMain = new MenuStrip();
-            ورودمقادیرToolStripMenuItem = new ToolStripMenuItem();
-            ورودمقادیرToolStripMenuItem1 = new ToolStripMenuItem();
-            براساسفرمToolStripMenuItem = new ToolStripMenuItem();
-            براساستاریخToolStripMenuItem = new ToolStripMenuItem();
-            براساسشاخصToolStripMenuItem = new ToolStripMenuItem();
-            اطلاعاتکاربریToolStripMenuItem = new ToolStripMenuItem();
-            تعریفکاربرانToolStripMenuItem = new ToolStripMenuItem();
-            دسترسیهایکاربرانToolStripMenuItem = new ToolStripMenuItem();
-            اطلاعاتپایهToolStripMenuItem = new ToolStripMenuItem();
-            شناسنامهشاخصهاToolStripMenuItem = new ToolStripMenuItem();
-            دستهبندیهایشاخصهاToolStripMenuItem = new ToolStripMenuItem();
-            تخصیصدستهبندیبهشاخصToolStripMenuItem = new ToolStripMenuItem();
-            تخصیصشاخصبهدستهبندیToolStripMenuItem = new ToolStripMenuItem();
-            ادعاهایکاربرانرویشاخصهاToolStripMenuItem = new ToolStripMenuItem();
-            تخصیصکاربربهشاخصToolStripMenuItem = new ToolStripMenuItem();
-            تخصیصشاخصبهکاربرToolStripMenuItem = new ToolStripMenuItem();
-            خروجToolStripMenuItem = new ToolStripMenuItem();
+            FileToolStripMenuItem = new ToolStripMenuItem();
+            HelpToolStripMenuItem = new ToolStripMenuItem();
+            ExitToolStripMenuItem = new ToolStripMenuItem();
+            BaseInfoToolStripMenuItem = new ToolStripMenuItem();
+            UsersToolStripMenuItem = new ToolStripMenuItem();
+            IndicatorsToolStripMenuItem = new ToolStripMenuItem();
+            ClaimsToolStripMenuItem = new ToolStripMenuItem();
+            IndicatorValueToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControlWithCloseTab();
             menuStripMain.SuspendLayout();
@@ -53,160 +44,103 @@
             // 
             // menuStripMain
             // 
-            menuStripMain.Items.AddRange(new ToolStripItem[] { ورودمقادیرToolStripMenuItem });
+            menuStripMain.ImageScalingSize = new Size(20, 20);
+            menuStripMain.Items.AddRange(new ToolStripItem[] { FileToolStripMenuItem, BaseInfoToolStripMenuItem, IndicatorValueToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
-            menuStripMain.Size = new Size(800, 24);
+            menuStripMain.Padding = new Padding(7, 3, 0, 3);
+            menuStripMain.Size = new Size(914, 30);
             menuStripMain.TabIndex = 1;
             menuStripMain.Text = "menuStripMain";
             menuStripMain.TextDirection = ToolStripTextDirection.Vertical90;
             // 
-            // ورودمقادیرToolStripMenuItem
+            // FileToolStripMenuItem
             // 
-            ورودمقادیرToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ورودمقادیرToolStripMenuItem1, اطلاعاتکاربریToolStripMenuItem, اطلاعاتپایهToolStripMenuItem, خروجToolStripMenuItem });
-            ورودمقادیرToolStripMenuItem.Name = "ورودمقادیرToolStripMenuItem";
-            ورودمقادیرToolStripMenuItem.Size = new Size(36, 20);
-            ورودمقادیرToolStripMenuItem.Text = "منو";
-            ورودمقادیرToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
+            FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { HelpToolStripMenuItem, ExitToolStripMenuItem });
+            FileToolStripMenuItem.Name = "FileToolStripMenuItem";
+            FileToolStripMenuItem.Size = new Size(50, 24);
+            FileToolStripMenuItem.Text = "فایل";
+            FileToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             // 
-            // ورودمقادیرToolStripMenuItem1
+            // HelpToolStripMenuItem
             // 
-            ورودمقادیرToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { براساسفرمToolStripMenuItem, براساستاریخToolStripMenuItem, براساسشاخصToolStripMenuItem });
-            ورودمقادیرToolStripMenuItem1.Name = "ورودمقادیرToolStripMenuItem1";
-            ورودمقادیرToolStripMenuItem1.Size = new Size(180, 22);
-            ورودمقادیرToolStripMenuItem1.Text = "ورود مقادیر";
+            HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
+            HelpToolStripMenuItem.Size = new Size(224, 26);
+            HelpToolStripMenuItem.Text = "راهنما";
             // 
-            // براساسفرمToolStripMenuItem
+            // ExitToolStripMenuItem
             // 
-            براساسفرمToolStripMenuItem.Name = "براساسفرمToolStripMenuItem";
-            براساسفرمToolStripMenuItem.Size = new Size(180, 22);
-            براساسفرمToolStripMenuItem.Text = "بر اساس فرم";
-            براساسفرمToolStripMenuItem.Click += براساسفرمToolStripMenuItem_Click;
+            ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
+            ExitToolStripMenuItem.Size = new Size(224, 26);
+            ExitToolStripMenuItem.Text = "خروج";
             // 
-            // براساستاریخToolStripMenuItem
+            // BaseInfoToolStripMenuItem
             // 
-            براساستاریخToolStripMenuItem.Name = "براساستاریخToolStripMenuItem";
-            براساستاریخToolStripMenuItem.Size = new Size(180, 22);
-            براساستاریخToolStripMenuItem.Text = "بر اساس تاریخ";
-            براساستاریخToolStripMenuItem.Click += براساستاریخToolStripMenuItem_Click;
+            BaseInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { UsersToolStripMenuItem, IndicatorsToolStripMenuItem, ClaimsToolStripMenuItem });
+            BaseInfoToolStripMenuItem.Name = "BaseInfoToolStripMenuItem";
+            BaseInfoToolStripMenuItem.Size = new Size(102, 24);
+            BaseInfoToolStripMenuItem.Text = "اطلاعات پایه";
+            BaseInfoToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             // 
-            // براساسشاخصToolStripMenuItem
+            // UsersToolStripMenuItem
             // 
-            براساسشاخصToolStripMenuItem.Name = "براساسشاخصToolStripMenuItem";
-            براساسشاخصToolStripMenuItem.Size = new Size(180, 22);
-            براساسشاخصToolStripMenuItem.Text = "بر اساس شاخص";
-            براساسشاخصToolStripMenuItem.Click += براساسشاخصToolStripMenuItem_Click;
+            UsersToolStripMenuItem.Name = "UsersToolStripMenuItem";
+            UsersToolStripMenuItem.Size = new Size(210, 26);
+            UsersToolStripMenuItem.Text = "مدیریت کاربران";
+            UsersToolStripMenuItem.Click += UsersToolStripMenuItem_Click;
             // 
-            // اطلاعاتکاربریToolStripMenuItem
+            // IndicatorsToolStripMenuItem
             // 
-            اطلاعاتکاربریToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تعریفکاربرانToolStripMenuItem, دسترسیهایکاربرانToolStripMenuItem });
-            اطلاعاتکاربریToolStripMenuItem.Name = "اطلاعاتکاربریToolStripMenuItem";
-            اطلاعاتکاربریToolStripMenuItem.Size = new Size(180, 22);
-            اطلاعاتکاربریToolStripMenuItem.Text = "اطلاعات کاربری";
+            IndicatorsToolStripMenuItem.Name = "IndicatorsToolStripMenuItem";
+            IndicatorsToolStripMenuItem.Size = new Size(210, 26);
+            IndicatorsToolStripMenuItem.Text = "مدیریت شاخص‌ها";
+            IndicatorsToolStripMenuItem.Click += IndicatorsToolStripMenuItem_Click;
             // 
-            // تعریفکاربرانToolStripMenuItem
+            // ClaimsToolStripMenuItem
             // 
-            تعریفکاربرانToolStripMenuItem.Name = "تعریفکاربرانToolStripMenuItem";
-            تعریفکاربرانToolStripMenuItem.Size = new Size(180, 22);
-            تعریفکاربرانToolStripMenuItem.Text = "تعریف کاربران";
-            تعریفکاربرانToolStripMenuItem.Click += تعریفکاربرانToolStripMenuItem_Click;
+            ClaimsToolStripMenuItem.Name = "ClaimsToolStripMenuItem";
+            ClaimsToolStripMenuItem.Size = new Size(210, 26);
+            ClaimsToolStripMenuItem.Text = "مدیریت دسترسی‌ها";
+            ClaimsToolStripMenuItem.Click += ClaimsToolStripMenuItem_Click;
             // 
-            // دسترسیهایکاربرانToolStripMenuItem
+            // IndicatorValueToolStripMenuItem
             // 
-            دسترسیهایکاربرانToolStripMenuItem.Name = "دسترسیهایکاربرانToolStripMenuItem";
-            دسترسیهایکاربرانToolStripMenuItem.Size = new Size(180, 22);
-            دسترسیهایکاربرانToolStripMenuItem.Text = "دسترسی‌های کاربران";
-            دسترسیهایکاربرانToolStripMenuItem.Click += دسترسیهایکاربرانToolStripMenuItem_Click;
-            // 
-            // اطلاعاتپایهToolStripMenuItem
-            // 
-            اطلاعاتپایهToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { شناسنامهشاخصهاToolStripMenuItem, دستهبندیهایشاخصهاToolStripMenuItem, ادعاهایکاربرانرویشاخصهاToolStripMenuItem });
-            اطلاعاتپایهToolStripMenuItem.Name = "اطلاعاتپایهToolStripMenuItem";
-            اطلاعاتپایهToolStripMenuItem.Size = new Size(180, 22);
-            اطلاعاتپایهToolStripMenuItem.Text = "اطلاعات پایه";
-            // 
-            // شناسنامهشاخصهاToolStripMenuItem
-            // 
-            شناسنامهشاخصهاToolStripMenuItem.Name = "شناسنامهشاخصهاToolStripMenuItem";
-            شناسنامهشاخصهاToolStripMenuItem.Size = new Size(221, 22);
-            شناسنامهشاخصهاToolStripMenuItem.Text = "شناسنامه شاخص‌ها";
-            شناسنامهشاخصهاToolStripMenuItem.Click += شناسنامهشاخصهاToolStripMenuItem_Click;
-            // 
-            // دستهبندیهایشاخصهاToolStripMenuItem
-            // 
-            دستهبندیهایشاخصهاToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تخصیصدستهبندیبهشاخصToolStripMenuItem, تخصیصشاخصبهدستهبندیToolStripMenuItem });
-            دستهبندیهایشاخصهاToolStripMenuItem.Name = "دستهبندیهایشاخصهاToolStripMenuItem";
-            دستهبندیهایشاخصهاToolStripMenuItem.Size = new Size(221, 22);
-            دستهبندیهایشاخصهاToolStripMenuItem.Text = "دسته‌بندی‌های شاخص‌ها";
-            // 
-            // تخصیصدستهبندیبهشاخصToolStripMenuItem
-            // 
-            تخصیصدستهبندیبهشاخصToolStripMenuItem.Name = "تخصیصدستهبندیبهشاخصToolStripMenuItem";
-            تخصیصدستهبندیبهشاخصToolStripMenuItem.Size = new Size(221, 22);
-            تخصیصدستهبندیبهشاخصToolStripMenuItem.Text = "تخصیص دسته‌بندی به شاخص";
-            تخصیصدستهبندیبهشاخصToolStripMenuItem.Click += تخصیصدستهبندیبهشاخصToolStripMenuItem_Click;
-            // 
-            // تخصیصشاخصبهدستهبندیToolStripMenuItem
-            // 
-            تخصیصشاخصبهدستهبندیToolStripMenuItem.Name = "تخصیصشاخصبهدستهبندیToolStripMenuItem";
-            تخصیصشاخصبهدستهبندیToolStripMenuItem.Size = new Size(221, 22);
-            تخصیصشاخصبهدستهبندیToolStripMenuItem.Text = "تخصیص شاخص به دسته‌بندی";
-            تخصیصشاخصبهدستهبندیToolStripMenuItem.Click += تخصیصشاخصبهدستهبندیToolStripMenuItem_Click;
-            // 
-            // ادعاهایکاربرانرویشاخصهاToolStripMenuItem
-            // 
-            ادعاهایکاربرانرویشاخصهاToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { تخصیصکاربربهشاخصToolStripMenuItem, تخصیصشاخصبهکاربرToolStripMenuItem });
-            ادعاهایکاربرانرویشاخصهاToolStripMenuItem.Name = "ادعاهایکاربرانرویشاخصهاToolStripMenuItem";
-            ادعاهایکاربرانرویشاخصهاToolStripMenuItem.Size = new Size(221, 22);
-            ادعاهایکاربرانرویشاخصهاToolStripMenuItem.Text = "ادعاهای کاربران روی شاخص‌ها";
-            // 
-            // تخصیصکاربربهشاخصToolStripMenuItem
-            // 
-            تخصیصکاربربهشاخصToolStripMenuItem.Name = "تخصیصکاربربهشاخصToolStripMenuItem";
-            تخصیصکاربربهشاخصToolStripMenuItem.Size = new Size(195, 22);
-            تخصیصکاربربهشاخصToolStripMenuItem.Text = "تخصیص کاربر به شاخص";
-            تخصیصکاربربهشاخصToolStripMenuItem.Click += تخصیصکاربربهشاخصToolStripMenuItem_Click;
-            // 
-            // تخصیصشاخصبهکاربرToolStripMenuItem
-            // 
-            تخصیصشاخصبهکاربرToolStripMenuItem.Name = "تخصیصشاخصبهکاربرToolStripMenuItem";
-            تخصیصشاخصبهکاربرToolStripMenuItem.Size = new Size(195, 22);
-            تخصیصشاخصبهکاربرToolStripMenuItem.Text = "تخصیص شاخص به کاربر";
-            تخصیصشاخصبهکاربرToolStripMenuItem.Click += تخصیصشاخصبهکاربرToolStripMenuItem_Click;
-            // 
-            // خروجToolStripMenuItem
-            // 
-            خروجToolStripMenuItem.Name = "خروجToolStripMenuItem";
-            خروجToolStripMenuItem.Size = new Size(180, 22);
-            خروجToolStripMenuItem.Text = "خروج";
+            IndicatorValueToolStripMenuItem.Name = "IndicatorValueToolStripMenuItem";
+            IndicatorValueToolStripMenuItem.Size = new Size(96, 24);
+            IndicatorValueToolStripMenuItem.Text = "ورود مقادیر";
+            IndicatorValueToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
+            IndicatorValueToolStripMenuItem.Click += IndicatorValueToolStripMenuItem_Click;
             // 
             // flowLayoutPanelMain
             // 
             flowLayoutPanelMain.Dock = DockStyle.Fill;
-            flowLayoutPanelMain.Location = new Point(0, 24);
+            flowLayoutPanelMain.Location = new Point(0, 30);
+            flowLayoutPanelMain.Margin = new Padding(3, 4, 3, 4);
             flowLayoutPanelMain.Name = "flowLayoutPanelMain";
-            flowLayoutPanelMain.Size = new Size(800, 426);
+            flowLayoutPanelMain.Size = new Size(914, 570);
             flowLayoutPanelMain.TabIndex = 2;
             // 
             // tabControlMain
             // 
             tabControlMain.Dock = DockStyle.Fill;
-            tabControlMain.Location = new Point(0, 24);
+            tabControlMain.Location = new Point(0, 30);
+            tabControlMain.Margin = new Padding(3, 4, 3, 4);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.RightToLeftLayout = true;
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(800, 426);
+            tabControlMain.Size = new Size(914, 570);
             tabControlMain.TabIndex = 0;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
             Controls.Add(tabControlMain);
             Controls.Add(flowLayoutPanelMain);
             Controls.Add(menuStripMain);
             MainMenuStrip = menuStripMain;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
@@ -219,25 +153,16 @@
         }
 
         #endregion
-        private MenuStrip menuStripMain;
-        private ToolStripMenuItem ورودمقادیرToolStripMenuItem;
-        private ToolStripMenuItem ورودمقادیرToolStripMenuItem1;
-        private ToolStripMenuItem براساسفرمToolStripMenuItem;
-        private ToolStripMenuItem براساستاریخToolStripMenuItem;
-        private ToolStripMenuItem براساسشاخصToolStripMenuItem;
-        private ToolStripMenuItem اطلاعاتکاربریToolStripMenuItem;
-        private ToolStripMenuItem تعریفکاربرانToolStripMenuItem;
-        private ToolStripMenuItem دسترسیهایکاربرانToolStripMenuItem;
-        private ToolStripMenuItem اطلاعاتپایهToolStripMenuItem;
-        private ToolStripMenuItem شناسنامهشاخصهاToolStripMenuItem;
-        private ToolStripMenuItem دستهبندیهایشاخصهاToolStripMenuItem;
-        private ToolStripMenuItem تخصیصدستهبندیبهشاخصToolStripMenuItem;
-        private ToolStripMenuItem تخصیصشاخصبهدستهبندیToolStripMenuItem;
-        private ToolStripMenuItem ادعاهایکاربرانرویشاخصهاToolStripMenuItem;
-        private ToolStripMenuItem تخصیصکاربربهشاخصToolStripMenuItem;
-        private ToolStripMenuItem تخصیصشاخصبهکاربرToolStripMenuItem;
-        private ToolStripMenuItem خروجToolStripMenuItem;
         private FlowLayoutPanel flowLayoutPanelMain;
-        private TabControl tabControlMain;
+        private TabControlWithCloseTab tabControlMain;
+        private MenuStrip menuStripMain;
+        private ToolStripMenuItem FileToolStripMenuItem;
+        private ToolStripMenuItem HelpToolStripMenuItem;
+        private ToolStripMenuItem ExitToolStripMenuItem;
+        private ToolStripMenuItem BaseInfoToolStripMenuItem;
+        private ToolStripMenuItem UsersToolStripMenuItem;
+        private ToolStripMenuItem IndicatorsToolStripMenuItem;
+        private ToolStripMenuItem ClaimsToolStripMenuItem;
+        private ToolStripMenuItem IndicatorValueToolStripMenuItem;
     }
 }
