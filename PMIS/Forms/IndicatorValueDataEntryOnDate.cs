@@ -28,6 +28,7 @@ using Castle.Components.DictionaryAdapter;
 using PMIS.Bases;
 using PMIS.DTO.ClaimUserOnIndicator;
 using System.Linq;
+using Microsoft.AspNetCore.Components.RenderTree;
 
 namespace PMIS.Forms
 {
@@ -137,7 +138,7 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
-            RowLeave(e.RowIndex);
+           // RowLeave(sender, e);
         }
 
         private void dgvResultsList_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -160,7 +161,7 @@ namespace PMIS.Forms
 
         private void dgvResultsList_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-
+            isLoaded = false;
         }
 
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -178,7 +179,7 @@ namespace PMIS.Forms
             lstLogicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
-            userClaims =  await GetClaims(GlobalVariable.userId);
+            userClaims = await GetClaims(GlobalVariable.userId);
             GenerateDgvFilterColumnsInitialize();
             GenerateDgvResultColumnsInitialize();
             FiltersInitialize();
@@ -507,6 +508,7 @@ namespace PMIS.Forms
             try
             {
 
+
                 List<IndicatorValueSearchResponseDto> result = _indicatorValueList.ToList();
 
 
@@ -532,8 +534,8 @@ namespace PMIS.Forms
                         };
                         List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForDate(indicatorValue, indicator)).ToList();
                         blankIndicatorValues = (await GenerateRowsForValueType(blankIndicatorValues, indicator)).ToList();
-                        
-                        blankIndicatorValues = blankIndicatorValues.Where( x => HasAccess("Add", x.FkLkpValueTypeInfo.Value, x.FkIndicatorId).Result == true).ToList();
+
+                        blankIndicatorValues = blankIndicatorValues.Where(x => HasAccess("Add", x.FkLkpValueTypeInfo.Value, x.FkIndicatorId).Result == true).ToList();
                         blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime == x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId));
 
 
@@ -623,7 +625,7 @@ namespace PMIS.Forms
                             indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
-                            indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id; 
+                            indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
                             indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").Single();
                             temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp2);
@@ -760,7 +762,7 @@ namespace PMIS.Forms
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
-                        bool hasPermission = await HasAccess("Add", lkpValueType,  int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        bool hasPermission = await HasAccess("Add", lkpValueType, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                         if (!hasPermission)
                         {
                             //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
@@ -817,7 +819,7 @@ namespace PMIS.Forms
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
 
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
-                        bool hasPermission = await HasAccess("Edit", lkpValueType,  int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        bool hasPermission = await HasAccess("Edit", lkpValueType, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                         if (!hasPermission)
                         {
                             //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
@@ -921,10 +923,13 @@ namespace PMIS.Forms
 
         public async void RowEnter(object sender, DataGridViewCellEventArgs e)
         {
+
             if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
             {
                 await Task.Run(async () =>
                 {
+                    // isLoaded = false;
+                    //  dgvResultsList.RowEnter -= RowEnter;
                     lstSearchResponse = await GenerateRows2(lstSearchResponse);
                     this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
                     {
@@ -932,35 +937,46 @@ namespace PMIS.Forms
                         resultBindingSource.DataSource = bindingList;
                         dgvResultsList.DataSource = resultBindingSource;
                     });
+                    // dgvResultsList.RowEnter += RowEnter;
+
+
+
                 });
             }
-            if (isLoaded)
+            else if (isLoaded)
             {
+
                 DataGridViewRow selectedRow = dgvResultsList.Rows[e.RowIndex];
                 selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
                 selectedRow.DefaultCellStyle.ForeColor = Color.White;
             }
+
         }
 
-        public void RowLeave(int rowIndex)
+        public void RowValidated(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow previousRow = dgvResultsList.Rows[rowIndex];
-            if (dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
+            isLoaded = true;
+            DataGridViewRow previousRow = dgvResultsList.Rows[e.RowIndex];
+            //Edit Style
+            if (dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvResultsList.Rows[e.RowIndex].Cells["FlgEdited"].Value.ToString()))
             {
                 previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
             }
-            else if (dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
+            // Add Style
+            else if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0 && dgvResultsList.Rows[e.RowIndex].Cells["Value"].Value != null)
             {
                 previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
 
-            }
+            }           
+            //None Style
             else
             {
                 previousRow.DefaultCellStyle.BackColor = Color.White;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
             }
+           
         }
 
         public async void CellContentClick(int rowIndex, int columnIndex)
@@ -970,7 +986,7 @@ namespace PMIS.Forms
             if (dgvResultsList.Rows[rowIndex].IsNewRow)
                 return;
             var row = dgvResultsList.Rows[rowIndex];
-            if (dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0)
+            if (dgvResultsList.Columns[columnIndex].Name == "Edit" && rowIndex >= 0 && row.Cells["Id"].Value.ToString() != "0")
             {
                 string operationMode = row.Cells["Id"].Value.ToString() == "0" ? "Add" : "Edit";
                 var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
@@ -1045,18 +1061,18 @@ namespace PMIS.Forms
             //    }
             //}
         }
-        
-        private async Task<IEnumerable<ClaimUserOnIndicatorSearchResponseDto>> GetClaims( int _userId)
+
+        private async Task<IEnumerable<ClaimUserOnIndicatorSearchResponseDto>> GetClaims(int _userId)
         {
             try
             {
 
-            (bool IsSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) = await claimUserOnIndicatorService.Search
-                    (
-                    new GenericSearchRequestDto()
-                    {
-                        filters = new List<GenericSearchFilterDto>()
+                (bool IsSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) = await claimUserOnIndicatorService.Search
+                        (
+                        new GenericSearchRequestDto()
                         {
+                            filters = new List<GenericSearchFilterDto>()
+                            {
                             new GenericSearchFilterDto()
                             {
                                 columnName = "FkUserId",
@@ -1065,9 +1081,9 @@ namespace PMIS.Forms
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition
                             }
+                            }
                         }
-                    }
-                    );
+                        );
                 if (IsSuccess)
                 {
                     return userClaims;
@@ -1080,17 +1096,17 @@ namespace PMIS.Forms
                 throw;
             }
         }
-        private  Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _indicatorId)
+        private Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _indicatorId)
         {
             try
             {
                 if (userClaims.Count() > 0)
                 {
                     if (userClaims.Where(c => c.FkIndicatorId == _indicatorId && c.FkLkpClaimUserOnIndicatorInfo.Value == (_operationMode + _lkpValueType)).Count() > 0)
-                        return  Task.FromResult(true);
+                        return Task.FromResult(true);
                 }
 
-                return  Task.FromResult(false);
+                return Task.FromResult(false);
             }
             catch (Exception ex)
             {
@@ -1170,6 +1186,16 @@ namespace PMIS.Forms
             }
         }
 
+        private void dgvResultsList_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            RowValidated(sender,e);
+
+        }
+
+        private void dgvResultsList_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            
+        }
     }
 
 

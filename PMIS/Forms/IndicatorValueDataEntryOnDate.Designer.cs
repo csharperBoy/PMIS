@@ -158,6 +158,8 @@ namespace PMIS.Forms
             dgvResultsList.RowLeave += dgvResultsList_RowLeave;
             dgvResultsList.RowPostPaint += dgvResultsList_RowPostPaint;
             dgvResultsList.RowsAdded += dgvResultsList_RowsAdded;
+            dgvResultsList.RowValidated += dgvResultsList_RowValidated;
+            dgvResultsList.RowValidating += dgvResultsList_RowValidating;
             // 
             // panelFilters
             // 
