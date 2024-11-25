@@ -1,6 +1,7 @@
 ﻿using Generic.Base;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using PMIS.Bases;
 using PMIS.DTO.Indicator;
@@ -27,31 +28,30 @@ namespace PMIS.Forms
 
         private async void LoginForm_Load(object sender, EventArgs e)
         {
-           // IndicatorAddRequestDto a = await GenericMapHandler.StaticMap<AutoMapHandler,Indicator, IndicatorAddRequestDto>(new AutoMapHandler(), new Indicator() { Code = "Ali"});
-           
+            // IndicatorAddRequestDto a = await GenericMapHandler.StaticMap<AutoMapHandler,Indicator, IndicatorAddRequestDto>(new AutoMapHandler(), new Indicator() { Code = "Ali"});
+
         }
 
         private void buttonEntry_Click(object sender, EventArgs e)
         {
             try
             {
-                //string hashText = Hasher.HasherHMACSHA512.Hash(textBoxUsername.Text + "+" + textBoxPassword.Text);
-                //using (var context = new PmisContext()) 
-                //{
-                //    context.Database.EnsureCreated();
-                //    if (context.Users.Where(x => x.PasswordHash == hashText).First().Id != 0)
-                //    {
-                //        GlobalVariable.username = context.Users.Where(x => x.PasswordHash == hashText).First().UserName;
-
-                //    }
-                //    else
-                //    {
-                //        return ;
-                //    }
-                //    context.Dispose();
-                //};
-                GlobalVariable.username = "Admin";
-                GlobalVariable.userId = 13;
+                string hashText = Hasher.HasherHMACSHA512.Hash(textBoxUsername.Text + "+" + textBoxPassword.Text);
+                using (var context = new PmisContext())
+                {
+                    context.Database.EnsureCreated();
+                    User user = context.Users.Where(x => x.PasswordHash == hashText).First();
+                    if (user.Id != 0)
+                    {
+                        GlobalVariable.username = user.UserName;
+                        GlobalVariable.userId = user.Id;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    context.Dispose();
+                };
                 this.Hide();
 
 
@@ -66,7 +66,7 @@ namespace PMIS.Forms
 
                 this.Close();
 
-            } 
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Not OK Authentication : " + ex.Message);

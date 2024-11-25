@@ -73,6 +73,7 @@
             ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
             ExitToolStripMenuItem.Size = new Size(224, 26);
             ExitToolStripMenuItem.Text = "خروج";
+            ExitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
             // BaseInfoToolStripMenuItem
             // 

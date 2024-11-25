@@ -63,8 +63,8 @@ namespace PMIS
 
             //var loginForm = serviceProvider.GetRequiredService<LoginForm>();
             //Application.Run(loginForm); 
-            var mainForm = serviceProvider.GetRequiredService<MainForm>();
-            Application.Run(mainForm);
+            var baseForm = serviceProvider.GetRequiredService<LoginForm>();
+            Application.Run(baseForm);
         }
         private static void ConfigureServices(IServiceCollection services)
         {
