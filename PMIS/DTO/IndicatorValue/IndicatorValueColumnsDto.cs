@@ -1,12 +1,14 @@
 ﻿using PMIS.Bases;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpDestination;
+using PMIS.DTO.LookUpValue.Info;
 using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PMIS.DTO.IndicatorValue
 {
@@ -17,8 +19,13 @@ namespace PMIS.DTO.IndicatorValue
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicatorValues = await lookUpValueService.GetList("IndicatorValue");
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicator = await lookUpValueService.GetList("Indicator");
-            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());
-            lstIndicator = await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId);
+            List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0 , Title = "همه"} };
+            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator1) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());
+            
+            lstIndicator1 = (await indicatorService.SearchByExternaFilter(lstIndicator1, GlobalVariable.userId));
+            lstIndicator.AddRange(lstIndicator1);
+
+
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
 
@@ -194,6 +201,8 @@ namespace PMIS.DTO.IndicatorValue
                    Visible = true,
                }
         });
+
+           
         }
 
         public List<DataGridViewColumn> FilterColumns { get; set; } = new List<DataGridViewColumn>();

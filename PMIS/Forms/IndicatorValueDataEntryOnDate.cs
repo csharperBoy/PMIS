@@ -49,9 +49,12 @@ namespace PMIS.Forms
         private IIndicatorValueService indicatorValueService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
+        private DateTime dateTimeFrom;
+        private DateTime dateTimeTo;
+        private IEnumerable<IndicatorSearchResponseDto> indicators;
+        IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims;
         private bool isLoaded = false;
         private TabControl tabControl;
-
         #endregion
 
         public IndicatorValueDataEntryOnDate(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
@@ -175,6 +178,7 @@ namespace PMIS.Forms
             lstLogicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
+            userClaims =  await GetClaims(GlobalVariable.userId);
             GenerateDgvFilterColumnsInitialize();
             GenerateDgvResultColumnsInitialize();
             FiltersInitialize();
@@ -336,9 +340,7 @@ namespace PMIS.Forms
                 throw;
             }
         }
-        DateTime dateTimeFrom;
-        DateTime dateTimeTo;
-        IEnumerable<IndicatorSearchResponseDto> indicators;
+
         public async Task SearchEntity()
         {
             isLoaded = false;
@@ -355,7 +357,8 @@ namespace PMIS.Forms
                 dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
                 dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
                 lstDates.AddRange(Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo));
-                if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value != "0")
+                indicators = indicators.Where(i => i.Id != 0);
+                if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value.ToString() != "0")
                 {
                     indicators = indicators.Where(i => i.Id == int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                 }
@@ -484,8 +487,8 @@ namespace PMIS.Forms
                                 VrtLkpPeriodId = indicator.FkLkpPeriodId,
                                 DateTime = date,
                             };
-                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForValueType(indicatorValue, indicator);
-                            blankIndicatorValues = await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator);
+                            IEnumerable<IndicatorValueSearchResponseDto> blankIndicatorValues = await GenerateRowsForDate(indicatorValue, indicator);
+                            blankIndicatorValues = await GenerateRowsForValueType(blankIndicatorValues, indicator);
                             blankIndicatorValues = blankIndicatorValues.Except(_indicatorValueList);
                             result.AddRange(blankIndicatorValues);
                         }
@@ -515,7 +518,7 @@ namespace PMIS.Forms
                 var datesToRemove = new List<DateTime>();
                 foreach (var date in lstDates)
                 {
-                    List<IndicatorValueSearchResponseDto> blankIndicatorValues = new List<IndicatorValueSearchResponseDto>();
+                    bool flgGenerated = false;
                     foreach (IndicatorSearchResponseDto indicator in indicators)
                     {
 
@@ -524,23 +527,25 @@ namespace PMIS.Forms
                             FkIndicatorId = indicator.Id,
                             VrtLkpFormId = indicator.FkLkpFormId,
                             VrtLkpPeriodId = indicator.FkLkpPeriodId,
-                            DateTime = date,                            
+                            DateTime = date,
                             shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
                         };
-                        blankIndicatorValues = (await GenerateRowsForValueType(indicatorValue, indicator)).ToList();
-                        blankIndicatorValues = (await GenerateRowsForDateOnIndicator(blankIndicatorValues, indicator)).ToList();
-                        //blankIndicatorValues = blankIndicatorValues.Except(result).ToList();
-                        //  blankIndicatorValues.RemoveAll(x => result.Contains(x));
+                        List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForDate(indicatorValue, indicator)).ToList();
+                        blankIndicatorValues = (await GenerateRowsForValueType(blankIndicatorValues, indicator)).ToList();
+                        blankIndicatorValues = blankIndicatorValues.Where( x => HasAccess("Add", x.FkLkpValueTypeInfo.Value, x.FkIndicatorId).Result == true).ToList();
                         blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime == x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId));
+
+
+
 
                         if (blankIndicatorValues.Count() > 0)
                         {
                             result.AddRange(blankIndicatorValues);
                             datesToRemove.Add(date);
-                            
+                            flgGenerated = true;
                         }
                     }
-                    if(blankIndicatorValues.Count > 0) 
+                    if (flgGenerated)
                         break;
                 }
 
@@ -558,7 +563,7 @@ namespace PMIS.Forms
             }
         }
 
-        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForDateOnIndicator(IEnumerable<IndicatorValueSearchResponseDto> indicatorValues, IndicatorSearchResponseDto indicator)
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForValueType(IEnumerable<IndicatorValueSearchResponseDto> indicatorValues, IndicatorSearchResponseDto indicator)
         {
             try
             {
@@ -637,7 +642,7 @@ namespace PMIS.Forms
             }
         }
 
-        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForValueType(IndicatorValueSearchResponseDto indicatorValue, IndicatorSearchResponseDto indicator)
+        private async Task<IEnumerable<IndicatorValueSearchResponseDto>> GenerateRowsForDate(IndicatorValueSearchResponseDto indicatorValue, IndicatorSearchResponseDto indicator)
         {
             try
             {
@@ -651,7 +656,7 @@ namespace PMIS.Forms
                     case "Annually":
                         if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1)
                         {
-                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                             break;
@@ -660,7 +665,7 @@ namespace PMIS.Forms
                     case "Biannual":
                         if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187)
                         {
-                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                             break;
@@ -669,7 +674,7 @@ namespace PMIS.Forms
                     case "Seasonal":
                         if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 1 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 94 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 187 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 277)
                         {
-                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                             break;
@@ -678,7 +683,7 @@ namespace PMIS.Forms
                     case "Monthly":
                         if (persianCalendar.GetDayOfMonth(indicatorValue.DateTime) == 1)
                         {
-                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                             break;
@@ -710,7 +715,7 @@ namespace PMIS.Forms
                         for (int i = 0; i < 24; i++)
                         {
                             indicatorValue.DateTime.AddHours(i);
-                            indicatorValue.FkLkpShiftId = ((LookUpValueShortInfoDto)shifts.Where(s => s.Value == "0")).Id;
+                            indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp);
                         }
@@ -742,7 +747,7 @@ namespace PMIS.Forms
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
-                        bool hasPermission = await HasAccess("Add", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        bool hasPermission = await HasAccess("Add", lkpValueType,  int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                         if (!hasPermission)
                         {
                             //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
@@ -799,7 +804,7 @@ namespace PMIS.Forms
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
 
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
-                        bool hasPermission = await HasAccess("Edit", lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                        bool hasPermission = await HasAccess("Edit", lkpValueType,  int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                         if (!hasPermission)
                         {
                             //MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
@@ -903,12 +908,6 @@ namespace PMIS.Forms
 
         public async void RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (isLoaded)
-            {
-                DataGridViewRow selectedRow = dgvResultsList.Rows[e.RowIndex];
-                selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
-                selectedRow.DefaultCellStyle.ForeColor = Color.White;
-            }
             if (dgvResultsList.Rows[e.RowIndex].IsNewRow)
             {
                 await Task.Run(async () =>
@@ -921,6 +920,12 @@ namespace PMIS.Forms
                         dgvResultsList.DataSource = resultBindingSource;
                     });
                 });
+            }
+            if (isLoaded)
+            {
+                DataGridViewRow selectedRow = dgvResultsList.Rows[e.RowIndex];
+                selectedRow.DefaultCellStyle.BackColor = Color.LightBlue;
+                selectedRow.DefaultCellStyle.ForeColor = Color.White;
             }
         }
 
@@ -957,7 +962,7 @@ namespace PMIS.Forms
                 string operationMode = row.Cells["Id"].Value.ToString() == "0" ? "Add" : "Edit";
                 var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                 string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
-                bool hasPermission = await HasAccess(operationMode, lkpValueType, GlobalVariable.userId, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
+                bool hasPermission = await HasAccess(operationMode, lkpValueType, int.Parse(row.Cells["FkIndicatorId"].Value.ToString()));
                 if (!hasPermission)
                 {
                     MessageBox.Show("دسترسی برای ویرایش این شاخص را ندارید!!!");
@@ -1027,12 +1032,13 @@ namespace PMIS.Forms
             //    }
             //}
         }
-
-        private async Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _userId, int _indicatorId)
+        
+        private async Task<IEnumerable<ClaimUserOnIndicatorSearchResponseDto>> GetClaims( int _userId)
         {
             try
             {
-                (bool IsSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) = await claimUserOnIndicatorService.Search
+
+            (bool IsSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims) = await claimUserOnIndicatorService.Search
                     (
                     new GenericSearchRequestDto()
                     {
@@ -1045,26 +1051,33 @@ namespace PMIS.Forms
                                 LogicalOperator = LogicalOperator.Begin,
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition
-                            },
-                            new GenericSearchFilterDto()
-                            {
-                                columnName = "FkIndicatorId",
-                                value = _indicatorId.ToString(),
-                                LogicalOperator = LogicalOperator.And,
-                                operation = FilterOperator.Equals,
-                                type = PhraseType.Condition
                             }
                         }
                     }
                     );
-
-                if (IsSuccess && userClaims.Count() > 0)
+                if (IsSuccess)
                 {
-                    if (userClaims.Where(c => c.FkLkpClaimUserOnIndicatorInfo.Value == (_operationMode + _lkpValueType)).Count() > 0)
-                        return await Task.FromResult(true);
+                    return userClaims;
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        private  Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _indicatorId)
+        {
+            try
+            {
+                if (userClaims.Count() > 0)
+                {
+                    if (userClaims.Where(c => c.FkIndicatorId == _indicatorId && c.FkLkpClaimUserOnIndicatorInfo.Value == (_operationMode + _lkpValueType)).Count() > 0)
+                        return  Task.FromResult(true);
                 }
 
-                return await Task.FromResult(false);
+                return  Task.FromResult(false);
             }
             catch (Exception ex)
             {
