@@ -532,6 +532,7 @@ namespace PMIS.Forms
                         };
                         List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForDate(indicatorValue, indicator)).ToList();
                         blankIndicatorValues = (await GenerateRowsForValueType(blankIndicatorValues, indicator)).ToList();
+                        
                         blankIndicatorValues = blankIndicatorValues.Where( x => HasAccess("Add", x.FkLkpValueTypeInfo.Value, x.FkIndicatorId).Result == true).ToList();
                         blankIndicatorValues.RemoveAll(x => result.Any(r => r.DateTime == x.DateTime && r.FkIndicatorId == x.FkIndicatorId && r.FkLkpShiftId == x.FkLkpShiftId && r.FkLkpValueTypeId == x.FkLkpValueTypeId));
 
@@ -581,51 +582,63 @@ namespace PMIS.Forms
                             break;
                         case "Foresight":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Foresight").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             break;
                         case "Target":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             break;
                         case "Performance":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             break;
                         case "FT":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Foresight").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
                             temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp2);
                             break;
                         case "FP":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Foresight").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").Single();
                             temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp2);
                             break;
                         case "TP":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
-                            indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                            indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id; 
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").Single();
                             temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp2);
                             break;
                         case "FTP":
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Foresight").Single();
                             temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp1);
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
                             temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp2);
                             indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Performance").Single().Id;
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").Single();
                             temp3 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                             result.Add(temp3);
                             break;
