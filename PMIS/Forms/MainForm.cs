@@ -39,10 +39,15 @@ namespace PMIS.Forms
 
         private void ClaimsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
+            new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
         }
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new IndicatorValueForm(indicatorValueService, indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
         {
             new IndicatorValueForm(indicatorValueService, indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }

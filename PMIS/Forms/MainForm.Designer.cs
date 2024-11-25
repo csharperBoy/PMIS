@@ -146,6 +146,7 @@
             RightToLeftLayout = true;
             Text = "MainForm";
             WindowState = FormWindowState.Maximized;
+            Load += MainForm_Load;
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             ResumeLayout(false);
