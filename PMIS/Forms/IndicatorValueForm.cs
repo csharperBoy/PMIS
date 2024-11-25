@@ -397,6 +397,8 @@ namespace PMIS.Forms
                 };
                 foreach (DataGridViewColumn column in dgvFiltersList.Columns)
                 {
+                    if (column.Name.StartsWith("Vrt"))
+                        continue;
                     var cellValue = row.Cells[column.Name].Value == null ? "" : row.Cells[column.Name].Value.ToString();
 
                     if ((column is not DataGridViewComboBoxColumn && !cellValue.IsNullOrEmpty()) || (column is DataGridViewComboBoxColumn && cellValue != "" && cellValue != "0"))
@@ -442,6 +444,7 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
+
             lstSearchResponse = await GenerateRows2(lstSearchResponse);
             if (isSuccess)
             {
