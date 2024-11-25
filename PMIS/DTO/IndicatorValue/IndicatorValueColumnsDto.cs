@@ -20,8 +20,7 @@ namespace PMIS.DTO.IndicatorValue
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicatorValues = await lookUpValueService.GetList("IndicatorValue");
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicator = await lookUpValueService.GetList("Indicator");
             List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0 , Title = "همه"} };
-            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator1) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());
-            
+            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator1) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());            
             lstIndicator1 = (await indicatorService.SearchByExternaFilter(lstIndicator1, GlobalVariable.userId));
             lstIndicator.AddRange(lstIndicator1);
 

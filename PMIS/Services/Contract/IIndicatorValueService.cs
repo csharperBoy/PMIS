@@ -11,5 +11,6 @@ namespace PMIS.Services.Contract
 {
     public interface IIndicatorValueService : IGenericNormalService<IndicatorValue, IndicatorValueAddRequestDto, IndicatorValueAddResponseDto, IndicatorValueEditRequestDto, IndicatorValueEditResponseDto, IndicatorValueDeleteRequestDto, IndicatorValueDeleteResponseDto, IndicatorValueSearchResponseDto>
     {
+        Task<IEnumerable<IndicatorValueSearchResponseDto>> SearchByExternaFilter(IEnumerable<IndicatorValueSearchResponseDto> list, int? lkpFormId, int? lkpPeriodId);
     }
 }

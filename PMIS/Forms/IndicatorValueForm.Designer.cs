@@ -182,6 +182,7 @@ namespace PMIS.Forms
             dgvFiltersList.RowHeadersWidth = 51;
             dgvFiltersList.Size = new Size(1102, 65);
             dgvFiltersList.TabIndex = 7;
+            dgvFiltersList.CellValueChanged += dgvFiltersList_CellValueChanged;
             // 
             // IndicatorValueForm
             // 
