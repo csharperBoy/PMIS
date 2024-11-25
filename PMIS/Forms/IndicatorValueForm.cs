@@ -310,6 +310,11 @@ namespace PMIS.Forms
                     }
                 }
             }
+            PersianCalendar persianCalendar = new PersianCalendar();
+            string year= persianCalendar.GetYear(persianCalendar.AddYears(DateTime.Now, 1)).ToString();
+            
+            dgvFiltersList.Rows[0].Cells["DateTimeFrom"].Value = Helper.Convert.ConvertGregorianToShamsi(DateTime.Now.AddDays(-14));
+            dgvFiltersList.Rows[0].Cells["DateTimeTo"].Value =Helper.Convert.ConvertGregorianToShamsi( Helper.Convert.ConvertShamsiToGregorian( year + "/01/01").AddDays(-1) );
         }
 
         public void RefreshVisuals()
