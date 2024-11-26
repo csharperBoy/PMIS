@@ -1,5 +1,6 @@
 ﻿using PMIS.Bases;
 using PMIS.DTO.Indicator;
+using PMIS.DTO.LookUp.Info;
 using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.Services.Contract;
@@ -46,7 +47,7 @@ namespace PMIS.DTO.IndicatorValue
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "شیفت",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single().Title,
                    Name = "FkLkpShiftId",
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
@@ -56,7 +57,7 @@ namespace PMIS.DTO.IndicatorValue
                    Visible = true,
                },new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single().Title,
                    Name = "VrtLkpForm",
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
@@ -67,7 +68,7 @@ namespace PMIS.DTO.IndicatorValue
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دوره زمانی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single().Title,
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
@@ -89,7 +90,7 @@ namespace PMIS.DTO.IndicatorValue
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع مقدار",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single().Title,
                    Name = "FkLkpValueTypeId",
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",
@@ -128,7 +129,7 @@ namespace PMIS.DTO.IndicatorValue
                },
               new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "شیفت",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single().Title,
                    Name = "FkLkpShiftId",
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
@@ -140,7 +141,7 @@ namespace PMIS.DTO.IndicatorValue
                },
               new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single().Title,
                    Name = "VrtLkpForm",
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
@@ -151,7 +152,7 @@ namespace PMIS.DTO.IndicatorValue
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دوره زمانی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single().Title,
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
@@ -174,7 +175,7 @@ namespace PMIS.DTO.IndicatorValue
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع مقدار",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single().Title,
                    Name = "FkLkpValueTypeId",
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",

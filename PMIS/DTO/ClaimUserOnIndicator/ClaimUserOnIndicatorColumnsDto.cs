@@ -77,7 +77,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع ادعا",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimUserOnIndicator")).Single().Title,
                    Name = "FkLkpClaimUserOnIndicatorId",
                    DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",
@@ -130,7 +130,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "نوع ادعا",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimUserOnIndicator")).Single().Title,
                    Name = "FkLkpClaimUserOnIndicatorId",
                    DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",

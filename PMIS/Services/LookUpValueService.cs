@@ -101,6 +101,19 @@ namespace PMIS.Services
                 throw;
             }
         }
+        public async Task<IEnumerable<LookUpShortInfoDto>> GetList(IEnumerable<LookUpDestinationSearchResponseDto> _tablelookUpList, string _code)
+        {
+            try
+            {
+                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code);
+
+                return await Task.FromResult(result.Select(x=> x.FkLookUpInfo));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
 

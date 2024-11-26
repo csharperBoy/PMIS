@@ -36,7 +36,7 @@ namespace PMIS.DTO.User
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "کد تقویم کاری",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpWorkCalendar")).Single().Title,
                    Name = "FkLkpWorkCalendarId",
                    DataPropertyName = "FkLkpWorkCalendarId",
                    DisplayMember = "Display",
@@ -125,7 +125,7 @@ namespace PMIS.DTO.User
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "کد تقویم کاری",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpWorkCalendar")).Single().Title,
                    Name = "FkLkpWorkCalendarId",
                    DataPropertyName = "FkLkpWorkCalendarId",
                    DisplayMember = "Display",

@@ -38,7 +38,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم مربوطه",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpForm")).Single().Title,
                    Name = "FkLkpFormId",
                    DataPropertyName = "FkLkpFormId",
                    DisplayMember = "Display",
@@ -49,7 +49,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دستی/اتوماتیک",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpManuality")).Single().Title,
                    Name = "FkLkpManualityId",
                    DataPropertyName = "FkLkpManualityId",
                    DisplayMember = "Display",
@@ -60,7 +60,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد عملیاتی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpUnit")).Single().Title,
                    Name = "FkLkpUnitId",
                    DataPropertyName = "FkLkpUnitId",
                    DisplayMember = "Display",
@@ -71,7 +71,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دوره زمانی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpPeriod")).Single().Title,
                    Name = "FkLkpPeriodId",
                    DataPropertyName = "FkLkpPeriodId",
                    DisplayMember = "Display",
@@ -82,7 +82,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد اندازه‌گیری",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
                    Name = "FkLkpMeasureId",
                    DataPropertyName = "FkLkpMeasureId",
                    DisplayMember = "Display",
@@ -93,7 +93,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "مطلوبیت",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
                    Name = "FkLkpDesirabilityId",
                    DataPropertyName = "FkLkpDesirabilityId",
                    DisplayMember = "Display",
@@ -149,7 +149,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "فرم مربوطه",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpForm")).Single().Title,
                    Name = "FkLkpFormId",
                    DataPropertyName = "FkLkpFormId",
                    DisplayMember = "Display",
@@ -160,7 +160,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دستی/اتوماتیک",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpManuality")).Single().Title,
                    Name = "FkLkpManualityId",
                    DataPropertyName = "FkLkpManualityId",
                    DisplayMember = "Display",
@@ -171,7 +171,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد عملیاتی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpUnit")).Single().Title,
                    Name = "FkLkpUnitId",
                    DataPropertyName = "FkLkpUnitId",
                    DisplayMember = "Display",
@@ -182,7 +182,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "دوره زمانی",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpPeriod")).Single().Title,
                    Name = "FkLkpPeriodId",
                    DataPropertyName = "FkLkpPeriodId",
                    DisplayMember = "Display",
@@ -193,7 +193,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "واحد اندازه‌گیری",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
                    Name = "FkLkpMeasureId",
                    DataPropertyName = "FkLkpMeasureId",
                    DisplayMember = "Display",
@@ -204,7 +204,7 @@ namespace PMIS.DTO.Indicator
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = "مطلوبیت",
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
                    Name = "FkLkpDesirabilityId",
                    DataPropertyName = "FkLkpDesirabilityId",
                    DisplayMember = "Display",
