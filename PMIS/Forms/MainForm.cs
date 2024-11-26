@@ -12,10 +12,11 @@ namespace PMIS.Forms
         IIndicatorValueService indicatorValueService;
         ILookUpDestinationService lookUpDestinationService;
         IClaimUserOnIndicatorService claimUserOnIndicatorService;
+        private IClaimOnSystemService claimOnSystemService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService,   IClaimOnSystemService _claimOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
-
+            claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
             indicatorService = _indicatorService;
             indicatorValueService = _indicatorValueService;
@@ -29,17 +30,17 @@ namespace PMIS.Forms
 
         private void UsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new UserForm(userService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
+            new UserForm(userService,   claimOnSystemService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
         }
 
         private void IndicatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorForm(indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+            new IndicatorForm(indicatorService,   claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void ClaimsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
+            new ClaimUserOnIndicatorForm(claimOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
         }
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)

@@ -428,6 +428,7 @@ namespace PMIS.Bases
                     lookUpDestination.Clear();
                     lookUpValue.Clear();
                     #endregion
+
                     #region ClaimUserOnSystem
                     //add lookup
                     //------------------------------------

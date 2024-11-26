@@ -33,12 +33,14 @@ namespace PMIS.Forms
         private IUserService userService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
+        private IClaimOnSystemService claimOnSystemService;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public UserForm(IUserService _userService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public UserForm(IUserService _userService,   IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
+            this.claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
@@ -654,7 +656,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(  claimOnSystemService,claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
                     frm.Show();
                 }
             }
