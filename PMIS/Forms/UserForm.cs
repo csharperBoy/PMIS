@@ -286,6 +286,7 @@ namespace PMIS.Forms
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
                     }
+                    dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }

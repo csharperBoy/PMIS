@@ -18,8 +18,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimUserOnIndicator");
 
-            List<UserSearchResponseDto> lstUser = new List<UserSearchResponseDto>() { new UserSearchResponseDto() { Id = 0, UserName = "همه" } };
-            (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser1) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+           // List<UserSearchResponseDto> lstUser = new List<UserSearchResponseDto>() { new UserSearchResponseDto() { Id = 0, UserName = "همه" } };
+            (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
             {
                 filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
                 {
@@ -33,10 +33,10 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                     }
                 }
             });
-            lstUser.AddRange(lstUser1);
+          //  lstUser.AddRange(lstUser1);
 
-            List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0, Title = "همه" } };
-            (bool isSuccessIndicator, IEnumerable<IndicatorSearchResponseDto> lstIndicator1) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+           // List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0, Title = "همه" } };
+            (bool isSuccessIndicator, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
             {
                 filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
                 {
@@ -50,7 +50,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                     }
                 }
             });           
-            lstIndicator.AddRange(lstIndicator1);
+           // lstIndicator.AddRange(lstIndicator1);
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
@@ -61,7 +61,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "FkUserId",
                    DisplayMember = "Username",
                    ValueMember = "Id",
-                   DataSource = lstUser,
+                   DataSource = lstUser.ToArray(),
                    ReadOnly = false,
                    Visible = true,
                },new DataGridViewComboBoxColumn()
@@ -71,7 +71,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "FkIndicatorId",
                    DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource = lstIndicator,
+                   DataSource = lstIndicator.ToArray(),
                    ReadOnly = false,
                    Visible = true,
                },
@@ -95,7 +95,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    Visible = true,
                }
         });
-
+           
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
                 new DataGridViewTextBoxColumn()

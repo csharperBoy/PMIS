@@ -2,6 +2,7 @@
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using PMIS.DTO.ClaimOnSystem;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpValue.Info;
@@ -30,24 +31,52 @@ namespace PMIS.Forms
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IUserService userService;
         private IIndicatorService indicatorService;
+        private IClaimOnSystemService claimOnSystemService;
         private int fkUserId;
         private int fkIndicatorId;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService ,ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
+        public ClaimUserOnIndicatorForm(IClaimOnSystemService _claimOnSystemService,IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
-            InitializeComponent();
-            claimUserOnIndicatorService = _claimUserOnIndicatorService;
-            userService = _userService;
-            indicatorService = _indicatorService;
-            lookUpValueService = _lookUpValueService;
-            fkUserId = _fkUserId;
-            fkIndicatorId = _fkIndicatorId;
-            CustomInitialize();
-            tabControl = _tabControl;
-            AddNewTabPage(tabControl, this);
+            this.claimOnSystemService = _claimOnSystemService;
+            if (CheckSystemClaimsRequired())
+            {
+                InitializeComponent();
+                claimUserOnIndicatorService = _claimUserOnIndicatorService;
+                userService = _userService;
+                indicatorService = _indicatorService;
+                lookUpValueService = _lookUpValueService;
+                fkUserId = _fkUserId;
+                fkIndicatorId = _fkIndicatorId;
+                CustomInitialize();
+                tabControl = _tabControl;
+                AddNewTabPage(tabControl, this);
+            }
+            else
+            {
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+
+            }
+        }
+
+        private bool CheckSystemClaimsRequired()
+        {
+            try
+            {
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = claimOnSystemService.GetCurrentUserClaims().Result;
+                if (claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm")) 
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         private void AddNewTabPage(TabControl tabControl, Form form)
@@ -152,7 +181,7 @@ namespace PMIS.Forms
         {
             // InitializeComponent();
             columns = new ClaimUserOnIndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService,userService, indicatorService, fkUserId, fkIndicatorId);
+            await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
             lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
@@ -288,6 +317,25 @@ namespace PMIS.Forms
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
                     }
+                    if (comboBoxColumn.DataSource is IndicatorSearchResponseDto[] arrayInd)
+                    {
+                        List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
+                        lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
+                        comboBoxColumn.DataSource = lstSourse;
+                        comboBoxColumn.DisplayMember = "Title";
+                        comboBoxColumn.ValueMember = "Id";
+                        // comboBoxColumn.SelectedIndex = 0;
+                    }
+                    if (comboBoxColumn.DataSource is UserSearchResponseDto[] arrayUsr)
+                    {
+                        List<UserSearchResponseDto> lstSourse = arrayUsr.ToList();
+                        lstSourse.Insert(0, new UserSearchResponseDto() { Id = 0, UserName = "همه", });
+                        comboBoxColumn.DataSource = lstSourse;
+                        comboBoxColumn.DisplayMember = "UserName";
+                        comboBoxColumn.ValueMember = "Id";
+                        // comboBoxColumn.SelectedIndex = 0;
+                    }
+                    dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }
@@ -409,10 +457,10 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        
-                            if((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
-                            {
-                                ClaimUserOnIndicatorAddRequestDto addRequest = new ClaimUserOnIndicatorAddRequestDto();
+
+                        if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
+                        {
+                            ClaimUserOnIndicatorAddRequestDto addRequest = new ClaimUserOnIndicatorAddRequestDto();
 
                             addRequest = AddMaping(row);
                             lstAddRequest.Add(addRequest);
