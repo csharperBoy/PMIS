@@ -24,6 +24,8 @@ namespace PMIS.DTO.User
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -33,6 +35,8 @@ namespace PMIS.DTO.User
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -44,6 +48,8 @@ namespace PMIS.DTO.User
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -60,6 +66,8 @@ namespace PMIS.DTO.User
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 200,
+                   DividerWidth = 5
                }
         });
             ResultColumns.AddRange(new List<DataGridViewColumn>()

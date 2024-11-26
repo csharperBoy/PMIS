@@ -64,6 +64,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource = lstUser.ToArray(),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },new DataGridViewComboBoxColumn()
                {
                    HeaderText = "شاخص",
@@ -74,6 +76,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource = lstIndicator.ToArray(),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -85,6 +89,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -93,6 +99,8 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
+                   MinimumWidth = 200,
+                   DividerWidth = 5
                }
         });
            

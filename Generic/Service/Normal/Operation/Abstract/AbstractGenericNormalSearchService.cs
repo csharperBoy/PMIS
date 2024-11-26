@@ -61,7 +61,8 @@ namespace Generic.Service.Normal.Operation.Abstract
                    pageNumber: requestInput.pageNumber,
                    recordCount: requestInput.recordCount
                );
-                
+                if (entities == null)
+                    return (false,null);
                 List<TEntitySearchResponseDto> results = entities.Select(entity => mapper.Map<TEntity, TEntitySearchResponseDto>(entity).Result).ToList();
                 foreach (var entity in entities)
                 {

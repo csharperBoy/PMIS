@@ -1,5 +1,8 @@
 ﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
+using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.User;
 using PMIS.Services.Contract;
+using System.Windows.Forms;
 
 namespace PMIS.Forms
 {
@@ -16,8 +19,8 @@ namespace PMIS.Forms
         private Serilog.ILogger logHandler;
         public MainForm(IIndicatorService _indicatorService,   IClaimOnSystemService _claimOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
-            claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
+            claimOnSystemService = _claimOnSystemService;
             indicatorService = _indicatorService;
             indicatorValueService = _indicatorValueService;
             userService = _userService;
@@ -26,8 +29,44 @@ namespace PMIS.Forms
             lookUpDestinationService = _lookUpDestinationService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             logHandler = _logHandler.CreateLogger();
+            CustomInitialize();
         }
+        private async void CustomInitialize()
+        {
+           await CheckSystemClaimsRequired();
+        }
+        private async Task CheckSystemClaimsRequired()
+        {
+            try
+            {
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
+                {
+                    ClaimsToolStripMenuItem.Visible = false;
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorForm"))
+                {
+                    IndicatorsToolStripMenuItem.Visible = false;
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
+                {
+                    IndicatorValueToolStripMenuItem.Visible = false;
+                }
+                else
+                {
+                    new IndicatorValueForm(indicatorValueService, indicatorService, claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "UserForm"))
+                {
+                    UsersToolStripMenuItem.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+        }
         private void UsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new UserForm(userService,   claimOnSystemService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
@@ -45,12 +84,13 @@ namespace PMIS.Forms
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorValueForm(indicatorValueService, indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+            new IndicatorValueForm(indicatorValueService, indicatorService,claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            new IndicatorValueForm(indicatorValueService, indicatorService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+
+           
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)

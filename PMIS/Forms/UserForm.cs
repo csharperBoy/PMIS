@@ -16,6 +16,7 @@ using PMIS.Bases;
 using System.Net;
 using System.Security;
 using System.Runtime.InteropServices;
+using PMIS.DTO.ClaimOnSystem;
 
 namespace PMIS.Forms
 {
@@ -38,19 +39,60 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public UserForm(IUserService _userService,   IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public UserForm(IUserService _userService, IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
-            this.claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
+            claimOnSystemService = _claimOnSystemService;
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
             indicatorService = _indicatorService;
-            CustomInitialize();
             tabControl = _tabControl;
-            AddNewTabPage(tabControl, this);
+            CustomInitialize();
         }
+        private async void CustomInitialize()
+        {
+            int selectedIndex = tabControl.SelectedIndex;
+            AddNewTabPage(tabControl, this);
+            if (await CheckSystemClaimsRequired())
+            {
+                // InitializeComponent();
+                columns = new UserColumnsDto();
+                await columns.Initialize(lookUpValueService);
+                lstLogicalDeleteRequest = new List<UserDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<UserDeleteRequestDto>();
+                lstRecycleRequest = new List<UserDeleteRequestDto>();
+                GenerateDgvFilterColumnsInitialize();
+                GenerateDgvResultColumnsInitialize();
+                FiltersInitialize();
+                SearchEntity();
+            }
+            else
+            {
 
+                tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
+                tabControl.SelectedIndex = selectedIndex;
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+            }
+        }
+        private async Task<bool> CheckSystemClaimsRequired()
+        {
+            try
+            {
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "UserForm"))
+                {
+                    this.Close();
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
         private void AddNewTabPage(TabControl tabControl, Form form)
         {
             TabPage tabPage = new TabPage();
@@ -155,20 +197,7 @@ namespace PMIS.Forms
 
 
 
-        private async void CustomInitialize()
-        {
 
-            // InitializeComponent();
-            columns = new UserColumnsDto();
-            await columns.Initialize(lookUpValueService);
-            lstLogicalDeleteRequest = new List<UserDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<UserDeleteRequestDto>();
-            lstRecycleRequest = new List<UserDeleteRequestDto>();
-            GenerateDgvFilterColumnsInitialize();
-            GenerateDgvResultColumnsInitialize();
-            FiltersInitialize();
-            SearchEntity();
-        }
 
         private void GenerateDgvFilterColumnsInitialize()
         {
@@ -656,7 +685,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(  claimOnSystemService,claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
                     frm.Show();
                 }
             }

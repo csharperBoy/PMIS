@@ -86,7 +86,6 @@ namespace PMIS.Forms
                 IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
                 {
-                    //MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
                     this.Close();
                     return false;
                 }

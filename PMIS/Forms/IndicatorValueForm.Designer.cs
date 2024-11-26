@@ -175,10 +175,13 @@ namespace PMIS.Forms
             // dgvFiltersList
             // 
             dgvFiltersList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvFiltersList.BackgroundColor = SystemColors.Control;
             dgvFiltersList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvFiltersList.Dock = DockStyle.Fill;
+            dgvFiltersList.GridColor = SystemColors.Control;
             dgvFiltersList.Location = new Point(160, 0);
             dgvFiltersList.Name = "dgvFiltersList";
+            dgvFiltersList.RowHeadersVisible = false;
             dgvFiltersList.RowHeadersWidth = 51;
             dgvFiltersList.Size = new Size(1102, 65);
             dgvFiltersList.TabIndex = 7;

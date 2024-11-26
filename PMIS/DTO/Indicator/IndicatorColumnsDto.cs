@@ -26,6 +26,8 @@ namespace PMIS.DTO.Indicator
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -35,6 +37,8 @@ namespace PMIS.DTO.Indicator
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -46,6 +50,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -57,6 +63,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -68,6 +76,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -79,6 +89,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -90,6 +102,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
                {
@@ -101,6 +115,8 @@ namespace PMIS.DTO.Indicator
                    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -109,6 +125,8 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "Formula",
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
                {
@@ -117,6 +135,8 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
+                    MinimumWidth = 150,
+                   DividerWidth = 5
                }
         });
             ResultColumns.AddRange(new List<DataGridViewColumn>()

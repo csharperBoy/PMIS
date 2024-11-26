@@ -1,6 +1,7 @@
 ﻿using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
+using PMIS.DTO.ClaimOnSystem;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpValue.Info;
@@ -34,19 +35,60 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorForm(IIndicatorService _indicatorService,  IClaimOnSystemService _claimOnSystemService,IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorForm(IIndicatorService _indicatorService, IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
-            claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
-            indicatorService = _indicatorService;           
+            claimOnSystemService = _claimOnSystemService;
+            indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
-            CustomInitialize();
             tabControl = _tabControl;
-            AddNewTabPage(tabControl,this);
+            CustomInitialize();
         }
+        private async void CustomInitialize()
+        {
+            int selectedIndex = tabControl.SelectedIndex;
+            AddNewTabPage(tabControl, this);
+            if (await CheckSystemClaimsRequired())
+            {
+                // InitializeComponent();
+                columns = new IndicatorColumnsDto();
+                await columns.Initialize(lookUpValueService);
+                lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
+                lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
+                GenerateDgvFilterColumnsInitialize();
+                GenerateDgvResultColumnsInitialize();
+                FiltersInitialize();
+                SearchEntity();
+            }
+            else
+            {
 
+                tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
+                tabControl.SelectedIndex = selectedIndex;
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+            }
+        }
+        private async Task<bool> CheckSystemClaimsRequired()
+        {
+            try
+            {
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorForm"))
+                {
+                    this.Close();
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
         private void AddNewTabPage(TabControl tabControl, Form form)
         {
             TabPage tabPage = new TabPage();
@@ -145,20 +187,7 @@ namespace PMIS.Forms
 
 
 
-        private async void CustomInitialize()
-        {
-            
-            // InitializeComponent();
-            columns = new IndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService);
-            lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
-            lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
-            GenerateDgvFilterColumnsInitialize();
-            GenerateDgvResultColumnsInitialize();
-            FiltersInitialize();
-            SearchEntity();
-        }
+
 
         private void GenerateDgvFilterColumnsInitialize()
         {
@@ -401,7 +430,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if ((row.Cells["Id"].Value == null && row.Index+1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
+                        if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
                         {
                             IndicatorAddRequestDto addRequest = new IndicatorAddRequestDto();
 
@@ -646,7 +675,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimOnSystemService,claimUserOnIndicatorService,userService, indicatorService, lookUpValueService, 0, tempId, tabControl);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, tempId, tabControl);
                     frm.Show();
                 }
             }

@@ -31,6 +31,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 using PMIS.DTO.Indicator.Info;
+using PMIS.DTO.ClaimOnSystem;
 
 namespace PMIS.Forms
 {
@@ -52,6 +53,7 @@ namespace PMIS.Forms
         private IIndicatorValueService indicatorValueService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
+        private IClaimOnSystemService claimOnSystemService;
         private DateTime dateTimeFrom;
         private DateTime dateTimeTo;
         private IEnumerable<IndicatorSearchResponseDto> indicators;
@@ -60,19 +62,64 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorValueForm(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorValueForm(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             indicatorValueService = _IndicatorValueService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
+            claimOnSystemService = _claimOnSystemService;
             userService = _userService;
-            CustomInitialize();
             tabControl = _tabControl;
-            AddNewTabPage(tabControl, this);
+            CustomInitialize();
         }
+        private async void CustomInitialize()
+        {
+            int selectedIndex = tabControl.SelectedIndex;
+            AddNewTabPage(tabControl, this);
+            if (await CheckSystemClaimsRequired())
+            {
+                // InitializeComponent();
+                columns = new IndicatorValueColumnsDto();
+                await columns.Initialize(lookUpValueService, indicatorService);
+                lstLogicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
+                lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
+                userClaims = await GetClaims(GlobalVariable.userId);
+                GenerateDgvFilterColumnsInitialize();
+                GenerateDgvResultColumnsInitialize();
+                FiltersInitialize();
+                dgvResultsList.DataSource = resultBindingSource;
+                //SearchEntity();
+                btnSearch_Click(this, new EventArgs());
+            }
+            else
+            {
 
+                tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
+                tabControl.SelectedIndex = selectedIndex;
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+            }
+        }
+        private async Task<bool> CheckSystemClaimsRequired()
+        {
+            try
+            {
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
+                {
+                    this.Close();
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
         private void AddNewTabPage(TabControl tabControl, Form form)
         {
             TabPage tabPage = new TabPage();
@@ -173,22 +220,7 @@ namespace PMIS.Forms
 
 
 
-        private async void CustomInitialize()
-        {
-            // InitializeComponent();
-            columns = new IndicatorValueColumnsDto();
-            await columns.Initialize(lookUpValueService, indicatorService);
-            lstLogicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<IndicatorValueDeleteRequestDto>();
-            lstRecycleRequest = new List<IndicatorValueDeleteRequestDto>();
-            userClaims = await GetClaims(GlobalVariable.userId);
-            GenerateDgvFilterColumnsInitialize();
-            GenerateDgvResultColumnsInitialize();
-            FiltersInitialize();
-            dgvResultsList.DataSource = resultBindingSource;
-            //SearchEntity();
-            btnSearch_Click(this, new EventArgs());
-        }
+
 
         private void GenerateDgvFilterColumnsInitialize()
         {
@@ -659,17 +691,17 @@ namespace PMIS.Forms
                             }
                             break;
                         case "TP":
-                                indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").SingleOrDefault();
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").SingleOrDefault();
                             if (indicatorValue.FkLkpValueTypeInfo != null)
                             {
-                            indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
+                                indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
                                 temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                                 result.Add(temp1);
                             }
-                                indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").SingleOrDefault();
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Performance").SingleOrDefault();
                             if (indicatorValue.FkLkpValueTypeInfo != null)
                             {
-                            indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
+                                indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
                                 temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                                 result.Add(temp2);
                             }
