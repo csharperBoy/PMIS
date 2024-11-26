@@ -667,14 +667,14 @@ namespace PMIS.Forms
                             indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Foresight").Single();
                             if (indicatorValue.FkLkpValueTypeInfo != null)
                             {
-                                indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Foresight").Single().Id;
+                                indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
                                 temp1 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                                 result.Add(temp1);
                             }
-                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").Single();
+                            indicatorValue.FkLkpValueTypeInfo = valueTypes.Where(v => v.Value == "Target").SingleOrDefault();
                             if (indicatorValue.FkLkpValueTypeInfo != null)
                             {
-                                indicatorValue.FkLkpValueTypeId = valueTypes.Where(v => v.Value == "Target").Single().Id;
+                                indicatorValue.FkLkpValueTypeId = indicatorValue.FkLkpValueTypeInfo.Id;
                                 temp2 = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);
                                 result.Add(temp2);
                             }
