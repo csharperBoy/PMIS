@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace PMIS.Models;
 
@@ -56,6 +55,8 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("ClaimOnSystem");
 
+            entity.HasIndex(e => new { e.FkLkpClaimOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("ID");
 
             entity.HasOne(d => d.FkLkpClaimOnSystem).WithMany(p => p.ClaimOnSystems)
@@ -74,6 +75,8 @@ public partial class PmisContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK_Claim");
 
             entity.ToTable("ClaimUserOnIndicator");
+
+            entity.HasIndex(e => new { e.FkIndicatorId, e.FkLkpClaimUserOnIndicatorId, e.FkUserId }, "UNQ_ClaimUserIndicator").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkIndicatorId).HasColumnName("FkIndicatorID");
@@ -100,8 +103,12 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("Indicator");
 
+            entity.HasIndex(e => e.Code, "UNQ_Code").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Code).IsUnicode(false);
+            entity.Property(e => e.Code)
+                .HasMaxLength(500)
+                .IsUnicode(false);
             entity.Property(e => e.FkLkpDesirabilityId).HasColumnName("FkLkpDesirabilityID");
             entity.Property(e => e.FkLkpFormId).HasColumnName("FkLkpFormID");
             entity.Property(e => e.FkLkpManualityId).HasColumnName("FkLkpManualityID");
@@ -175,6 +182,8 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("IndicatorValue");
 
+            entity.HasIndex(e => new { e.DateTime, e.FkIndicatorId, e.FkLkpShiftId, e.FkLkpValueTypeId }, "UNQ_Key").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkIndicatorId).HasColumnName("FkIndicatorID");
             entity.Property(e => e.FkLkpShiftId).HasColumnName("FkLkpShiftID");
@@ -208,10 +217,16 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("LookUpDestination");
 
+            entity.HasIndex(e => new { e.ColumnName, e.TableName, e.FkLookUpId }, "UNQ_LookUpDestination").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ColumnName).IsUnicode(false);
+            entity.Property(e => e.ColumnName)
+                .HasMaxLength(300)
+                .IsUnicode(false);
             entity.Property(e => e.FkLookUpId).HasColumnName("FkLookUpID");
-            entity.Property(e => e.TableName).IsUnicode(false);
+            entity.Property(e => e.TableName)
+                .HasMaxLength(300)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.FkLookUp).WithMany(p => p.LookUpDestinations)
                 .HasForeignKey(d => d.FkLookUpId)
@@ -249,7 +264,9 @@ public partial class PmisContext : DbContext
                 .HasMaxLength(13)
                 .IsUnicode(false)
                 .IsFixedLength();
-            entity.Property(e => e.UserName).IsUnicode(false);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(500)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.FkLkpWorkCalendar).WithMany(p => p.Users)
                 .HasForeignKey(d => d.FkLkpWorkCalendarId)

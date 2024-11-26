@@ -39,6 +39,7 @@
             IndicatorValueToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControlWithCloseTab();
+            ChangePasswordToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -56,7 +57,7 @@
             // 
             // FileToolStripMenuItem
             // 
-            FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { HelpToolStripMenuItem, ExitToolStripMenuItem });
+            FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { HelpToolStripMenuItem, ChangePasswordToolStripMenuItem, ExitToolStripMenuItem });
             FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             FileToolStripMenuItem.Size = new Size(50, 24);
             FileToolStripMenuItem.Text = "فایل";
@@ -132,6 +133,13 @@
             tabControlMain.Size = new Size(914, 570);
             tabControlMain.TabIndex = 0;
             // 
+            // ChangePasswordToolStripMenuItem
+            // 
+            ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem";
+            ChangePasswordToolStripMenuItem.Size = new Size(224, 26);
+            ChangePasswordToolStripMenuItem.Text = "تغییر رمز عبور";
+            ChangePasswordToolStripMenuItem.Click += ChangePasswordToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -166,5 +174,6 @@
         private ToolStripMenuItem IndicatorsToolStripMenuItem;
         private ToolStripMenuItem ClaimsToolStripMenuItem;
         private ToolStripMenuItem IndicatorValueToolStripMenuItem;
+        private ToolStripMenuItem ChangePasswordToolStripMenuItem;
     }
 }

@@ -17,7 +17,7 @@ namespace PMIS.Forms
         IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IClaimOnSystemService claimOnSystemService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService,   IClaimOnSystemService _claimOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, IClaimOnSystemService _claimOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
             InitializeComponent();
             claimOnSystemService = _claimOnSystemService;
@@ -33,7 +33,7 @@ namespace PMIS.Forms
         }
         private async void CustomInitialize()
         {
-           await CheckSystemClaimsRequired();
+            await CheckSystemClaimsRequired();
         }
         private async Task CheckSystemClaimsRequired()
         {
@@ -69,12 +69,12 @@ namespace PMIS.Forms
         }
         private void UsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new UserForm(userService,   claimOnSystemService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
+            new UserForm(userService, claimOnSystemService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
         }
 
         private void IndicatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorForm(indicatorService,   claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+            new IndicatorForm(indicatorService, claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void ClaimsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -84,18 +84,24 @@ namespace PMIS.Forms
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorValueForm(indicatorValueService, indicatorService,claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+            new IndicatorValueForm(indicatorValueService, indicatorService, claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
 
-           
+
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangePasswordForm changePasswordForm =  new ChangePasswordForm();
+            changePasswordForm.Show();
         }
     }
 }
