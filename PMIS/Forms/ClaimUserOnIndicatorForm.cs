@@ -55,9 +55,9 @@ namespace PMIS.Forms
         }
         private async void CustomInitialize()
         {
+            AddNewTabPage(tabControl, this);
             if (await CheckSystemClaimsRequired())
             {
-                AddNewTabPage(tabControl, this);
                 // InitializeComponent();
                 columns = new ClaimUserOnIndicatorColumnsDto();
                 await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
@@ -71,6 +71,8 @@ namespace PMIS.Forms
             }
             else
             {
+
+                tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
             }
 
