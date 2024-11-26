@@ -29,12 +29,14 @@ namespace PMIS.Forms
         private IUserService userService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
+        private IClaimOnSystemService claimOnSystemService;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public IndicatorForm(IIndicatorService _indicatorService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorForm(IIndicatorService _indicatorService,  IClaimOnSystemService _claimOnSystemService,IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
+            claimOnSystemService = _claimOnSystemService;
             InitializeComponent();
             indicatorService = _indicatorService;           
             lookUpValueService = _lookUpValueService;
@@ -276,6 +278,7 @@ namespace PMIS.Forms
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
                     }
+                    dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }
@@ -643,7 +646,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnIndicatorService,userService, indicatorService, lookUpValueService, 0, tempId, tabControl);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimOnSystemService,claimUserOnIndicatorService,userService, indicatorService, lookUpValueService, 0, tempId, tabControl);
                     frm.Show();
                 }
             }

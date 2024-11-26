@@ -429,6 +429,33 @@ namespace PMIS.Bases
                     lookUpValue.Clear();
                     #endregion
 
+                    #region ClaimUserOnSystem
+                    //add lookup
+                    //------------------------------------
+                    lookup = new LookUp { Code = "LkpClaimUserOnSystem", Title = "ادعاهای کاربر روی سیستم" };
+                    context.LookUps.Add(lookup);
+                    context.SaveChanges();
+                    //------------------------------------
+
+                    //add destinations
+                    //------------------------------------
+                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimUserOnSystem", ColumnName = "FkLkpClaimUserOnSystemID" });
+                    context.LookUpDestinations.AddRange(lookUpDestination);
+                    //------------------------------------
+
+                    //add values
+                    //------------------------------------
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ClaimUserOnIndicatorForm", Display = "فرم ادعاها", OrderNum = 1 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorForm", Display = "فرم مدیریت شاخص ها", OrderNum = 2 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorValueForm", Display = "فرم ورود مقادیر", OrderNum = 3 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "UserForm", Display = "فرم مدیریت کاربران", OrderNum = 4 });
+                    context.LookUpValues.AddRange(lookUpValue);
+                    //------------------------------------
+                    context.SaveChanges();
+                    lookUpDestination.Clear();
+                    lookUpValue.Clear();
+                    #endregion
+
                     #region WorkCalendar
                     //add lookup
                     //------------------------------------

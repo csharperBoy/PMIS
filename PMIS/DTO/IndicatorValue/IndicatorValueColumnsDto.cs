@@ -20,10 +20,10 @@ namespace PMIS.DTO.IndicatorValue
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicatorValues = await lookUpValueService.GetList("IndicatorValue");
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicator = await lookUpValueService.GetList("Indicator");
-            List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0 , Title = "همه"} };
-            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator1) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());            
-            lstIndicator1 = (await indicatorService.SearchByExternaFilter(lstIndicator1, GlobalVariable.userId));
-            lstIndicator.AddRange(lstIndicator1);
+            //List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0 , Title = "همه"} };
+            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());            
+            lstIndicator = (await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId));
+           // lstIndicator.AddRange(lstIndicator1);
 
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
@@ -84,7 +84,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "FkIndicatorId",
                    DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource = lstIndicator,
+                   DataSource = lstIndicator.ToArray(),
                    ReadOnly = false,
                    Visible = true,
                },
@@ -108,6 +108,7 @@ namespace PMIS.DTO.IndicatorValue
                    Visible = true,
                }
         });
+          
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
                 new DataGridViewTextBoxColumn()

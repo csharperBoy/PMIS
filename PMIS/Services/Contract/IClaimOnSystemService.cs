@@ -11,5 +11,6 @@ namespace PMIS.Services.Contract
 {
     public interface IClaimOnSystemService : IGenericNormalService<ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>
     {
+        Task<IEnumerable<ClaimOnSystemSearchResponseDto>> GetCurrentUserClaims();
     }
 }

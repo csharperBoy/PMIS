@@ -30,6 +30,7 @@ using PMIS.DTO.ClaimUserOnIndicator;
 using System.Linq;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System;
+using PMIS.DTO.Indicator.Info;
 
 namespace PMIS.Forms
 {
@@ -306,6 +307,15 @@ namespace PMIS.Forms
                         lstSourse.Insert(0, new LookUpValueShortInfoDto() { Id = 0, Display = "همه", });
                         comboBoxColumn.DataSource = lstSourse;
                         comboBoxColumn.DisplayMember = "Display";
+                        comboBoxColumn.ValueMember = "Id";
+                        // comboBoxColumn.SelectedIndex = 0;
+                    }
+                    else if (comboBoxColumn.DataSource is IndicatorSearchResponseDto[] arrayInd)
+                    {
+                        List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
+                        lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
+                        comboBoxColumn.DataSource = lstSourse;
+                        comboBoxColumn.DisplayMember = "Title";
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
                     }
