@@ -55,6 +55,7 @@ namespace PMIS.Forms
         }
         private async void CustomInitialize()
         {
+            int selectedIndex = tabControl.SelectedIndex;
             AddNewTabPage(tabControl, this);
             if (await CheckSystemClaimsRequired())
             {
@@ -73,6 +74,7 @@ namespace PMIS.Forms
             {
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
+                tabControl.SelectedIndex = selectedIndex;
                 MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
             }
 
