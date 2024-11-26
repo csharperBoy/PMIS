@@ -38,39 +38,55 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimOnSystemService _claimOnSystemService,IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
+        public ClaimUserOnIndicatorForm(IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
-            this.claimOnSystemService = _claimOnSystemService;
-            if (CheckSystemClaimsRequired())
+
+            InitializeComponent();
+            claimOnSystemService = _claimOnSystemService;
+            claimUserOnIndicatorService = _claimUserOnIndicatorService;
+            userService = _userService;
+            indicatorService = _indicatorService;
+            lookUpValueService = _lookUpValueService;
+            fkUserId = _fkUserId;
+            fkIndicatorId = _fkIndicatorId;
+            tabControl = _tabControl;
+            CustomInitialize();
+
+        }
+        private async void CustomInitialize()
+        {
+            if (await CheckSystemClaimsRequired())
             {
-                InitializeComponent();
-                claimUserOnIndicatorService = _claimUserOnIndicatorService;
-                userService = _userService;
-                indicatorService = _indicatorService;
-                lookUpValueService = _lookUpValueService;
-                fkUserId = _fkUserId;
-                fkIndicatorId = _fkIndicatorId;
-                CustomInitialize();
-                tabControl = _tabControl;
                 AddNewTabPage(tabControl, this);
+                // InitializeComponent();
+                columns = new ClaimUserOnIndicatorColumnsDto();
+                await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
+                lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
+                lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
+                GenerateDgvFilterColumnsInitialize();
+                GenerateDgvResultColumnsInitialize();
+                FiltersInitialize();
+                SearchEntity();
             }
             else
             {
                 MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
-
             }
-        }
 
-        private bool CheckSystemClaimsRequired()
+        }
+        private async Task<bool> CheckSystemClaimsRequired()
         {
             try
             {
-                IEnumerable<ClaimOnSystemSearchResponseDto> claims = claimOnSystemService.GetCurrentUserClaims().Result;
-                if (claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm")) 
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
                 {
-                    return true;
+                    //MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+                    this.Close();
+                    return false;
                 }
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -177,19 +193,7 @@ namespace PMIS.Forms
 
 
 
-        private async void CustomInitialize()
-        {
-            // InitializeComponent();
-            columns = new ClaimUserOnIndicatorColumnsDto();
-            await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
-            lstLogicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
-            lstRecycleRequest = new List<ClaimUserOnIndicatorDeleteRequestDto>();
-            GenerateDgvFilterColumnsInitialize();
-            GenerateDgvResultColumnsInitialize();
-            FiltersInitialize();
-            SearchEntity();
-        }
+
 
         private void GenerateDgvFilterColumnsInitialize()
         {
