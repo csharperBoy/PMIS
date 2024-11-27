@@ -56,41 +56,43 @@ namespace PMIS.Forms
             panelMenu.Controls.Add(btnApply);
             panelMenu.Dock = DockStyle.Top;
             panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(5);
+            panelMenu.Margin = new Padding(4, 4, 4, 4);
             panelMenu.Name = "panelMenu";
-            panelMenu.Padding = new Padding(5);
-            panelMenu.Size = new Size(1262, 44);
+            panelMenu.Padding = new Padding(4, 4, 4, 4);
+            panelMenu.Size = new Size(1104, 33);
             panelMenu.TabIndex = 0;
             // 
             // btnDownload
             // 
             btnDownload.Dock = DockStyle.Right;
-            btnDownload.Location = new Point(903, 5);
-            btnDownload.Margin = new Padding(5);
+            btnDownload.Location = new Point(791, 4);
+            btnDownload.Margin = new Padding(4, 4, 4, 4);
             btnDownload.Name = "btnDownload";
-            btnDownload.Size = new Size(118, 34);
+            btnDownload.Size = new Size(103, 25);
             btnDownload.TabIndex = 3;
             btnDownload.Text = "بارگیری";
             btnDownload.UseVisualStyleBackColor = true;
+            btnDownload.Visible = false;
             // 
             // btnUpload
             // 
             btnUpload.Dock = DockStyle.Right;
-            btnUpload.Location = new Point(1021, 5);
-            btnUpload.Margin = new Padding(5);
+            btnUpload.Location = new Point(894, 4);
+            btnUpload.Margin = new Padding(4, 4, 4, 4);
             btnUpload.Name = "btnUpload";
-            btnUpload.Size = new Size(118, 34);
+            btnUpload.Size = new Size(103, 25);
             btnUpload.TabIndex = 2;
             btnUpload.Text = "بارگزاری";
             btnUpload.UseVisualStyleBackColor = true;
+            btnUpload.Visible = false;
             // 
             // btnApply
             // 
             btnApply.Dock = DockStyle.Right;
-            btnApply.Location = new Point(1139, 5);
-            btnApply.Margin = new Padding(5);
+            btnApply.Location = new Point(997, 4);
+            btnApply.Margin = new Padding(4, 4, 4, 4);
             btnApply.Name = "btnApply";
-            btnApply.Size = new Size(118, 34);
+            btnApply.Size = new Size(103, 25);
             btnApply.TabIndex = 1;
             btnApply.Text = "اعمال تغییرات";
             btnApply.UseVisualStyleBackColor = true;
@@ -101,8 +103,9 @@ namespace PMIS.Forms
             chbRecycle.AutoSize = true;
             chbRecycle.Dock = DockStyle.Left;
             chbRecycle.Location = new Point(0, 0);
+            chbRecycle.Margin = new Padding(3, 2, 3, 2);
             chbRecycle.Name = "chbRecycle";
-            chbRecycle.Size = new Size(74, 65);
+            chbRecycle.Size = new Size(60, 49);
             chbRecycle.TabIndex = 6;
             chbRecycle.Text = "بازیابی";
             chbRecycle.UseVisualStyleBackColor = true;
@@ -110,10 +113,10 @@ namespace PMIS.Forms
             // btnSearch
             // 
             btnSearch.Dock = DockStyle.Left;
-            btnSearch.Location = new Point(74, 0);
-            btnSearch.Margin = new Padding(5);
+            btnSearch.Location = new Point(60, 0);
+            btnSearch.Margin = new Padding(4, 4, 4, 4);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(86, 65);
+            btnSearch.Size = new Size(75, 49);
             btnSearch.TabIndex = 0;
             btnSearch.Text = "جستجو";
             btnSearch.UseVisualStyleBackColor = true;
@@ -124,19 +127,19 @@ namespace PMIS.Forms
             panelContent.Controls.Add(panelResults);
             panelContent.Controls.Add(panelFilters);
             panelContent.Dock = DockStyle.Fill;
-            panelContent.Location = new Point(0, 44);
-            panelContent.Margin = new Padding(3, 4, 3, 4);
+            panelContent.Location = new Point(0, 33);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(1262, 677);
+            panelContent.Size = new Size(1104, 508);
             panelContent.TabIndex = 1;
             // 
             // panelResults
             // 
             panelResults.Controls.Add(dgvResultsList);
             panelResults.Dock = DockStyle.Fill;
-            panelResults.Location = new Point(0, 65);
+            panelResults.Location = new Point(0, 49);
+            panelResults.Margin = new Padding(3, 2, 3, 2);
             panelResults.Name = "panelResults";
-            panelResults.Size = new Size(1262, 612);
+            panelResults.Size = new Size(1104, 459);
             panelResults.TabIndex = 2;
             // 
             // dgvResultsList
@@ -146,10 +149,9 @@ namespace PMIS.Forms
             dgvResultsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvResultsList.Dock = DockStyle.Fill;
             dgvResultsList.Location = new Point(0, 0);
-            dgvResultsList.Margin = new Padding(3, 4, 3, 4);
             dgvResultsList.Name = "dgvResultsList";
             dgvResultsList.RowHeadersWidth = 51;
-            dgvResultsList.Size = new Size(1262, 612);
+            dgvResultsList.Size = new Size(1104, 459);
             dgvResultsList.TabIndex = 0;
             dgvResultsList.CellBeginEdit += dgvResultsList_CellBeginEdit;
             dgvResultsList.CellContentClick += dgvResultsList_CellContentClick;
@@ -166,8 +168,9 @@ namespace PMIS.Forms
             panelFilters.Controls.Add(chbRecycle);
             panelFilters.Dock = DockStyle.Top;
             panelFilters.Location = new Point(0, 0);
+            panelFilters.Margin = new Padding(3, 2, 3, 2);
             panelFilters.Name = "panelFilters";
-            panelFilters.Size = new Size(1262, 65);
+            panelFilters.Size = new Size(1104, 49);
             panelFilters.TabIndex = 1;
             // 
             // dgvFiltersList
@@ -177,20 +180,21 @@ namespace PMIS.Forms
             dgvFiltersList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvFiltersList.Dock = DockStyle.Fill;
             dgvFiltersList.GridColor = SystemColors.Control;
-            dgvFiltersList.Location = new Point(160, 0);
+            dgvFiltersList.Location = new Point(135, 0);
+            dgvFiltersList.Margin = new Padding(3, 2, 3, 2);
             dgvFiltersList.Name = "dgvFiltersList";
-            dgvFiltersList.RowHeadersWidth = 51;
-            dgvFiltersList.Size = new Size(1102, 65);
+            dgvFiltersList.RowHeadersVisible = false;
+            dgvFiltersList.RowHeadersWidth = 50;
+            dgvFiltersList.Size = new Size(969, 49);
             dgvFiltersList.TabIndex = 7;
             // 
             // ClaimUserOnIndicatorForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1262, 721);
+            ClientSize = new Size(1104, 541);
             Controls.Add(panelContent);
             Controls.Add(panelMenu);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "ClaimUserOnIndicatorForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
