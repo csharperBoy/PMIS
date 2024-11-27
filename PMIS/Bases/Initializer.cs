@@ -40,21 +40,28 @@ namespace PMIS.Bases
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("عملیات ساخت پایگاه داده موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
             void IDbInitializer.SetData()
             {
-                context = new PmisContext();
+                try
+                {
+                    context = new PmisContext();
 
-                #region SetAllLookUps
-                setAllLookUps(context);
-                #endregion
+                    #region SetAllLookUps
+                    setAllLookUps(context);
+                    #endregion
 
-                #region SetBaseUsers
-                SetBaseUsers(context);
-                #endregion
+                    #region SetBaseUsers
+                    SetBaseUsers(context);
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("عملیات مقداردهی اولیه اطلاهات پایه موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             private void setAllLookUps(PmisContext context)

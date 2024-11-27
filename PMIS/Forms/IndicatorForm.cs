@@ -405,7 +405,7 @@ namespace PMIS.Forms
                 if (list.Count() == 0)
                 {
                     dgvResultsList.DataSource = null;
-                    MessageBox.Show("موردی یافت نشد!!!");
+                    MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
@@ -414,7 +414,7 @@ namespace PMIS.Forms
             }
             else
             {
-                MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!");
+                MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             RefreshVisuals();
             isLoaded = true;
@@ -446,7 +446,7 @@ namespace PMIS.Forms
 
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -456,7 +456,7 @@ namespace PMIS.Forms
                     //    IsSuccess = x.IsSuccess
                     //})
                     //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
+                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -491,11 +491,11 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -512,12 +512,12 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات حذف موقت موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -535,12 +535,12 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات بازیابی موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -558,12 +558,12 @@ namespace PMIS.Forms
                 bool isSuccess = await indicatorService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)

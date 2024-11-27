@@ -73,7 +73,7 @@ namespace PMIS.Forms
         {
             try
             {
-                string hashText = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxOldPassword.Text);
+                string hashText = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxCurrentPassword.Text);
 
                 (bool result, IEnumerable<UserSearchResponseDto> users) = await userService.Search(new GenericSearchRequestDto()
                 {
@@ -92,7 +92,7 @@ namespace PMIS.Forms
 
                 if (result && users.Count() == 1)
                 {
-                    if (textBoxNewPassword.Text == textBoxReNewPassword.Text)
+                    if (textBoxNewPassword.Text == textBoxRepeatNewPassword.Text)
                     {
                         string newPasswordHash = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxNewPassword.Text);
                         UserEditRequestDto userEditRequest = new UserEditRequestDto();
@@ -101,22 +101,22 @@ namespace PMIS.Forms
                         bool isSuccess = await userService.EditRange(new List<UserEditRequestDto>() { userEditRequest });
                         if (isSuccess)
                         {
-                            MessageBox.Show("گذرواژه با موفقیت تغییر کرد.", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Close();
                         }
                         else
                         {
-                            MessageBox.Show("تغییر گذرواژه موفقیت‌آمیز نبود!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("عملیات تغییر گذرواژه موفقیت‌آمیز نبود!!!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("گذرواژه جدید را به درستی تکرار کنید.", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("گذرواژه جدید را به درستی تکرار کنید!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("گذرواژه قبلی به درستی وارد نشده است!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("گذرواژه فعلی به درستی وارد نشده است!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)

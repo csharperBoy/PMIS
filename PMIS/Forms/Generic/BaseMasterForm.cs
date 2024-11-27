@@ -294,7 +294,7 @@ namespace PMIS.Forms.Generic
                 if (list.Count() == 0)
                 {
                     NormalFormElements.dgvResultsList.DataSource = null;
-                    MessageBox.Show("موردی یافت نشد!!!");
+                    MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
@@ -303,7 +303,7 @@ namespace PMIS.Forms.Generic
             }
             else
             {
-                MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!");
+                MessageBox.Show("عملیات موفقیت‌آمیز نبود!!!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             RefreshVisuals();
             isLoaded = true;
@@ -335,7 +335,7 @@ namespace PMIS.Forms.Generic
 
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -345,7 +345,7 @@ namespace PMIS.Forms.Generic
                     //    IsSuccess = x.IsSuccess
                     //})
                     //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/);
+                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -380,11 +380,11 @@ namespace PMIS.Forms.Generic
                 bool isSuccess = await entityService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -402,12 +402,12 @@ namespace PMIS.Forms.Generic
                 bool isSuccess = await entityService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstLogicalDeleteRequest = new List<TEntityDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات حذف موقت موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -425,12 +425,12 @@ namespace PMIS.Forms.Generic
                 bool isSuccess = await entityService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstRecycleRequest = new List<TEntityDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات بازیابی موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)
@@ -448,12 +448,12 @@ namespace PMIS.Forms.Generic
                 bool isSuccess = await entityService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!");
+                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lstPhysicalDeleteRequest = new List<TEntityDeleteRequestDto>();
                 }
                 else
                 {
-                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود");
+                    MessageBox.Show("عملیات حذف موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception)

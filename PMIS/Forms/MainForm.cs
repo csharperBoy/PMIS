@@ -99,7 +99,7 @@ namespace PMIS.Forms
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)

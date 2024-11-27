@@ -28,23 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            labelUsername = new Label();
+            labelCurrentPassword = new Label();
             textBoxNewPassword = new TextBox();
-            labelPassword = new Label();
+            labelNewPassword = new Label();
             buttonSubmit = new Button();
-            textBoxReNewPassword = new TextBox();
-            label1 = new Label();
-            textBoxOldPassword = new TextBox();
+            textBoxRepeatNewPassword = new TextBox();
+            labelRepeatNewPassword = new Label();
+            textBoxCurrentPassword = new TextBox();
             SuspendLayout();
             // 
-            // labelUsername
+            // labelCurrentPassword
             // 
-            labelUsername.AutoSize = true;
-            labelUsername.Location = new Point(15, 35);
-            labelUsername.Name = "labelUsername";
-            labelUsername.Size = new Size(72, 15);
-            labelUsername.TabIndex = 0;
-            labelUsername.Text = "گذرواژه فعلی";
+            labelCurrentPassword.AutoSize = true;
+            labelCurrentPassword.Location = new Point(15, 35);
+            labelCurrentPassword.Name = "labelCurrentPassword";
+            labelCurrentPassword.Size = new Size(72, 15);
+            labelCurrentPassword.TabIndex = 0;
+            labelCurrentPassword.Text = "گذرواژه فعلی";
             // 
             // textBoxNewPassword
             // 
@@ -54,14 +54,14 @@
             textBoxNewPassword.Size = new Size(100, 23);
             textBoxNewPassword.TabIndex = 2;
             // 
-            // labelPassword
+            // labelNewPassword
             // 
-            labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(15, 75);
-            labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(68, 15);
-            labelPassword.TabIndex = 0;
-            labelPassword.Text = "گذرواژه جدید";
+            labelNewPassword.AutoSize = true;
+            labelNewPassword.Location = new Point(15, 75);
+            labelNewPassword.Name = "labelNewPassword";
+            labelNewPassword.Size = new Size(68, 15);
+            labelNewPassword.TabIndex = 0;
+            labelNewPassword.Text = "گذرواژه جدید";
             // 
             // buttonSubmit
             // 
@@ -73,42 +73,42 @@
             buttonSubmit.UseVisualStyleBackColor = true;
             buttonSubmit.Click += buttonSubmit_Click;
             // 
-            // textBoxReNewPassword
+            // textBoxRepeatNewPassword
             // 
-            textBoxReNewPassword.Location = new Point(110, 105);
-            textBoxReNewPassword.Name = "textBoxReNewPassword";
-            textBoxReNewPassword.PasswordChar = '●';
-            textBoxReNewPassword.Size = new Size(100, 23);
-            textBoxReNewPassword.TabIndex = 3;
+            textBoxRepeatNewPassword.Location = new Point(110, 105);
+            textBoxRepeatNewPassword.Name = "textBoxRepeatNewPassword";
+            textBoxRepeatNewPassword.PasswordChar = '●';
+            textBoxRepeatNewPassword.Size = new Size(100, 23);
+            textBoxRepeatNewPassword.TabIndex = 3;
             // 
-            // label1
+            // labelRepeatNewPassword
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(15, 110);
-            label1.Name = "label1";
-            label1.Size = new Size(93, 15);
-            label1.TabIndex = 0;
-            label1.Text = "تکرار گذرواژه جدید";
+            labelRepeatNewPassword.AutoSize = true;
+            labelRepeatNewPassword.Location = new Point(15, 110);
+            labelRepeatNewPassword.Name = "labelRepeatNewPassword";
+            labelRepeatNewPassword.Size = new Size(93, 15);
+            labelRepeatNewPassword.TabIndex = 0;
+            labelRepeatNewPassword.Text = "تکرار گذرواژه جدید";
             // 
-            // textBoxOldPassword
+            // textBoxCurrentPassword
             // 
-            textBoxOldPassword.Location = new Point(110, 30);
-            textBoxOldPassword.Name = "textBoxOldPassword";
-            textBoxOldPassword.PasswordChar = '●';
-            textBoxOldPassword.Size = new Size(100, 23);
-            textBoxOldPassword.TabIndex = 1;
+            textBoxCurrentPassword.Location = new Point(110, 30);
+            textBoxCurrentPassword.Name = "textBoxCurrentPassword";
+            textBoxCurrentPassword.PasswordChar = '●';
+            textBoxCurrentPassword.Size = new Size(100, 23);
+            textBoxCurrentPassword.TabIndex = 1;
             // 
             // ChangePasswordForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(270, 200);
-            Controls.Add(textBoxOldPassword);
-            Controls.Add(textBoxReNewPassword);
-            Controls.Add(label1);
-            Controls.Add(labelUsername);
+            Controls.Add(textBoxCurrentPassword);
+            Controls.Add(textBoxRepeatNewPassword);
+            Controls.Add(labelRepeatNewPassword);
+            Controls.Add(labelCurrentPassword);
             Controls.Add(textBoxNewPassword);
-            Controls.Add(labelPassword);
+            Controls.Add(labelNewPassword);
             Controls.Add(buttonSubmit);
             Margin = new Padding(3, 2, 3, 2);
             Name = "ChangePasswordForm";
@@ -121,12 +121,12 @@
 
         #endregion
 
-        private Label labelUsername;
+        private Label labelCurrentPassword;
+        private TextBox textBoxCurrentPassword;
+        private Label labelNewPassword;
         private TextBox textBoxNewPassword;
-        private Label labelPassword;
+        private Label labelRepeatNewPassword;
+        private TextBox textBoxRepeatNewPassword;
         private Button buttonSubmit;
-        private TextBox textBoxReNewPassword;
-        private Label label1;
-        private TextBox textBoxOldPassword;
     }
 }
