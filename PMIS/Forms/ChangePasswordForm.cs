@@ -3,7 +3,7 @@ using Generic.Service.DTO.Concrete;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualBasic.ApplicationServices;
 using PMIS.Bases;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.User;
 using PMIS.Models;

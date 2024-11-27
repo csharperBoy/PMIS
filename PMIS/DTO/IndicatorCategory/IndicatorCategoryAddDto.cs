@@ -1,5 +1,5 @@
 ﻿using Generic.Service.DTO.Concrete;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

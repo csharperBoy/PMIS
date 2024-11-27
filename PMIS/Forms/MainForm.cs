@@ -1,5 +1,5 @@
 ﻿using Generic.Base.Handler.SystemLog.WithSerilog.Abstract;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.User;
 using PMIS.Services.Contract;
 using System.Windows.Forms;

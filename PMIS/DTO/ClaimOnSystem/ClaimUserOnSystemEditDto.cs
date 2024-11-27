@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 
-namespace PMIS.DTO.ClaimOnSystem
+namespace PMIS.DTO.ClaimUserOnSystem
 {
     public class ClaimOnSystemEditRequestDto : GenericEditRequestDto
     {
@@ -21,7 +21,7 @@ namespace PMIS.DTO.ClaimOnSystem
             where TDestination : class
             where TSource : class
         {
-            GenericSqlServerRepository<Models.ClaimOnSystem, PmisContext> repository = new GenericSqlServerRepository<Models.ClaimOnSystem, PmisContext>(new PmisContext(),
+            GenericSqlServerRepository<Models.ClaimUserOnSystem, PmisContext> repository = new GenericSqlServerRepository<Models.ClaimUserOnSystem, PmisContext>(new PmisContext(),
                new GenericExceptionHandler()
                ,
                new GenericLogWithSerilogInFileHandler(
@@ -37,9 +37,9 @@ namespace PMIS.DTO.ClaimOnSystem
                );
             if (source is ClaimOnSystemEditRequestDto sourceModel)
             {
-                if (destination is Models.ClaimOnSystem destinationModel)
+                if (destination is Models.ClaimUserOnSystem destinationModel)
                 {
-                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.ClaimOnSystem, Models.ClaimOnSystem>(await repository.GetByIdAsync(sourceModel.Id), destinationModel);
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<Models.ClaimUserOnSystem, Models.ClaimUserOnSystem>(await repository.GetByIdAsync(sourceModel.Id), destinationModel);
                 }
 
             }
@@ -67,7 +67,7 @@ namespace PMIS.DTO.ClaimOnSystem
            where TDestination : class
            where TSource : class
         {
-            if (source is Models.ClaimOnSystem sourceModel)
+            if (source is Models.ClaimUserOnSystem sourceModel)
             {
                 if (destination is ClaimOnSystemEditResponseDto destinationModel)
                 {

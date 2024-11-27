@@ -1,7 +1,7 @@
 ﻿using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpValue.Info;

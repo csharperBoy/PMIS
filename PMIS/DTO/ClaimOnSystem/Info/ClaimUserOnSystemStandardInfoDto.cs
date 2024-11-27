@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.ClaimOnSystem.Info
+namespace PMIS.DTO.ClaimUserOnSystem.Info
 {
-    public class ClaimOnSystemStandardInfoDto : ClaimOnSystemTinyInfoDto
+    public class ClaimUserOnSystemStandardInfoDto : ClaimUserOnSystemTinyInfoDto
     {
 
-        public async Task<ClaimOnSystemStandardInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimOnSystem baseModel)
+        public async Task<ClaimUserOnSystemStandardInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimUserOnSystem baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 

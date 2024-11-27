@@ -2,8 +2,8 @@
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using PMIS.DTO.ClaimOnSystem;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.DTO.User;
@@ -26,7 +26,7 @@ namespace PMIS.Forms
         private List<ClaimOnSystemDeleteRequestDto> lstLogicalDeleteRequest;
         private List<ClaimOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<ClaimOnSystemDeleteRequestDto> lstRecycleRequest;
-        private ClaimOnSystemColumnsDto columns;
+        private ClaimUserOnSystemColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
         private IIndicatorService indicatorService;
@@ -58,7 +58,7 @@ namespace PMIS.Forms
             if (await CheckSystemClaimsRequired())
             {
                 // InitializeComponent();
-                columns = new ClaimOnSystemColumnsDto();
+                columns = new ClaimUserOnSystemColumnsDto();
                 await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
                 lstLogicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
                 lstPhysicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();

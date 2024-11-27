@@ -1,16 +1,16 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.ClaimOnSystem.Info;
+using PMIS.DTO.ClaimUserOnSystem.Info;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.ClaimOnSystem.Info
+namespace PMIS.DTO.ClaimUserOnSystem.Info
 {
-    public class ClaimOnSystemTinyInfoDto
+    public class ClaimUserOnSystemTinyInfoDto
     {
-        public async Task<ClaimOnSystemTinyInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimOnSystem baseModel)
+        public async Task<ClaimUserOnSystemTinyInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimUserOnSystem baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
             return this;

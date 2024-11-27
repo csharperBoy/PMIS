@@ -1,5 +1,5 @@
 ﻿using Generic.Service.Normal.Composition.Contract;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services.Contract
 {
-    public interface IClaimOnSystemService : IGenericNormalService<ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>
+    public interface IClaimOnSystemService : IGenericNormalService<ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>
     {
         Task<IEnumerable<ClaimOnSystemSearchResponseDto>> GetCurrentUserClaims();
     }

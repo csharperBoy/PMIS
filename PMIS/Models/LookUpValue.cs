@@ -21,7 +21,7 @@ public partial class LookUpValue
 
     public bool FlgLogicalDelete { get; set; }
 
-    public virtual ICollection<ClaimOnSystem> ClaimOnSystems { get; set; } = new List<ClaimOnSystem>();
+    public virtual ICollection<ClaimUserOnSystem> ClaimOnSystems { get; set; } = new List<ClaimUserOnSystem>();
 
     public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 

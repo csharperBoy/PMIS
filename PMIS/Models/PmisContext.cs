@@ -16,7 +16,7 @@ public partial class PmisContext : DbContext
     {
     }
 
-    public virtual DbSet<ClaimOnSystem> ClaimOnSystems { get; set; }
+    public virtual DbSet<ClaimUserOnSystem> ClaimOnSystems { get; set; }
 
     public virtual DbSet<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; }
 
@@ -52,9 +52,9 @@ public partial class PmisContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ClaimOnSystem>(entity =>
+        modelBuilder.Entity<ClaimUserOnSystem>(entity =>
         {
-            entity.ToTable("ClaimOnSystem");
+            entity.ToTable("ClaimUserOnSystem");
 
             entity.HasIndex(e => new { e.FkLkpClaimOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
 

@@ -1,5 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.ClaimOnSystem.Info;
+using PMIS.DTO.ClaimUserOnSystem.Info;
 using PMIS.DTO.Indicator.Info;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.DTO.User.Info;
@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.ClaimOnSystem.Info
+namespace PMIS.DTO.ClaimUserOnSystem.Info
 {
-    public class ClaimOnSystemShortInfoDto : ClaimOnSystemTinyInfoDto
+    public class ClaimUserOnSystemShortInfoDto : ClaimUserOnSystemTinyInfoDto
     {
 
-        public async Task<ClaimOnSystemShortInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimOnSystem baseModel)
+        public async Task<ClaimUserOnSystemShortInfoDto> extraMapFromBaseModel(PMIS.Models.ClaimUserOnSystem baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 

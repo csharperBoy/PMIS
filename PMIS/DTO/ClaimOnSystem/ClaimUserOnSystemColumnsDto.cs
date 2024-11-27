@@ -10,13 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.ClaimOnSystem
+namespace PMIS.DTO.ClaimUserOnSystem
 {
-    public class ClaimOnSystemColumnsDto //: GenericColumnsDto
+    public class ClaimUserOnSystemColumnsDto //: GenericColumnsDto
     {
         public async Task Initialize(ILookUpValueService lookUpValueService, IUserService userService, IIndicatorService indicatorService, int fkUserId, int fkIndicatorId)
         {
-            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimOnSystem");
+            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("ClaimUserOnSystem");
 
             // List<UserSearchResponseDto> lstUser = new List<UserSearchResponseDto>() { new UserSearchResponseDto() { Id = 0, UserName = "همه" } };
             (bool isSuccessUser, IEnumerable<UserSearchResponseDto> lstUser) = await userService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()

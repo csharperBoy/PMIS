@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.ClaimOnSystem
+namespace PMIS.DTO.ClaimUserOnSystem
 {
     public class ClaimOnSystemAddRequestDto : GenericAddRequestDto
     {
@@ -32,7 +32,7 @@ namespace PMIS.DTO.ClaimOnSystem
            where TDestination : class
            where TSource : class
         {
-            if (source is Models.ClaimOnSystem sourceModel)
+            if (source is Models.ClaimUserOnSystem sourceModel)
             {
                 if (destination is ClaimOnSystemAddResponseDto destinationModel)
                 {

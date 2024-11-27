@@ -16,7 +16,7 @@ using PMIS.Bases;
 using System.Net;
 using System.Security;
 using System.Runtime.InteropServices;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 
 namespace PMIS.Forms
 {

@@ -440,7 +440,7 @@ namespace PMIS.Bases
                     lookUpValue.Clear();
                     #endregion
 
-                    #region ClaimOnSystem
+                    #region ClaimUserOnSystem
                     //add lookup
                     //------------------------------------
                     lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای کاربران روی سیستم" };
@@ -450,7 +450,7 @@ namespace PMIS.Bases
 
                     //add destinations
                     //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimOnSystem", ColumnName = "FkLkpClaimOnSystemID" });
+                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimUserOnSystem", ColumnName = "FkLkpClaimOnSystemID" });
                     context.LookUpDestinations.AddRange(lookUpDestination);
                     //------------------------------------
 
@@ -633,17 +633,17 @@ namespace PMIS.Bases
                 context.Database.EnsureCreated();
                 if (!context.ClaimOnSystems.Any())
                 {
-                    List<Models.ClaimOnSystem> claim = new List<Models.ClaimOnSystem>();
+                    List<Models.ClaimUserOnSystem> claim = new List<Models.ClaimUserOnSystem>();
                     #region PrimaryClaims
                     //add user
                     //------------------------------------
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ChangePasswordForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "UserForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorCategoryForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnIndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnSystemForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorValueForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ChangePasswordForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "UserForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorCategoryForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnIndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnSystemForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorValueForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     context.ClaimOnSystems.AddRange(claim);
                     context.SaveChanges();
                     //------------------------------------

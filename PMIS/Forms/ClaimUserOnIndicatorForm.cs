@@ -2,7 +2,7 @@
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpValue.Info;

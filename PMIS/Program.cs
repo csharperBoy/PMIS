@@ -18,7 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.IndicatorCategory;
@@ -90,15 +90,15 @@ namespace PMIS
             services.AddTransient<LoginForm>();
             #endregion
 
-            #region ClaimOnSystem
-            services.AddScoped<AbstractGenericRepository<ClaimOnSystem, PmisContext>, GenericSqlServerRepository<ClaimOnSystem, PmisContext>>();
-            services.AddScoped<IClaimOnSystemService, ClaimOnSystemService>();
-            services.AddScoped<AbstractGenericNormalService<PmisContext, ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>, GenericNormalService<PmisContext, ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>>();
-            services.AddScoped<AbstractGenericNormalAddService<PmisContext, ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto>, GenericNormalAddService<PmisContext, ClaimOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto>>();
-            services.AddScoped<AbstractGenericNormalEditService<PmisContext, ClaimOnSystem, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto>, GenericNormalEditService<PmisContext, ClaimOnSystem, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto>>();
-            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, ClaimOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, ClaimOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>>();
-            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, ClaimOnSystem, ClaimOnSystemSearchResponseDto>, GenericNormalSearchService<PmisContext, ClaimOnSystem, ClaimOnSystemSearchResponseDto>>();
+            #region ClaimUserOnSystem
+            services.AddScoped<AbstractGenericRepository<ClaimUserOnSystem, PmisContext>, GenericSqlServerRepository<ClaimUserOnSystem, PmisContext>>();
+            services.AddScoped<IClaimOnSystemService, ClaimUserOnSystemService>();
+            services.AddScoped<AbstractGenericNormalService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>, GenericNormalService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>>();
+            services.AddScoped<AbstractGenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto>, GenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto>>();
+            services.AddScoped<AbstractGenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto>, GenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto>>();
+            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, ClaimUserOnSystem, ClaimOnSystemSearchResponseDto>, GenericNormalSearchService<PmisContext, ClaimUserOnSystem, ClaimOnSystemSearchResponseDto>>();
             #endregion
 
             #region ClaimUserOnIndicator

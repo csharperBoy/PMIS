@@ -31,7 +31,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 using PMIS.DTO.Indicator.Info;
-using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.ClaimUserOnSystem;
 
 namespace PMIS.Forms
 {
