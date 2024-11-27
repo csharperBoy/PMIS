@@ -35,7 +35,7 @@ namespace PMIS.Bases
                     using (var dbContext = new PmisContext())
                     {
                         dbContext.Database.EnsureCreated();
-                        dbContext.Database.Migrate();
+                        //dbContext.Database.Migrate();
                     }
                 }
                 catch (Exception ex)
