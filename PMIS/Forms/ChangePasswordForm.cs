@@ -38,7 +38,7 @@ namespace PMIS.Forms
                     {
                         if (textBoxNewPassword.Text == textBoxReNewPassword.Text)
                         {
-                            string newPasswordHash = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + "+" + textBoxNewPassword.Text);
+                            string newPasswordHash = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxNewPassword.Text.Trim());
                             user.PasswordHash = newPasswordHash;
                             context.Users.Update(user);
                             context.SaveChanges();
