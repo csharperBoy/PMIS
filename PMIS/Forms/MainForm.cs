@@ -54,7 +54,11 @@ namespace PMIS.Forms
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
                 {
-                    ClaimsToolStripMenuItem.Visible = false;
+                    ClaimUserOnIndicatorToolStripMenuItem.Visible = false;
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnSystemForm"))
+                {
+                    ClaimUserOnIndicatorToolStripMenuItem.Visible = false;
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
                 {
@@ -71,6 +75,12 @@ namespace PMIS.Forms
                 throw;
             }
         }
+
+        private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ChangePasswordForm(claimOnSystemService, userService);
+        }
+
         private void UsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new UserForm(userService, claimOnSystemService, claimUserOnIndicatorService, indicatorService, lookUpValueService, tabControlMain);
@@ -81,9 +91,14 @@ namespace PMIS.Forms
             new IndicatorForm(indicatorService, claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
-        private void ClaimsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClaimUserOnIndicatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ClaimUserOnIndicatorForm(claimOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
+        }
+
+        private void ClaimOnSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ClaimUserOnSystemForm(claimOnSystemService, claimOnSystemService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
         }
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,11 +115,6 @@ namespace PMIS.Forms
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new ChangePasswordForm(claimOnSystemService, userService);
         }
     }
 }

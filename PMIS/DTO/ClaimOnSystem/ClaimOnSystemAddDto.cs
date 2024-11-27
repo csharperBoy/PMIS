@@ -10,9 +10,9 @@ namespace PMIS.DTO.ClaimOnSystem
 {
     public class ClaimOnSystemAddRequestDto : GenericAddRequestDto
     {
-       // public int Id { get; set; }
+        // public int Id { get; set; }
 
-        public int? FkLkpClaimOnSystemId { get; set; }
+        public int FkLkpClaimOnSystemId { get; set; }
 
         public int? FkUserId { get; set; }
 

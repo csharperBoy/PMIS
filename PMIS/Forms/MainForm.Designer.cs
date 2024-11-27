@@ -31,15 +31,16 @@
             menuStripMain = new MenuStrip();
             FileToolStripMenuItem = new ToolStripMenuItem();
             HelpToolStripMenuItem = new ToolStripMenuItem();
+            ChangePasswordToolStripMenuItem = new ToolStripMenuItem();
             ExitToolStripMenuItem = new ToolStripMenuItem();
             BaseInfoToolStripMenuItem = new ToolStripMenuItem();
             UsersToolStripMenuItem = new ToolStripMenuItem();
             IndicatorsToolStripMenuItem = new ToolStripMenuItem();
-            ClaimsToolStripMenuItem = new ToolStripMenuItem();
+            ClaimUserOnIndicatorToolStripMenuItem = new ToolStripMenuItem();
+            ClaimOnSystemToolStripMenuItem = new ToolStripMenuItem();
             IndicatorValueToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControlWithCloseTab();
-            ChangePasswordToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -49,8 +50,7 @@
             menuStripMain.Items.AddRange(new ToolStripItem[] { FileToolStripMenuItem, BaseInfoToolStripMenuItem, IndicatorValueToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
-            menuStripMain.Padding = new Padding(7, 3, 0, 3);
-            menuStripMain.Size = new Size(914, 30);
+            menuStripMain.Size = new Size(800, 24);
             menuStripMain.TabIndex = 1;
             menuStripMain.Text = "menuStripMain";
             menuStripMain.TextDirection = ToolStripTextDirection.Vertical90;
@@ -59,56 +59,70 @@
             // 
             FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { HelpToolStripMenuItem, ChangePasswordToolStripMenuItem, ExitToolStripMenuItem });
             FileToolStripMenuItem.Name = "FileToolStripMenuItem";
-            FileToolStripMenuItem.Size = new Size(50, 24);
+            FileToolStripMenuItem.Size = new Size(40, 20);
             FileToolStripMenuItem.Text = "فایل";
             FileToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             // 
             // HelpToolStripMenuItem
             // 
             HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
-            HelpToolStripMenuItem.Size = new Size(224, 26);
+            HelpToolStripMenuItem.Size = new Size(136, 22);
             HelpToolStripMenuItem.Text = "راهنما";
+            // 
+            // ChangePasswordToolStripMenuItem
+            // 
+            ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem";
+            ChangePasswordToolStripMenuItem.Size = new Size(136, 22);
+            ChangePasswordToolStripMenuItem.Text = "تغییر گذرواژه";
+            ChangePasswordToolStripMenuItem.Click += ChangePasswordToolStripMenuItem_Click;
             // 
             // ExitToolStripMenuItem
             // 
             ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            ExitToolStripMenuItem.Size = new Size(224, 26);
+            ExitToolStripMenuItem.Size = new Size(136, 22);
             ExitToolStripMenuItem.Text = "خروج";
             ExitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
             // BaseInfoToolStripMenuItem
             // 
-            BaseInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { UsersToolStripMenuItem, IndicatorsToolStripMenuItem, ClaimsToolStripMenuItem });
+            BaseInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { UsersToolStripMenuItem, IndicatorsToolStripMenuItem, ClaimUserOnIndicatorToolStripMenuItem, ClaimOnSystemToolStripMenuItem });
             BaseInfoToolStripMenuItem.Name = "BaseInfoToolStripMenuItem";
-            BaseInfoToolStripMenuItem.Size = new Size(102, 24);
+            BaseInfoToolStripMenuItem.Size = new Size(80, 20);
             BaseInfoToolStripMenuItem.Text = "اطلاعات پایه";
             BaseInfoToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             // 
             // UsersToolStripMenuItem
             // 
             UsersToolStripMenuItem.Name = "UsersToolStripMenuItem";
-            UsersToolStripMenuItem.Size = new Size(210, 26);
+            UsersToolStripMenuItem.Size = new Size(219, 22);
             UsersToolStripMenuItem.Text = "مدیریت کاربران";
             UsersToolStripMenuItem.Click += UsersToolStripMenuItem_Click;
             // 
             // IndicatorsToolStripMenuItem
             // 
             IndicatorsToolStripMenuItem.Name = "IndicatorsToolStripMenuItem";
-            IndicatorsToolStripMenuItem.Size = new Size(210, 26);
+            IndicatorsToolStripMenuItem.Size = new Size(219, 22);
             IndicatorsToolStripMenuItem.Text = "مدیریت شاخص‌ها";
             IndicatorsToolStripMenuItem.Click += IndicatorsToolStripMenuItem_Click;
             // 
-            // ClaimsToolStripMenuItem
+            // ClaimUserOnIndicatorToolStripMenuItem
             // 
-            ClaimsToolStripMenuItem.Name = "ClaimsToolStripMenuItem";
-            ClaimsToolStripMenuItem.Size = new Size(210, 26);
-            ClaimsToolStripMenuItem.Text = "مدیریت دسترسی‌ها";
-            ClaimsToolStripMenuItem.Click += ClaimsToolStripMenuItem_Click;
+            ClaimUserOnIndicatorToolStripMenuItem.Name = "ClaimUserOnIndicatorToolStripMenuItem";
+            ClaimUserOnIndicatorToolStripMenuItem.Size = new Size(219, 22);
+            ClaimUserOnIndicatorToolStripMenuItem.Text = "مدیریت دسترسی به شاخص‌ها";
+            ClaimUserOnIndicatorToolStripMenuItem.Click += ClaimUserOnIndicatorToolStripMenuItem_Click;
+            // 
+            // ClaimOnSystemToolStripMenuItem
+            // 
+            ClaimOnSystemToolStripMenuItem.Name = "ClaimOnSystemToolStripMenuItem";
+            ClaimOnSystemToolStripMenuItem.Size = new Size(219, 22);
+            ClaimOnSystemToolStripMenuItem.Text = "مدیریت دسترسی به فرم‌ها";
+            ClaimOnSystemToolStripMenuItem.Click += ClaimOnSystemToolStripMenuItem_Click;
             // 
             // IndicatorValueToolStripMenuItem
             // 
             IndicatorValueToolStripMenuItem.Name = "IndicatorValueToolStripMenuItem";
-            IndicatorValueToolStripMenuItem.Size = new Size(96, 24);
+            IndicatorValueToolStripMenuItem.Size = new Size(75, 20);
             IndicatorValueToolStripMenuItem.Text = "ورود مقادیر";
             IndicatorValueToolStripMenuItem.TextDirection = ToolStripTextDirection.Horizontal;
             IndicatorValueToolStripMenuItem.Click += IndicatorValueToolStripMenuItem_Click;
@@ -116,40 +130,30 @@
             // flowLayoutPanelMain
             // 
             flowLayoutPanelMain.Dock = DockStyle.Fill;
-            flowLayoutPanelMain.Location = new Point(0, 30);
-            flowLayoutPanelMain.Margin = new Padding(3, 4, 3, 4);
+            flowLayoutPanelMain.Location = new Point(0, 24);
             flowLayoutPanelMain.Name = "flowLayoutPanelMain";
-            flowLayoutPanelMain.Size = new Size(914, 570);
+            flowLayoutPanelMain.Size = new Size(800, 426);
             flowLayoutPanelMain.TabIndex = 2;
             // 
             // tabControlMain
             // 
             tabControlMain.Dock = DockStyle.Fill;
-            tabControlMain.Location = new Point(0, 30);
-            tabControlMain.Margin = new Padding(3, 4, 3, 4);
+            tabControlMain.Location = new Point(0, 24);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.RightToLeftLayout = true;
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(914, 570);
+            tabControlMain.Size = new Size(800, 426);
             tabControlMain.TabIndex = 0;
-            // 
-            // ChangePasswordToolStripMenuItem
-            // 
-            ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem";
-            ChangePasswordToolStripMenuItem.Size = new Size(224, 26);
-            ChangePasswordToolStripMenuItem.Text = "تغییر گذرواژه";
-            ChangePasswordToolStripMenuItem.Click += ChangePasswordToolStripMenuItem_Click;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(800, 450);
             Controls.Add(tabControlMain);
             Controls.Add(flowLayoutPanelMain);
             Controls.Add(menuStripMain);
             MainMenuStrip = menuStripMain;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
@@ -172,8 +176,9 @@
         private ToolStripMenuItem BaseInfoToolStripMenuItem;
         private ToolStripMenuItem UsersToolStripMenuItem;
         private ToolStripMenuItem IndicatorsToolStripMenuItem;
-        private ToolStripMenuItem ClaimsToolStripMenuItem;
+        private ToolStripMenuItem ClaimUserOnIndicatorToolStripMenuItem;
         private ToolStripMenuItem IndicatorValueToolStripMenuItem;
         private ToolStripMenuItem ChangePasswordToolStripMenuItem;
+        private ToolStripMenuItem ClaimOnSystemToolStripMenuItem;
     }
 }

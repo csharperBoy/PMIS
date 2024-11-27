@@ -35,6 +35,14 @@ namespace PMIS.Services
                             LogicalOperator=Generic.Service.DTO.Concrete.LogicalOperator.Begin,
                             operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
                             type = Generic.Service.DTO.Concrete.PhraseType.Condition
+                        },
+                        new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                        {
+                            columnName = "FlgLogicalDelete",
+                            value = false.ToString(),
+                            LogicalOperator=Generic.Service.DTO.Concrete.LogicalOperator.And,
+                            operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                            type = Generic.Service.DTO.Concrete.PhraseType.Condition
                         }
                     }
                 });

@@ -436,17 +436,17 @@ namespace PMIS.Bases
                     lookUpValue.Clear();
                     #endregion
 
-                    #region ClaimUserOnSystem
+                    #region ClaimOnSystem
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpClaimUserOnSystem", Title = "ادعاهای کاربر روی سیستم" };
+                    lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای کاربر روی سیستم" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
 
                     //add destinations
                     //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimUserOnSystem", ColumnName = "FkLkpClaimUserOnSystemID" });
+                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimOnSystem", ColumnName = "FkLkpClaimOnSystemID" });
                     context.LookUpDestinations.AddRange(lookUpDestination);
                     //------------------------------------
 

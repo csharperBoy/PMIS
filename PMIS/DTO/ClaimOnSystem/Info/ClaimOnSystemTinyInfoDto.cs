@@ -20,6 +20,10 @@ namespace PMIS.DTO.ClaimOnSystem.Info
        
         public string? Description { get; set; }
 
-        
+        public int FkLkpClaimOnSystemId { get; set; }
+
+        public int FkUserId { get; set; }
+
+
     }
 }
