@@ -98,7 +98,7 @@ namespace PMIS.Forms
 
         private void ClaimOnSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new ClaimUserOnSystemForm(claimOnSystemService, claimOnSystemService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
+            new ClaimUserOnSystemForm(claimOnSystemService, userService, indicatorService, lookUpValueService, 0, 0, tabControlMain);
         }
 
         private void IndicatorValueToolStripMenuItem_Click(object sender, EventArgs e)

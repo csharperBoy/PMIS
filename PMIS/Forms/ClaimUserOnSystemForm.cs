@@ -28,7 +28,6 @@ namespace PMIS.Forms
         private List<ClaimOnSystemDeleteRequestDto> lstRecycleRequest;
         private ClaimOnSystemColumnsDto columns;
         private ILookUpValueService lookUpValueService;
-        private IClaimOnSystemService ClaimOnSystemService;
         private IUserService userService;
         private IIndicatorService indicatorService;
         private IClaimOnSystemService claimOnSystemService;
@@ -38,12 +37,11 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public ClaimUserOnSystemForm(IClaimOnSystemService _claimOnSystemService, IClaimOnSystemService _ClaimOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
+        public ClaimUserOnSystemForm(IClaimOnSystemService _claimOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
 
             InitializeComponent();
             claimOnSystemService = _claimOnSystemService;
-            ClaimOnSystemService = _ClaimOnSystemService;
             userService = _userService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
@@ -432,7 +430,7 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<ClaimOnSystemSearchResponseDto> list) = await ClaimOnSystemService.Search(searchRequest);
+            (bool isSuccess, IEnumerable<ClaimOnSystemSearchResponseDto> list) = await claimOnSystemService.Search(searchRequest);
 
             if (isSuccess)
             {
@@ -476,8 +474,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemAddResponseDto> list) = await ClaimOnSystemService.AddGroup(lstAddRequest);
-                bool isSuccess = await ClaimOnSystemService.AddRange(lstAddRequest);
+                //(bool isSuccess, IEnumerable<ClaimOnSystemAddResponseDto> list) = await claimOnSystemService.AddGroup(lstAddRequest);
+                bool isSuccess = await claimOnSystemService.AddRange(lstAddRequest);
 
                 if (isSuccess)
                 {
@@ -522,8 +520,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemEditResponseDto> list) = await ClaimOnSystemService.EditGroup(lstEditRequest);
-                bool isSuccess = await ClaimOnSystemService.EditRange(lstEditRequest);
+                //(bool isSuccess, IEnumerable<ClaimOnSystemEditResponseDto> list) = await claimOnSystemService.EditGroup(lstEditRequest);
+                bool isSuccess = await claimOnSystemService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -544,8 +542,8 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await ClaimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await ClaimOnSystemService.LogicalDeleteRange(lstLogicalDeleteRequest);
+                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await claimOnSystemService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -567,8 +565,8 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await ClaimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await ClaimOnSystemService.RecycleRange(lstRecycleRequest);
+                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await claimOnSystemService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -590,8 +588,8 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await ClaimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await ClaimOnSystemService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
+                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await claimOnSystemService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);

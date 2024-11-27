@@ -443,7 +443,7 @@ namespace PMIS.Bases
                     #region ClaimOnSystem
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای کاربر روی سیستم" };
+                    lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای کاربران روی سیستم" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
