@@ -99,7 +99,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task<bool> CheckSystemClaimsRequired()
@@ -284,7 +284,7 @@ namespace PMIS.Forms
                     Name = "LogicalDelete",
                     Text = "حذف موقت",
                     ReadOnly = false,
-                    Visible = true,
+                    Visible = false,
                     UseColumnTextForButtonValue = true,
                 });
                 dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
@@ -365,8 +365,9 @@ namespace PMIS.Forms
         {
             try
             {
+                chbRecycle.Visible = false;
                 dgvResultsList.Columns["Edit"].Visible = !chbRecycle.Checked;
-                dgvResultsList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
+                // dgvResultsList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
                 dgvResultsList.Columns["Recycle"].Visible = chbRecycle.Checked;
                 dgvResultsList.Columns["PhysicalDelete"].Visible = chbRecycle.Checked;
                 dgvResultsList.AllowUserToAddRows = !chbRecycle.Checked;
