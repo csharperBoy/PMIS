@@ -137,7 +137,7 @@
             // 
             ChangePasswordToolStripMenuItem.Name = "ChangePasswordToolStripMenuItem";
             ChangePasswordToolStripMenuItem.Size = new Size(224, 26);
-            ChangePasswordToolStripMenuItem.Text = "تغییر رمز عبور";
+            ChangePasswordToolStripMenuItem.Text = "تغییر گذرواژه";
             ChangePasswordToolStripMenuItem.Click += ChangePasswordToolStripMenuItem_Click;
             // 
             // MainForm

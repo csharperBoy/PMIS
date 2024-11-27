@@ -72,7 +72,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task<bool> CheckSystemClaimsRequired()
@@ -101,7 +101,7 @@ namespace PMIS.Forms
             tabPage.Padding = new Padding(3);
             tabPage.Size = new Size(192, 0);
             tabPage.TabIndex = 0;
-            tabPage.Text = "شناسنامه کاربران";
+            tabPage.Text = "مدیریت کاربران";
             tabPage.UseVisualStyleBackColor = true;
 
             form.TopLevel = false;
@@ -708,7 +708,7 @@ namespace PMIS.Forms
                 {
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value;
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value = new string('*', dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].ToString().Length);
-                    dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value + "+" + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value + " + " + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
                 }
             }

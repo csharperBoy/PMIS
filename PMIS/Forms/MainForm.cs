@@ -40,13 +40,21 @@ namespace PMIS.Forms
             try
             {
                 IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ChangePasswordForm"))
                 {
-                    ClaimsToolStripMenuItem.Visible = false;
+                    UsersToolStripMenuItem.Visible = false;
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "UserForm"))
+                {
+                    UsersToolStripMenuItem.Visible = false;
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorForm"))
                 {
                     IndicatorsToolStripMenuItem.Visible = false;
+                }
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
+                {
+                    ClaimsToolStripMenuItem.Visible = false;
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
                 {
@@ -55,10 +63,6 @@ namespace PMIS.Forms
                 else
                 {
                     new IndicatorValueForm(indicatorValueService, indicatorService, claimOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
-                }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "UserForm"))
-                {
-                    UsersToolStripMenuItem.Visible = false;
                 }
             }
             catch (Exception ex)
@@ -100,8 +104,7 @@ namespace PMIS.Forms
 
         private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ChangePasswordForm changePasswordForm =  new ChangePasswordForm();
-            changePasswordForm.Show();
+            new ChangePasswordForm(claimOnSystemService, userService);
         }
     }
 }

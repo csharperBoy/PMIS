@@ -318,7 +318,7 @@ namespace PMIS.Bases
                     #region Desirability
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpDesirability", Title = "جنس مطلوبیت" };
+                    lookup = new LookUp { Code = "LkpDesirability", Title = "روند مطلوبیت" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
@@ -372,7 +372,7 @@ namespace PMIS.Bases
                     #region Shift
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpShift", Title = "شیفت کاری خطوط" };
+                    lookup = new LookUp { Code = "LkpShift", Title = "شیفت کاری" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
@@ -399,12 +399,12 @@ namespace PMIS.Bases
                     #region ClaimUserOnIndicator
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpClaimUserOnIndicator", Title = "ادعاهای کاربر" };
+                    lookup = new LookUp { Code = "LkpClaimUserOnIndicator", Title = "ادعاهای کاربران روی شاخص‌ها" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
 
-                     //add destinations
+                    //add destinations
                     //------------------------------------
                     lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "ClaimUserOnIndicator", ColumnName = "FkLkpClaimUserOnIndicatorID" });
                     context.LookUpDestinations.AddRange(lookUpDestination);
@@ -413,9 +413,9 @@ namespace PMIS.Bases
                     //add values
                     //------------------------------------
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Owner", Display = "مالک", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadForesight", Display = "مسئول پیش‌بینی", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadTarget", Display = "مسئول هدف", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadPerformance", Display = "مسئول عملکرد", OrderNum = 4 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadForesight", Display = "مشاهده‌گر پیش‌بینی", OrderNum = 2 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadTarget", Display = "مشاهده‌گر هدف", OrderNum = 3 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ReadPerformance", Display = "مشاهده‌گر عملکرد", OrderNum = 4 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditForesight", Display = "ویرایشگر پیش‌بینی", OrderNum = 5 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditTarget", Display = "ویرایشگر هدف", OrderNum = 6 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EditPerformance", Display = "ویرایشگر عملکرد", OrderNum = 7 });
@@ -445,10 +445,13 @@ namespace PMIS.Bases
 
                     //add values
                     //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ClaimUserOnIndicatorForm", Display = "فرم ادعاها", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorForm", Display = "فرم مدیریت شاخص ها", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorValueForm", Display = "فرم ورود مقادیر", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "UserForm", Display = "فرم مدیریت کاربران", OrderNum = 4 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ChangePasswordForm", Display = "فرم تغییر گذرواژه", OrderNum = 1 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "UserForm", Display = "فرم مدیریت کاربران", OrderNum = 2 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorForm", Display = "فرم مدیریت شاخص‌ها", OrderNum = 3 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorCategoryForm", Display = "فرم دسته‌بندی‌های شاخص‌ها", OrderNum = 4 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ClaimUserOnIndicatorForm", Display = "فرم ادعاهای کاربران روی شاخص‌ها", OrderNum = 5 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ClaimUserOnSystemForm", Display = "فرم ادعاهای کاربران روی سیستم", OrderNum = 6 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorValueForm", Display = "فرم ورود مقادیر", OrderNum = 7 });
                     context.LookUpValues.AddRange(lookUpValue);
                     //------------------------------------
                     context.SaveChanges();
@@ -606,7 +609,7 @@ namespace PMIS.Bases
                     #region PrimaryUsers
                     //add user
                     //------------------------------------
-                    user.Add(new Models.User { UserName = "Admin", PasswordHash = Hasher.HasherHMACSHA512.Hash("Admin+123"), FullName = "فرمانروا", FkLkpWorkCalendarId = context.LookUpValues.Where(x => x.Value == "Nothing" && x.FkLookUp.Code == "LkpWorkCalendar").First().Id });
+                    user.Add(new Models.User { UserName = "Admin", PasswordHash = Hasher.HasherHMACSHA512.Hash("Admin + 123"), FullName = "مدیر سیستم", FkLkpWorkCalendarId = context.LookUpValues.Where(x => x.Value == "Nothing" && x.FkLookUp.Code == "LkpWorkCalendar").First().Id });
                     context.Users.AddRange(user);
                     context.SaveChanges();
                     //------------------------------------

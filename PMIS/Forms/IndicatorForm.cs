@@ -68,7 +68,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task<bool> CheckSystemClaimsRequired()
@@ -97,7 +97,7 @@ namespace PMIS.Forms
             tabPage.Padding = new Padding(3);
             tabPage.Size = new Size(192, 0);
             tabPage.TabIndex = 0;
-            tabPage.Text = "شناسنامه شاخص‌ها";
+            tabPage.Text = "مدیریت شاخص‌ها";
             tabPage.UseVisualStyleBackColor = true;
 
             form.TopLevel = false;

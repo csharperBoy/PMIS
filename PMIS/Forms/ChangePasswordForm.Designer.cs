@@ -40,74 +40,69 @@
             // labelUsername
             // 
             labelUsername.AutoSize = true;
-            labelUsername.Location = new Point(300, 51);
+            labelUsername.Location = new Point(15, 35);
             labelUsername.Name = "labelUsername";
-            labelUsername.Size = new Size(110, 20);
-            labelUsername.TabIndex = 7;
-            labelUsername.Text = "کلمه عبور فعلی";
-            labelUsername.Click += labelUsername_Click;
+            labelUsername.Size = new Size(72, 15);
+            labelUsername.TabIndex = 0;
+            labelUsername.Text = "گذرواژه فعلی";
             // 
             // textBoxNewPassword
             // 
-            textBoxNewPassword.Location = new Point(175, 98);
-            textBoxNewPassword.Margin = new Padding(3, 4, 3, 4);
+            textBoxNewPassword.Location = new Point(110, 70);
             textBoxNewPassword.Name = "textBoxNewPassword";
             textBoxNewPassword.PasswordChar = '●';
-            textBoxNewPassword.Size = new Size(114, 27);
+            textBoxNewPassword.Size = new Size(100, 23);
             textBoxNewPassword.TabIndex = 2;
             // 
             // labelPassword
             // 
             labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(300, 101);
+            labelPassword.Location = new Point(15, 75);
             labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(105, 20);
-            labelPassword.TabIndex = 8;
-            labelPassword.Text = "کلمه عبور جدید";
+            labelPassword.Size = new Size(68, 15);
+            labelPassword.TabIndex = 0;
+            labelPassword.Text = "گذرواژه جدید";
             // 
             // buttonSubmit
             // 
-            buttonSubmit.Location = new Point(190, 210);
-            buttonSubmit.Margin = new Padding(3, 4, 3, 4);
+            buttonSubmit.Location = new Point(120, 150);
             buttonSubmit.Name = "buttonSubmit";
-            buttonSubmit.Size = new Size(86, 33);
-            buttonSubmit.TabIndex = 9;
+            buttonSubmit.Size = new Size(75, 25);
+            buttonSubmit.TabIndex = 4;
             buttonSubmit.Text = "اعمال";
             buttonSubmit.UseVisualStyleBackColor = true;
             buttonSubmit.Click += buttonSubmit_Click;
             // 
             // textBoxReNewPassword
             // 
-            textBoxReNewPassword.Location = new Point(175, 151);
-            textBoxReNewPassword.Margin = new Padding(3, 4, 3, 4);
+            textBoxReNewPassword.Location = new Point(110, 105);
             textBoxReNewPassword.Name = "textBoxReNewPassword";
             textBoxReNewPassword.PasswordChar = '●';
-            textBoxReNewPassword.Size = new Size(114, 27);
+            textBoxReNewPassword.Size = new Size(100, 23);
             textBoxReNewPassword.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(300, 154);
+            label1.Location = new Point(15, 110);
             label1.Name = "label1";
-            label1.Size = new Size(137, 20);
-            label1.TabIndex = 11;
-            label1.Text = "تکرار کلمه عبور جدید";
+            label1.Size = new Size(93, 15);
+            label1.TabIndex = 0;
+            label1.Text = "تکرار گذرواژه جدید";
             // 
             // textBoxOldPassword
             // 
-            textBoxOldPassword.Location = new Point(175, 51);
-            textBoxOldPassword.Margin = new Padding(3, 4, 3, 4);
+            textBoxOldPassword.Location = new Point(110, 30);
             textBoxOldPassword.Name = "textBoxOldPassword";
             textBoxOldPassword.PasswordChar = '●';
-            textBoxOldPassword.Size = new Size(114, 27);
+            textBoxOldPassword.Size = new Size(100, 23);
             textBoxOldPassword.TabIndex = 1;
             // 
             // ChangePasswordForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(592, 323);
+            ClientSize = new Size(270, 200);
             Controls.Add(textBoxOldPassword);
             Controls.Add(textBoxReNewPassword);
             Controls.Add(label1);
@@ -115,8 +110,11 @@
             Controls.Add(textBoxNewPassword);
             Controls.Add(labelPassword);
             Controls.Add(buttonSubmit);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "ChangePasswordForm";
-            Text = "تغییر رمز عبور";
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
+            Text = "تغییر گذرواژه";
             ResumeLayout(false);
             PerformLayout();
         }

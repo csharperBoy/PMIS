@@ -1,6 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Generic.Base.Handler.Map;
+using Generic.Service.DTO.Concrete;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic.ApplicationServices;
 using PMIS.Bases;
+using PMIS.DTO.ClaimOnSystem;
+using PMIS.DTO.IndicatorValue;
+using PMIS.DTO.User;
 using PMIS.Models;
+using PMIS.Services;
+using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,52 +23,105 @@ namespace PMIS.Forms
 {
     public partial class ChangePasswordForm : Form
     {
-        public ChangePasswordForm()
+
+        #region Variables
+        private IClaimOnSystemService claimOnSystemService;
+        private IUserService userService;
+        #endregion
+
+        public ChangePasswordForm(IClaimOnSystemService _claimOnSystemService, IUserService _userService)
         {
             InitializeComponent();
+            claimOnSystemService = _claimOnSystemService;
+            userService = _userService;
+            CustomInitialize();
         }
 
-        private void labelUsername_Click(object sender, EventArgs e)
+        private async void CustomInitialize()
         {
-
+            if (!await CheckSystemClaimsRequired())
+            {
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Dispose();
+            }
+            else
+            {
+                ShowDialog();
+            }
         }
 
-        private void buttonSubmit_Click(object sender, EventArgs e)
+        private async Task<bool> CheckSystemClaimsRequired()
         {
             try
             {
-                string hashText = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + "+" + textBoxOldPassword.Text);
-                using (var context = new PmisContext())
+                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ChangePasswordForm"))
                 {
-                    context.Database.EnsureCreated();
-                    User user = context.Users.Where(x => x.PasswordHash == hashText).First();
-                    if (user.Id != 0)
+                    Close();
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        private async void buttonSubmit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string hashText = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxOldPassword.Text);
+
+                (bool result, IEnumerable<UserSearchResponseDto> users) = await userService.Search(new GenericSearchRequestDto()
+                {
+                    filters = new List<GenericSearchFilterDto>()
                     {
-                        if (textBoxNewPassword.Text == textBoxReNewPassword.Text)
+                        new GenericSearchFilterDto()
                         {
-                            string newPasswordHash = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxNewPassword.Text.Trim());
-                            user.PasswordHash = newPasswordHash;
-                            context.Users.Update(user);
-                            context.SaveChanges();
-                            context.Dispose();
-                            MessageBox.Show("رمز عبور با موفقیت تغییر کرد");
+                            columnName = "PasswordHash",
+                            value = hashText,
+                            LogicalOperator=LogicalOperator.Begin,
+                            operation = FilterOperator.Equals,
+                            type = PhraseType.Condition
+                        }
+                    }
+                });
+
+                if (result && users.Count() == 1)
+                {
+                    if (textBoxNewPassword.Text == textBoxReNewPassword.Text)
+                    {
+                        string newPasswordHash = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxNewPassword.Text);
+                        UserEditRequestDto userEditRequest = new UserEditRequestDto();
+                        await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(users.First(), userEditRequest);
+                        userEditRequest.PasswordHash = newPasswordHash;
+                        bool isSuccess = await userService.EditRange(new List<UserEditRequestDto>() { userEditRequest });
+                        if (isSuccess)
+                        {
+                            MessageBox.Show("گذرواژه با موفقیت تغییر کرد.", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Close();
                         }
                         else
                         {
-                            MessageBox.Show("رمز عبور جدید را به درستی تکرار کنید");
+                            MessageBox.Show("تغییر گذرواژه موفقیت‌آمیز نبود!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("رمز عبور اشتباه است");
+                        MessageBox.Show("گذرواژه جدید را به درستی تکرار کنید.", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                };
-                this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("گذرواژه قبلی به درستی وارد نشده است!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("رمز عبور اشتباه است");
-              //  MessageBox.Show("Not OK Authentication : " + ex.Message);
+                MessageBox.Show("تغییر گذرواژه امکان‌پذیر نمی‌باشد!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

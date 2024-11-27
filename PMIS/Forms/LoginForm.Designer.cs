@@ -37,55 +37,52 @@
             // 
             // textBoxUsername
             // 
-            textBoxUsername.Location = new Point(126, 53);
-            textBoxUsername.Margin = new Padding(3, 4, 3, 4);
+            textBoxUsername.Location = new Point(110, 40);
             textBoxUsername.Name = "textBoxUsername";
-            textBoxUsername.Size = new Size(114, 27);
-            textBoxUsername.TabIndex = 0;
+            textBoxUsername.Size = new Size(100, 23);
+            textBoxUsername.TabIndex = 1;
             // 
             // textBoxPassword
             // 
-            textBoxPassword.Location = new Point(126, 127);
-            textBoxPassword.Margin = new Padding(3, 4, 3, 4);
+            textBoxPassword.Location = new Point(110, 95);
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PasswordChar = '●';
-            textBoxPassword.Size = new Size(114, 27);
-            textBoxPassword.TabIndex = 1;
+            textBoxPassword.Size = new Size(100, 23);
+            textBoxPassword.TabIndex = 2;
             // 
             // labelUsername
             // 
             labelUsername.AutoSize = true;
-            labelUsername.Location = new Point(55, 53);
+            labelUsername.Location = new Point(50, 45);
             labelUsername.Name = "labelUsername";
-            labelUsername.Size = new Size(70, 20);
-            labelUsername.TabIndex = 2;
+            labelUsername.Size = new Size(55, 15);
+            labelUsername.TabIndex = 0;
             labelUsername.Text = "نام کاربری";
             // 
             // labelPassword
             // 
             labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(57, 127);
+            labelPassword.Location = new Point(50, 100);
             labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(71, 20);
-            labelPassword.TabIndex = 3;
-            labelPassword.Text = "کلمه عبور";
+            labelPassword.Size = new Size(42, 15);
+            labelPassword.TabIndex = 0;
+            labelPassword.Text = "گذرواژه";
             // 
             // buttonEntry
             // 
-            buttonEntry.Location = new Point(137, 200);
-            buttonEntry.Margin = new Padding(3, 4, 3, 4);
+            buttonEntry.Location = new Point(120, 150);
             buttonEntry.Name = "buttonEntry";
-            buttonEntry.Size = new Size(86, 33);
-            buttonEntry.TabIndex = 4;
+            buttonEntry.Size = new Size(75, 25);
+            buttonEntry.TabIndex = 3;
             buttonEntry.Text = "ورود";
             buttonEntry.UseVisualStyleBackColor = true;
             buttonEntry.Click += buttonEntry_Click;
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(309, 267);
+            ClientSize = new Size(270, 200);
             Controls.Add(labelUsername);
             Controls.Add(textBoxPassword);
             Controls.Add(labelPassword);
@@ -95,8 +92,7 @@
             Name = "LoginForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
-            Text = "LoginForm";
-            Load += LoginForm_Load;
+            Text = "ایستگاه ورودی";
             ResumeLayout(false);
             PerformLayout();
         }

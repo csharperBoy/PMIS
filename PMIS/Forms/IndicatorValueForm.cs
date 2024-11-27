@@ -57,7 +57,7 @@ namespace PMIS.Forms
         private DateTime dateTimeFrom;
         private DateTime dateTimeTo;
         private IEnumerable<IndicatorSearchResponseDto> indicators;
-        IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims;
+        private IEnumerable<ClaimUserOnIndicatorSearchResponseDto> userClaims;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
@@ -99,7 +99,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task<bool> CheckSystemClaimsRequired()

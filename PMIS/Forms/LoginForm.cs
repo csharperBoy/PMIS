@@ -1,11 +1,15 @@
 ﻿using Generic.Base;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
+using Generic.Service.DTO.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic.ApplicationServices;
 using PMIS.Bases;
 using PMIS.DTO.Indicator;
+using PMIS.DTO.User;
 using PMIS.Models;
+using PMIS.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,55 +25,62 @@ namespace PMIS.Forms
 {
     public partial class LoginForm : Form
     {
-        public LoginForm()
+
+        #region Variables
+        private IUserService userService;
+        #endregion
+
+        public LoginForm(IUserService _userService)
         {
             InitializeComponent();
+            userService = _userService;
         }
 
-        private async void LoginForm_Load(object sender, EventArgs e)
-        {
-            // IndicatorAddRequestDto a = await GenericMapHandler.StaticMap<AutoMapHandler,Indicator, IndicatorAddRequestDto>(new AutoMapHandler(), new Indicator() { Code = "Ali"});
-
-        }
-
-        private void buttonEntry_Click(object sender, EventArgs e)
+        private async void buttonEntry_Click(object sender, EventArgs e)
         {
             try
             {
-                string hashText = Hasher.HasherHMACSHA512.Hash(textBoxUsername.Text + "+" + textBoxPassword.Text);
-                using (var context = new PmisContext())
+                string hashText = Hasher.HasherHMACSHA512.Hash(textBoxUsername.Text.Trim() + " + " + textBoxPassword.Text);
+
+                (bool result, IEnumerable<UserSearchResponseDto> users) = await userService.Search(new GenericSearchRequestDto()
                 {
-                    context.Database.EnsureCreated();
-                    User user = context.Users.Where(x => x.PasswordHash == hashText).First();
-                    if (user.Id != 0)
+                    filters = new List<GenericSearchFilterDto>()
                     {
-                        GlobalVariable.username = user.UserName;
-                        GlobalVariable.userId = user.Id;
+                        new GenericSearchFilterDto()
+                        {
+                            columnName = "PasswordHash",
+                            value = hashText,
+                            LogicalOperator=LogicalOperator.Begin,
+                            operation = FilterOperator.Equals,
+                            type = PhraseType.Condition
+                        }
                     }
-                    else
-                    {
-                        return;
-                    }
-                    context.Dispose();
-                };
-                this.Hide();
+                });
 
-
+                if (result && users.Count() == 1)
+                {
+                    Hide();
+                    GlobalVariable.username = users.First().UserName;
+                    GlobalVariable.userId = users.First().Id;
+                    var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
+                    mainForm.ShowDialog();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("کاربر با مشخصات وارد شده یافت نشد!", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 //using (var scope = Program.serviceProvider.CreateScope())
                 //{
                 //    var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
                 //    mainForm.ShowDialog();
                 //}
-                var mainForm = Program.serviceProvider.GetRequiredService<MainForm>();
-                mainForm.ShowDialog();
-
-                this.Close();
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Not OK Authentication : " + ex.Message);
+                MessageBox.Show("خطا در احراز هویت: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -75,7 +75,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید");
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
