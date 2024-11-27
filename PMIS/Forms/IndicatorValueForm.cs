@@ -1021,12 +1021,15 @@ namespace PMIS.Forms
                     // isLoaded = false;
                     //  dgvResultsList.RowEnter -= RowEnter;
                     lstSearchResponse = await GenerateRows(lstSearchResponse);
-                    this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
+                    if (lstSearchResponse.Count() > 0)
                     {
-                        var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
-                        resultBindingSource.DataSource = bindingList;
-                        dgvResultsList.DataSource = resultBindingSource;
-                    });
+                        this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
+                        {
+                            var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+                            resultBindingSource.DataSource = bindingList;
+                            dgvResultsList.DataSource = resultBindingSource;
+                        });
+                    }
                     // dgvResultsList.RowEnter += RowEnter;
 
 

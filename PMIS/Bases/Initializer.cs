@@ -50,12 +50,16 @@ namespace PMIS.Bases
                 {
                     context = new PmisContext();
 
-                    #region SetAllLookUps
-                    setAllLookUps(context);
+                    #region setBaseLookUps
+                    setBaseLookUps(context);
                     #endregion
 
                     #region SetBaseUsers
                     SetBaseUsers(context);
+                    #endregion
+
+                    #region SetBaseClaims
+                    SetBaseClaims(context);
                     #endregion
                 }
                 catch (Exception ex)
@@ -64,7 +68,7 @@ namespace PMIS.Bases
                 }
             }
 
-            private void setAllLookUps(PmisContext context)
+            private void setBaseLookUps(PmisContext context)
             {
                 context.Database.EnsureCreated();
                 if (!context.LookUps.Any())
@@ -618,6 +622,29 @@ namespace PMIS.Bases
                     //------------------------------------
                     user.Add(new Models.User { UserName = "Admin", PasswordHash = Hasher.HasherHMACSHA512.Hash("Admin + 123"), FullName = "مدیر سیستم", FkLkpWorkCalendarId = context.LookUpValues.Where(x => x.Value == "Nothing" && x.FkLookUp.Code == "LkpWorkCalendar").First().Id });
                     context.Users.AddRange(user);
+                    context.SaveChanges();
+                    //------------------------------------
+                    #endregion
+                }
+            }
+
+            private void SetBaseClaims(PmisContext context)
+            {
+                context.Database.EnsureCreated();
+                if (!context.ClaimOnSystems.Any())
+                {
+                    List<Models.ClaimOnSystem> claim = new List<Models.ClaimOnSystem>();
+                    #region PrimaryClaims
+                    //add user
+                    //------------------------------------
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ChangePasswordForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "UserForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorCategoryForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnIndicatorForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnSystemForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    claim.Add(new Models.ClaimOnSystem { FkLkpClaimOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorValueForm" && x.FkLookUp.Code == "LkpClaimOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
+                    context.ClaimOnSystems.AddRange(claim);
                     context.SaveChanges();
                     //------------------------------------
                     #endregion
