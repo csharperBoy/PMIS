@@ -402,17 +402,13 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
 
             if (isSuccess)
             {
                 if (list.Count() == 0)
                 {
-                    dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
                 }
             }
             else

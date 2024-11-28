@@ -448,17 +448,13 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<ClaimUserOnIndicatorSearchResponseDto> list) = await claimUserOnIndicatorService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<ClaimUserOnIndicatorSearchResponseDto>(list.ToList());
 
             if (isSuccess)
             {
                 if (list.Count() == 0)
                 {
-                    dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    dgvResultsList.DataSource = new BindingList<ClaimUserOnIndicatorSearchResponseDto>(list.ToList());
                 }
             }
             else

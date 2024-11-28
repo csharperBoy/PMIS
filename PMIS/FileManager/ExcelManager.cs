@@ -139,8 +139,11 @@ namespace WSM.WindowsServices.FileManager
                     if (dgv.DataSource != null)
                     {
                         DataTable dataTable = new DataTable();
-                        string? nameSpace = dgv.DataSource.GetType().GetGenericArguments()[0].Namespace;
-                        dataTable.TableName = nameSpace?.Substring(nameSpace.LastIndexOf('.') + 1);
+                        if (dgv.DataSource.GetType().GetGenericArguments().Count() > 0)
+                        {
+                            string? nameSpace = dgv.DataSource.GetType().GetGenericArguments()[0].Namespace;
+                            dataTable.TableName = nameSpace?.Substring(nameSpace.LastIndexOf('.') + 1);
+                        }
                         foreach (DataGridViewColumn column in dgv.Columns)
                         {
                             if (column.Visible)

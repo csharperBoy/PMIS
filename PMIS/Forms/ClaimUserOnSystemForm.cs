@@ -434,17 +434,13 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, IEnumerable<ClaimOnSystemSearchResponseDto> list) = await claimOnSystemService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<ClaimOnSystemSearchResponseDto>(list.ToList());
 
             if (isSuccess)
             {
                 if (list.Count() == 0)
                 {
-                    dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    dgvResultsList.DataSource = new BindingList<ClaimOnSystemSearchResponseDto>(list.ToList());
                 }
             }
             else

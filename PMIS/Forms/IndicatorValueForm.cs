@@ -3,7 +3,6 @@ using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.IndicatorValue;
-using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.DTO.User;
 using PMIS.Forms.Generic;
@@ -33,6 +32,7 @@ using System;
 using PMIS.DTO.Indicator.Info;
 using PMIS.DTO.ClaimUserOnSystem;
 using WSM.WindowsServices.FileManager;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 
 namespace PMIS.Forms
 {
@@ -482,20 +482,15 @@ namespace PMIS.Forms
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
             lstSearchResponse = await indicatorValueService.SearchByExternaFilter(lstSearchResponse, int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpForm"].Value.ToString()), int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpPeriod"].Value.ToString()));
             lstSearchResponse = await GenerateRows(lstSearchResponse);
+            var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+            resultBindingSource = new BindingSource(bindingList, null);
+            dgvResultsList.DataSource = resultBindingSource;
+
             if (isSuccess)
             {
                 if (lstSearchResponse.Count() == 0)
                 {
-                    dgvResultsList.DataSource = null;
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-
-                    // dgvResultsList.DataSource = new BindingList<IndicatorValueSearchResponseDto>(list.ToList());
-                    var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
-                    resultBindingSource = new BindingSource(bindingList, null);
-                    dgvResultsList.DataSource = resultBindingSource;
                 }
             }
             else
