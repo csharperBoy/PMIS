@@ -157,7 +157,7 @@
             Name = "MainForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
-            Text = "MainForm";
+            Text = "داشبورد";
             WindowState = FormWindowState.Maximized;
             Load += MainForm_Load;
             menuStripMain.ResumeLayout(false);

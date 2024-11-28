@@ -36,7 +36,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "DateTimeFrom",
                    ReadOnly = false,
                    Visible = true, 
-                   MinimumWidth = 150,
+                   MinimumWidth = 100,
                     DividerWidth = 5
                },
                 new DataGridViewTextBoxColumn()
@@ -46,7 +46,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "DateTimeTo",
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                    MinimumWidth = 100,
                    DividerWidth = 5
                },
                 new DataGridViewComboBoxColumn()
