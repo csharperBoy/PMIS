@@ -15,7 +15,7 @@ namespace PMIS.DTO.IndicatorValue.Info
         public async Task<IndicatorValueTinyInfoDto> extraMapFromBaseModel(PMIS.Models.IndicatorValue baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
-            this.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(this.DateTime);
+            this.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(this.DateTime, "RRRR/MM/DD");
             return this;
         }
         public long Id { get; set; }

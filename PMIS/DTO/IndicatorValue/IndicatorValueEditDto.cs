@@ -19,7 +19,7 @@ namespace PMIS.DTO.IndicatorValue
             {
                 if (destination is Models.IndicatorValue destinationModel2)
                 {
-                    destinationModel2.DateTime = Helper.Convert.ConvertShamsiToGregorian(sourceModel2.shamsiDateTime);
+                    destinationModel2.DateTime = Helper.Convert.ConvertShamsiToGregorian(sourceModel2.shamsiDateTime).GetValueOrDefault();
                 }
             }
             return destination;

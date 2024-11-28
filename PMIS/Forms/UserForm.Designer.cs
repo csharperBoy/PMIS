@@ -56,9 +56,9 @@ namespace PMIS.Forms
             panelMenu.Controls.Add(btnApply);
             panelMenu.Dock = DockStyle.Top;
             panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(4, 4, 4, 4);
+            panelMenu.Margin = new Padding(4);
             panelMenu.Name = "panelMenu";
-            panelMenu.Padding = new Padding(4, 4, 4, 4);
+            panelMenu.Padding = new Padding(4);
             panelMenu.Size = new Size(1104, 33);
             panelMenu.TabIndex = 0;
             // 
@@ -66,19 +66,19 @@ namespace PMIS.Forms
             // 
             btnDownload.Dock = DockStyle.Right;
             btnDownload.Location = new Point(791, 4);
-            btnDownload.Margin = new Padding(4, 4, 4, 4);
+            btnDownload.Margin = new Padding(4);
             btnDownload.Name = "btnDownload";
             btnDownload.Size = new Size(103, 25);
             btnDownload.TabIndex = 3;
             btnDownload.Text = "بارگیری";
             btnDownload.UseVisualStyleBackColor = true;
-            btnDownload.Visible = false;
+            btnDownload.Click += btnDownload_Click;
             // 
             // btnUpload
             // 
             btnUpload.Dock = DockStyle.Right;
             btnUpload.Location = new Point(894, 4);
-            btnUpload.Margin = new Padding(4, 4, 4, 4);
+            btnUpload.Margin = new Padding(4);
             btnUpload.Name = "btnUpload";
             btnUpload.Size = new Size(103, 25);
             btnUpload.TabIndex = 2;
@@ -90,7 +90,7 @@ namespace PMIS.Forms
             // 
             btnApply.Dock = DockStyle.Right;
             btnApply.Location = new Point(997, 4);
-            btnApply.Margin = new Padding(4, 4, 4, 4);
+            btnApply.Margin = new Padding(4);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(103, 25);
             btnApply.TabIndex = 1;
@@ -114,7 +114,7 @@ namespace PMIS.Forms
             // 
             btnSearch.Dock = DockStyle.Left;
             btnSearch.Location = new Point(60, 0);
-            btnSearch.Margin = new Padding(4, 4, 4, 4);
+            btnSearch.Margin = new Padding(4);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(75, 49);
             btnSearch.TabIndex = 0;

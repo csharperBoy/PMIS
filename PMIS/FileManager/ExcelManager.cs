@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using System.Xml;
 using System.Globalization;
 using WSM.WindowsServices.FileManager.Interfaces;
+using Castle.Components.DictionaryAdapter.Xml;
 
 namespace WSM.WindowsServices.FileManager
 {
@@ -88,6 +89,8 @@ namespace WSM.WindowsServices.FileManager
         {
             try
             {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
                 //Create a file
                 var fileInfo = new FileInfo(fileName);
                 if (fileInfo.Exists)
@@ -96,12 +99,84 @@ namespace WSM.WindowsServices.FileManager
                 using (var pck = new ExcelPackage(fileInfo))
                 {
                     var workbook = pck.Workbook;
-                    var worksheet = workbook.Worksheets.Add(((DataTable)fileContent).TableName);
-                    worksheet.View.RightToLeft = true;
-                    worksheet.Cells.LoadFromDataTable((DataTable)fileContent, true);
+                    foreach (DataTable dataTable in ((DataSet)fileContent).Tables)
+                    {
+                        var worksheet = workbook.Worksheets.Add(dataTable.TableName);
+                        worksheet.View.RightToLeft = true;
+                        worksheet.Cells.LoadFromDataTable(dataTable, true);
+                    }
                     pck.Save();
                 }
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [TestMethod]
+        public static bool Write(string fileName, List<DataGridView> fileContent)
+        {
+            try
+            {
+                return Write(fileName, ConvertDataGridViewListToDataSet(fileContent));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [TestMethod]
+        public static DataSet ConvertDataGridViewListToDataSet(List<DataGridView> dgvList)
+        {
+            try
+            {
+                DataSet dataSet = new DataSet();
+                foreach (DataGridView dgv in dgvList)
+                {
+                    if (dgv.DataSource != null)
+                    {
+                        DataTable dataTable = new DataTable();
+                        string? nameSpace = dgv.DataSource.GetType().GetGenericArguments()[0].Namespace;
+                        dataTable.TableName = nameSpace?.Substring(nameSpace.LastIndexOf('.') + 1);
+                        foreach (DataGridViewColumn column in dgv.Columns)
+                        {
+                            if (column.Visible)
+                            {
+                                if (column is not DataGridViewButtonColumn && !column.Name.StartsWith("Vrt"))
+                                {
+                                    dataTable.Columns.Add(column.HeaderText);
+                                }
+                            }
+                        }
+                        foreach (DataGridViewRow row in dgv.Rows)
+                        {
+                            DataRow dRow = dataTable.NewRow();
+                            foreach (DataGridViewColumn column in dgv.Columns)
+                            {
+                                if (column.Visible)
+                                {
+                                    if (column is not DataGridViewButtonColumn && !column.Name.StartsWith("Vrt"))
+                                    {
+                                        if (column is DataGridViewComboBoxColumn)
+                                        {
+                                            dRow[column.HeaderText] = row.Cells[column.Name].FormattedValue;
+                                        }
+                                        else
+                                        {
+                                            dRow[column.HeaderText] = row.Cells[column.Name].Value;
+                                        }
+                                    }
+                                }
+                            }
+                            dataTable.Rows.Add(dRow);
+                        }
+                        dataSet.Tables.Add(dataTable);
+                    }
+                }
+                return dataSet;
             }
             catch (Exception ex)
             {

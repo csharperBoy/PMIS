@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 using PMIS.DTO.Indicator.Info;
 using PMIS.DTO.ClaimUserOnSystem;
+using WSM.WindowsServices.FileManager;
 
 namespace PMIS.Forms
 {
@@ -218,9 +219,10 @@ namespace PMIS.Forms
 
         }
 
-
-
-
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            Download();
+        }
 
         private void GenerateDgvFilterColumnsInitialize()
         {
@@ -357,8 +359,8 @@ namespace PMIS.Forms
             PersianCalendar persianCalendar = new PersianCalendar();
             string year = persianCalendar.GetYear(persianCalendar.AddYears(DateTime.Now, 1)).ToString();
 
-            dgvFiltersList.Rows[0].Cells["DateTimeFrom"].Value = Helper.Convert.ConvertGregorianToShamsi(DateTime.Now.AddDays(-14));
-            dgvFiltersList.Rows[0].Cells["DateTimeTo"].Value = Helper.Convert.ConvertGregorianToShamsi(Helper.Convert.ConvertShamsiToGregorian(year + "/01/01").AddDays(-1));
+            dgvFiltersList.Rows[0].Cells["DateTimeFrom"].Value = Helper.Convert.ConvertGregorianToShamsi(DateTime.Now.AddDays(-14), "RRRR/MM/DD");
+            dgvFiltersList.Rows[0].Cells["DateTimeTo"].Value = Helper.Convert.ConvertGregorianToShamsi(Helper.Convert.ConvertShamsiToGregorian(year + "/01/01").GetValueOrDefault().AddDays(-1), "RRRR/MM/DD");
         }
 
         public void RefreshVisuals()
@@ -575,7 +577,7 @@ namespace PMIS.Forms
                             VrtLkpFormId = indicator.FkLkpFormId,
                             VrtLkpPeriodId = indicator.FkLkpPeriodId,
                             DateTime = date,
-                            shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date)
+                            shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(date, "RRRR/MM/DD")
                         };
                         List<IndicatorValueSearchResponseDto> blankIndicatorValues = (await GenerateRowsForDate(indicatorValue, indicator)).ToList();
                         blankIndicatorValues = (await GenerateRowsForValueType(blankIndicatorValues, indicator)).ToList();
@@ -1299,8 +1301,8 @@ namespace PMIS.Forms
             foreach (DataGridViewRow row in dgvFiltersList.Rows)
             {
                 indicators = (IEnumerable<IndicatorSearchResponseDto>)((DataGridViewComboBoxColumn)dgvFiltersList.Columns["FkIndicatorId"]).DataSource;
-                dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()) : DateTime.Today.AddDays(-30);
-                dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()) : DateTime.Today.AddDays(30);
+                dateTimeFrom = row.Cells["DateTimeFrom"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeFrom"].Value.ToString()).GetValueOrDefault() : DateTime.Today.AddDays(-30);
+                dateTimeTo = row.Cells["DateTimeTo"].Value != null ? Helper.Convert.ConvertShamsiToGregorian(row.Cells["DateTimeTo"].Value.ToString()).GetValueOrDefault() : DateTime.Today.AddDays(30);
                 lstDates.AddRange(Helper.Convert.GetDatesBetween(dateTimeFrom, dateTimeTo));
                 indicators = indicators.Where(i => i.Id != 0);
                 if (row.Cells["FkIndicatorId"].Value != null && row.Cells["FkIndicatorId"].Value.ToString() != "0")
@@ -1318,7 +1320,31 @@ namespace PMIS.Forms
             }
         }
 
+        private void Download()
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                saveFileDialog.FileName = "IndicatorValues-" + Helper.Convert.ConvertGregorianToShamsi(DateTime.Now, "RRRRMMDDHH24MISSMS");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    saveFileDialog.FileName = saveFileDialog.FileName.Substring(0, saveFileDialog.FileName.LastIndexOf('.')) + "\\IndicatorValues" + saveFileDialog.FileName.Substring(saveFileDialog.FileName.LastIndexOf('.'));
+                    if (!Directory.Exists(Path.GetDirectoryName(saveFileDialog.FileName)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveFileDialog.FileName));
+                    }
+                    string fileName = saveFileDialog.FileName;
+                    bool result = ExcelManager.Write(fileName, new List<DataGridView>() { dgvResultsList });
+                    var filePath = Path.GetDirectoryName(fileName);
+                    MessageBox.Show("عملیات بارگیری موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("عملیات بارگیری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
-
-
 }

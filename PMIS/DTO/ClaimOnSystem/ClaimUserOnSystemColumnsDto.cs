@@ -60,7 +60,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimOnSystemID", "LkpClaimOnSystem"),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                    MinimumWidth = 200,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()

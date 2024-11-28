@@ -4,9 +4,12 @@ using Serilog.Core;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,24 +42,101 @@ namespace Generic.Helper
                     return null;
                 }
             }
+            public static string ConvertGregorianToShamsi(DateTime? DateTime, string Format = null)
 
-            public static DateTime ConvertShamsiToGregorian(string _shamsiDateString)
             {
-                PersianCalendar persianCalendar = new PersianCalendar();
-                var parts = _shamsiDateString.Split('/');
-                int year = int.Parse(parts[0]);
-                int month = int.Parse(parts[1]);
-                int day = int.Parse(parts[2]);
-                return persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0);
+                PersianCalendar PersianCalendar = new PersianCalendar();
+                string Result = "";
+                if (DateTime is not null)
+                {
+                    if (Format is null)
+                    {
+                        Result = $"{PersianCalendar.GetYear((DateTime)DateTime)}/{PersianCalendar.GetMonth((DateTime)DateTime).ToString("00")}/{PersianCalendar.GetDayOfMonth((DateTime)DateTime).ToString("00")} در ساعت {PersianCalendar.GetHour((DateTime)DateTime).ToString("00")}:{PersianCalendar.GetMinute((DateTime)DateTime).ToString("00")}";
+                    }
+                    else
+                    {
+                        if (Format.Contains("RRRR"))
+                        {
+                            Result += $"{PersianCalendar.GetYear((DateTime)DateTime)}";
+                        }
+                        if (Format.Count() > 4 && !char.IsLetterOrDigit(Format[4]))
+                        {
+                            Result += Format[4];
+                        }
+                        if (Format.Contains("MM"))
+                        {
+                            Result += $"{PersianCalendar.GetMonth((DateTime)DateTime).ToString("00")}";
+                        }
+                        if (Format.Count() > 7 && !char.IsLetterOrDigit(Format[7]))
+                        {
+                            Result += Format[7];
+                        }
+                        if (Format.Contains("DD"))
+                        {
+                            Result += $"{PersianCalendar.GetDayOfMonth((DateTime)DateTime).ToString("00")}";
+                        }
+                        if (Format.Count() > 10 && !char.IsLetterOrDigit(Format[10]))
+                        {
+                            Result += Format[10];
+                        }
+                        if (Format.Contains("HH24"))
+                        {
+                            Result += $"{PersianCalendar.GetHour((DateTime)DateTime).ToString("00")}";
+                        }
+                        if (Format.Count() > 13 && !char.IsLetterOrDigit(Format[13]))
+                        {
+                            Result += Format[13];
+                        }
+                        if (Format.Contains("MI"))
+                        {
+                            Result += $"{PersianCalendar.GetMinute((DateTime)DateTime).ToString("00")}";
+                        }
+                        if (Format.Count() > 16 && !char.IsLetterOrDigit(Format[16]))
+                        {
+                            Result += Format[16];
+                        }
+                        if (Format.Contains("SS"))
+                        {
+                            Result += $"{PersianCalendar.GetSecond((DateTime)DateTime).ToString("00")}";
+                        }
+                        if (Format.Count() > 19 && !char.IsLetterOrDigit(Format[19]))
+                        {
+                            Result += Format[19];
+                        }
+                        if (Format.Contains("MS"))
+                        {
+                            Result += $"{PersianCalendar.GetMilliseconds((DateTime)DateTime).ToString("00")}";
+                        }
+                    }
+                    if (Result == "")
+                    {
+                        Result = DateTime.ToString();
+                    }
+                }
+                return Result;
             }
-            public static string ConvertGregorianToShamsi(DateTime _gregorianDate)
+
+            public static DateTime? ConvertShamsiToGregorian(string persianDate)
             {
-                PersianCalendar persianCalendar = new PersianCalendar();
-                int year = persianCalendar.GetYear(_gregorianDate);
-                int month = persianCalendar.GetMonth(_gregorianDate);
-                int day = persianCalendar.GetDayOfMonth(_gregorianDate);
-                return year + "/" + month + "/" + day;
+                try
+                {
+                    var persianCalendar = new PersianCalendar();
+
+                    var parts = persianDate.Split('/');
+                    var year = int.Parse(parts[0]);
+                    var month = int.Parse(parts[1]);
+                    var day = int.Parse(parts[2]);
+
+                    DateTime dateTime = persianCalendar.ToDateTime(year, month, day, 0, 0, 0, 0);
+
+                    return dateTime;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
+
             public static List<DateTime> GetDatesBetween(DateTime start, DateTime end)
             {
                 List<DateTime> dates = new List<DateTime>();
@@ -97,6 +177,7 @@ namespace Generic.Helper
         }
 
     }
+
     public static class PredicateBuilder
     {
         public static Expression<Func<T, bool>> True<T>() { return f => true; }

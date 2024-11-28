@@ -23,7 +23,7 @@ namespace PMIS.DTO.IndicatorValue
                 if (destination is IndicatorValueSearchResponseDto destinationModel)
                 {
                     await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<IndicatorValueStandardInfoDto, IndicatorValueSearchResponseDto>(await destinationModel.extraMapFromBaseModel(sourceModel));
-                    destinationModel.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(sourceModel.DateTime);
+                    destinationModel.shamsiDateTime = Helper.Convert.ConvertGregorianToShamsi(sourceModel.DateTime, "RRRR/MM/DD");
                 }
 
             }

@@ -1,4 +1,5 @@
-﻿using Generic.Service.DTO.Concrete;
+﻿using Generic.Helper;
+using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnSystem;
@@ -13,6 +14,7 @@ using PMIS.Services.Contract;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
+using WSM.WindowsServices.FileManager;
 
 namespace PMIS.Forms
 {
@@ -68,7 +70,7 @@ namespace PMIS.Forms
 
                 tabControl.Controls.RemoveAt(tabControl.Controls.Count - 1);
                 tabControl.SelectedIndex = selectedIndex;
-                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید",  "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("باعرض پوزش شما دسترسی به این قسمت را ندارید", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task<bool> CheckSystemClaimsRequired()
@@ -185,9 +187,10 @@ namespace PMIS.Forms
 
         }
 
-
-
-
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            Download();
+        }
 
         private void GenerateDgvFilterColumnsInitialize()
         {
@@ -750,7 +753,32 @@ namespace PMIS.Forms
                 throw;
             }
         }
+
+        private void Download()
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                saveFileDialog.FileName = "Indicators-" + Helper.Convert.ConvertGregorianToShamsi(DateTime.Now, "RRRRMMDDHH24MISSMS");
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    saveFileDialog.FileName = saveFileDialog.FileName.Substring(0, saveFileDialog.FileName.LastIndexOf('.')) + "\\Indicators" + saveFileDialog.FileName.Substring(saveFileDialog.FileName.LastIndexOf('.'));
+                    if (!Directory.Exists(Path.GetDirectoryName(saveFileDialog.FileName)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveFileDialog.FileName));
+                    }
+                    string fileName = saveFileDialog.FileName;
+                    bool result = ExcelManager.Write(fileName, new List<DataGridView>() { dgvResultsList });
+                    var filePath = Path.GetDirectoryName(fileName);
+                    MessageBox.Show("عملیات بارگیری موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("عملیات بارگیری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
-
-
 }
