@@ -92,42 +92,42 @@ namespace PMIS.DTO.Indicator
                     MinimumWidth = 150,
                    DividerWidth = 5
                },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
-                   Name = "FkLkpMeasureId",
-                   DataPropertyName = "FkLkpMeasureId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
-                   ReadOnly = false,
-                   Visible = true,
-                    MinimumWidth = 150,
-                   DividerWidth = 5
-               },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
-                   Name = "FkLkpDesirabilityId",
-                   DataPropertyName = "FkLkpDesirabilityId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
-                   ReadOnly = false,
-                   Visible = true,
-                    MinimumWidth = 150,
-                   DividerWidth = 5
-               },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "فرمول",
-                   Name = "Formula",
-                   DataPropertyName = "Formula",
-                   ReadOnly = false,
-                   Visible = true,
-                    MinimumWidth = 150,
-                   DividerWidth = 5
-               },
+               //new DataGridViewComboBoxColumn()
+               //{
+               //    HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
+               //    Name = "FkLkpMeasureId",
+               //    DataPropertyName = "FkLkpMeasureId",
+               //    DisplayMember = "Display",
+               //    ValueMember = "Id",
+               //    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
+               //    ReadOnly = false,
+               //    Visible = true,
+               //     MinimumWidth = 150,
+               //    DividerWidth = 5
+               //},
+               //new DataGridViewComboBoxColumn()
+               //{
+               //    HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
+               //    Name = "FkLkpDesirabilityId",
+               //    DataPropertyName = "FkLkpDesirabilityId",
+               //    DisplayMember = "Display",
+               //    ValueMember = "Id",
+               //    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
+               //    ReadOnly = false,
+               //    Visible = true,
+               //     MinimumWidth = 150,
+               //    DividerWidth = 5
+               //},
+               //new DataGridViewTextBoxColumn()
+               //{
+               //    HeaderText = "فرمول",
+               //    Name = "Formula",
+               //    DataPropertyName = "Formula",
+               //    ReadOnly = false,
+               //    Visible = true,
+               //     MinimumWidth = 150,
+               //    DividerWidth = 5
+               //},
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
