@@ -205,14 +205,7 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
-                if (fkUserId != 0)
-                {
-                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Value = ((UserSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Items[0]).Id;
-                }
-                if (fkIndicatorId != 0)
-                {
-                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value = ((IndicatorSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
-                }
+               
             }
             catch (Exception ex)
             {
@@ -326,23 +319,42 @@ namespace PMIS.Forms
                     }
                     if (comboBoxColumn.DataSource is IndicatorSearchResponseDto[] arrayInd)
                     {
-                        List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
-                        lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
-                        comboBoxColumn.DataSource = lstSourse;
-                        comboBoxColumn.DisplayMember = "Title";
-                        comboBoxColumn.ValueMember = "Id";
-                        // comboBoxColumn.SelectedIndex = 0;
+                        if (fkIndicatorId != 0)
+                        {
+                            ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value = ((IndicatorSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = ((IndicatorSearchResponseDto)comboBoxColumn.Items[0]).Id;
+                        }
+                        else
+                        {
+                            List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
+                            lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
+                            comboBoxColumn.DataSource = lstSourse;
+                            comboBoxColumn.DisplayMember = "Title";
+                            comboBoxColumn.ValueMember = "Id";
+                            // comboBoxColumn.SelectedIndex = 0;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+                        }
                     }
                     if (comboBoxColumn.DataSource is UserSearchResponseDto[] arrayUsr)
                     {
-                        List<UserSearchResponseDto> lstSourse = arrayUsr.ToList();
-                        lstSourse.Insert(0, new UserSearchResponseDto() { Id = 0, UserName = "همه", });
-                        comboBoxColumn.DataSource = lstSourse;
-                        comboBoxColumn.DisplayMember = "UserName";
-                        comboBoxColumn.ValueMember = "Id";
-                        // comboBoxColumn.SelectedIndex = 0;
+                        if (fkUserId != 0)
+                        {
+                            ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Value = ((UserSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Items[0]).Id;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = ((UserSearchResponseDto)comboBoxColumn.Items[0]).Id;
+                        }
+                        else
+                        {
+                            List<UserSearchResponseDto> lstSourse = arrayUsr.ToList();
+                            lstSourse.Insert(0, new UserSearchResponseDto() { Id = 0, UserName = "همه", });
+                            comboBoxColumn.DataSource = lstSourse;
+                            comboBoxColumn.DisplayMember = "UserName";
+                            comboBoxColumn.ValueMember = "Id";
+                            // comboBoxColumn.SelectedIndex = 0;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0 ;
+                        }
                     }
-                    dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+
+                    //dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }

@@ -410,7 +410,7 @@ namespace PMIS.Bases
                     #region ClaimUserOnIndicator
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpClaimUserOnIndicator", Title = "ادعاهای کاربران روی شاخص‌ها" };
+                    lookup = new LookUp { Code = "LkpClaimUserOnIndicator", Title = "ادعا روی شاخص‌ها" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
@@ -443,7 +443,7 @@ namespace PMIS.Bases
                     #region ClaimUserOnSystem
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای کاربران روی سیستم" };
+                    lookup = new LookUp { Code = "LkpClaimOnSystem", Title = "ادعاهای روی سیستم" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
