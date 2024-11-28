@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStripMain = new MenuStrip();
             FileToolStripMenuItem = new ToolStripMenuItem();
             HelpToolStripMenuItem = new ToolStripMenuItem();
@@ -153,6 +154,7 @@
             Controls.Add(tabControlMain);
             Controls.Add(flowLayoutPanelMain);
             Controls.Add(menuStripMain);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
             Name = "MainForm";
             RightToLeft = RightToLeft.Yes;
