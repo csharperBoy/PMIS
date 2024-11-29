@@ -27,6 +27,7 @@ namespace PMIS.DTO.Indicator
            where TDestination : class
            where TSource : class
         {
+            string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
             GenericSqlServerRepository<Models.Indicator, PmisContext> repository = new GenericSqlServerRepository<Models.Indicator, PmisContext>(new PmisContext() ,
                 new GenericExceptionHandler()
                 ,
@@ -34,7 +35,7 @@ namespace PMIS.DTO.Indicator
                             new Generic.Base.Handler.SystemLog.WithSerilog.DTO.GenericConfigureLogWithSerilogRequestDto()
                             {
                                 inFileConfig = new Generic.Base.Handler.SystemLog.WithSerilog.DTO.GenericConfigureLogWithSerilogInFileRequestDto()
-                                { filePath = "C:\\Users\\868\\source\\repos\\PMIS\\PMIS\\bin\\Debug\\net8.0-windows\\logs\\log20241108.txt" },
+                                { filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs\\log.txt")},
                                 logHandlerType = GenericLogWithSerilogHandlerFactory.LogHandlerType.File,
                                 minimumLevel = Serilog.Events.LogEventLevel.Information,
                                 rollingInterval = Serilog.RollingInterval.Hour,
