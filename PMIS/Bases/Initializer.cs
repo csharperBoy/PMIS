@@ -95,9 +95,24 @@ namespace PMIS.Bases
                     //------------------------------------
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Other", Display = "سایر", OrderNum = 1 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Assurance", Display = "اختصاصی تضمین", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "BanksInventory", Display = "موجودی بانکها", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Bourse", Display = "بورس", OrderNum = 4 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "PromotionOffers", Display = "پیشنهادات انگیزشی", OrderNum = 5 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Assurance", Display = "سود و زیان", OrderNum = 3 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Assurance", Display = "منابع و مصارف", OrderNum = 4 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "BanksInventory", Display = "موجودی بانکها", OrderNum = 5 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Bourse", Display = "بورس", OrderNum = 6 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "PromotionOffers", Display = "پیشنهادات انگیزشی", OrderNum = 7 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form01", Display = "فرم 1", OrderNum = 8 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form02", Display = "فرم 2", OrderNum = 9 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form03", Display = "فرم 3", OrderNum = 10 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form04", Display = "فرم 4", OrderNum = 11 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form05", Display = "فرم 5", OrderNum = 12 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form061", Display = "فرم 6", OrderNum = 13 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form07", Display = "فرم 7", OrderNum = 14 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form08", Display = "فرم 8", OrderNum = 15 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form09", Display = "فرم 9", OrderNum = 16 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form10", Display = "فرم 10", OrderNum = 17 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form11", Display = "فرم 11", OrderNum = 18 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form12", Display = "فرم 12", OrderNum = 19 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form13", Display = "فرم 13", OrderNum = 20 });
                     context.LookUpValues.AddRange(lookUpValue);
                     //------------------------------------
                     context.SaveChanges();
