@@ -21,9 +21,21 @@ namespace PMIS.DTO.IndicatorValue
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicatorValues = await lookUpValueService.GetList("IndicatorValue");
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestinationIndicator = await lookUpValueService.GetList("Indicator");
             //List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0 , Title = "همه"} };
-            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto());            
+            (bool isSuccessInd, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+            {
+                filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>(){
+                new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                {
+                    columnName = "FlgLogicalDelete",
+                    LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.And,
+                    operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                    type = Generic.Service.DTO.Concrete.PhraseType.Condition,
+                    value = false.ToString()
+                }
+                }
+            });
             lstIndicator = (await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId));
-           // lstIndicator.AddRange(lstIndicator1);
+            // lstIndicator.AddRange(lstIndicator1);
 
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
@@ -35,7 +47,7 @@ namespace PMIS.DTO.IndicatorValue
                    Name = "DateTimeFrom",
                    DataPropertyName = "DateTimeFrom",
                    ReadOnly = false,
-                   Visible = true, 
+                   Visible = true,
                    MinimumWidth = 100,
                     DividerWidth = 5
                },
@@ -124,7 +136,7 @@ namespace PMIS.DTO.IndicatorValue
                    DividerWidth = 5
                }
         });
-          
+
             ResultColumns.AddRange(new List<DataGridViewColumn>()
             {
                 new DataGridViewTextBoxColumn()
@@ -207,7 +219,7 @@ namespace PMIS.DTO.IndicatorValue
                    Name = "Value",
                    DataPropertyName = "Value",
                    ReadOnly = true,
-                   Visible = true,                 
+                   Visible = true,
                },
                new DataGridViewTextBoxColumn()
                {
@@ -219,7 +231,7 @@ namespace PMIS.DTO.IndicatorValue
                }
         });
 
-           
+
         }
 
         public List<DataGridViewColumn> FilterColumns { get; set; } = new List<DataGridViewColumn>();

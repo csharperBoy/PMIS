@@ -28,6 +28,14 @@ namespace PMIS.DTO.IndicatorCategory
                         operation = fkIndicatorId != 0 ? Generic.Service.DTO.Concrete.FilterOperator.Equals : Generic.Service.DTO.Concrete.FilterOperator.NotEquals,
                         type = Generic.Service.DTO.Concrete.PhraseType.Condition,
                         value = fkIndicatorId.ToString()
+                    },
+                    new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                    {
+                        columnName = "FlgLogicalDelete",
+                        LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.And,
+                        operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                        type = Generic.Service.DTO.Concrete.PhraseType.Condition,
+                        value = false.ToString()
                     }
                 }
             });
