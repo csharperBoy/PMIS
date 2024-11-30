@@ -16,9 +16,9 @@ public partial class PmisContext : DbContext
     {
     }
 
-    public virtual DbSet<ClaimUserOnSystem> ClaimOnSystems { get; set; }
-
     public virtual DbSet<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; }
+
+    public virtual DbSet<ClaimUserOnSystem> ClaimUserOnSystems { get; set; }
 
     public virtual DbSet<Indicator> Indicators { get; set; }
 
@@ -52,30 +52,15 @@ public partial class PmisContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ClaimUserOnSystem>(entity =>
-        {
-            entity.ToTable("ClaimUserOnSystem");
-
-            entity.HasIndex(e => new { e.FkLkpClaimUserOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-
-            entity.HasOne(d => d.FkLkpClaimUserOnSystem).WithMany(p => p.ClaimOnSystems)
-                .HasForeignKey(d => d.FkLkpClaimUserOnSystemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaimOnSystem_LookUpValue");
-
-            entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimOnSystems)
-                .HasForeignKey(d => d.FkUserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaimOnSystem_User");
-        });
-
         modelBuilder.Entity<ClaimUserOnIndicator>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Claim");
 
             entity.ToTable("ClaimUserOnIndicator");
+
+            entity.HasIndex(e => e.FkLkpClaimUserOnIndicatorId, "IX_ClaimUserOnIndicator_FkLkpClaimUserOnIndicatorID");
+
+            entity.HasIndex(e => e.FkUserId, "IX_ClaimUserOnIndicator_FkUserID");
 
             entity.HasIndex(e => new { e.FkIndicatorId, e.FkLkpClaimUserOnIndicatorId, e.FkUserId }, "UNQ_ClaimUserIndicator").IsUnique();
 
@@ -100,9 +85,42 @@ public partial class PmisContext : DbContext
                 .HasConstraintName("FK_ClaimUserOnIndicator_User");
         });
 
+        modelBuilder.Entity<ClaimUserOnSystem>(entity =>
+        {
+            entity.ToTable("ClaimUserOnSystem");
+
+            entity.HasIndex(e => e.FkUserId, "IX_ClaimUserOnSystem_FkUserId");
+
+            entity.HasIndex(e => new { e.FkLkpClaimUserOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+
+            entity.HasOne(d => d.FkLkpClaimUserOnSystem).WithMany(p => p.ClaimUserOnSystems)
+                .HasForeignKey(d => d.FkLkpClaimUserOnSystemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClaimOnSystem_LookUpValue");
+
+            entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimUserOnSystems)
+                .HasForeignKey(d => d.FkUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ClaimOnSystem_User");
+        });
+
         modelBuilder.Entity<Indicator>(entity =>
         {
             entity.ToTable("Indicator");
+
+            entity.HasIndex(e => e.FkLkpDesirabilityId, "IX_Indicator_FkLkpDesirabilityID");
+
+            entity.HasIndex(e => e.FkLkpFormId, "IX_Indicator_FkLkpFormID");
+
+            entity.HasIndex(e => e.FkLkpManualityId, "IX_Indicator_FkLkpManualityID");
+
+            entity.HasIndex(e => e.FkLkpMeasureId, "IX_Indicator_FkLkpMeasureID");
+
+            entity.HasIndex(e => e.FkLkpPeriodId, "IX_Indicator_FkLkpPeriodID");
+
+            entity.HasIndex(e => e.FkLkpUnitId, "IX_Indicator_FkLkpUnitID");
 
             entity.HasIndex(e => e.Code, "UNQ_Code").IsUnique();
 
@@ -152,6 +170,14 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("IndicatorCategory");
 
+            entity.HasIndex(e => e.FkIndicatorId, "IX_IndicatorCategory_FkIndicatorID");
+
+            entity.HasIndex(e => e.FkLkpCategoryDetailId, "IX_IndicatorCategory_FkLkpCategoryDetailID");
+
+            entity.HasIndex(e => e.FkLkpCategoryMasterId, "IX_IndicatorCategory_FkLkpCategoryMasterID");
+
+            entity.HasIndex(e => e.FkLkpCategoryTypeId, "IX_IndicatorCategory_FkLkpCategoryTypeID");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkIndicatorId).HasColumnName("FkIndicatorID");
             entity.Property(e => e.FkLkpCategoryDetailId).HasColumnName("FkLkpCategoryDetailID");
@@ -182,6 +208,12 @@ public partial class PmisContext : DbContext
         modelBuilder.Entity<IndicatorValue>(entity =>
         {
             entity.ToTable("IndicatorValue");
+
+            entity.HasIndex(e => e.FkIndicatorId, "IX_IndicatorValue_FkIndicatorID");
+
+            entity.HasIndex(e => e.FkLkpShiftId, "IX_IndicatorValue_FkLkpShiftID");
+
+            entity.HasIndex(e => e.FkLkpValueTypeId, "IX_IndicatorValue_FkLkpValueTypeID");
 
             entity.HasIndex(e => new { e.DateTime, e.FkIndicatorId, e.FkLkpShiftId, e.FkLkpValueTypeId }, "UNQ_Key").IsUnique();
 
@@ -218,6 +250,8 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("LookUpDestination");
 
+            entity.HasIndex(e => e.FkLookUpId, "IX_LookUpDestination_FkLookUpID");
+
             entity.HasIndex(e => new { e.ColumnName, e.TableName, e.FkLookUpId }, "UNQ_LookUpDestination").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
@@ -239,6 +273,8 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("LookUpValue");
 
+            entity.HasIndex(e => e.FkLookUpId, "IX_LookUpValue_FkLookUpID");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.FkLookUpId).HasColumnName("FkLookUpID");
 
@@ -258,6 +294,8 @@ public partial class PmisContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("User");
+
+            entity.HasIndex(e => e.UserName, "UNQ_UserName").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.PasswordHash).IsUnicode(false);
