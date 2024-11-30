@@ -64,7 +64,7 @@ namespace PMIS.Bases
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("عملیات مقداردهی اولیه اطلاهات پایه موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("عملیات مقداردهی اولیه اطلاعات پایه موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
