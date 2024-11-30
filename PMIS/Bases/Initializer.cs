@@ -646,7 +646,7 @@ namespace PMIS.Bases
             private void SetBaseClaims(PmisContext context)
             {
                 context.Database.EnsureCreated();
-                if (!context.ClaimOnSystems.Any())
+                if (!context.ClaimUserOnSystems.Any())
                 {
                     List<Models.ClaimUserOnSystem> claim = new List<Models.ClaimUserOnSystem>();
                     #region PrimaryClaims
@@ -659,7 +659,7 @@ namespace PMIS.Bases
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnIndicatorForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnSystemForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorValueForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
-                    context.ClaimOnSystems.AddRange(claim);
+                    context.ClaimUserOnSystems.AddRange(claim);
                     context.SaveChanges();
                     //------------------------------------
                     #endregion

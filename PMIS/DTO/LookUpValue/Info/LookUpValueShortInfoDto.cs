@@ -19,7 +19,7 @@ namespace PMIS.DTO.LookUpValue.Info
         public async Task<LookUpValueShortInfoDto> extraMapFromBaseModel(PMIS.Models.LookUpValue baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
-            this.ClaimOnSystemsInfo = await Task.WhenAll(baseModel.ClaimOnSystems.Select(v => (new ClaimUserOnSystemTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
+            this.ClaimOnSystemsInfo = await Task.WhenAll(baseModel.ClaimUserOnSystems.Select(v => (new ClaimUserOnSystemTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
             this.ClaimUserOnIndicatorsInfo = await Task.WhenAll(baseModel.ClaimUserOnIndicators.Select(v => (new ClaimUserOnIndicatorTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
             this.LookUpDestinationsInfo = await Task.WhenAll(baseModel.FkLookUp.LookUpDestinations.Select(v => (new LookUpDestinationTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
             this.FkLookUpInfo = await (new LookUpTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLookUp);
