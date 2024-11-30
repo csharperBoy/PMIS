@@ -1341,5 +1341,20 @@ namespace PMIS.Forms
                 MessageBox.Show("عملیات بارگیری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void IndicatorValueForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                btnApply_Click(this, new EventArgs());
+            }
+        }
+
+        private void IndicatorValueForm_Leave(object sender, EventArgs e)
+        {
+            
+            this.Close();
+        }
     }
 }
