@@ -105,7 +105,7 @@ namespace PMIS.Bases
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form03", Display = "فرم 3", OrderNum = 10 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form04", Display = "فرم 4", OrderNum = 11 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form05", Display = "فرم 5", OrderNum = 12 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form061", Display = "فرم 6", OrderNum = 13 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form06", Display = "فرم 6", OrderNum = 13 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form07", Display = "فرم 7", OrderNum = 14 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form08", Display = "فرم 8", OrderNum = 15 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Form09", Display = "فرم 9", OrderNum = 16 });
