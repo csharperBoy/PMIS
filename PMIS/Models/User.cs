@@ -29,3 +29,4 @@ public partial class User
 
     public virtual LookUpValue FkLkpWorkCalendar { get; set; } = null!;
 }
+ 
