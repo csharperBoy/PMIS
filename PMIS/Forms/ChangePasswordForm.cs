@@ -55,7 +55,7 @@ namespace PMIS.Forms
             try
             {
                 IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ChangePasswordForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ChangePasswordForm"))
                 {
                     Close();
                     return false;

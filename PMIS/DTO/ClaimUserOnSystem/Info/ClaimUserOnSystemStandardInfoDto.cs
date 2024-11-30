@@ -16,12 +16,12 @@ namespace PMIS.DTO.ClaimUserOnSystem.Info
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
-            this.FkLkpClaimOnSystemInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaimOnSystem);
+            this.FkLkpClaimUserOnSystemInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaimOnSystem);
             this.FkUserInfo = await (new UserShortInfoDto()).extraMapFromBaseModel(baseModel.FkUser);
             return this;
         }
 
-        public virtual LookUpValueShortInfoDto FkLkpClaimOnSystemInfo { get; set; }
+        public virtual LookUpValueShortInfoDto FkLkpClaimUserOnSystemInfo { get; set; }
 
         public virtual UserShortInfoDto FkUserInfo { get; set; }
     }

@@ -78,7 +78,7 @@ namespace PMIS.Forms
             try
             {
                 IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "IndicatorForm"))
                 {
                     this.Close();
                     return false;

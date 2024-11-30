@@ -40,27 +40,27 @@ namespace PMIS.Forms
             try
             {
                 IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ChangePasswordForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ChangePasswordForm"))
                 {
                     UsersToolStripMenuItem.Visible = false;
                 }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "UserForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "UserForm"))
                 {
                     UsersToolStripMenuItem.Visible = false;
                 }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "IndicatorForm"))
                 {
                     IndicatorsToolStripMenuItem.Visible = false;
                 }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
                 {
                     ClaimUserOnIndicatorToolStripMenuItem.Visible = false;
                 }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnSystemForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ClaimUserOnSystemForm"))
                 {
                     ClaimUserOnSystemToolStripMenuItem.Visible = false;
                 }
-                if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "IndicatorValueForm"))
                 {
                     IndicatorValueToolStripMenuItem.Visible = false;
                 }

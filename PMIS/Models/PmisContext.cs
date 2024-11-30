@@ -56,12 +56,12 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("ClaimUserOnSystem");
 
-            entity.HasIndex(e => new { e.FkLkpClaimOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
+            entity.HasIndex(e => new { e.FkLkpClaimUserOnSystemId, e.FkUserId }, "UNQ_UserClaim").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
 
             entity.HasOne(d => d.FkLkpClaimOnSystem).WithMany(p => p.ClaimOnSystems)
-                .HasForeignKey(d => d.FkLkpClaimOnSystemId)
+                .HasForeignKey(d => d.FkLkpClaimUserOnSystemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ClaimOnSystem_LookUpValue");
 
