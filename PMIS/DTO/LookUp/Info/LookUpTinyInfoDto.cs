@@ -24,8 +24,8 @@ namespace PMIS.DTO.LookUp.Info
 
         public string? Description { get; set; }
 
+        public bool FlgLogicalDelete { get; set; }
 
-      
     }
 }
 

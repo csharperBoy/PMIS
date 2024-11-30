@@ -450,22 +450,11 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<UserAddResponseDto> list) = await userService.AddGroup(lstAddRequest);
-                bool isSuccess = await userService.AddRange(lstAddRequest);
+                 bool isSuccess = await userService.AddRange(lstAddRequest);
 
-                if (isSuccess)
+                if (!isSuccess)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    //string errorMessage = String.Join("\n", list.Select((x, index) => new
-                    //{
-                    //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
-                    //    IsSuccess = x.IsSuccess
-                    //})
-                    //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                  MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
