@@ -707,9 +707,13 @@ namespace PMIS.Forms
                 {
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value;
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp1"].Value = new string('*', dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].ToString().Length);
-                    dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value + " + " + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
+                    dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value = Hasher.HasherHMACSHA512.Hash(Helper.Convert.CapitalizeFirstLetter(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value.ToString()) + " + " + dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value);
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
                 }
+            }
+            else if (dgvResultsList.Columns[columnIndex].Name == "UserName" && rowIndex >= 0)
+            {
+                dgvResultsList.Rows[rowIndex].Cells["UserName"].Value = Helper.Convert.CapitalizeFirstLetter(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value.ToString());
             }
         }
 

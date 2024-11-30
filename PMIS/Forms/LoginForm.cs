@@ -1,6 +1,7 @@
 ﻿using Generic.Base;
 using Generic.Base.Handler.Map;
 using Generic.Base.Handler.Map.Abstract;
+using Generic.Helper;
 using Generic.Service.DTO.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +41,7 @@ namespace PMIS.Forms
         {
             try
             {
-                string hashText = Hasher.HasherHMACSHA512.Hash(textBoxUsername.Text.Trim() + " + " + textBoxPassword.Text);
+                string hashText = Hasher.HasherHMACSHA512.Hash(Helper.Convert.CapitalizeFirstLetter(textBoxUsername.Text.Trim()) + " + " + textBoxPassword.Text);
 
                 (bool result, IEnumerable<UserSearchResponseDto> users) = await userService.Search(new GenericSearchRequestDto()
                 {

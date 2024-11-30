@@ -20,6 +20,13 @@ namespace Generic.Helper
     {
         public static class Convert
         {
+            public static string CapitalizeFirstLetter(string input)
+            {
+                if (string.IsNullOrEmpty(input))
+                    return input;
+
+                return char.ToUpper(input[0]) + input.Substring(1).ToLower();
+            }
             public static string ConvertObjectToJson(object? _obj, ReferenceLoopHandling _referenceLoop = ReferenceLoopHandling.Serialize, PreserveReferencesHandling _PreserveReferencesHandling = PreserveReferencesHandling.Objects, int _maxDepth = 1)
             {
                 try
