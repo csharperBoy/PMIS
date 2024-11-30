@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_27C886AD7174433A9A032CFAA206F1D3"
+        "MsmKey" = "8:_280B30C411974C809A9D892BE2AE0267"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_280B30C411974C809A9D892BE2AE0267"
+        "MsmKey" = "8:_548A3C9D0968438AB162D93500C05B21"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +43,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -59,6 +67,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -90,9 +114,9 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27C886AD7174433A9A032CFAA206F1D3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_548A3C9D0968438AB162D93500C05B21"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\Desktop\\Icon.ico"
+            "SourcePath" = "8:..\\PMIS\\Icon.ico"
             "TargetName" = "8:Icon.ico"
             "Tag" = "8:"
             "Folder" = "8:_9C6A2861F27A460F88BC7C8786BF0ED1"
@@ -167,7 +191,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SetupPMIS"
         "ProductCode" = "8:{E71CC9AC-B57F-449C-B623-F172C2F05689}"
-        "PackageCode" = "8:{BB2C32FB-4941-494B-9B49-B748F3BB209B}"
+        "PackageCode" = "8:{D80BD270-5135-4234-AA86-291A35B2A202}"
         "UpgradeCode" = "8:{81E5ED7C-BDB7-40E4-9B70-E8BB2EC33FBD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -287,6 +311,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_58071F2D28BE403C9FF59EFB7716CEED"
+            {
+            "Name" = "8:PMIS"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_280B30C411974C809A9D892BE2AE0267"
+            "Folder" = "8:_D2DA5A0E808448E785437C8D8B7191AE"
+            "WorkingFolder" = "8:_9C6A2861F27A460F88BC7C8786BF0ED1"
+            "Icon" = "8:_548A3C9D0968438AB162D93500C05B21"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9550193369EE4B95AA355A538D367264"
             {
             "Name" = "8:PMIS"
@@ -298,7 +336,7 @@
             "Target" = "8:_280B30C411974C809A9D892BE2AE0267"
             "Folder" = "8:_EACB8EC51760489E91B73618D6960A00"
             "WorkingFolder" = "8:_9C6A2861F27A460F88BC7C8786BF0ED1"
-            "Icon" = "8:_27C886AD7174433A9A032CFAA206F1D3"
+            "Icon" = "8:_548A3C9D0968438AB162D93500C05B21"
             "Feature" = "8:"
             }
         }
@@ -702,7 +740,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_280B30C411974C809A9D892BE2AE0267"
             {
-            "SourcePath" = "8:..\\PMIS\\bin\\Release\\net8.0-windows7.0\\publish\\win-x64\\PMIS.exe"
+            "SourcePath" = "8:..\\PMIS\\bin\\Release\\net9.0-windows7.0\\publish\\win-x64\\PMIS.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9C6A2861F27A460F88BC7C8786BF0ED1"
