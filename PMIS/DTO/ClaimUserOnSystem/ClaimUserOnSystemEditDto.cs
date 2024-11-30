@@ -57,7 +57,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
 
         //public bool? FlgLogicalDelete { get; set; }
 
-        //public virtual LookUpValue FkLkpClaimOnSystem { get; set; } = null!;
+        //public virtual LookUpValue FkLkpClaimUserOnSystem { get; set; } = null!;
 
         //public virtual User FkUser { get; set; } = null!;
     }

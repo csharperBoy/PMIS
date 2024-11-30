@@ -16,7 +16,7 @@ namespace PMIS.DTO.ClaimUserOnSystem.Info
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
-            this.FkLkpClaimUserOnSystemInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaimOnSystem);
+            this.FkLkpClaimUserOnSystemInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpClaimUserOnSystem);
             this.FkUserInfo = await (new UserShortInfoDto()).extraMapFromBaseModel(baseModel.FkUser);
             return this;
         }

@@ -60,7 +60,7 @@ public partial class PmisContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
 
-            entity.HasOne(d => d.FkLkpClaimOnSystem).WithMany(p => p.ClaimOnSystems)
+            entity.HasOne(d => d.FkLkpClaimUserOnSystem).WithMany(p => p.ClaimOnSystems)
                 .HasForeignKey(d => d.FkLkpClaimUserOnSystemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ClaimOnSystem_LookUpValue");

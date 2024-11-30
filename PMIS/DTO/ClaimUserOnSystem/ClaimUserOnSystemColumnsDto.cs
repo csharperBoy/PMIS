@@ -52,12 +52,12 @@ namespace PMIS.DTO.ClaimUserOnSystem
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimOnSystem")).Single().Title,
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimUserOnSystem")).Single().Title,
                    Name = "FkLkpClaimUserOnSystemId",
                    DataPropertyName = "FkLkpClaimUserOnSystemId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimOnSystem"),
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem"),
                    ReadOnly = false,
                    Visible = true,
                     MinimumWidth = 200,
@@ -98,12 +98,12 @@ namespace PMIS.DTO.ClaimUserOnSystem
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimOnSystem")).Single().Title,
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpClaimUserOnSystem")).Single().Title,
                    Name = "FkLkpClaimUserOnSystemId",
                    DataPropertyName = "FkLkpClaimUserOnSystemId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimOnSystem"),
+                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem"),
                    ReadOnly = true,
                    Visible = true,
                },
