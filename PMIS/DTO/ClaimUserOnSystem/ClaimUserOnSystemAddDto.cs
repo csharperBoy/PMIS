@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PMIS.DTO.ClaimUserOnSystem
 {
-    public class ClaimOnSystemAddRequestDto : GenericAddRequestDto
+    public class ClaimUserOnSystemAddRequestDto : GenericAddRequestDto
     {
         // public int Id { get; set; }
 
@@ -26,7 +26,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
 
       //  public virtual User? FkUser { get; set; }
     }
-    public class ClaimOnSystemAddResponseDto : GenericAddResponseDto
+    public class ClaimUserOnSystemAddResponseDto : GenericAddResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
            where TDestination : class
@@ -34,7 +34,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
         {
             if (source is Models.ClaimUserOnSystem sourceModel)
             {
-                if (destination is ClaimOnSystemAddResponseDto destinationModel)
+                if (destination is ClaimUserOnSystemAddResponseDto destinationModel)
                 {
                     destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
                 }

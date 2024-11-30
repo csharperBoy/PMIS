@@ -11,7 +11,7 @@ using PMIS.DTO.ClaimUserOnSystem.Info;
 
 namespace PMIS.DTO.ClaimUserOnSystem
 {
-    public class ClaimOnSystemSearchResponseDto : ClaimUserOnSystemStandardInfoDto
+    public class ClaimUserOnSystemSearchResponseDto : ClaimUserOnSystemStandardInfoDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
             where TDestination : class
@@ -19,9 +19,9 @@ namespace PMIS.DTO.ClaimUserOnSystem
         {
             if (source is Models.ClaimUserOnSystem sourceModel)
             {
-                if (destination is ClaimOnSystemSearchResponseDto destinationModel)
+                if (destination is ClaimUserOnSystemSearchResponseDto destinationModel)
                 {
-                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<ClaimUserOnSystemStandardInfoDto, ClaimOnSystemSearchResponseDto>(await destinationModel.extraMapFromBaseModel(sourceModel));
+                    await GenericMapHandlerFactory.GetMapper(MappingMode.Auto).Map<ClaimUserOnSystemStandardInfoDto, ClaimUserOnSystemSearchResponseDto>(await destinationModel.extraMapFromBaseModel(sourceModel));
                 }
 
             }

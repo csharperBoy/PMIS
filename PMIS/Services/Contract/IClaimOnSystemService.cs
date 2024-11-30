@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services.Contract
 {
-    public interface IClaimOnSystemService : IGenericNormalService<ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>
+    public interface IClaimOnSystemService : IGenericNormalService<ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto, ClaimUserOnSystemSearchResponseDto>
     {
-        Task<IEnumerable<ClaimOnSystemSearchResponseDto>> GetCurrentUserClaims();
+        Task<IEnumerable<ClaimUserOnSystemSearchResponseDto>> GetCurrentUserClaims();
     }
 }

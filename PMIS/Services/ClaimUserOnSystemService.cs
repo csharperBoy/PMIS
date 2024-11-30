@@ -14,17 +14,17 @@ using System.Threading.Tasks;
 
 namespace PMIS.Services
 {
-    public class ClaimUserOnSystemService : GenericNormalService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto, ClaimOnSystemSearchResponseDto>
+    public class ClaimUserOnSystemService : GenericNormalService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto, ClaimUserOnSystemSearchResponseDto>
        , IClaimOnSystemService
     {
-        public ClaimUserOnSystemService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimOnSystemAddRequestDto, ClaimOnSystemAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimOnSystemEditRequestDto, ClaimOnSystemEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimOnSystemDeleteRequestDto, ClaimOnSystemDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, ClaimUserOnSystem, ClaimOnSystemSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
+        public ClaimUserOnSystemService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
         }
-        public async Task<IEnumerable<ClaimOnSystemSearchResponseDto>> GetCurrentUserClaims()
+        public async Task<IEnumerable<ClaimUserOnSystemSearchResponseDto>> GetCurrentUserClaims()
         {
             try
             {
-                (bool isSuccess, IEnumerable<ClaimOnSystemSearchResponseDto> result) = await Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+                (bool isSuccess, IEnumerable<ClaimUserOnSystemSearchResponseDto> result) = await Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
                 {
                     filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
                     {

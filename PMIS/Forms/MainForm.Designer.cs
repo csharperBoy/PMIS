@@ -38,7 +38,7 @@
             UsersToolStripMenuItem = new ToolStripMenuItem();
             IndicatorsToolStripMenuItem = new ToolStripMenuItem();
             ClaimUserOnIndicatorToolStripMenuItem = new ToolStripMenuItem();
-            ClaimOnSystemToolStripMenuItem = new ToolStripMenuItem();
+            ClaimUserOnSystemToolStripMenuItem = new ToolStripMenuItem();
             IndicatorValueToolStripMenuItem = new ToolStripMenuItem();
             flowLayoutPanelMain = new FlowLayoutPanel();
             tabControlMain = new TabControlWithCloseTab();
@@ -86,7 +86,7 @@
             // 
             // BaseInfoToolStripMenuItem
             // 
-            BaseInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { UsersToolStripMenuItem, IndicatorsToolStripMenuItem, ClaimUserOnIndicatorToolStripMenuItem, ClaimOnSystemToolStripMenuItem });
+            BaseInfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { UsersToolStripMenuItem, IndicatorsToolStripMenuItem, ClaimUserOnIndicatorToolStripMenuItem, ClaimUserOnSystemToolStripMenuItem });
             BaseInfoToolStripMenuItem.Name = "BaseInfoToolStripMenuItem";
             BaseInfoToolStripMenuItem.Size = new Size(80, 20);
             BaseInfoToolStripMenuItem.Text = "اطلاعات پایه";
@@ -113,12 +113,12 @@
             ClaimUserOnIndicatorToolStripMenuItem.Text = "مدیریت دسترسی به شاخص‌ها";
             ClaimUserOnIndicatorToolStripMenuItem.Click += ClaimUserOnIndicatorToolStripMenuItem_Click;
             // 
-            // ClaimOnSystemToolStripMenuItem
+            // ClaimUserOnSystemToolStripMenuItem
             // 
-            ClaimOnSystemToolStripMenuItem.Name = "ClaimOnSystemToolStripMenuItem";
-            ClaimOnSystemToolStripMenuItem.Size = new Size(219, 22);
-            ClaimOnSystemToolStripMenuItem.Text = "مدیریت دسترسی به فرم‌ها";
-            ClaimOnSystemToolStripMenuItem.Click += ClaimOnSystemToolStripMenuItem_Click;
+            ClaimUserOnSystemToolStripMenuItem.Name = "ClaimUserOnSystemToolStripMenuItem";
+            ClaimUserOnSystemToolStripMenuItem.Size = new Size(219, 22);
+            ClaimUserOnSystemToolStripMenuItem.Text = "مدیریت دسترسی به فرم‌ها";
+            ClaimUserOnSystemToolStripMenuItem.Click += ClaimOnSystemToolStripMenuItem_Click;
             // 
             // IndicatorValueToolStripMenuItem
             // 
@@ -181,6 +181,6 @@
         private ToolStripMenuItem ClaimUserOnIndicatorToolStripMenuItem;
         private ToolStripMenuItem IndicatorValueToolStripMenuItem;
         private ToolStripMenuItem ChangePasswordToolStripMenuItem;
-        private ToolStripMenuItem ClaimOnSystemToolStripMenuItem;
+        private ToolStripMenuItem ClaimUserOnSystemToolStripMenuItem;
     }
 }

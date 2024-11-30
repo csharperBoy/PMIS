@@ -15,7 +15,7 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 
 namespace PMIS.DTO.ClaimUserOnSystem
 {
-    public class ClaimOnSystemEditRequestDto : GenericEditRequestDto
+    public class ClaimUserOnSystemEditRequestDto : GenericEditRequestDto
     {
         public static async Task<TDestination> BeforeMap<TSource, TDestination>(TSource source, TDestination destination)
             where TDestination : class
@@ -35,7 +35,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                            }
                        )
                );
-            if (source is ClaimOnSystemEditRequestDto sourceModel)
+            if (source is ClaimUserOnSystemEditRequestDto sourceModel)
             {
                 if (destination is Models.ClaimUserOnSystem destinationModel)
                 {
@@ -61,7 +61,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
 
         //public virtual User FkUser { get; set; } = null!;
     }
-    public class ClaimOnSystemEditResponseDto : GenericEditResponseDto
+    public class ClaimUserOnSystemEditResponseDto : GenericEditResponseDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
            where TDestination : class
@@ -69,7 +69,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
         {
             if (source is Models.ClaimUserOnSystem sourceModel)
             {
-                if (destination is ClaimOnSystemEditResponseDto destinationModel)
+                if (destination is ClaimUserOnSystemEditResponseDto destinationModel)
                 {
                     destinationModel.IsSuccess = sourceModel.Id != 0 ? true : false;
                 }

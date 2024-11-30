@@ -23,11 +23,11 @@ namespace PMIS.Forms
     {
 
         #region Variables
-        private List<ClaimOnSystemAddRequestDto> lstAddRequest;
-        private List<ClaimOnSystemEditRequestDto> lstEditRequest;
-        private List<ClaimOnSystemDeleteRequestDto> lstLogicalDeleteRequest;
-        private List<ClaimOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
-        private List<ClaimOnSystemDeleteRequestDto> lstRecycleRequest;
+        private List<ClaimUserOnSystemAddRequestDto> lstAddRequest;
+        private List<ClaimUserOnSystemEditRequestDto> lstEditRequest;
+        private List<ClaimUserOnSystemDeleteRequestDto> lstLogicalDeleteRequest;
+        private List<ClaimUserOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
+        private List<ClaimUserOnSystemDeleteRequestDto> lstRecycleRequest;
         private ClaimUserOnSystemColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -62,9 +62,9 @@ namespace PMIS.Forms
                 // InitializeComponent();
                 columns = new ClaimUserOnSystemColumnsDto();
                 await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
-                lstLogicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
-                lstPhysicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
-                lstRecycleRequest = new List<ClaimOnSystemDeleteRequestDto>();
+                lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
                 GenerateDgvFilterColumnsInitialize();
                 GenerateDgvResultColumnsInitialize();
                 FiltersInitialize();
@@ -83,7 +83,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnSystemForm"))
                 {
                     this.Close();
@@ -381,11 +381,11 @@ namespace PMIS.Forms
         public async Task SearchEntity()
         {
             isLoaded = false;
-            lstAddRequest = new List<ClaimOnSystemAddRequestDto>();
-            lstEditRequest = new List<ClaimOnSystemEditRequestDto>();
-            lstLogicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
-            lstRecycleRequest = new List<ClaimOnSystemDeleteRequestDto>();
+            lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
+            lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
+            lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+            lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+            lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
 
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
@@ -433,8 +433,8 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<ClaimOnSystemSearchResponseDto> list) = await claimOnSystemService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<ClaimOnSystemSearchResponseDto>(list.ToList());
+            (bool isSuccess, IEnumerable<ClaimUserOnSystemSearchResponseDto> list) = await claimOnSystemService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<ClaimUserOnSystemSearchResponseDto>(list.ToList());
 
             if (isSuccess)
             {
@@ -455,7 +455,7 @@ namespace PMIS.Forms
         {
             try
             {
-                lstAddRequest = new List<ClaimOnSystemAddRequestDto>();
+                lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
@@ -464,7 +464,7 @@ namespace PMIS.Forms
 
                         if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
                         {
-                            ClaimOnSystemAddRequestDto addRequest = new ClaimOnSystemAddRequestDto();
+                            ClaimUserOnSystemAddRequestDto addRequest = new ClaimUserOnSystemAddRequestDto();
 
                             addRequest = AddMaping(row);
                             lstAddRequest.Add(addRequest);
@@ -473,7 +473,7 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemAddResponseDto> list) = await claimOnSystemService.AddGroup(lstAddRequest);
+                //(bool isSuccess, IEnumerable<ClaimUserOnSystemAddResponseDto> list) = await claimOnSystemService.AddGroup(lstAddRequest);
                 bool isSuccess = await claimOnSystemService.AddRange(lstAddRequest);
 
                 if (isSuccess)
@@ -502,7 +502,7 @@ namespace PMIS.Forms
         {
             try
             {
-                lstEditRequest = new List<ClaimOnSystemEditRequestDto>();
+                lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
@@ -510,7 +510,7 @@ namespace PMIS.Forms
                     {
                         if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
                         {
-                            ClaimOnSystemEditRequestDto editRequest = new ClaimOnSystemEditRequestDto();
+                            ClaimUserOnSystemEditRequestDto editRequest = new ClaimUserOnSystemEditRequestDto();
 
                             editRequest = EditMaping(row);
                             lstEditRequest.Add(editRequest);
@@ -519,7 +519,7 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemEditResponseDto> list) = await claimOnSystemService.EditGroup(lstEditRequest);
+                //(bool isSuccess, IEnumerable<ClaimUserOnSystemEditResponseDto> list) = await claimOnSystemService.EditGroup(lstEditRequest);
                 bool isSuccess = await claimOnSystemService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
@@ -541,12 +541,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
                 bool isSuccess = await claimOnSystemService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstLogicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
+                    lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
                 }
                 else
                 {
@@ -564,12 +564,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
                 bool isSuccess = await claimOnSystemService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstRecycleRequest = new List<ClaimOnSystemDeleteRequestDto>();
+                    lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
                 }
                 else
                 {
@@ -587,12 +587,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
+                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
                 bool isSuccess = await claimOnSystemService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstPhysicalDeleteRequest = new List<ClaimOnSystemDeleteRequestDto>();
+                    lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
                 }
                 else
                 {
@@ -656,7 +656,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimOnSystemDeleteRequestDto deleteRequest = new ClaimOnSystemDeleteRequestDto();
+                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -673,7 +673,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimOnSystemDeleteRequestDto deleteRequest = new ClaimOnSystemDeleteRequestDto();
+                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -690,7 +690,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimOnSystemDeleteRequestDto deleteRequest = new ClaimOnSystemDeleteRequestDto();
+                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -736,11 +736,11 @@ namespace PMIS.Forms
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
-        private ClaimOnSystemAddRequestDto AddMaping(DataGridViewRow row)
+        private ClaimUserOnSystemAddRequestDto AddMaping(DataGridViewRow row)
         {
             try
             {
-                ClaimOnSystemAddRequestDto addRequest = new ClaimOnSystemAddRequestDto();
+                ClaimUserOnSystemAddRequestDto addRequest = new ClaimUserOnSystemAddRequestDto();
 
                 var entityFields = addRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in dgvResultsList.Columns)
@@ -761,17 +761,17 @@ namespace PMIS.Forms
             }
         }
 
-        private ClaimOnSystemAddRequestDto AfterAddMapping(ClaimOnSystemAddRequestDto addRequest)
+        private ClaimUserOnSystemAddRequestDto AfterAddMapping(ClaimUserOnSystemAddRequestDto addRequest)
         {
             addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
             return addRequest;
         }
 
-        private ClaimOnSystemEditRequestDto EditMaping(DataGridViewRow row)
+        private ClaimUserOnSystemEditRequestDto EditMaping(DataGridViewRow row)
         {
             try
             {
-                ClaimOnSystemEditRequestDto editRequest = new ClaimOnSystemEditRequestDto();
+                ClaimUserOnSystemEditRequestDto editRequest = new ClaimUserOnSystemEditRequestDto();
                 var entityFields = editRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in dgvResultsList.Columns)
                 {
@@ -791,7 +791,7 @@ namespace PMIS.Forms
             }
         }
 
-        private ClaimOnSystemEditRequestDto AfterEditMapping(ClaimOnSystemEditRequestDto addRequest)
+        private ClaimUserOnSystemEditRequestDto AfterEditMapping(ClaimUserOnSystemEditRequestDto addRequest)
         {
             addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
             return addRequest;

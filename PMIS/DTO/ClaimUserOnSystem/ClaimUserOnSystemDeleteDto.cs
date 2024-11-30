@@ -16,7 +16,7 @@ using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 namespace PMIS.DTO.ClaimUserOnSystem
 {
 
-    public class ClaimOnSystemDeleteRequestDto : GenericDeleteRequestDto
+    public class ClaimUserOnSystemDeleteRequestDto : GenericDeleteRequestDto
     {
         public static async Task<TDestination> AfterMap<TSource, TDestination>(TSource source, TDestination destination)
           where TDestination : class
@@ -36,7 +36,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                             }
                         )
                 );
-            if (source is ClaimOnSystemDeleteRequestDto sourceModel)
+            if (source is ClaimUserOnSystemDeleteRequestDto sourceModel)
             {
                 if (destination is Models.ClaimUserOnSystem destinationModel)
                 {
@@ -49,7 +49,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
         }
         public int Id { get; set; }
     }
-    public class ClaimOnSystemDeleteResponseDto : GenericDeleteResponseDto
+    public class ClaimUserOnSystemDeleteResponseDto : GenericDeleteResponseDto
     {
         public int Id { get; set; }
     }

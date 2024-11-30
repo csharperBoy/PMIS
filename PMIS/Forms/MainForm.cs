@@ -39,7 +39,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ChangePasswordForm"))
                 {
                     UsersToolStripMenuItem.Visible = false;
@@ -58,7 +58,7 @@ namespace PMIS.Forms
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "ClaimUserOnSystemForm"))
                 {
-                    ClaimUserOnIndicatorToolStripMenuItem.Visible = false;
+                    ClaimUserOnSystemToolStripMenuItem.Visible = false;
                 }
                 if (!claims.Any(c => c.FkLkpClaimOnSystemInfo.Value == "IndicatorValueForm"))
                 {
