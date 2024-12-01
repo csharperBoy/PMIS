@@ -79,6 +79,7 @@ namespace PMIS.Forms
         }
         private async void CustomInitialize()
         {
+            chbRecycle.Visible = false;
             int selectedIndex = tabControl.SelectedIndex;
             AddNewTabPage(tabControl, this);
             if (await CheckSystemClaimsRequired())
@@ -376,7 +377,6 @@ namespace PMIS.Forms
         {
             try
             {
-                chbRecycle.Visible = false;
                 dgvResultsList.Columns["Edit"].Visible = !chbRecycle.Checked;
                 // dgvResultsList.Columns["LogicalDelete"].Visible = !chbRecycle.Checked;
                 dgvResultsList.Columns["Recycle"].Visible = chbRecycle.Checked;
