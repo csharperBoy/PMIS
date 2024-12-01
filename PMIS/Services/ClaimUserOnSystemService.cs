@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace PMIS.Services
 {
     public class ClaimUserOnSystemService : GenericNormalService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto, ClaimUserOnSystemSearchResponseDto>
-       , IClaimOnSystemService
+       , IClaimUserOnSystemService
     {
         public ClaimUserOnSystemService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {

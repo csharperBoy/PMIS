@@ -92,7 +92,7 @@ namespace PMIS
 
             #region ClaimUserOnSystem
             services.AddScoped<AbstractGenericRepository<ClaimUserOnSystem, PmisContext>, GenericSqlServerRepository<ClaimUserOnSystem, PmisContext>>();
-            services.AddScoped<IClaimOnSystemService, ClaimUserOnSystemService>();
+            services.AddScoped<IClaimUserOnSystemService, ClaimUserOnSystemService>();
             services.AddScoped<AbstractGenericNormalService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto, ClaimUserOnSystemSearchResponseDto>, GenericNormalService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto, ClaimUserOnSystemDeleteRequestDto, ClaimUserOnSystemDeleteResponseDto, ClaimUserOnSystemSearchResponseDto>>();
             services.AddScoped<AbstractGenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto>, GenericNormalAddService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemAddRequestDto, ClaimUserOnSystemAddResponseDto>>();
             services.AddScoped<AbstractGenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto>, GenericNormalEditService<PmisContext, ClaimUserOnSystem, ClaimUserOnSystemEditRequestDto, ClaimUserOnSystemEditResponseDto>>();

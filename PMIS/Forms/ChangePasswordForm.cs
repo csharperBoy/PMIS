@@ -25,14 +25,14 @@ namespace PMIS.Forms
     {
 
         #region Variables
-        private IClaimOnSystemService claimOnSystemService;
+        private IClaimUserOnSystemService claimUserOnSystemService;
         private IUserService userService;
         #endregion
 
-        public ChangePasswordForm(IClaimOnSystemService _claimOnSystemService, IUserService _userService)
+        public ChangePasswordForm(IClaimUserOnSystemService _claimUserOnSystemService, IUserService _userService)
         {
             InitializeComponent();
-            claimOnSystemService = _claimOnSystemService;
+            claimUserOnSystemService = _claimUserOnSystemService;
             userService = _userService;
             CustomInitialize();
         }
@@ -54,7 +54,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimUserOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ChangePasswordForm"))
                 {
                     Close();

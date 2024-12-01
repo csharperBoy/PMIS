@@ -118,7 +118,7 @@
             ClaimUserOnSystemToolStripMenuItem.Name = "ClaimUserOnSystemToolStripMenuItem";
             ClaimUserOnSystemToolStripMenuItem.Size = new Size(219, 22);
             ClaimUserOnSystemToolStripMenuItem.Text = "مدیریت دسترسی به فرم‌ها";
-            ClaimUserOnSystemToolStripMenuItem.Click += ClaimOnSystemToolStripMenuItem_Click;
+            ClaimUserOnSystemToolStripMenuItem.Click += ClaimUserOnSystemToolStripMenuItem_Click;
             // 
             // IndicatorValueToolStripMenuItem
             // 

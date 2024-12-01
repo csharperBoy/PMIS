@@ -98,12 +98,12 @@ public partial class PmisContext : DbContext
             entity.HasOne(d => d.FkLkpClaimUserOnSystem).WithMany(p => p.ClaimUserOnSystems)
                 .HasForeignKey(d => d.FkLkpClaimUserOnSystemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaimOnSystem_LookUpValue");
+                .HasConstraintName("FK_ClaimUserOnSystem_LookUpValue");
 
             entity.HasOne(d => d.FkUser).WithMany(p => p.ClaimUserOnSystems)
                 .HasForeignKey(d => d.FkUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClaimOnSystem_User");
+                .HasConstraintName("FK_ClaimUserOnSystem_User");
         });
 
         modelBuilder.Entity<Indicator>(entity =>

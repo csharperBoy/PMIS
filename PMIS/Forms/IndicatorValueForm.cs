@@ -54,7 +54,7 @@ namespace PMIS.Forms
         private IIndicatorValueService indicatorValueService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
-        private IClaimOnSystemService claimOnSystemService;
+        private IClaimUserOnSystemService claimUserOnSystemService;
         private DateTime dateTimeFrom;
         private DateTime dateTimeTo;
         private IEnumerable<IndicatorSearchResponseDto> indicators;
@@ -63,14 +63,14 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorValueForm(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorValueForm(IIndicatorValueService _IndicatorValueService, IIndicatorService _indicatorService, IClaimUserOnSystemService _claimUserOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             indicatorValueService = _IndicatorValueService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
-            claimOnSystemService = _claimOnSystemService;
+            claimUserOnSystemService = _claimUserOnSystemService;
             userService = _userService;
             tabControl = _tabControl;
             CustomInitialize();
@@ -107,7 +107,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimUserOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "IndicatorValueForm"))
                 {
                     this.Close();

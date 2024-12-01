@@ -33,18 +33,18 @@ namespace PMIS.Forms
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IUserService userService;
         private IIndicatorService indicatorService;
-        private IClaimOnSystemService claimOnSystemService;
+        private IClaimUserOnSystemService claimUserOnSystemService;
         private int fkUserId;
         private int fkIndicatorId;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public ClaimUserOnIndicatorForm(IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
+        public ClaimUserOnIndicatorForm(IClaimUserOnSystemService _claimUserOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
 
             InitializeComponent();
-            claimOnSystemService = _claimOnSystemService;
+            claimUserOnSystemService = _claimUserOnSystemService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
             indicatorService = _indicatorService;
@@ -85,7 +85,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimUserOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ClaimUserOnIndicatorForm"))
                 {
                     this.Close();

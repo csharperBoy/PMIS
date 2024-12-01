@@ -36,15 +36,15 @@ namespace PMIS.Forms
         private IUserService userService;
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
-        private IClaimOnSystemService claimOnSystemService;
+        private IClaimUserOnSystemService claimUserOnSystemService;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public UserForm(IUserService _userService, IClaimOnSystemService _claimOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public UserForm(IUserService _userService, IClaimUserOnSystemService _claimUserOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
-            claimOnSystemService = _claimOnSystemService;
+            claimUserOnSystemService = _claimUserOnSystemService;
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
@@ -81,7 +81,7 @@ namespace PMIS.Forms
         {
             try
             {
-                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimOnSystemService.GetCurrentUserClaims();
+                IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimUserOnSystemService.GetCurrentUserClaims();
                 if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "UserForm"))
                 {
                     this.Close();
@@ -673,7 +673,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
+                    ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, tempId, 0, tabControl);
                     frm.Show();
                 }
             }
