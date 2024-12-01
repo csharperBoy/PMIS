@@ -4,7 +4,7 @@ using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Indicator;
-using PMIS.DTO.Indicator;
+using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.LookUpValue.Info;
 using PMIS.DTO.User;
 using PMIS.Forms.Generic;
@@ -27,6 +27,7 @@ namespace PMIS.Forms
         private List<IndicatorDeleteRequestDto> lstLogicalDeleteRequest;
         private List<IndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorDeleteRequestDto> lstRecycleRequest;
+        private IEnumerable<IndicatorSearchResponseDto> lstSearchResponse;
         private IndicatorColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -349,21 +350,40 @@ namespace PMIS.Forms
 
         private async Task ShouldChangesBeSaved()
         {
-            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            if (lstSearchResponse != null && HasChangeResults())
             {
-                await Apply();
+                var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    await Apply();
+                }
             }
+        }
+
+        private bool HasChangeResults()
+        {
+            if (lstAddRequest.Count != 0 ||
+                lstEditRequest.Count != 0 ||
+                lstLogicalDeleteRequest.Count != 0 ||
+                lstPhysicalDeleteRequest.Count != 0 ||
+                lstRecycleRequest.Count != 0
+                )
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task SearchEntity()
         {
             isLoaded = false;
+            await ShouldChangesBeSaved();
             lstAddRequest = new List<IndicatorAddRequestDto>();
             lstEditRequest = new List<IndicatorEditRequestDto>();
             lstLogicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstPhysicalDeleteRequest = new List<IndicatorDeleteRequestDto>();
             lstRecycleRequest = new List<IndicatorDeleteRequestDto>();
+            lstSearchResponse = new List<IndicatorSearchResponseDto>();
 
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
@@ -411,12 +431,12 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<IndicatorSearchResponseDto> list) = await indicatorService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(list.ToList());
+            (bool isSuccess, lstSearchResponse) = await indicatorService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(lstSearchResponse.ToList());
 
             if (isSuccess)
             {
-                if (list.Count() == 0)
+                if (lstSearchResponse.Count() == 0)
                 {
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }

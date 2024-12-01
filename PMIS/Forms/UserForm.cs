@@ -19,6 +19,7 @@ using AutoMapper;
 using WSM.WindowsServices.FileManager;
 using Generic.Helper;
 using System.Data;
+using PMIS.DTO.Indicator;
 
 namespace PMIS.Forms
 {
@@ -31,6 +32,7 @@ namespace PMIS.Forms
         private List<UserDeleteRequestDto> lstLogicalDeleteRequest;
         private List<UserDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<UserDeleteRequestDto> lstRecycleRequest;
+        private IEnumerable<UserSearchResponseDto> lstSearchResponse;
         private UserColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -359,16 +361,34 @@ namespace PMIS.Forms
 
         private async Task ShouldChangesBeSaved()
         {
-            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            if (lstSearchResponse != null && HasChangeResults())
             {
-                await Apply();
+                var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    await Apply();
+                }
             }
+        }
+
+        private  bool HasChangeResults()
+        {
+            if (lstAddRequest.Count != 0 ||
+                lstEditRequest.Count != 0 ||
+                lstLogicalDeleteRequest.Count != 0 ||
+                lstPhysicalDeleteRequest.Count != 0 ||
+                lstRecycleRequest.Count != 0
+                )
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task SearchEntity()
         {
             isLoaded = false;
+            await ShouldChangesBeSaved();
             lstAddRequest = new List<UserAddRequestDto>();
             lstEditRequest = new List<UserEditRequestDto>();
             lstLogicalDeleteRequest = new List<UserDeleteRequestDto>();
@@ -421,12 +441,12 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<UserSearchResponseDto> list) = await userService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<UserSearchResponseDto>(list.ToList());
+            (bool isSuccess, lstSearchResponse) = await userService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<UserSearchResponseDto>(lstSearchResponse.ToList());
 
             if (isSuccess)
             {
-                if (list.Count() == 0)
+                if (lstSearchResponse.Count() == 0)
                 {
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }

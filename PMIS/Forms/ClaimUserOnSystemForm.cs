@@ -28,6 +28,7 @@ namespace PMIS.Forms
         private List<ClaimUserOnSystemDeleteRequestDto> lstLogicalDeleteRequest;
         private List<ClaimUserOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<ClaimUserOnSystemDeleteRequestDto> lstRecycleRequest;
+        private IEnumerable<ClaimUserOnSystemSearchResponseDto> lstSearchResponse;
         private ClaimUserOnSystemColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -381,16 +382,34 @@ namespace PMIS.Forms
 
         private async Task ShouldChangesBeSaved()
         {
-            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            if (lstSearchResponse != null && HasChangeResults())
             {
-                await Apply();
+                var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    await Apply();
+                }
             }
+        }
+
+        private bool HasChangeResults()
+        {
+            if (lstAddRequest.Count != 0 ||
+                lstEditRequest.Count != 0 ||
+                lstLogicalDeleteRequest.Count != 0 ||
+                lstPhysicalDeleteRequest.Count != 0 ||
+                lstRecycleRequest.Count != 0
+                )
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task SearchEntity()
         {
             isLoaded = false;
+            await ShouldChangesBeSaved();
             lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
             lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
             lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
@@ -443,12 +462,12 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, IEnumerable<ClaimUserOnSystemSearchResponseDto> list) = await claimUserOnSystemService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<ClaimUserOnSystemSearchResponseDto>(list.ToList());
+            (bool isSuccess, lstSearchResponse) = await claimUserOnSystemService.Search(searchRequest);
+            dgvResultsList.DataSource = new BindingList<ClaimUserOnSystemSearchResponseDto>(lstSearchResponse.ToList());
 
             if (isSuccess)
             {
-                if (list.Count() == 0)
+                if (lstSearchResponse.Count() == 0)
                 {
                     MessageBox.Show("موردی یافت نشد!!!", "هشدار", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
