@@ -137,7 +137,7 @@ namespace PMIS.Forms
 
         private async void NormalForm_Leave(object sender, EventArgs e)
         {
-            // await ShouldChangesBeSaved();
+            await ShouldChangesBeSaved();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)

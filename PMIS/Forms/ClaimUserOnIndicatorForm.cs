@@ -139,7 +139,7 @@ namespace PMIS.Forms
 
         private async void NormalForm_Leave(object sender, EventArgs e)
         {
-            // await ShouldChangesBeSaved();
+            await ShouldChangesBeSaved();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -201,7 +201,7 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
-               
+
             }
             catch (Exception ex)
             {
@@ -346,7 +346,7 @@ namespace PMIS.Forms
                             comboBoxColumn.DisplayMember = "UserName";
                             comboBoxColumn.ValueMember = "Id";
                             // comboBoxColumn.SelectedIndex = 0;
-                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0 ;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                         }
                     }
 
