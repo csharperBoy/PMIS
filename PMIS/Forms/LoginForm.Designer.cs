@@ -41,6 +41,7 @@
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.Size = new Size(100, 23);
             textBoxUsername.TabIndex = 1;
+            textBoxUsername.KeyPress += textBoxEntry_KeyPress;
             // 
             // textBoxPassword
             // 
@@ -49,6 +50,7 @@
             textBoxPassword.PasswordChar = '●';
             textBoxPassword.Size = new Size(100, 23);
             textBoxPassword.TabIndex = 2;
+            textBoxPassword.KeyPress += textBoxEntry_KeyPress;
             // 
             // labelUsername
             // 
