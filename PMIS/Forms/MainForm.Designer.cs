@@ -170,7 +170,7 @@
 
         #endregion
         private FlowLayoutPanel flowLayoutPanelMain;
-        private TabControlWithCloseTab tabControlMain;
+        private TabControl tabControlMain;
         private MenuStrip menuStripMain;
         private ToolStripMenuItem FileToolStripMenuItem;
         private ToolStripMenuItem HelpToolStripMenuItem;

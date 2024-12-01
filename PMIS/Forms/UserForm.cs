@@ -122,6 +122,7 @@ namespace PMIS.Forms
             panel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(panel);
             form.Show();
+            tabControl.DoubleClick += CloseTabPage;
             tabControl.SelectedTab = tabPage;
         }
 
@@ -132,11 +133,7 @@ namespace PMIS.Forms
 
         private async void NormalForm_Leave(object sender, EventArgs e)
         {
-            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                await Apply();
-            }
+            // await ShouldChangesBeSaved();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)
@@ -348,6 +345,24 @@ namespace PMIS.Forms
             {
 
                 throw;
+            }
+        }
+
+        private async void CloseTabPage(object? sender, EventArgs e)
+        {
+            if (tabControl.Controls[tabControl.SelectedIndex].Controls[0].Controls[0] == this)
+            {
+                await ShouldChangesBeSaved();
+                tabControl.DoubleClick -= CloseTabPage;
+            }
+        }
+
+        private async Task ShouldChangesBeSaved()
+        {
+            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                await Apply();
             }
         }
 
