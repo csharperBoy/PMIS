@@ -26,7 +26,6 @@ namespace PMIS.DTO.LookUpValue.Info
 
         public string? Description { get; set; }
 
-        
-
+        public bool? FlgLogicalDelete { get; set; }
     }
 }

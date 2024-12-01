@@ -48,7 +48,7 @@ namespace PMIS.Services
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
 
-                return list;
+                return list.Where(x => x.FlgLogicalDelete != true);
             }
             catch (Exception)
             {
@@ -79,9 +79,9 @@ namespace PMIS.Services
                     }
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
-                list = list.Where(l => l.FkLookUpInfo.Code == _code);
+                list = list.Where(l => l.FkLookUpInfo.Code == _code && l.FlgLogicalDelete != true);
 
-                return list.Single().LookUpValuesInfo;
+                return list.Single().LookUpValuesInfo.Where(x => x.FlgLogicalDelete != true);
             }
             catch (Exception)
             {
@@ -93,7 +93,6 @@ namespace PMIS.Services
             try
             {
                 IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true);
-
                 return await Task.FromResult(result.Single().LookUpValuesInfo);
             }
             catch (Exception)
@@ -105,9 +104,9 @@ namespace PMIS.Services
         {
             try
             {
-                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true );
+                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true);
 
-                return await Task.FromResult(result.Select(x=> x.FkLookUpInfo));
+                return await Task.FromResult(result.Select(x => x.FkLookUpInfo).Where(l => l.FlgLogicalDelete != true));
             }
             catch (Exception)
             {
