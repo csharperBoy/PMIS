@@ -130,6 +130,15 @@ namespace PMIS.Forms
 
         }
 
+        private async void NormalForm_Leave(object sender, EventArgs e)
+        {
+            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                await Apply();
+            }
+        }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             await SearchEntity();
@@ -137,21 +146,7 @@ namespace PMIS.Forms
 
         private async void btnApply_Click(object sender, EventArgs e)
         {
-            try
-            {
-                await EdiUser();
-                await LogicalDeleteEntity();
-                await PhysicalDeleteEntity();
-                await RecycleEntity();
-                await AddEntity();
-                RefreshVisuals();
-
-                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            await Apply();
         }
 
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
@@ -427,6 +422,25 @@ namespace PMIS.Forms
             }
             RefreshVisuals();
             isLoaded = true;
+        }
+
+        private async Task Apply()
+        {
+            try
+            {
+                await EdiUser();
+                await LogicalDeleteEntity();
+                await PhysicalDeleteEntity();
+                await RecycleEntity();
+                await AddEntity();
+                RefreshVisuals();
+
+                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public async Task AddEntity()

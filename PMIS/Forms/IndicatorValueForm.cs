@@ -92,8 +92,7 @@ namespace PMIS.Forms
                 GenerateDgvResultColumnsInitialize();
                 FiltersInitialize();
                 dgvResultsList.DataSource = resultBindingSource;
-                //SearchEntity();
-                btnSearch_Click(this, new EventArgs());
+                SearchEntity();
             }
             else
             {
@@ -156,6 +155,15 @@ namespace PMIS.Forms
 
         }
 
+        private async void NormalForm_Leave(object sender, EventArgs e)
+        {
+            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                await Apply();
+            }
+        }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             await SearchEntity();
@@ -163,21 +171,7 @@ namespace PMIS.Forms
 
         private async void btnApply_Click(object sender, EventArgs e)
         {
-            try
-            {
-                await EdiIndicatorValue();
-                // await LogicalDeleteEntity();
-                //await PhysicalDeleteEntity();
-                // await RecycleEntity();
-                await AddEntity();
-                RefreshVisuals();
-
-                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            await Apply();
         }
 
         private void dgvResultsList_RowEnter(object sender, DataGridViewCellEventArgs e)
@@ -222,6 +216,22 @@ namespace PMIS.Forms
         private void btnDownload_Click(object sender, EventArgs e)
         {
             Download();
+        }
+
+        private void dgvResultsList_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            RowValidated(sender, e);
+
+        }
+
+        private void dgvResultsList_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
+
+        private void dgvFiltersList_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void GenerateDgvFilterColumnsInitialize()
@@ -500,7 +510,6 @@ namespace PMIS.Forms
             RefreshVisuals();
             isLoaded = true;
         }
-
 
         #region Generate Row 1
         /*
@@ -834,6 +843,25 @@ namespace PMIS.Forms
             }
         }
         #endregion
+
+        private async Task Apply()
+        {
+            try
+            {
+                await EdiIndicatorValue();
+                // await LogicalDeleteEntity();
+                //await PhysicalDeleteEntity();
+                // await RecycleEntity();
+                await AddEntity();
+                RefreshVisuals();
+
+                MessageBox.Show("تغییرات با موفقیت اعمال شد", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در اعمال تغییرات: {ex.Message}", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public async Task AddEntity()
         {
@@ -1186,6 +1214,7 @@ namespace PMIS.Forms
                 throw;
             }
         }
+
         private Task<bool> HasAccess(string _operationMode, string _lkpValueType, int _indicatorId)
         {
             try
@@ -1276,21 +1305,6 @@ namespace PMIS.Forms
             }
         }
 
-        private void dgvResultsList_RowValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            RowValidated(sender, e);
-
-        }
-
-        private void dgvResultsList_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
-        {
-
-        }
-
-        private void dgvFiltersList_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
         private void ApplyFilters()
         {
             foreach (DataGridViewRow row in dgvFiltersList.Rows)
@@ -1340,21 +1354,6 @@ namespace PMIS.Forms
             {
                 MessageBox.Show("عملیات بارگیری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void IndicatorValueForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var dialogResult = MessageBox.Show("آیا مایل به اعمال تغییرات هستید؟", "", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                btnApply_Click(this, new EventArgs());
-            }
-        }
-
-        private void IndicatorValueForm_Leave(object sender, EventArgs e)
-        {
-            
-            this.Close();
         }
     }
 }

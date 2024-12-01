@@ -60,7 +60,7 @@ namespace PMIS.Forms
             panelMenu.Name = "panelMenu";
             panelMenu.Padding = new Padding(4);
             panelMenu.Size = new Size(1104, 33);
-            panelMenu.TabIndex = 0;
+            panelMenu.TabIndex = 1;
             // 
             // btnDownload
             // 
@@ -69,7 +69,7 @@ namespace PMIS.Forms
             btnDownload.Margin = new Padding(4);
             btnDownload.Name = "btnDownload";
             btnDownload.Size = new Size(103, 25);
-            btnDownload.TabIndex = 3;
+            btnDownload.TabIndex = 0;
             btnDownload.Text = "بارگیری";
             btnDownload.UseVisualStyleBackColor = true;
             btnDownload.Visible = false;
@@ -82,7 +82,7 @@ namespace PMIS.Forms
             btnUpload.Margin = new Padding(4);
             btnUpload.Name = "btnUpload";
             btnUpload.Size = new Size(103, 25);
-            btnUpload.TabIndex = 2;
+            btnUpload.TabIndex = 1;
             btnUpload.Text = "بارگزاری";
             btnUpload.UseVisualStyleBackColor = true;
             btnUpload.Visible = false;
@@ -94,7 +94,7 @@ namespace PMIS.Forms
             btnApply.Margin = new Padding(4);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(103, 25);
-            btnApply.TabIndex = 1;
+            btnApply.TabIndex = 2;
             btnApply.Text = "اعمال تغییرات";
             btnApply.UseVisualStyleBackColor = true;
             btnApply.Click += btnApply_Click;
@@ -106,8 +106,8 @@ namespace PMIS.Forms
             chbRecycle.Location = new Point(0, 0);
             chbRecycle.Margin = new Padding(3, 2, 3, 2);
             chbRecycle.Name = "chbRecycle";
-            chbRecycle.Size = new Size(60, 49);
-            chbRecycle.TabIndex = 6;
+            chbRecycle.Size = new Size(60, 69);
+            chbRecycle.TabIndex = 2;
             chbRecycle.Text = "بازیابی";
             chbRecycle.UseVisualStyleBackColor = true;
             // 
@@ -117,8 +117,8 @@ namespace PMIS.Forms
             btnSearch.Location = new Point(60, 0);
             btnSearch.Margin = new Padding(4);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(75, 49);
-            btnSearch.TabIndex = 0;
+            btnSearch.Size = new Size(75, 69);
+            btnSearch.TabIndex = 1;
             btnSearch.Text = "جستجو";
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
@@ -131,28 +131,31 @@ namespace PMIS.Forms
             panelContent.Location = new Point(0, 33);
             panelContent.Name = "panelContent";
             panelContent.Size = new Size(1104, 508);
-            panelContent.TabIndex = 1;
+            panelContent.TabIndex = 0;
             // 
             // panelResults
             // 
             panelResults.Controls.Add(dgvResultsList);
             panelResults.Dock = DockStyle.Fill;
-            panelResults.Location = new Point(0, 49);
+            panelResults.Location = new Point(0, 69);
             panelResults.Margin = new Padding(3, 2, 3, 2);
             panelResults.Name = "panelResults";
-            panelResults.Size = new Size(1104, 459);
-            panelResults.TabIndex = 2;
+            panelResults.Size = new Size(1104, 439);
+            panelResults.TabIndex = 0;
             // 
             // dgvResultsList
             // 
+            dgvResultsList.AllowDrop = true;
             dgvResultsList.AllowUserToOrderColumns = true;
             dgvResultsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvResultsList.BorderStyle = BorderStyle.None;
             dgvResultsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvResultsList.Dock = DockStyle.Fill;
+            dgvResultsList.GridColor = SystemColors.ControlDark;
             dgvResultsList.Location = new Point(0, 0);
             dgvResultsList.Name = "dgvResultsList";
-            dgvResultsList.RowHeadersWidth = 51;
-            dgvResultsList.Size = new Size(1104, 459);
+            dgvResultsList.RowHeadersWidth = 50;
+            dgvResultsList.Size = new Size(1104, 439);
             dgvResultsList.TabIndex = 0;
             dgvResultsList.CellBeginEdit += dgvResultsList_CellBeginEdit;
             dgvResultsList.CellContentClick += dgvResultsList_CellContentClick;
@@ -171,24 +174,25 @@ namespace PMIS.Forms
             panelFilters.Location = new Point(0, 0);
             panelFilters.Margin = new Padding(3, 2, 3, 2);
             panelFilters.Name = "panelFilters";
-            panelFilters.Size = new Size(1104, 49);
+            panelFilters.Size = new Size(1104, 69);
             panelFilters.TabIndex = 1;
             // 
             // dgvFiltersList
             // 
+            dgvFiltersList.AllowDrop = true;
+            dgvFiltersList.AllowUserToOrderColumns = true;
             dgvFiltersList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvFiltersList.BackgroundColor = SystemColors.Control;
             dgvFiltersList.BorderStyle = BorderStyle.None;
             dgvFiltersList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvFiltersList.Dock = DockStyle.Fill;
-            dgvFiltersList.GridColor = SystemColors.Control;
+            dgvFiltersList.GridColor = SystemColors.ControlDark;
             dgvFiltersList.Location = new Point(135, 0);
-            dgvFiltersList.Margin = new Padding(3, 2, 3, 2);
             dgvFiltersList.Name = "dgvFiltersList";
             dgvFiltersList.RowHeadersVisible = false;
             dgvFiltersList.RowHeadersWidth = 50;
-            dgvFiltersList.Size = new Size(969, 49);
-            dgvFiltersList.TabIndex = 7;
+            dgvFiltersList.Size = new Size(969, 69);
+            dgvFiltersList.TabIndex = 0;
             // 
             // ClaimUserOnSystemForm
             // 
@@ -202,6 +206,7 @@ namespace PMIS.Forms
             RightToLeftLayout = true;
             Text = "NormalForm";
             Load += NormalForm_Load;
+            Leave += NormalForm_Leave;
             panelMenu.ResumeLayout(false);
             panelContent.ResumeLayout(false);
             panelResults.ResumeLayout(false);
