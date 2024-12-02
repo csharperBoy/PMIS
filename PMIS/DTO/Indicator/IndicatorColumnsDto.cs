@@ -26,7 +26,7 @@ namespace PMIS.DTO.Indicator
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 75,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -37,7 +37,7 @@ namespace PMIS.DTO.Indicator
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 200,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -47,10 +47,10 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -60,10 +60,10 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpManualityId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -73,10 +73,10 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpUnitId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -86,48 +86,48 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 100,
                    DividerWidth = 5
                },
-               //new DataGridViewComboBoxColumn()
-               //{
-               //    HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
-               //    Name = "FkLkpMeasureId",
-               //    DataPropertyName = "FkLkpMeasureId",
-               //    DisplayMember = "Display",
-               //    ValueMember = "Id",
-               //    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
-               //    ReadOnly = false,
-               //    Visible = true,
-               //     MinimumWidth = 150,
-               //    DividerWidth = 5
-               //},
-               //new DataGridViewComboBoxColumn()
-               //{
-               //    HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
-               //    Name = "FkLkpDesirabilityId",
-               //    DataPropertyName = "FkLkpDesirabilityId",
-               //    DisplayMember = "Display",
-               //    ValueMember = "Id",
-               //    DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
-               //    ReadOnly = false,
-               //    Visible = true,
-               //     MinimumWidth = 150,
-               //    DividerWidth = 5
-               //},
-               //new DataGridViewTextBoxColumn()
-               //{
-               //    HeaderText = "فرمول",
-               //    Name = "Formula",
-               //    DataPropertyName = "Formula",
-               //    ReadOnly = false,
-               //    Visible = true,
-               //     MinimumWidth = 150,
-               //    DividerWidth = 5
-               //},
+               new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpMeasure")).Single().Title,
+                   Name = "FkLkpMeasureId",
+                   DataPropertyName = "FkLkpMeasureId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure")).ToArray(),
+                   ReadOnly = false,
+                   Visible = true,
+                   MinimumWidth = 150,
+                   DividerWidth = 5
+               },
+               new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpDesirability")).Single().Title,
+                   Name = "FkLkpDesirabilityId",
+                   DataPropertyName = "FkLkpDesirabilityId",
+                   DisplayMember = "Display",
+                   ValueMember = "Id",
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability")).ToArray(),
+                   ReadOnly = false,
+                   Visible = true,
+                   MinimumWidth = 100,
+                   DividerWidth = 5
+               },
+               new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "فرمول",
+                   Name = "Formula",
+                   DataPropertyName = "Formula",
+                   ReadOnly = false,
+                   Visible = true,
+                   MinimumWidth = 150,
+                   DividerWidth = 5
+               },
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
@@ -135,7 +135,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                }
         });
@@ -174,7 +174,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpFormID", "LkpForm")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
@@ -185,7 +185,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpManualityId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpManualityID", "LkpManuality")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
@@ -196,7 +196,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpUnitId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpUnitID", "LkpUnit")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
@@ -207,7 +207,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpPeriodID", "LkpPeriod")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
@@ -218,7 +218,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpMeasureId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpMeasureID", "LkpMeasure")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
@@ -229,7 +229,7 @@ namespace PMIS.DTO.Indicator
                    DataPropertyName = "FkLkpDesirabilityId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpDesirabilityID", "LkpDesirability")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },

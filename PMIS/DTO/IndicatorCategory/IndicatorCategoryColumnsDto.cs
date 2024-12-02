@@ -53,7 +53,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataSource = lstIndicator.ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -63,10 +63,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
@@ -75,10 +75,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryMasterId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
@@ -87,10 +87,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryDetailId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -100,7 +100,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "OrderNum",
                    ReadOnly = false,
                    Visible = true,
-                   MinimumWidth = 50,
+                  MinimumWidth = 50,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -110,7 +110,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-                   MinimumWidth = 200,
+                  MinimumWidth = 200,
                    DividerWidth = 5
                }
         });
@@ -135,7 +135,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataSource = lstIndicator.ToArray(),
                    ReadOnly = true,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -145,10 +145,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
@@ -157,10 +157,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryMasterId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
@@ -169,10 +169,10 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkLkpCategoryDetailId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -182,7 +182,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "OrderNum",
                    ReadOnly = true,
                    Visible = true,
-                   MinimumWidth = 50,
+                  MinimumWidth = 50,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -192,7 +192,7 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "Description",
                    ReadOnly = true,
                    Visible = true,
-                   MinimumWidth = 200,
+                  MinimumWidth = 200,
                    DividerWidth = 5
                }
         });

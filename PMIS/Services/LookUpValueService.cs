@@ -93,7 +93,7 @@ namespace PMIS.Services
             try
             {
                 IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true);
-                return await Task.FromResult(result.Single().LookUpValuesInfo);
+                return await Task.FromResult(result.Single().LookUpValuesInfo.Where(x => x.FlgLogicalDelete != true));
             }
             catch (Exception)
             {

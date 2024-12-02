@@ -55,7 +55,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataSource = lstUser.ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -65,10 +65,10 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataPropertyName = "FkLkpClaimUserOnSystemId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 200,
+                   MinimumWidth = 200,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -78,7 +78,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-                   MinimumWidth = 200,
+                  MinimumWidth = 200,
                    DividerWidth = 5
                }
         });
@@ -111,7 +111,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataPropertyName = "FkLkpClaimUserOnSystemId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnSystemId", "LkpClaimUserOnSystem")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },

@@ -24,7 +24,7 @@ namespace PMIS.DTO.User
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -35,7 +35,7 @@ namespace PMIS.DTO.User
                    ReadOnly = false,
                    Visible = true,
                    Frozen = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -45,10 +45,10 @@ namespace PMIS.DTO.User
                    DataPropertyName = "FkLkpWorkCalendarId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -66,7 +66,7 @@ namespace PMIS.DTO.User
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 200,
+                   MinimumWidth = 200,
                    DividerWidth = 5
                }
         });
@@ -138,7 +138,7 @@ namespace PMIS.DTO.User
                    DataPropertyName = "FkLkpWorkCalendarId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpWorkCalendarID", "LkpWorkCalendar")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },

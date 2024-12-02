@@ -80,7 +80,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource = lstUser.ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },new DataGridViewComboBoxColumn()
                {
@@ -92,7 +92,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataSource = lstIndicator.ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 150,
+                   MinimumWidth = 150,
                    DividerWidth = 5
                },
                new DataGridViewComboBoxColumn()
@@ -102,10 +102,10 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator")).ToArray(),
                    ReadOnly = false,
                    Visible = true,
-                    MinimumWidth = 200,
+                   MinimumWidth = 200,
                    DividerWidth = 5
                },
                new DataGridViewTextBoxColumn()
@@ -115,7 +115,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "Description",
                    ReadOnly = false,
                    Visible = true,
-                   MinimumWidth = 200,
+                  MinimumWidth = 200,
                    DividerWidth = 5
                }
         });
@@ -159,7 +159,7 @@ namespace PMIS.DTO.ClaimUserOnIndicator
                    DataPropertyName = "FkLkpClaimUserOnIndicatorId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await  lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator"),
+                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpClaimUserOnIndicatorID", "LkpClaimUserOnIndicator")).ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
