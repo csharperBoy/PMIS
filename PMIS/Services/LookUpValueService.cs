@@ -18,6 +18,7 @@ using PMIS.DTO.LookUpDestination;
 using Generic.Base.Handler.Map;
 using Generic.Service.DTO.Abstract;
 using Generic.Service.DTO.Concrete;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace PMIS.Services
 {
@@ -47,8 +48,8 @@ namespace PMIS.Services
                     }
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
-
-                return list.Where(x => x.FlgLogicalDelete != true);
+               
+                return list;
             }
             catch (Exception)
             {
@@ -79,9 +80,9 @@ namespace PMIS.Services
                     }
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
-                list = list.Where(l => l.FkLookUpInfo.Code == _code && l.FlgLogicalDelete != true);
+                list = list.Where(l => l.FkLookUpInfo.Code == _code);
 
-                return list.Single().LookUpValuesInfo.Where(x => x.FlgLogicalDelete != true);
+                return list.Single().LookUpValuesInfo;
             }
             catch (Exception)
             {
@@ -92,10 +93,11 @@ namespace PMIS.Services
         {
             try
             {
-                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true);
+                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.ColumnName == _columnName && l.FkLookUpInfo.Code == _code);
+
                 return await Task.FromResult(result.Single().LookUpValuesInfo);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -104,9 +106,9 @@ namespace PMIS.Services
         {
             try
             {
-                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code && l.FkLookUpInfo.FlgLogicalDelete != true);
+                IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code);
 
-                return await Task.FromResult(result.Select(x => x.FkLookUpInfo).Where(l => l.FlgLogicalDelete != true));
+                return await Task.FromResult(result.Select(x => x.FkLookUpInfo));
             }
             catch (Exception)
             {

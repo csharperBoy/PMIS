@@ -36,6 +36,10 @@ namespace PMIS.DTO.IndicatorValue
             });
             lstIndicator = (await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId));
             // lstIndicator.AddRange(lstIndicator1);
+            var lstLkpShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"));
+            var lstLkpForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"));
+            var LkpPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod"));
+            var lstLkpValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType"));
 
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
@@ -68,7 +72,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"),
+                   DataSource =  lstLkpShift,
                    ReadOnly = false,
                    Visible = true,
                     MinimumWidth = 150,
@@ -80,7 +84,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"),
+                   DataSource =  lstLkpForm,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
@@ -93,7 +97,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod"),
+                   DataSource =  LkpPeriod,
                    ReadOnly = false,
                    Visible = true,
                     MinimumWidth = 150,
@@ -119,7 +123,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType"),
+                   DataSource = lstLkpValueType,
                    ReadOnly = false,
                    Visible = true,
                     MinimumWidth = 150,
@@ -147,7 +151,7 @@ namespace PMIS.DTO.IndicatorValue
                     ReadOnly = true,
                     Visible = false,
                 },
-               new DataGridViewTextBoxColumn()
+                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "تاریخ",
                    Name = "shamsiDateTime",
@@ -156,26 +160,26 @@ namespace PMIS.DTO.IndicatorValue
                    Visible = true,
                    Frozen = true,
                },
-              new DataGridViewComboBoxColumn()
+                new DataGridViewComboBoxColumn()
                {
                    HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single().Title,
                    Name = "FkLkpShiftId",
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"),
+                   DataSource = lstLkpShift,
                    ReadOnly = true,
                    Visible = true,
                    Frozen = true,
                },
-              new DataGridViewComboBoxColumn()
+                new DataGridViewComboBoxColumn()
                {
                    HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single().Title,
                    Name = "VrtLkpForm",
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"),
+                   DataSource =  lstLkpForm,
                    ReadOnly = true,
                    Visible = false,
                },
@@ -186,11 +190,10 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod"),
+                   DataSource = LkpPeriod,
                    ReadOnly = true,
                    Visible = true,
                },
-
                 new DataGridViewComboBoxColumn()
                {
                    HeaderText = "شاخص",
@@ -202,14 +205,14 @@ namespace PMIS.DTO.IndicatorValue
                    ReadOnly = true,
                    Visible = true,
                },
-               new DataGridViewComboBoxColumn()
+                new DataGridViewComboBoxColumn()
                {
                    HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single().Title,
                    Name = "FkLkpValueTypeId",
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType"),
+                   DataSource = lstLkpValueType,
                    ReadOnly = true,
                    Visible = true,
                },
@@ -221,7 +224,7 @@ namespace PMIS.DTO.IndicatorValue
                    ReadOnly = true,
                    Visible = true,
                },
-               new DataGridViewTextBoxColumn()
+                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
                    Name = "Description",
