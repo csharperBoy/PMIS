@@ -49,7 +49,7 @@ namespace PMIS.Services
                 };
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
                
-                return list;
+                return list.Where(x => x.FlgLogicalDelete != true);
             }
             catch (Exception)
             {
@@ -82,7 +82,7 @@ namespace PMIS.Services
                 (bool IsSuccess, IEnumerable<LookUpDestinationSearchResponseDto> list) = await lookUpDestinationService.Search(req);
                 list = list.Where(l => l.FkLookUpInfo.Code == _code);
 
-                return list.Single().LookUpValuesInfo;
+                return list.Single().LookUpValuesInfo.Where(x => x.FlgLogicalDelete != true);
             }
             catch (Exception)
             {
@@ -107,7 +107,7 @@ namespace PMIS.Services
             {
                 IEnumerable<LookUpDestinationSearchResponseDto> result = _tablelookUpList.Where(l => l.FkLookUpInfo.Code == _code);
 
-                return await Task.FromResult(result.Select(x => x.FkLookUpInfo));
+                return await Task.FromResult(result.Select(x => x.FkLookUpInfo).Where(x => x.FlgLogicalDelete != true));
             }
             catch (Exception)
             {

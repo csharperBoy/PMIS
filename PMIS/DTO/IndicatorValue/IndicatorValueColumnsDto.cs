@@ -34,12 +34,16 @@ namespace PMIS.DTO.IndicatorValue
                 }
                 }
             });
-            lstIndicator = (await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId));
+            lstIndicator = (await indicatorService.SearchByExternaFilter(lstIndicator, GlobalVariable.userId)).ToArray();
             // lstIndicator.AddRange(lstIndicator1);
-            var lstLkpShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift"));
-            var lstLkpForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm"));
-            var LkpPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod"));
-            var lstLkpValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType"));
+            var lstLkpShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single();
+            var lstLkpValuesShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift")).ToArray();
+            var lstLkpForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single();
+            var lstLkpValuesForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm")).ToArray();
+            var lstLkpPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single();
+            var lstLkpValuesPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod")).ToArray();
+            var lstLkpValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single();
+            var lstLkpValuesValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType")).ToArray();
 
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
@@ -67,24 +71,24 @@ namespace PMIS.DTO.IndicatorValue
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single().Title,
+                   HeaderText = lstLkpShift.Title,
                    Name = "FkLkpShiftId",
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift")).ToArray(),
+                   DataSource =  lstLkpValuesShift,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                },new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single().Title,
+                   HeaderText = lstLkpForm.Title,
                    Name = "VrtLkpForm",
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm")).ToArray(),
+                   DataSource =  lstLkpValuesForm,
                    ReadOnly = false,
                    Visible = true,
                   MinimumWidth = 150,
@@ -92,12 +96,12 @@ namespace PMIS.DTO.IndicatorValue
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single().Title,
+                   HeaderText = lstLkpPeriod.Title,
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod")).ToArray(),
+                   DataSource =  lstLkpValuesPeriod,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
@@ -110,7 +114,7 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "FkIndicatorId",
                    DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource = lstIndicator.ToArray(),
+                   DataSource = lstIndicator,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
@@ -118,12 +122,12 @@ namespace PMIS.DTO.IndicatorValue
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single().Title,
+                   HeaderText = lstLkpValueType.Title,
                    Name = "FkLkpValueTypeId",
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType")).ToArray(),
+                   DataSource =  lstLkpValuesValueType,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
@@ -162,35 +166,35 @@ namespace PMIS.DTO.IndicatorValue
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single().Title,
+                   HeaderText = lstLkpShift.Title,
                    Name = "FkLkpShiftId",
                    DataPropertyName = "FkLkpShiftId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift")).ToArray(),
+                   DataSource =  lstLkpValuesShift,
                    ReadOnly = true,
                    Visible = true,
                    Frozen = true,
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single().Title,
+                   HeaderText = lstLkpForm.Title,
                    Name = "VrtLkpForm",
                    DataPropertyName = "VrtLkpFormId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm")).ToArray(),
+                   DataSource =  lstLkpValuesForm,
                    ReadOnly = true,
                    Visible = false,
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single().Title,
+                   HeaderText = lstLkpPeriod.Title,
                    Name = "VrtLkpPeriod",
                    DataPropertyName = "VrtLkpPeriodId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod")).ToArray(),
+                   DataSource =  lstLkpValuesPeriod,
                    ReadOnly = true,
                    Visible = true,
                },
@@ -207,12 +211,12 @@ namespace PMIS.DTO.IndicatorValue
                },
                 new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single().Title,
+                   HeaderText = lstLkpValueType.Title,
                    Name = "FkLkpValueTypeId",
                    DataPropertyName = "FkLkpValueTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType")).ToArray(),
+                   DataSource =  lstLkpValuesValueType,
                    ReadOnly = true,
                    Visible = true,
                },
