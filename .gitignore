@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PMIS/Services/LookUpValueService.cs
+/PMIS/DTO/IndicatorValue/IndicatorValueColumnsDto.cs
