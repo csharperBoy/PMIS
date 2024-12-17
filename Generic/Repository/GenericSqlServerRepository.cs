@@ -46,7 +46,6 @@ namespace Generic.Repository
             bool result;
             try
             {
-
                 await dbSet.AddAsync(entity);
 
                 result = true;
