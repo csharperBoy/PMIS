@@ -69,7 +69,7 @@ namespace Generic.Repository
             try
             {
                 await dbSet.AddRangeAsync(entities);
-                dbContext.Entry(entities).State = EntityState.Added;
+             //   dbContext.Entry(entities).State = EntityState.Added;
                 result = true;
             }
             catch (Exception)
