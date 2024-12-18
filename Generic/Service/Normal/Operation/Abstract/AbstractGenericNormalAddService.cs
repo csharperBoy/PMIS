@@ -96,13 +96,14 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         public async Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
         {
+            List<TEntity> entityRequest = new List<TEntity>();
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
                       return true;
 
                 bool result = true;
-                List<TEntity> entityRequest = new List<TEntity>();
+               
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -114,7 +115,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                 result = await repository.InsertRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
 
-                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+               
 
                 return result;
             }

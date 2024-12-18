@@ -749,7 +749,7 @@ namespace PMIS.Forms
                     dgvResultsList.Rows[rowIndex].Cells["PasswordHashTemp2"].Value = dgvResultsList.Rows[rowIndex].Cells["PasswordHash"].Value;
                 }
             }
-            else if (dgvResultsList.Columns[columnIndex].Name == "UserName" && rowIndex >= 0)
+            else if (dgvResultsList.Columns[columnIndex].Name == "UserName" && rowIndex >= 0 && dgvResultsList.Rows[rowIndex].Cells["UserName"].Value != null)
             {
                 dgvResultsList.Rows[rowIndex].Cells["UserName"].Value = Helper.Convert.CapitalizeFirstLetter(dgvResultsList.Rows[rowIndex].Cells["UserName"].Value.ToString());
             }

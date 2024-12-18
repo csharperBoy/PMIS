@@ -73,6 +73,10 @@ namespace Generic.Repository
             }
             catch (Exception)
             {
+                //foreach (var item in entities)
+                //{
+                //    dbContext.Entry(item).State = EntityState.Detached;
+                //}
                 await RollbackAsync();
                 result = false;
             }
