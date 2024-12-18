@@ -10,6 +10,6 @@ namespace WSM.WindowsServices.FileManager.Interfaces
     internal interface FileWriteInterface
     {
         [TestMethod]
-        public static abstract bool Write(string fileName, object fileContent);
+        public static abstract bool Write<T>(string fileName, T fileContent) where T : class;
     }
 }

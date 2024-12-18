@@ -10,73 +10,46 @@ using System.Xml;
 using System.Globalization;
 using WSM.WindowsServices.FileManager.Interfaces;
 using Castle.Components.DictionaryAdapter.Xml;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml.Drawing;
+using System.Windows.Forms;
 
 namespace WSM.WindowsServices.FileManager
 {
     public class ExcelManager : FileInterface
     {
-
-        /*
-            //using dialog box to open the excel file and giving the extension as .xlsx to open the excel files
-            OpenFileDialog openfile = new OpenFileDialog();
-            openfile.DefaultExt = ".xlsx";
-            openfile.Filter = "(.xlsx)|*.xlsx";
-
-            ///show open file dialog box 
-            bool? result = openfile.ShowDialog();
-            ///process open file dialog box results
-            if (result == true)
-            {
-               //copying the path of the excel file to a textbox named txtFilePath
-               string txtFilePath = openfile.FileName;
-               //Add reference then select Microsoft .Office.Interop.Excel
-
-            }
-        */
-
         [TestMethod]
-        public static object Read(string fileName)
+        private static DataSet Read(string fileName)
         {
             try
             {
-                // ایجاد یک رشته اتصال برای باز کردن فایل اکسل
-                // استفاده از پارامتر HDR برای نادیده گرفتن سطر اول فایل اکسل که عناوین را نشان می‌دهد
+                DataSet dataSet = new DataSet();
                 var connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fileName};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";";
 
-                var worksheetString = "";
-                // به دست آوردن نام اولین شیت
-                using (var pck = new ExcelPackage(new FileInfo(fileName)))
-                {
-                    var workbook = pck.Workbook;
-                    var worksheet = workbook.Worksheets[0];
-                    worksheetString = worksheet.Name;
-                }
-
-                // ایجاد یک شیء از کلاس DataTable برای نگهداری داده‌های خوانده شده از فایل اکسل
-                var dataTable = new DataTable();
-
-                // ایجاد یک شیء از کلاس OleDbConnection برای اتصال به فایل اکسل
                 using (var connection = new OleDbConnection(connectionString))
                 {
-                    // باز کردن اتصال
                     connection.Open();
-
-                    // ایجاد یک شیء از کلاس OleDbCommand برای اجرای یک پرس و جو بر روی فایل اکسل
-                    // انتخاب همه سطرها و ستون‌های کاربرگ اول فایل اکسل
-                    using (var command = new OleDbCommand("SELECT * FROM [" + worksheetString + "$]", connection))
+                    using (var pck = new ExcelPackage(new FileInfo(fileName)))
                     {
-                        // ایجاد یک شیء از کلاس OleDbDataAdapter برای پر کردن یک جدول داده با نتیجه پرس و جو
-                        using (var adapter = new OleDbDataAdapter(command))
+                        var workbook = pck.Workbook;
+                        foreach (var worksheet in workbook.Worksheets)
                         {
-                            // پر کردن جدول داده با استفاده از شیء OleDbDataAdapter
-                            adapter.Fill(dataTable);
+                            DataTable dataTable = new DataTable();
+                            dataTable.TableName = worksheet.Name;
+
+                            using (var command = new OleDbCommand("SELECT * FROM [" + dataTable.TableName + "$]", connection))
+                            {
+                                using (var adapter = new OleDbDataAdapter(command))
+                                {
+                                    adapter.Fill(dataTable);
+                                }
+                            }
+                            dataSet.Tables.Add(dataTable);
                         }
                     }
-
-                    // بستن اتصال
                     connection.Close();
-                    return dataTable;
                 }
+                return dataSet;
             }
             catch (Exception ex)
             {
@@ -85,7 +58,56 @@ namespace WSM.WindowsServices.FileManager
         }
 
         [TestMethod]
-        public static bool Write(string fileName, object fileContent)
+        public static object Read<T>(string fileName) where T : class
+        {
+            try
+            {
+                DataSet dataSet = Read(fileName);
+                if (typeof(T) == typeof(DataSet))
+                {
+                    return dataSet;
+                }
+                else if (typeof(T) == typeof(List<DataGridView>))
+                {
+                    return ConvertDataSetToDataGridViewList(dataSet);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [TestMethod]
+        public static List<DataGridView> ConvertDataSetToDataGridViewList(DataSet dataSet)
+        {
+            try
+            {
+                List<DataGridView> dgvList = new List<DataGridView>();
+                foreach (DataTable dataTable in dataSet.Tables)
+                {
+                    DataGridView dgv = new DataGridView();
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        int temp = dgv.Columns.Add(column.ColumnName, column.ColumnName);
+                    }
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        dgv.Rows.Add(row);
+                    }
+                    dgvList.Add(dgv);
+                }
+                return dgvList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [TestMethod]
+        private static bool Write(string fileName, DataSet fileContent)
         {
             try
             {
@@ -99,7 +121,7 @@ namespace WSM.WindowsServices.FileManager
                 using (var pck = new ExcelPackage(fileInfo))
                 {
                     var workbook = pck.Workbook;
-                    foreach (DataTable dataTable in ((DataSet)fileContent).Tables)
+                    foreach (DataTable dataTable in (fileContent).Tables)
                     {
                         var worksheet = workbook.Worksheets.Add(dataTable.TableName);
                         worksheet.View.RightToLeft = true;
@@ -116,11 +138,20 @@ namespace WSM.WindowsServices.FileManager
         }
 
         [TestMethod]
-        public static bool Write(string fileName, List<DataGridView> fileContent)
+        public static bool Write<T>(string fileName, T fileContent) where T : class
         {
             try
             {
-                return Write(fileName, ConvertDataGridViewListToDataSet(fileContent));
+                if (typeof(T) == typeof(DataSet))
+                {
+                    return Write(fileName, fileContent);
+                }
+                else if (typeof(T) == typeof(List<DataGridView>))
+                {
+                    return Write(fileName, ConvertDataGridViewListToDataSet(fileContent));
+                }
+                return false;
+
             }
             catch (Exception ex)
             {
@@ -129,54 +160,57 @@ namespace WSM.WindowsServices.FileManager
         }
 
         [TestMethod]
-        public static DataSet ConvertDataGridViewListToDataSet(List<DataGridView> dgvList)
+        public static DataSet ConvertDataGridViewListToDataSet(object dgvList)
         {
             try
             {
                 DataSet dataSet = new DataSet();
-                foreach (DataGridView dgv in dgvList)
+                if (dgvList.GetType() == typeof(List<DataGridView>))
                 {
-                    if (dgv.DataSource != null)
+                    foreach (DataGridView dgv in (List<DataGridView>)dgvList)
                     {
-                        DataTable dataTable = new DataTable();
-                        if (dgv.DataSource.GetType().GetGenericArguments().Count() > 0)
+                        if (dgv.DataSource != null)
                         {
-                            string? nameSpace = dgv.DataSource.GetType().GetGenericArguments()[0].Namespace;
-                            dataTable.TableName = nameSpace?.Substring(nameSpace.LastIndexOf('.') + 1);
-                        }
-                        foreach (DataGridViewColumn column in dgv.Columns)
-                        {
-                            if (column.Visible)
+                            DataTable dataTable = new DataTable();
+                            if (dgv.DataSource.GetType().GetGenericArguments().Count() > 0)
                             {
-                                if (column is not DataGridViewButtonColumn && !column.Name.StartsWith("Vrt"))
-                                {
-                                    dataTable.Columns.Add(column.HeaderText);
-                                }
+                                string? nameSpace = dgv.DataSource.GetType().GetGenericArguments()[0].Namespace;
+                                dataTable.TableName = nameSpace?.Substring(nameSpace.LastIndexOf('.') + 1);
                             }
-                        }
-                        foreach (DataGridViewRow row in dgv.Rows)
-                        {
-                            DataRow dRow = dataTable.NewRow();
                             foreach (DataGridViewColumn column in dgv.Columns)
                             {
                                 if (column.Visible)
                                 {
                                     if (column is not DataGridViewButtonColumn && !column.Name.StartsWith("Vrt"))
                                     {
-                                        if (column is DataGridViewComboBoxColumn)
-                                        {
-                                            dRow[column.HeaderText] = row.Cells[column.Name].FormattedValue;
-                                        }
-                                        else
-                                        {
-                                            dRow[column.HeaderText] = row.Cells[column.Name].Value;
-                                        }
+                                        dataTable.Columns.Add(column.HeaderText);
                                     }
                                 }
                             }
-                            dataTable.Rows.Add(dRow);
+                            foreach (DataGridViewRow row in dgv.Rows)
+                            {
+                                DataRow dRow = dataTable.NewRow();
+                                foreach (DataGridViewColumn column in dgv.Columns)
+                                {
+                                    if (column.Visible)
+                                    {
+                                        if (column is not DataGridViewButtonColumn && !column.Name.StartsWith("Vrt"))
+                                        {
+                                            if (column is DataGridViewComboBoxColumn)
+                                            {
+                                                dRow[column.HeaderText] = row.Cells[column.Name].FormattedValue;
+                                            }
+                                            else
+                                            {
+                                                dRow[column.HeaderText] = row.Cells[column.Name].Value;
+                                            }
+                                        }
+                                    }
+                                }
+                                dataTable.Rows.Add(dRow);
+                            }
+                            dataSet.Tables.Add(dataTable);
                         }
-                        dataSet.Tables.Add(dataTable);
                     }
                 }
                 return dataSet;

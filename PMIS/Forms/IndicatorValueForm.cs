@@ -23,7 +23,6 @@ using Generic.Base.Handler.Map.Concrete;
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Base.Handler.Map;
 using AutoMapper;
-using Castle.Components.DictionaryAdapter;
 using PMIS.Bases;
 using PMIS.DTO.ClaimUserOnIndicator;
 using System.Linq;
@@ -48,9 +47,9 @@ namespace PMIS.Forms
         private List<IndicatorValueDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorValueDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<IndicatorValueSearchResponseDto> lstSearchResponse;
-        private List<DateTime> lstDates;
         private BindingSource resultBindingSource;
         private IndicatorValueColumnsDto columns;
+        private List<DateTime> lstDates;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
         private IIndicatorValueService indicatorValueService;
@@ -527,7 +526,7 @@ namespace PMIS.Forms
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
             lstSearchResponse = await indicatorValueService.SearchByExternaFilter(lstSearchResponse, int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpForm"].Value.ToString()), int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpPeriod"].Value.ToString()));
             lstSearchResponse = await GenerateRows(lstSearchResponse);
-            var bindingList = new System.ComponentModel.BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+            var bindingList = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
             resultBindingSource = new BindingSource(bindingList, null);
             dgvResultsList.DataSource = resultBindingSource;
 

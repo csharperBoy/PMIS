@@ -1,4 +1,5 @@
-﻿using Generic.Helper;
+﻿using AutoMapper;
+using Generic.Helper;
 using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +12,9 @@ using PMIS.Forms.Generic;
 using PMIS.Models;
 using PMIS.Services;
 using PMIS.Services.Contract;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
 using WSM.WindowsServices.FileManager;
@@ -178,6 +181,11 @@ namespace PMIS.Forms
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
 
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            Upload();
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
@@ -796,6 +804,44 @@ namespace PMIS.Forms
             {
 
                 throw;
+            }
+        }
+
+        private async void Upload()
+        {
+            try
+            {
+                await ShouldChangesBeSaved();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (Path.GetFileName(openFileDialog.FileName).StartsWith("Indicators"))
+                    {
+                        DataTable dataTable = ((DataSet)ExcelManager.Read<DataSet>(openFileDialog.FileName)).Tables[0];
+                        var lst = new BindingList<IndicatorSearchResponseDto>(new List<IndicatorSearchResponseDto>());
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            foreach (DataColumn column in dataTable.Columns)
+                            {
+                                if (dgvResultsList.Columns[column.ColumnName] != null)
+                                {
+
+                                }
+                            }
+                        }
+                        dgvResultsList.DataSource = lst.ToArray();
+                        MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        throw new Exception("نام فایل باید با Indicators آغاز گردد!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

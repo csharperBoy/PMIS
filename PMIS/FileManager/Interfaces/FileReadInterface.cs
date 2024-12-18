@@ -10,6 +10,6 @@ namespace WSM.WindowsServices.FileManager.Interfaces
     internal interface FileReadInterface
     {
         [TestMethod]
-        public static abstract object Read(string fileName);
+        public static abstract object Read<T>(string fileName) where T : class;
     }
 }
