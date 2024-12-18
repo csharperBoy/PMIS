@@ -43,7 +43,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                     return (true, null);
+                    return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
@@ -97,13 +97,13 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         public async Task<bool> LogicalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
+            List<TEntity> entityRequest = new List<TEntity>();
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                      return true;
+                    return true;
 
                 bool result = true;
-                List<TEntity> entityRequest = new List<TEntity>();
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -130,6 +130,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
                 throw;
             }
             finally
@@ -143,7 +144,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                     return (true, null);
+                    return (true, null);
 
                 bool resultIsSuccess = true;
                 bool result = true;
@@ -199,7 +200,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
-                      return true;
+                    return true;
 
                 bool result = true;
                 List<TEntity> entityRequest = new List<TEntity>();

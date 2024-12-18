@@ -71,6 +71,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }
@@ -86,6 +87,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
+               
                 throw;
             }
             finally
