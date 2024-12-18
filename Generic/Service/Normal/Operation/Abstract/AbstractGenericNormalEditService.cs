@@ -65,6 +65,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                         responseTemp = (TEntityEditResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                       //  responseTemp.
@@ -91,13 +92,14 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         public async Task<bool> EditRange(IEnumerable<TEntityEditRequestDto> requestInput)
         {
+            List<TEntity> entityRequest = new List<TEntity>();
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
                     return true;
 
                 bool result = true;
-                List<TEntity> entityRequest = new List<TEntity>();
+               
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -116,6 +118,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
                 throw;
             }
             finally

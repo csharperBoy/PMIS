@@ -71,6 +71,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityAddResponseDto>(entity);
                         responseTemp = (TEntityAddResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }
@@ -86,6 +87,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
+               
                 throw;
             }
             finally
@@ -96,13 +98,14 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         public async Task<bool> AddRange(IEnumerable<TEntityAddRequestDto> requestInput)
         {
+            List<TEntity> entityRequest = new List<TEntity>();
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
                       return true;
 
                 bool result = true;
-                List<TEntity> entityRequest = new List<TEntity>();
+               
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -114,13 +117,13 @@ namespace Generic.Service.Normal.Operation.Abstract
                 result = await repository.InsertRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
 
-                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
+               
 
                 return result;
             }
             catch (Exception ex)
             {
-                
+                await repository.RollbackAsync();
                 throw;
             }
             finally
