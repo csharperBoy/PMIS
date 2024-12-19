@@ -112,7 +112,6 @@ namespace Generic.Service.Normal.Operation.Abstract
                 result = await repository.UpdateRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
 
-                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
                 
                 return result;
             }

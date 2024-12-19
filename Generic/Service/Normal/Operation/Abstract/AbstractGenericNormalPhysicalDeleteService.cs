@@ -61,6 +61,7 @@ namespace Generic.Service.Normal.Operation.Abstract
                     }
                     catch (Exception ex)
                     {
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityDeleteResponseDto>(entity);
                         responseTemp = (TEntityDeleteResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
                     }
@@ -87,13 +88,13 @@ namespace Generic.Service.Normal.Operation.Abstract
 
         public async Task<bool> PhysicalDeleteRange(IEnumerable<TEntityDeleteRequestDto> requestInput)
         {
+                List<TEntity> entityRequest = new List<TEntity>();
             try
             {
                 if (requestInput == null || requestInput.Count() == 0)
                       return true;
 
                 bool result = true;
-                List<TEntity> entityRequest = new List<TEntity>();
                 foreach (var req in requestInput)
                 {
                     TEntity entity = new TEntity();
@@ -105,12 +106,11 @@ namespace Generic.Service.Normal.Operation.Abstract
                 result = await repository.DeleteRangeAsync(entityRequest);
                 await repository.SaveAndCommitAsync();
 
-                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
-
                 return result;
             }
             catch (Exception ex)
             {
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
                 throw;
             }
             finally
