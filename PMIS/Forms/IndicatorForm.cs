@@ -819,18 +819,30 @@ namespace PMIS.Forms
                     if (Path.GetFileName(openFileDialog.FileName).StartsWith("Indicators"))
                     {
                         DataTable dataTable = ((DataSet)ExcelManager.Read<DataSet>(openFileDialog.FileName)).Tables[0];
-                        var lst = new BindingList<IndicatorSearchResponseDto>(new List<IndicatorSearchResponseDto>());
+                        dgvResultsList.DataSource = null;
                         foreach (DataRow row in dataTable.Rows)
                         {
+                            int index = dgvResultsList.Rows.Add();
                             foreach (DataColumn column in dataTable.Columns)
                             {
-                                if (dgvResultsList.Columns[column.ColumnName] != null)
+                                foreach (DataGridViewColumn item in dgvResultsList.Columns)
                                 {
-
+                                    if (item.HeaderText == column.ColumnName)
+                                    {
+                                        if (item.CellType is DataGridViewComboBoxCell)
+                                        {
+                                            ((DataGridViewComboBoxCell)dgvResultsList.Rows[index].Cells[item.Name]).ValueMember = row[index].ToString();
+                                        }
+                                        else if (item.CellType is DataGridViewTextBoxCell)
+                                        {
+                                            ((DataGridViewTextBoxCell)dgvResultsList.Rows[index].Cells[item.Name]).Value = row[index].ToString();
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        dgvResultsList.DataSource = lst.ToArray();
+                      //  dgvResultsList.DataSource = lst.ToArray();
                         MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
