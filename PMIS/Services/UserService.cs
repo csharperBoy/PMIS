@@ -21,6 +21,7 @@ namespace PMIS.Services
     {
         public UserService(AbstractGenericMapHandler _mapper, AbstractGenericNormalAddService<PmisContext, User, UserAddRequestDto, UserAddResponseDto> _normalAddService, AbstractGenericNormalEditService<PmisContext, User, UserEditRequestDto, UserEditResponseDto> _normalEditService, AbstractGenericNormalLogicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto> _logicalDeleteService, AbstractGenericNormalPhysicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto> _physicalDeleteService, AbstractGenericNormalSearchService<PmisContext, User, UserSearchResponseDto> _searchService) : base(_mapper, _normalAddService, _normalEditService, _logicalDeleteService, _physicalDeleteService, _searchService)
         {
+
         }
         private AbstractGenericMapHandler mapper;
        
