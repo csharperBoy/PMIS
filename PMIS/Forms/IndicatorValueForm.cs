@@ -34,6 +34,7 @@ using WSM.WindowsServices.FileManager;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Presentation;
 using System.Runtime.Intrinsics.Arm;
+using System.Data;
 
 namespace PMIS.Forms
 {
@@ -210,6 +211,11 @@ namespace PMIS.Forms
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
 
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            Upload();
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
@@ -1105,6 +1111,27 @@ namespace PMIS.Forms
 
         }
 
+        public void RowLeave(int rowIndex)
+        {
+            DataGridViewRow previousRow = dgvResultsList.Rows[rowIndex];
+            if (dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value != null && bool.Parse(dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value.ToString()))
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
+            else if (dgvResultsList.Rows[rowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[rowIndex].Cells["Id"].Value.ToString()) == 0)
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+
+            }
+            else
+            {
+                previousRow.DefaultCellStyle.BackColor = Color.White;
+                previousRow.DefaultCellStyle.ForeColor = Color.Black;
+            }
+        }
+
         public void RowValidated(object sender, DataGridViewCellEventArgs e)
         {
             isLoaded = true;
@@ -1277,6 +1304,11 @@ namespace PMIS.Forms
             return false;
         }
 
+        private void CellValidated(int rowIndex, int columnIndex)
+        {
+
+        }
+
         public void RowPostPaint(int rowIndex)
         {
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
@@ -1360,6 +1392,127 @@ namespace PMIS.Forms
                 {
                     indicators = indicators.Where(i => i.FkLkpPeriodId == int.Parse(row.Cells["VrtLkpPeriod"].Value.ToString()));
                 }
+            }
+        }
+
+        private async void Upload()
+        {
+            try
+            {
+                await ShouldChangesBeSaved();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (Path.GetFileName(openFileDialog.FileName).StartsWith("IndicatorValues"))
+                    {
+                        DataTable dataTable = ((DataSet)ExcelManager.Read<DataSet>(openFileDialog.FileName)).Tables[0];
+                        dgvResultsList.DataSource = null;
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            int index = dgvResultsList.Rows.Add();
+                            foreach (DataColumn column in dataTable.Columns)
+                            {
+                                foreach (DataGridViewColumn item in dgvResultsList.Columns)
+                                {
+                                    if (item.HeaderText == column.ColumnName)
+                                    {
+                                        DataGridViewCell cell = dgvResultsList.Rows[index].Cells[item.Name];
+                                        if (cell is DataGridViewComboBoxCell)
+                                        {
+                                            object dataSource = ((DataGridViewComboBoxCell)cell).DataSource;
+                                            if (dataSource is LookUpValueShortInfoDto[])
+                                            {
+                                                var selectItem = ((LookUpValueShortInfoDto[])dataSource).FirstOrDefault(item => item.Display == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                            else if (dataSource is IndicatorSearchResponseDto[])
+                                            {
+                                                var selectItem = ((IndicatorSearchResponseDto[])dataSource).FirstOrDefault(item => item.Code == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                        }
+                                        else if (cell is DataGridViewTextBoxCell)
+                                        {
+                                            ((DataGridViewTextBoxCell)cell).Value = row[column].ToString();
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
+                            {
+                                filters = new List<GenericSearchFilterDto>(),
+                            };
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FlgLogicalDelete",
+                                value = false.ToString(),
+                                LogicalOperator = LogicalOperator.Begin,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "DateTime",
+                                value = Helper.Convert.ConvertShamsiToGregorian(dgvResultsList.Rows[index].Cells["shamsiDateTime"].Value.ToString()).ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkLkpShiftId",
+                                value = dgvResultsList.Rows[index].Cells["FkLkpShiftId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkIndicatorId",
+                                value = dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkLkpValueTypeId",
+                                value = dgvResultsList.Rows[index].Cells["FkLkpValueTypeId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
+                            if (isSuccess && lstSearchResponse.Count() > 0)
+                            {
+                                dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
+                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                            }
+                            foreach (DataGridViewColumn item in dgvResultsList.Columns)
+                            {
+                                CellValidated(index, item.Index);
+                            }
+                            RowLeave(index);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("نام فایل باید با IndicatorValues آغاز گردد!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dgvResultsList.Rows.Clear();
+                MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
