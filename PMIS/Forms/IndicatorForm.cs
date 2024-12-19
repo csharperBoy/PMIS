@@ -829,21 +829,55 @@ namespace PMIS.Forms
                                 {
                                     if (item.HeaderText == column.ColumnName)
                                     {
-                                        if (item.CellType is DataGridViewComboBoxCell)
+                                        DataGridViewCell cell = dgvResultsList.Rows[index].Cells[item.Name];
+                                        if (cell is DataGridViewComboBoxCell)
                                         {
-                                            ((DataGridViewComboBoxCell)dgvResultsList.Rows[index].Cells[item.Name]).ValueMember = row[index].ToString();
+                                            object dataSource = ((DataGridViewComboBoxCell)cell).DataSource;
+                                            if (dataSource is LookUpValueShortInfoDto[])
+                                            {
+                                                var selectItem = ((LookUpValueShortInfoDto[])dataSource).FirstOrDefault(item => item.Display == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
                                         }
-                                        else if (item.CellType is DataGridViewTextBoxCell)
+                                        else if (cell is DataGridViewTextBoxCell)
                                         {
-                                            ((DataGridViewTextBoxCell)dgvResultsList.Rows[index].Cells[item.Name]).Value = row[index].ToString();
+                                            ((DataGridViewTextBoxCell)cell).Value = row[column].ToString();
                                         }
                                         break;
                                     }
                                 }
                             }
+                            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
+                            {
+                                filters = new List<GenericSearchFilterDto>(),
+                            };
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FlgLogicalDelete",
+                                value = false.ToString(),
+                                LogicalOperator = LogicalOperator.Begin,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "Code",
+                                value = dgvResultsList.Rows[index].Cells["Code"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            (bool isSuccess, lstSearchResponse) = await indicatorService.Search(searchRequest);
+                            if (isSuccess  && lstSearchResponse.Count() > 0)
+                            {
+                                dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
+                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                            }
+                            RowLeave(index);
                         }
-                      //  dgvResultsList.DataSource = lst.ToArray();
-                        MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -853,6 +887,7 @@ namespace PMIS.Forms
             }
             catch (Exception ex)
             {
+                dgvResultsList.Rows.Clear();
                 MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
