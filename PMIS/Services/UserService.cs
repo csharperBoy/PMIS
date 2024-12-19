@@ -2,7 +2,6 @@
 using Generic.Base.Handler.Map.Abstract;
 using Generic.Service.Normal.Composition;
 using Generic.Service.Normal.Operation.Abstract;
-using GenericTest.Repository;
 using Microsoft.EntityFrameworkCore;
 using PMIS.DTO.User;
 using PMIS.Models;
@@ -23,24 +22,6 @@ namespace PMIS.Services
         {
 
         }
-        private AbstractGenericMapHandler mapper;
        
-        public override async Task<bool> AddRange(IEnumerable<UserAddRequestDto> requestInput)
-        {
-            mapper = GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto);
-            Repository<User,PmisContext> repository = new Repository<User, PmisContext> (new PmisContext());
-            bool result = true;
-            List<User> entityRequest = new List<User>();
-            foreach (var req in requestInput)
-            {
-                User entity = new User();
-
-                entity = await mapper.Map<UserAddRequestDto, User>(req);
-                entityRequest.Add(entity);
-            }           
-               
-            result = await repository.InsertRangeAsync(entityRequest);                       
-            return result;
-        }
     }
 } 

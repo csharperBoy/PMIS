@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GenericTest\GenericTest.csproj" />
     <ProjectReference Include="..\Generic\Generic.csproj" />
   </ItemGroup>
 
