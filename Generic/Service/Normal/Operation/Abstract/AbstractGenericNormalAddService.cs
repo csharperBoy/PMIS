@@ -123,6 +123,7 @@ namespace Generic.Service.Normal.Operation.Abstract
             }
             catch (Exception ex)
             {
+                await repository.SetEntitiesStateAsync(entityRequest, EntityState.Detached);
                 await repository.RollbackAsync();
                 throw;
             }
