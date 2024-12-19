@@ -746,6 +746,11 @@ namespace PMIS.Forms
             return false;
         }
 
+        private void CellValidated(int rowIndex, int columnIndex)
+        {
+
+        }
+
         public void RowPostPaint(int rowIndex)
         {
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
@@ -875,6 +880,10 @@ namespace PMIS.Forms
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
                                 dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                            }
+                            foreach (DataGridViewColumn item in dgvResultsList.Columns)
+                            {
+                                CellValidated(index, item.Index);
                             }
                             RowLeave(index);
                         }
