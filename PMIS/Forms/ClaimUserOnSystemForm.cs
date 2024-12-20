@@ -3,6 +3,7 @@ using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Indicator;
@@ -29,6 +30,7 @@ namespace PMIS.Forms
         private List<ClaimUserOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<ClaimUserOnSystemDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<ClaimUserOnSystemSearchResponseDto> lstSearchResponse;
+        private BindingList<ClaimUserOnSystemSearchResponseDto> lstBinding;
         private ClaimUserOnSystemColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -394,8 +396,8 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (lstAddRequest.Count != 0 ||
-                lstEditRequest.Count != 0 ||
+            if (lstBinding.Count() > lstSearchResponse.Count() || // lstAddRequest.Count != 0 ||
+                dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
                 lstRecycleRequest.Count != 0
@@ -463,7 +465,8 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await claimUserOnSystemService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<ClaimUserOnSystemSearchResponseDto>(lstSearchResponse.ToList());
+            lstBinding = new BindingList<ClaimUserOnSystemSearchResponseDto>(lstSearchResponse.ToList());
+            dgvResultsList.DataSource = lstBinding;
 
             if (isSuccess)
             {

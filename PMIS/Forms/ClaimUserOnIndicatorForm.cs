@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Generic.Helper;
 using WSM.WindowsServices.FileManager;
+using PMIS.DTO.IndicatorValue;
 
 namespace PMIS.Forms
 {
@@ -29,6 +30,7 @@ namespace PMIS.Forms
         private List<ClaimUserOnIndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<ClaimUserOnIndicatorDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<ClaimUserOnIndicatorSearchResponseDto> lstSearchResponse;
+        private BindingList<ClaimUserOnIndicatorSearchResponseDto> lstBinding;
         private ClaimUserOnIndicatorColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
@@ -408,8 +410,8 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (lstAddRequest.Count != 0 ||
-                lstEditRequest.Count != 0 ||
+            if (lstBinding.Count() > lstSearchResponse.Count() || // lstAddRequest.Count != 0 ||
+                dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
                 lstRecycleRequest.Count != 0
@@ -477,7 +479,8 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await claimUserOnIndicatorService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<ClaimUserOnIndicatorSearchResponseDto>(lstSearchResponse.ToList());
+            lstBinding = new BindingList<ClaimUserOnIndicatorSearchResponseDto>(lstSearchResponse.ToList());
+            dgvResultsList.DataSource = lstBinding;
 
             if (isSuccess)
             {

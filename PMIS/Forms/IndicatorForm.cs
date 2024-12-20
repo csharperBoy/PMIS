@@ -31,6 +31,7 @@ namespace PMIS.Forms
         private List<IndicatorDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<IndicatorSearchResponseDto> lstSearchResponse;
+        private BindingList<IndicatorSearchResponseDto> lstBinding;
         private IndicatorColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
@@ -370,8 +371,8 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (lstAddRequest.Count != 0 ||
-                lstEditRequest.Count != 0 ||
+            if (lstBinding.Count() > lstSearchResponse.Count() || // lstAddRequest.Count != 0 ||
+                dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
                 lstRecycleRequest.Count != 0
@@ -440,7 +441,8 @@ namespace PMIS.Forms
 
 
             (bool isSuccess, lstSearchResponse) = await indicatorService.Search(searchRequest);
-            dgvResultsList.DataSource = new BindingList<IndicatorSearchResponseDto>(lstSearchResponse.ToList());
+            lstBinding = new BindingList<IndicatorSearchResponseDto>(lstSearchResponse.ToList());
+            dgvResultsList.DataSource = lstBinding;
 
             if (isSuccess)
             {
@@ -886,6 +888,7 @@ namespace PMIS.Forms
                                 CellValidated(index, item.Index);
                             }
                             RowLeave(index);
+                            lstSearchResponse = new List<IndicatorSearchResponseDto>();
                         }
                     }
                     else

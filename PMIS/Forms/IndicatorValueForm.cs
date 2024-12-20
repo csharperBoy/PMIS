@@ -48,6 +48,7 @@ namespace PMIS.Forms
         private List<IndicatorValueDeleteRequestDto> lstPhysicalDeleteRequest;
         private List<IndicatorValueDeleteRequestDto> lstRecycleRequest;
         private IEnumerable<IndicatorValueSearchResponseDto> lstSearchResponse;
+        private BindingList<IndicatorValueSearchResponseDto> lstBinding;
         private BindingSource resultBindingSource;
         private IndicatorValueColumnsDto columns;
         private List<DateTime> lstDates;
@@ -431,8 +432,8 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (lstAddRequest.Count != 0 ||
-                lstEditRequest.Count != 0 ||
+            if (lstBinding.Count() > lstSearchResponse.Count() || // lstAddRequest.Count != 0 ||
+                dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
                 lstRecycleRequest.Count != 0
@@ -532,8 +533,8 @@ namespace PMIS.Forms
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
             lstSearchResponse = await indicatorValueService.SearchByExternaFilter(lstSearchResponse, int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpForm"].Value.ToString()), int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpPeriod"].Value.ToString()));
             lstSearchResponse = await GenerateRows(lstSearchResponse);
-            var bindingList = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
-            resultBindingSource = new BindingSource(bindingList, null);
+            lstBinding = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+            resultBindingSource = new BindingSource(lstBinding, null);
             dgvResultsList.DataSource = resultBindingSource;
 
             if (isSuccess)
@@ -1501,6 +1502,7 @@ namespace PMIS.Forms
                                 CellValidated(index, item.Index);
                             }
                             RowLeave(index);
+                            lstSearchResponse = new List<IndicatorValueSearchResponseDto>();
                         }
                     }
                     else
