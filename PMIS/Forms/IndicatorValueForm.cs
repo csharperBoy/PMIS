@@ -888,7 +888,7 @@ namespace PMIS.Forms
         {
             try
             {
-                await EdiIndicatorValue();
+                await EditEntity();
                 // await LogicalDeleteEntity();
                 //await PhysicalDeleteEntity();
                 // await RecycleEntity();
@@ -959,7 +959,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task EdiIndicatorValue()
+        public async Task EditEntity()
         {
             try
             {

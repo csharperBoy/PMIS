@@ -498,7 +498,7 @@ namespace PMIS.Forms
         {
             try
             {
-                await EdiClaimUserOnIndicator();
+                await EditEntity();
                 await LogicalDeleteEntity();
                 await PhysicalDeleteEntity();
                 await RecycleEntity();
@@ -560,7 +560,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task EdiClaimUserOnIndicator()
+        public async Task EditEntity()
         {
             try
             {

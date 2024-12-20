@@ -484,7 +484,7 @@ namespace PMIS.Forms
         {
             try
             {
-                await EdiClaimUserOnSystem();
+                await EditEntity();
                 await LogicalDeleteEntity();
                 await PhysicalDeleteEntity();
                 await RecycleEntity();
@@ -546,7 +546,7 @@ namespace PMIS.Forms
             }
         }
 
-        public async Task EdiClaimUserOnSystem()
+        public async Task EditEntity()
         {
             try
             {
