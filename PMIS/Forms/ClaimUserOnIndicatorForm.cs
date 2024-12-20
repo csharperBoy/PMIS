@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using Generic.Helper;
 using WSM.WindowsServices.FileManager;
 using PMIS.DTO.IndicatorValue;
+using System.Data;
 
 namespace PMIS.Forms
 {
@@ -189,6 +190,11 @@ namespace PMIS.Forms
         private void dgvResultsList_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
 
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            Upload();
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
@@ -787,6 +793,11 @@ namespace PMIS.Forms
             return false;
         }
 
+        private void CellValidated(int rowIndex, int columnIndex)
+        {
+
+        }
+
         public void RowPostPaint(int rowIndex)
         {
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].Value = (rowIndex + 1).ToString();
@@ -862,6 +873,128 @@ namespace PMIS.Forms
             addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
             addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
             return addRequest;
+        }
+
+        private async void Upload()
+        {
+            try
+            {
+                await ShouldChangesBeSaved();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (Path.GetFileName(openFileDialog.FileName).StartsWith("IndicatorsClaims"))
+                    {
+                        DataTable dataTable = ((DataSet)ExcelManager.Read<DataSet>(openFileDialog.FileName)).Tables[0];
+                        dgvResultsList.DataSource = null;
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            int index = dgvResultsList.Rows.Add();
+                            foreach (DataColumn column in dataTable.Columns)
+                            {
+                                foreach (DataGridViewColumn item in dgvResultsList.Columns)
+                                {
+                                    if (item.HeaderText == column.ColumnName)
+                                    {
+                                        DataGridViewCell cell = dgvResultsList.Rows[index].Cells[item.Name];
+                                        if (cell is DataGridViewComboBoxCell)
+                                        {
+                                            object dataSource = ((DataGridViewComboBoxCell)cell).DataSource;
+                                            if (dataSource is LookUpValueShortInfoDto[])
+                                            {
+                                                var selectItem = ((LookUpValueShortInfoDto[])dataSource).FirstOrDefault(item => item.Display == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                            else if (dataSource is UserSearchResponseDto[])
+                                            {
+                                                var selectItem = ((UserSearchResponseDto[])dataSource).FirstOrDefault(item => item.UserName == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                            else if (dataSource is IndicatorSearchResponseDto[])
+                                            {
+                                                var selectItem = ((IndicatorSearchResponseDto[])dataSource).FirstOrDefault(item => item.Code == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                        }
+                                        else if (cell is DataGridViewTextBoxCell)
+                                        {
+                                            ((DataGridViewTextBoxCell)cell).Value = row[column].ToString();
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
+                            {
+                                filters = new List<GenericSearchFilterDto>(),
+                            };
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FlgLogicalDelete",
+                                value = false.ToString(),
+                                LogicalOperator = LogicalOperator.Begin,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkUserId",
+                                value = dgvResultsList.Rows[index].Cells["FkUserId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkIndicatorId",
+                                value = dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkLkpClaimUserOnIndicatorId",
+                                value = dgvResultsList.Rows[index].Cells["FkLkpClaimUserOnIndicatorId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            (bool isSuccess, lstSearchResponse) = await claimUserOnIndicatorService.Search(searchRequest);
+                            if (isSuccess && lstSearchResponse.Count() > 0)
+                            {
+                                dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
+                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                            }
+                            foreach (DataGridViewColumn item in dgvResultsList.Columns)
+                            {
+                                CellValidated(index, item.Index);
+                            }
+                            RowLeave(index);
+                            lstSearchResponse = new List<ClaimUserOnIndicatorSearchResponseDto>();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("نام فایل باید با IndicatorsClaims آغاز گردد!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dgvResultsList.Rows.Clear();
+                MessageBox.Show("عملیات بارگزاری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Download()

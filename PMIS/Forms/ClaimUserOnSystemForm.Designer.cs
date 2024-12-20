@@ -72,7 +72,6 @@ namespace PMIS.Forms
             btnDownload.TabIndex = 0;
             btnDownload.Text = "بارگیری";
             btnDownload.UseVisualStyleBackColor = true;
-            btnDownload.Visible = false;
             btnDownload.Click += btnDownload_Click;
             // 
             // btnUpload
@@ -85,7 +84,7 @@ namespace PMIS.Forms
             btnUpload.TabIndex = 1;
             btnUpload.Text = "بارگزاری";
             btnUpload.UseVisualStyleBackColor = true;
-            btnUpload.Visible = false;
+            btnUpload.Click += btnUpload_Click;
             // 
             // btnApply
             // 

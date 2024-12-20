@@ -100,7 +100,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
                    DataPropertyName = "FkUserId",
                    DisplayMember = "Username",
                    ValueMember = "Id",
-                   DataSource = lstUser,
+                   DataSource = lstUser.ToArray(),
                    ReadOnly = true,
                    Visible = true,
                },
