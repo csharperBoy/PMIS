@@ -779,7 +779,8 @@ namespace PMIS.Forms
                     var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Equals("<" + column.Name + ">k__BackingField"));
                     if (fieldInfo != null)
                     {
-                        fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
+                        //fieldInfo.SetValue(addRequest, row.Cells[column.Name].Value);
+                        fieldInfo.SetValue(addRequest, Convert.ChangeType(row.Cells[column.Name].Value, fieldInfo.FieldType));
                     }
                 }
                 return addRequest;
@@ -802,7 +803,8 @@ namespace PMIS.Forms
                     var fieldInfo = entityFields.FirstOrDefault(f => f.Name.Equals("<" + column.Name + ">k__BackingField"));
                     if (fieldInfo != null)
                     {
-                        fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);
+                        //fieldInfo.SetValue(editRequest, row.Cells[column.Name].Value);
+                        fieldInfo.SetValue(editRequest, Convert.ChangeType(row.Cells[column.Name].Value, fieldInfo.FieldType));
                     }
                 }
                 return editRequest;
