@@ -71,6 +71,19 @@ namespace PMIS.Forms
 
         private async void buttonSubmit_Click(object sender, EventArgs e)
         {
+            await Apply();
+        }
+
+        private async void textBoxEntry_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                await Apply();
+            }
+        }
+
+        private async Task Apply()
+        {
             try
             {
                 string hashText = Hasher.HasherHMACSHA512.Hash(GlobalVariable.username + " + " + textBoxCurrentPassword.Text);

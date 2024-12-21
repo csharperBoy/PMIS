@@ -53,6 +53,7 @@
             textBoxNewPassword.PasswordChar = '●';
             textBoxNewPassword.Size = new Size(100, 23);
             textBoxNewPassword.TabIndex = 2;
+            textBoxNewPassword.KeyPress += textBoxEntry_KeyPress;
             // 
             // labelNewPassword
             // 
@@ -80,6 +81,7 @@
             textBoxRepeatNewPassword.PasswordChar = '●';
             textBoxRepeatNewPassword.Size = new Size(100, 23);
             textBoxRepeatNewPassword.TabIndex = 3;
+            textBoxRepeatNewPassword.KeyPress += textBoxEntry_KeyPress;
             // 
             // labelRepeatNewPassword
             // 
@@ -97,6 +99,7 @@
             textBoxCurrentPassword.PasswordChar = '●';
             textBoxCurrentPassword.Size = new Size(100, 23);
             textBoxCurrentPassword.TabIndex = 1;
+            textBoxCurrentPassword.KeyPress += textBoxEntry_KeyPress;
             // 
             // ChangePasswordForm
             // 
@@ -115,6 +118,7 @@
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Text = "تغییر گذرواژه";
+            KeyPress += textBoxEntry_KeyPress;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -45,10 +45,4 @@
     <Folder Include="InstallShield\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Forms\ClaimUserOnSystemForm - Copy.cs">
-      <SubType>Form</SubType>
-    </Compile>
-  </ItemGroup>
-
 </Project>
