@@ -608,7 +608,7 @@ namespace PMIS.Bases
                     //add values
                     //------------------------------------
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Quality", Display = "کیفیت ISO9001", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Environmental", Display = "زیست‌محیطی ISO14001", OrderNum = 2 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Environmental", Display = "زیست ‌محیطی ISO14001", OrderNum = 2 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "SafetyAndHealth", Display = "ایمنی و بهداشت ISO45001", OrderNum = 3 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Energy", Display = "انرژی ISO50001", OrderNum = 4 });
                     lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Laboratory", Display = "آزمایشگاه ISO17025", OrderNum = 5 });
