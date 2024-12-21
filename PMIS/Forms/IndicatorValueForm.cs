@@ -432,7 +432,7 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (lstBinding.Count() < lstSearchResponse.Count() || // lstAddRequest.Count != 0 ||
+            if (dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0) > 0 || // lstAddRequest.Count != 0 ||
                 dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
@@ -532,7 +532,7 @@ namespace PMIS.Forms
 
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
             lstSearchResponse = await indicatorValueService.SearchByExternaFilter(lstSearchResponse, int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpForm"].Value.ToString()), int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpPeriod"].Value.ToString()));
-            lstSearchResponse = await GenerateRows(lstSearchResponse);
+            // lstSearchResponse = await GenerateRows(lstSearchResponse);
             lstBinding = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
             resultBindingSource = new BindingSource(lstBinding, null);
             dgvResultsList.DataSource = resultBindingSource;
