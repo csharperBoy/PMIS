@@ -4,8 +4,8 @@ using Generic.Service.Normal.Composition.Contract;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnIndicator;
-using PMIS.DTO.ClaimUserOnSystem;
-using PMIS.DTO.ClaimUserOnSystem;
+using PMIS.DTO.IndicatorCategory;
+using PMIS.DTO.IndicatorCategory;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.LookUpValue.Info;
@@ -19,42 +19,43 @@ using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
 using WSM.WindowsServices.FileManager;
+using PMIS.DTO.ClaimUserOnSystem;
 
 namespace PMIS.Forms
 {
-    public partial class ClaimUserOnSystemForm : Form
+    public partial class IndicatorCategoryForm : Form
     {
 
         #region Variables
-        private List<ClaimUserOnSystemAddRequestDto> lstAddRequest;
-        private List<ClaimUserOnSystemEditRequestDto> lstEditRequest;
-        private List<ClaimUserOnSystemDeleteRequestDto> lstLogicalDeleteRequest;
-        private List<ClaimUserOnSystemDeleteRequestDto> lstPhysicalDeleteRequest;
-        private List<ClaimUserOnSystemDeleteRequestDto> lstRecycleRequest;
-        private IEnumerable<ClaimUserOnSystemSearchResponseDto> lstSearchResponse;
-        private BindingList<ClaimUserOnSystemSearchResponseDto> lstBinding;
-        private ClaimUserOnSystemColumnsDto columns;
+        private List<IndicatorCategoryAddRequestDto> lstAddRequest;
+        private List<IndicatorCategoryEditRequestDto> lstEditRequest;
+        private List<IndicatorCategoryDeleteRequestDto> lstLogicalDeleteRequest;
+        private List<IndicatorCategoryDeleteRequestDto> lstPhysicalDeleteRequest;
+        private List<IndicatorCategoryDeleteRequestDto> lstRecycleRequest;
+        private IEnumerable<IndicatorCategorySearchResponseDto> lstSearchResponse;
+        private BindingList<IndicatorCategorySearchResponseDto> lstBinding;
+        private IndicatorCategoryColumnsDto columns;
         private ILookUpValueService lookUpValueService;
         private IUserService userService;
         private IIndicatorService indicatorService;
-        private IClaimUserOnSystemService claimUserOnSystemService;
-        private int fkUserId;
+        private IIndicatorCategoryService IndicatorCategoryService;
+        private IClaimUserOnSystemService claimUserOnSystemService;        
         private int fkIndicatorId;
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
-        
-        public ClaimUserOnSystemForm(IClaimUserOnSystemService _claimUserOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
+
+        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkIndicatorId, TabControl _tabControl)
         {
 
             InitializeComponent();
-            claimUserOnSystemService = _claimUserOnSystemService;
+            IndicatorCategoryService = _IndicatorCategoryService;
             userService = _userService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
-            fkUserId = _fkUserId;
             fkIndicatorId = _fkIndicatorId;
             tabControl = _tabControl;
+            claimUserOnSystemService = _claimUserOnSystemService;
             CustomInitialize();
 
         }
@@ -65,11 +66,11 @@ namespace PMIS.Forms
             if (await CheckSystemClaimsRequired())
             {
                 // InitializeComponent();
-                columns = new ClaimUserOnSystemColumnsDto();
-                await columns.Initialize(lookUpValueService, userService, indicatorService, fkUserId, fkIndicatorId);
-                lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
-                lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
-                lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                columns = new IndicatorCategoryColumnsDto();
+                await columns.Initialize(lookUpValueService, indicatorService, fkIndicatorId);
+                lstLogicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
+                lstPhysicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
+                lstRecycleRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 GenerateDgvFilterColumnsInitialize();
                 GenerateDgvResultColumnsInitialize();
                 FiltersInitialize();
@@ -89,7 +90,7 @@ namespace PMIS.Forms
             try
             {
                 IEnumerable<ClaimUserOnSystemSearchResponseDto> claims = await claimUserOnSystemService.GetCurrentUserClaims();
-                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "ClaimUserOnSystemForm"))
+                if (!claims.Any(c => c.FkLkpClaimUserOnSystemInfo.Value == "IndicatorCategoryForm"))
                 {
                     this.Close();
                     return false;
@@ -107,7 +108,7 @@ namespace PMIS.Forms
         {
             TabPage tabPage = new TabPage();
             tabPage.Location = new Point(4, 24);
-            tabPage.Name = "tabPageClaimUserOnSystemForm";
+            tabPage.Name = "tabPageIndicatorCategoryForm";
             tabPage.Padding = new Padding(3);
             tabPage.Size = new Size(192, 0);
             tabPage.TabIndex = 0;
@@ -208,7 +209,7 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
-                if (fkUserId != 0)
+                if (fkIndicatorId != 0)
                 {
                     ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Value = ((UserSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Items[0]).Id;
                 }
@@ -419,11 +420,11 @@ namespace PMIS.Forms
         {
             isLoaded = false;
             await ShouldChangesBeSaved();
-            lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
-            lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
-            lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
-            lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
-            lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+            lstAddRequest = new List<IndicatorCategoryAddRequestDto>();
+            lstEditRequest = new List<IndicatorCategoryEditRequestDto>();
+            lstLogicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
+            lstPhysicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
+            lstRecycleRequest = new List<IndicatorCategoryDeleteRequestDto>();
 
             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
             {
@@ -471,8 +472,8 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, lstSearchResponse) = await claimUserOnSystemService.Search(searchRequest);
-            lstBinding = new BindingList<ClaimUserOnSystemSearchResponseDto>(lstSearchResponse.ToList());
+            (bool isSuccess, lstSearchResponse) = await IndicatorCategoryService.Search(searchRequest);
+            lstBinding = new BindingList<IndicatorCategorySearchResponseDto>(lstSearchResponse.ToList());
             dgvResultsList.DataSource = lstBinding;
 
             if (isSuccess)
@@ -513,7 +514,7 @@ namespace PMIS.Forms
         {
             try
             {
-                lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
+                lstAddRequest = new List<IndicatorCategoryAddRequestDto>();
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
@@ -522,7 +523,7 @@ namespace PMIS.Forms
 
                         if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
                         {
-                            ClaimUserOnSystemAddRequestDto addRequest = new ClaimUserOnSystemAddRequestDto();
+                            IndicatorCategoryAddRequestDto addRequest = new IndicatorCategoryAddRequestDto();
 
                             addRequest = AddMaping(row);
                             lstAddRequest.Add(addRequest);
@@ -531,8 +532,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemAddResponseDto> list) = await claimUserOnSystemService.AddGroup(lstAddRequest);
-                bool isSuccess = await claimUserOnSystemService.AddRange(lstAddRequest);
+                //(bool isSuccess, IEnumerable<IndicatorCategoryAddResponseDto> list) = await IndicatorCategoryService.AddGroup(lstAddRequest);
+                bool isSuccess = await IndicatorCategoryService.AddRange(lstAddRequest);
 
                 if (isSuccess)
                 {
@@ -560,7 +561,7 @@ namespace PMIS.Forms
         {
             try
             {
-                lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
+                lstEditRequest = new List<IndicatorCategoryEditRequestDto>();
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
@@ -568,7 +569,7 @@ namespace PMIS.Forms
                     {
                         if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
                         {
-                            ClaimUserOnSystemEditRequestDto editRequest = new ClaimUserOnSystemEditRequestDto();
+                            IndicatorCategoryEditRequestDto editRequest = new IndicatorCategoryEditRequestDto();
 
                             editRequest = EditMaping(row);
                             lstEditRequest.Add(editRequest);
@@ -577,8 +578,8 @@ namespace PMIS.Forms
                     catch (Exception) { }
                 }
 
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemEditResponseDto> list) = await claimUserOnSystemService.EditGroup(lstEditRequest);
-                bool isSuccess = await claimUserOnSystemService.EditRange(lstEditRequest);
+                //(bool isSuccess, IEnumerable<IndicatorCategoryEditResponseDto> list) = await IndicatorCategoryService.EditGroup(lstEditRequest);
+                bool isSuccess = await IndicatorCategoryService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -599,12 +600,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimUserOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await claimUserOnSystemService.LogicalDeleteRange(lstLogicalDeleteRequest);
+                //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await IndicatorCategoryService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstLogicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                    lstLogicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 }
                 else
                 {
@@ -622,12 +623,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimUserOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await claimUserOnSystemService.RecycleRange(lstRecycleRequest);
+                //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await IndicatorCategoryService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstRecycleRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                    lstRecycleRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 }
                 else
                 {
@@ -645,12 +646,12 @@ namespace PMIS.Forms
             try
             {
 
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemDeleteResponseDto> list) = await claimUserOnSystemService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await claimUserOnSystemService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
+                //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
+                bool isSuccess = await IndicatorCategoryService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lstPhysicalDeleteRequest = new List<ClaimUserOnSystemDeleteRequestDto>();
+                    lstPhysicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 }
                 else
                 {
@@ -714,7 +715,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
+                    IndicatorCategoryDeleteRequestDto deleteRequest = new IndicatorCategoryDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -731,7 +732,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
+                    IndicatorCategoryDeleteRequestDto deleteRequest = new IndicatorCategoryDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -748,7 +749,7 @@ namespace PMIS.Forms
             {
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
-                    ClaimUserOnSystemDeleteRequestDto deleteRequest = new ClaimUserOnSystemDeleteRequestDto();
+                    IndicatorCategoryDeleteRequestDto deleteRequest = new IndicatorCategoryDeleteRequestDto();
                     var entityFields = deleteRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("<" + "Id" + ">k__BackingField"));
 
@@ -799,11 +800,11 @@ namespace PMIS.Forms
             dgvResultsList.Rows[rowIndex].Cells["RowNumber"].ReadOnly = true;
         }
 
-        private ClaimUserOnSystemAddRequestDto AddMaping(DataGridViewRow row)
+        private IndicatorCategoryAddRequestDto AddMaping(DataGridViewRow row)
         {
             try
             {
-                ClaimUserOnSystemAddRequestDto addRequest = new ClaimUserOnSystemAddRequestDto();
+                IndicatorCategoryAddRequestDto addRequest = new IndicatorCategoryAddRequestDto();
 
                 var entityFields = addRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in dgvResultsList.Columns)
@@ -825,17 +826,17 @@ namespace PMIS.Forms
             }
         }
 
-        private ClaimUserOnSystemAddRequestDto AfterAddMapping(ClaimUserOnSystemAddRequestDto addRequest)
+        private IndicatorCategoryAddRequestDto AfterAddMapping(IndicatorCategoryAddRequestDto addRequest)
         {
-            addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
+            addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
             return addRequest;
         }
 
-        private ClaimUserOnSystemEditRequestDto EditMaping(DataGridViewRow row)
+        private IndicatorCategoryEditRequestDto EditMaping(DataGridViewRow row)
         {
             try
             {
-                ClaimUserOnSystemEditRequestDto editRequest = new ClaimUserOnSystemEditRequestDto();
+                IndicatorCategoryEditRequestDto editRequest = new IndicatorCategoryEditRequestDto();
                 var entityFields = editRequest.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 foreach (DataGridViewColumn column in dgvResultsList.Columns)
                 {
@@ -856,9 +857,9 @@ namespace PMIS.Forms
             }
         }
 
-        private ClaimUserOnSystemEditRequestDto AfterEditMapping(ClaimUserOnSystemEditRequestDto addRequest)
+        private IndicatorCategoryEditRequestDto AfterEditMapping(IndicatorCategoryEditRequestDto addRequest)
         {
-            addRequest.FkUserId = fkUserId == 0 ? addRequest.FkUserId : fkUserId;
+            addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
             return addRequest;
         }
 
@@ -935,13 +936,13 @@ namespace PMIS.Forms
                             });
                             searchRequest.filters.Add(new GenericSearchFilterDto()
                             {
-                                columnName = "FkLkpClaimUserOnSystemId",
-                                value = dgvResultsList.Rows[index].Cells["FkLkpClaimUserOnSystemId"].Value.ToString(),
+                                columnName = "FkLkpIndicatorCategoryId",
+                                value = dgvResultsList.Rows[index].Cells["FkLkpIndicatorCategoryId"].Value.ToString(),
                                 LogicalOperator = LogicalOperator.And,
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition,
                             });
-                            (bool isSuccess, lstSearchResponse) = await claimUserOnSystemService.Search(searchRequest);
+                            (bool isSuccess, lstSearchResponse) = await IndicatorCategoryService.Search(searchRequest);
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
@@ -952,7 +953,7 @@ namespace PMIS.Forms
                                 CellValidated(index, item.Index);
                             }
                             RowLeave(index);
-                            lstSearchResponse = new List<ClaimUserOnSystemSearchResponseDto>();
+                            lstSearchResponse = new List<IndicatorCategorySearchResponseDto>();
                         }
                     }
                     else
