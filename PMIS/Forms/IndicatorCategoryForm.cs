@@ -36,7 +36,7 @@ namespace PMIS.Forms
         private BindingList<IndicatorCategorySearchResponseDto> lstBinding;
         private IndicatorCategoryColumnsDto columns;
         private ILookUpValueService lookUpValueService;
-        private IUserService userService;
+       // private IUserService userService;
         private IIndicatorService indicatorService;
         private IIndicatorCategoryService IndicatorCategoryService;
         private IClaimUserOnSystemService claimUserOnSystemService;        
@@ -45,12 +45,12 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkIndicatorId, TabControl _tabControl)
+        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkIndicatorId, TabControl _tabControl)
         {
 
             InitializeComponent();
             IndicatorCategoryService = _IndicatorCategoryService;
-            userService = _userService;
+            //userService = _userService;
             indicatorService = _indicatorService;
             lookUpValueService = _lookUpValueService;
             fkIndicatorId = _fkIndicatorId;

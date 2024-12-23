@@ -9,6 +9,7 @@ namespace PMIS.Forms
     public partial class MainForm : Form
     {
         IIndicatorService indicatorService;
+        IIndicatorCategoryService indicatorCategoryService;
         IUserService userService;
         ILookUpService lookUpService;
         ILookUpValueService lookUpValueService;
@@ -17,7 +18,7 @@ namespace PMIS.Forms
         IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IClaimUserOnSystemService claimUserOnSystemService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, IIndicatorCategoryService _indicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
             InitializeComponent();
             claimUserOnSystemService = _claimUserOnSystemService;
@@ -28,6 +29,7 @@ namespace PMIS.Forms
             lookUpValueService = _lookUpValueService;
             lookUpDestinationService = _lookUpDestinationService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
+            indicatorCategoryService = _indicatorCategoryService;
             logHandler = _logHandler.CreateLogger();
             CustomInitialize();
         }
@@ -115,6 +117,12 @@ namespace PMIS.Forms
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void IndicatorCategoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new IndicatorCategoryForm(indicatorCategoryService,  claimUserOnSystemService, indicatorService, lookUpValueService,0, tabControlMain);
+
         }
     }
 }
