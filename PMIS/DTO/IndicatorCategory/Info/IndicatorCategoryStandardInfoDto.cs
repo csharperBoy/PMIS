@@ -16,17 +16,13 @@ namespace PMIS.DTO.IndicatorCategory.Info
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
             this.FkIndicatorInfo = await (new IndicatorShortInfoDto()).extraMapFromBaseModel(baseModel.FkIndicator);
-            this.FkLkpCategoryDetailInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpCategoryDetail);
-            this.FkLkpCategoryMasterInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpCategoryMaster);
-            this.FkLkpCategoryTypeInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpCategoryType);
+            this.FkCategoryInfo = await (new CategoryShortInfoDto()).extraMapFromBaseModel(baseModel.FkCategory);
             return this;
         }
         public virtual IndicatorShortInfoDto FkIndicatorInfo { get; set; } = null!;
 
-        public virtual LookUpValueShortInfoDto FkLkpCategoryDetailInfo { get; set; } = null!;
+        public virtual CategoryShortInfoDto FkLCategoryInfo { get; set; } = null!;
 
-        public virtual LookUpValueShortInfoDto FkLkpCategoryMasterInfo { get; set; } = null!;
 
-        public virtual LookUpValueShortInfoDto FkLkpCategoryTypeInfo { get; set; } = null!;
     }
 }

@@ -1,20 +1,18 @@
 ﻿using Generic.Base.Handler.Map;
-using PMIS.DTO.ClaimUserOnIndicator.Info;
 using PMIS.DTO.Indicator.Info;
-using PMIS.DTO.IndicatorValue.Info;
-using PMIS.DTO.LookUpValue.Info;
+using PMIS.DTO.Category.Info;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMIS.DTO.IndicatorCategory.Info
+namespace PMIS.DTO.Category.Info
 {
-    public class IndicatorCategoryShortInfoDto : IndicatorCategoryTinyInfoDto
+    public class CategoryShortInfoDto : CategoryTinyInfoDto
     {
 
-        public async Task<IndicatorCategoryShortInfoDto> extraMapFromBaseModel(PMIS.Models.IndicatorCategory baseModel)
+        public async Task<CategoryShortInfoDto> extraMapFromBaseModel(PMIS.Models.Category baseModel)
         {
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
@@ -22,11 +20,13 @@ namespace PMIS.DTO.IndicatorCategory.Info
             this.FkCategoryInfo = await (new CategoryTinyInfoDto()).extraMapFromBaseModel(baseModel.FkCategory);
             return this;
         }
-        public virtual IndicatorTinyInfoDto   FkIndicatorInfo { get; set; } = null!;
+        public virtual Category? FkParent { get; set; }
 
+        public virtual LookUpValue FklkpType { get; set; } = null!;
 
-        public virtual CategoryTinyInfoDto FkLCategoryInfo { get; set; } = null!;
+        public virtual ICollection<IndicatorCategory> IndicatorCategories { get; set; } = new List<IndicatorCategory>();
 
+        public virtual ICollection<Category> InverseFkParent { get; set; } = new List<Category>();
 
 
     }
