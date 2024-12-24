@@ -38,10 +38,13 @@ namespace PMIS.DTO.IndicatorValue
             // lstIndicator.AddRange(lstIndicator1);
             var lstLkpShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpShift")).Single();
             var lstLkpValuesShift = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpShiftID", "LkpShift")).ToArray();
+            
             var lstLkpForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpForm")).Single();
             var lstLkpValuesForm = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpFormID", "LkpForm")).ToArray();
+            
             var lstLkpPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "LkpPeriod")).Single();
             var lstLkpValuesPeriod = (await lookUpValueService.GetList(lstLookUpDestinationIndicator, "FkLkpPeriodID", "LkpPeriod")).ToArray();
+            
             var lstLkpValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "LkpValueType")).Single();
             var lstLkpValuesValueType = (await lookUpValueService.GetList(lstLookUpDestinationIndicatorValues, "FkLkpValueTypeID", "LkpValueType")).ToArray();
 

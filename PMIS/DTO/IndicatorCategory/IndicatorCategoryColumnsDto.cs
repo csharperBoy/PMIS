@@ -16,6 +16,14 @@ namespace PMIS.DTO.IndicatorCategory
         {
             IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("IndicatorCategory");
 
+            var lstLkpCategoryType = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryType")).Single();
+            var lstLkpCategoryTypeValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray();
+
+            var lstLkpCategoryMaster = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryMaster")).Single();
+            var lstLkpCategoryMasterValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray();
+
+            var lstLkpCategoryDetail = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryDetail")).Single();
+            var lstLkpCategoryDetailValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray();
             // List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0, Title = "همه" } };
             (bool isSuccessIndicator, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
             {
@@ -58,36 +66,36 @@ namespace PMIS.DTO.IndicatorCategory
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryType")).Single().Title,
+                   HeaderText =lstLkpCategoryType.Title,
                    Name = "FkLkpCategoryTypeId",
                    DataPropertyName = "FkLkpCategoryTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray(),
+                   DataSource = lstLkpCategoryType,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryMaster")).Single().Title,
+                   HeaderText = lstLkpCategoryMaster.Title,
                    Name = "FkLkpCategoryMasterId",
                    DataPropertyName = "FkLkpCategoryMasterId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray(),
+                   DataSource = lstLkpCategoryMasterValues,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryDetail")).Single().Title,
+                   HeaderText =lstLkpCategoryDetail.Title,
                    Name = "FkLkpCategoryDetailId",
                    DataPropertyName = "FkLkpCategoryDetailId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray(),
+                   DataSource =  lstLkpCategoryDetailValues,
                    ReadOnly = false,
                    Visible = true,
                    MinimumWidth = 150,
@@ -140,36 +148,36 @@ namespace PMIS.DTO.IndicatorCategory
                },
                new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryType")).Single().Title,
+                   HeaderText = lstLkpCategoryType.Title,
                    Name = "FkLkpCategoryTypeId",
                    DataPropertyName = "FkLkpCategoryTypeId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray(),
+                   DataSource = lstLkpCategoryTypeValues,
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryMaster")).Single().Title,
+                   HeaderText = lstLkpCategoryMaster.Title,
                    Name = "FkLkpCategoryMasterId",
                    DataPropertyName = "FkLkpCategoryMasterId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray(),
+                   DataSource =  lstLkpCategoryMasterValues,
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryDetail")).Single().Title,
+                   HeaderText = lstLkpCategoryDetail.Title,
                    Name = "FkLkpCategoryDetailId",
                    DataPropertyName = "FkLkpCategoryDetailId",
                    DisplayMember = "Display",
                    ValueMember = "Id",
-                   DataSource =  (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray(),
+                   DataSource =  lstLkpCategoryDetailValues,
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
