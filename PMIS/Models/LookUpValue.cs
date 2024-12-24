@@ -21,17 +21,13 @@ public partial class LookUpValue
 
     public bool FlgLogicalDelete { get; set; }
 
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+
     public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
     public virtual ICollection<ClaimUserOnSystem> ClaimUserOnSystems { get; set; } = new List<ClaimUserOnSystem>();
 
     public virtual LookUp FkLookUp { get; set; } = null!;
-
-    public virtual ICollection<IndicatorCategory> IndicatorCategoryFkLkpCategoryDetails { get; set; } = new List<IndicatorCategory>();
-
-    public virtual ICollection<IndicatorCategory> IndicatorCategoryFkLkpCategoryMasters { get; set; } = new List<IndicatorCategory>();
-
-    public virtual ICollection<IndicatorCategory> IndicatorCategoryFkLkpCategoryTypes { get; set; } = new List<IndicatorCategory>();
 
     public virtual ICollection<Indicator> IndicatorFkLkpDesirabilities { get; set; } = new List<Indicator>();
 
