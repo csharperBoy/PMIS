@@ -1,0 +1,3 @@
+﻿create model from database:
+scaffold-dbcontext "Server =.; Database = PMIS; User Id = devdb; Password = Fajr@123;TrustServerCertificate=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.sqlserver -outputdir Models -force
+***************
