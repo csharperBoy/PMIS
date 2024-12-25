@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using PMIS.DTO.Category.Info;
 using PMIS.DTO.Indicator.Info;
 using PMIS.DTO.LookUpValue.Info;
 using System;
@@ -21,7 +22,7 @@ namespace PMIS.DTO.IndicatorCategory.Info
         }
         public virtual IndicatorShortInfoDto FkIndicatorInfo { get; set; } = null!;
 
-        public virtual CategoryShortInfoDto FkLCategoryInfo { get; set; } = null!;
+        public virtual CategoryShortInfoDto FkCategoryInfo { get; set; } = null!;
 
 
     }

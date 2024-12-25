@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PMIS.DTO.LookUp.Info;
+using PMIS.DTO.LookUpDestination.Info;
+using PMIS.DTO.IndicatorCategory.Info;
+using PMIS.DTO.LookUpValue.Info;
+using PMIS.DTO.ClaimUserOnIndicator.Info;
 
 namespace PMIS.DTO.Category.Info
 {
@@ -14,20 +19,26 @@ namespace PMIS.DTO.Category.Info
 
         public async Task<CategoryShortInfoDto> extraMapFromBaseModel(PMIS.Models.Category baseModel)
         {
+            if (baseModel == null)
+                return null;
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
-            this.FkIndicatorInfo = await (new IndicatorTinyInfoDto()).extraMapFromBaseModel(baseModel.FkIndicator);
-            this.FkCategoryInfo = await (new CategoryTinyInfoDto()).extraMapFromBaseModel(baseModel.FkCategory);
+            this.FklkpTypeInfo = await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FklkpType);
+            this.FkParentInfo = await (new CategoryTinyInfoDto()).extraMapFromBaseModel(baseModel.FkParent);
+            
+            this.IndicatorCategoriesInfo = await Task.WhenAll(baseModel.IndicatorCategories.Select(v => (new IndicatorCategoryTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
+            this.InverseFkParentInfo = await Task.WhenAll(baseModel.InverseFkParent.Select(v => (new CategoryTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
+
             return this;
         }
-        public virtual Category? FkParent { get; set; }
+        public virtual CategoryTinyInfoDto? FkParentInfo { get; set; }
 
-        public virtual LookUpValue FklkpType { get; set; } = null!;
+        public virtual LookUpValueTinyInfoDto FklkpTypeInfo { get; set; } = null!;
 
-        public virtual ICollection<IndicatorCategory> IndicatorCategories { get; set; } = new List<IndicatorCategory>();
+        public virtual ICollection<IndicatorCategoryTinyInfoDto> IndicatorCategoriesInfo { get; set; } = new List<IndicatorCategoryTinyInfoDto>();
 
-        public virtual ICollection<Category> InverseFkParent { get; set; } = new List<Category>();
+        public virtual ICollection<CategoryTinyInfoDto> InverseFkParentInfo { get; set; } = new List<CategoryTinyInfoDto>();
 
-
+       
     }
 }

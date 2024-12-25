@@ -1,4 +1,5 @@
 ﻿using Generic.Base.Handler.Map;
+using PMIS.DTO.Category.Info;
 using PMIS.DTO.ClaimUserOnIndicator.Info;
 using PMIS.DTO.Indicator.Info;
 using PMIS.DTO.IndicatorValue.Info;
@@ -25,7 +26,7 @@ namespace PMIS.DTO.IndicatorCategory.Info
         public virtual IndicatorTinyInfoDto   FkIndicatorInfo { get; set; } = null!;
 
 
-        public virtual CategoryTinyInfoDto FkLCategoryInfo { get; set; } = null!;
+        public virtual CategoryTinyInfoDto FkCategoryInfo { get; set; } = null!;
 
 
 
