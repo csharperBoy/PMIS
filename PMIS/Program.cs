@@ -36,6 +36,7 @@ using PMIS.Services.Contract;
 using Serilog;
 using System.Configuration;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
+using PMIS.DTO.Category;
 namespace PMIS
 {
     internal static class Program
@@ -187,6 +188,17 @@ namespace PMIS
             services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>>();
             services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, User, UserDeleteRequestDto, UserDeleteResponseDto>>();
             services.AddScoped<AbstractGenericNormalSearchService<PmisContext, User, UserSearchResponseDto>, GenericNormalSearchService<PmisContext, User, UserSearchResponseDto>>();
+            #endregion
+
+            #region Category
+            services.AddScoped<AbstractGenericRepository<Category, PmisContext>, GenericSqlServerRepository<Category, PmisContext>>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<AbstractGenericNormalService<PmisContext, Category, CategoryAddRequestDto, CategoryAddResponseDto, CategoryEditRequestDto, CategoryEditResponseDto, CategoryDeleteRequestDto, CategoryDeleteResponseDto, CategorySearchResponseDto>, GenericNormalService<PmisContext, Category, CategoryAddRequestDto, CategoryAddResponseDto, CategoryEditRequestDto, CategoryEditResponseDto, CategoryDeleteRequestDto, CategoryDeleteResponseDto, CategorySearchResponseDto>>();
+            services.AddScoped<AbstractGenericNormalAddService<PmisContext, Category, CategoryAddRequestDto, CategoryAddResponseDto>, GenericNormalAddService<PmisContext, Category, CategoryAddRequestDto, CategoryAddResponseDto>>();
+            services.AddScoped<AbstractGenericNormalEditService<PmisContext, Category, CategoryEditRequestDto, CategoryEditResponseDto>, GenericNormalEditService<PmisContext, Category, CategoryEditRequestDto, CategoryEditResponseDto>>();
+            services.AddScoped<AbstractGenericNormalLogicalDeleteService<PmisContext, Category, CategoryDeleteRequestDto, CategoryDeleteResponseDto>, GenericNormalLogicalDeleteService<PmisContext, Category, CategoryDeleteRequestDto, CategoryDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalPhysicalDeleteService<PmisContext, Category, CategoryDeleteRequestDto, CategoryDeleteResponseDto>, GenericNormalPhysicalDeleteService<PmisContext, Category, CategoryDeleteRequestDto, CategoryDeleteResponseDto>>();
+            services.AddScoped<AbstractGenericNormalSearchService<PmisContext, Category, CategorySearchResponseDto>, GenericNormalSearchService<PmisContext, Category, CategorySearchResponseDto>>();
             #endregion
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
