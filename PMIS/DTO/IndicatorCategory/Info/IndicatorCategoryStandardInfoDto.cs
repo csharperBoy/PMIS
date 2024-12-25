@@ -18,6 +18,8 @@ namespace PMIS.DTO.IndicatorCategory.Info
 
             this.FkIndicatorInfo = await (new IndicatorShortInfoDto()).extraMapFromBaseModel(baseModel.FkIndicator);
             this.FkCategoryInfo = await (new CategoryShortInfoDto()).extraMapFromBaseModel(baseModel.FkCategory);
+
+            this.VrtParentCategoryId = baseModel.FkCategory.FkParentId;
             return this;
         }
         public virtual IndicatorShortInfoDto FkIndicatorInfo { get; set; } = null!;

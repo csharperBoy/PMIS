@@ -1,4 +1,5 @@
-﻿using PMIS.DTO.Indicator;
+﻿using PMIS.DTO.Category;
+using PMIS.DTO.Indicator;
 using PMIS.DTO.LookUpDestination;
 using PMIS.DTO.User;
 using PMIS.Services.Contract;
@@ -12,18 +13,9 @@ namespace PMIS.DTO.IndicatorCategory
 {
     public class IndicatorCategoryColumnsDto
     {
-        public async Task Initialize(ILookUpValueService lookUpValueService, IIndicatorService indicatorService, int fkIndicatorId)
+        public async Task Initialize(ICategoryService categoryService, IIndicatorService indicatorService, int fkIndicatorId, int fkCategoryId)
         {
-            IEnumerable<LookUpDestinationSearchResponseDto> lstLookUpDestination = await lookUpValueService.GetList("IndicatorCategory");
 
-            var lstLkpCategoryType = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryType")).Single();
-            var lstLkpCategoryTypeValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryTypeID", "LkpCategoryType")).ToArray();
-
-            var lstLkpCategoryMaster = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryMaster")).Single();
-            var lstLkpCategoryMasterValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryMasterID", "LkpCategoryMaster")).ToArray();
-
-            var lstLkpCategoryDetail = (await lookUpValueService.GetList(lstLookUpDestination, "LkpCategoryDetail")).Single();
-            var lstLkpCategoryDetailValues = (await lookUpValueService.GetList(lstLookUpDestination, "FkLkpCategoryDetailID", "LkpCategoryDetail")).ToArray();
             // List<IndicatorSearchResponseDto> lstIndicator = new List<IndicatorSearchResponseDto>() { new IndicatorSearchResponseDto() { Id = 0, Title = "همه" } };
             (bool isSuccessIndicator, IEnumerable<IndicatorSearchResponseDto> lstIndicator) = await indicatorService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
             {
@@ -49,6 +41,25 @@ namespace PMIS.DTO.IndicatorCategory
             });
             // lstIndicator.AddRange(lstIndicator1);
 
+            (bool isSuccessCategory, IEnumerable<CategorySearchResponseDto> lstCategory) = await categoryService.Search(new Generic.Service.DTO.Concrete.GenericSearchRequestDto()
+            {
+                filters = new List<Generic.Service.DTO.Concrete.GenericSearchFilterDto>()
+                {
+                    new Generic.Service.DTO.Concrete.GenericSearchFilterDto()
+                    {
+                        columnName = "FlgLogicalDelete",
+                        LogicalOperator = Generic.Service.DTO.Concrete.LogicalOperator.And,
+                        operation = Generic.Service.DTO.Concrete.FilterOperator.Equals,
+                        type = Generic.Service.DTO.Concrete.PhraseType.Condition,
+                        value = false.ToString()
+                    }
+                }
+            });
+            IEnumerable<CategorySearchResponseDto> lstMasterCategory = lstCategory.Where(c => c.FkParentInfo == null).ToList();
+            if (fkCategoryId != 0)
+                lstCategory = lstCategory.Where(c => c.Id == fkCategoryId).ToList();
+
+
             FilterColumns.AddRange(new List<DataGridViewColumn>()
             {
              new DataGridViewComboBoxColumn()
@@ -64,43 +75,7 @@ namespace PMIS.DTO.IndicatorCategory
                    MinimumWidth = 150,
                    DividerWidth = 5
                },
-               new DataGridViewComboBoxColumn()
-               {
-                   HeaderText =lstLkpCategoryType.Title,
-                   Name = "FkLkpCategoryTypeId",
-                   DataPropertyName = "FkLkpCategoryTypeId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource = lstLkpCategoryType,
-                   ReadOnly = false,
-                   Visible = true,
-                   MinimumWidth = 150,
-                   DividerWidth = 5
-               }, new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = lstLkpCategoryMaster.Title,
-                   Name = "FkLkpCategoryMasterId",
-                   DataPropertyName = "FkLkpCategoryMasterId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource = lstLkpCategoryMasterValues,
-                   ReadOnly = false,
-                   Visible = true,
-                   MinimumWidth = 150,
-                   DividerWidth = 5
-               }, new DataGridViewComboBoxColumn()
-               {
-                   HeaderText =lstLkpCategoryDetail.Title,
-                   Name = "FkLkpCategoryDetailId",
-                   DataPropertyName = "FkLkpCategoryDetailId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  lstLkpCategoryDetailValues,
-                   ReadOnly = false,
-                   Visible = true,
-                   MinimumWidth = 150,
-                   DividerWidth = 5
-               },
+
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "ترتیب",
@@ -145,44 +120,31 @@ namespace PMIS.DTO.IndicatorCategory
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
-               },
-               new DataGridViewComboBoxColumn()
+               }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = lstLkpCategoryType.Title,
-                   Name = "FkLkpCategoryTypeId",
-                   DataPropertyName = "FkLkpCategoryTypeId",
-                   DisplayMember = "Display",
+                   HeaderText = "دسته بندی اصلی",
+                   Name = "VrtParentCategory",
+                   DataPropertyName = "VrtParentCategoryId",
+                   DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource = lstLkpCategoryTypeValues,
+                   DataSource = lstMasterCategory.ToArray(),
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
                }, new DataGridViewComboBoxColumn()
                {
-                   HeaderText = lstLkpCategoryMaster.Title,
-                   Name = "FkLkpCategoryMasterId",
-                   DataPropertyName = "FkLkpCategoryMasterId",
-                   DisplayMember = "Display",
+                   HeaderText = "دسته بندی",
+                   Name = "FkCategoryId",
+                   DataPropertyName = "FkCategoryId",
+                   DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource =  lstLkpCategoryMasterValues,
+                   DataSource = lstCategory.ToArray(),
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
                    DividerWidth = 5
-               }, new DataGridViewComboBoxColumn()
-               {
-                   HeaderText = lstLkpCategoryDetail.Title,
-                   Name = "FkLkpCategoryDetailId",
-                   DataPropertyName = "FkLkpCategoryDetailId",
-                   DisplayMember = "Display",
-                   ValueMember = "Id",
-                   DataSource =  lstLkpCategoryDetailValues,
-                   ReadOnly = true,
-                   Visible = true,
-                   MinimumWidth = 150,
-                   DividerWidth = 5
-               },
+               }   ,
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "ترتیب",
