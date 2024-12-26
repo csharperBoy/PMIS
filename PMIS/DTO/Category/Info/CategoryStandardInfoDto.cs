@@ -13,7 +13,7 @@ namespace PMIS.DTO.Category.Info
 {
     public class CategoryStandardInfoDto : CategoryTinyInfoDto
     {
-        public async Task<CategoryShortInfoDto> extraMapFromBaseModel(PMIS.Models.Category baseModel)
+        public async Task<CategoryStandardInfoDto> extraMapFromBaseModel(PMIS.Models.Category baseModel)
         {
             if (baseModel == null)
                 return null;

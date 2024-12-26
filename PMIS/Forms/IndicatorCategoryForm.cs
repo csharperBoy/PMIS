@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using WSM.WindowsServices.FileManager;
 using PMIS.DTO.ClaimUserOnSystem;
+using PMIS.DTO.Category;
 
 namespace PMIS.Forms
 {
@@ -35,25 +36,28 @@ namespace PMIS.Forms
         private IEnumerable<IndicatorCategorySearchResponseDto> lstSearchResponse;
         private BindingList<IndicatorCategorySearchResponseDto> lstBinding;
         private IndicatorCategoryColumnsDto columns;
-        private ILookUpValueService lookUpValueService;
-       // private IUserService userService;
+        private ICategoryService categoryService;
+        // private IUserService userService;
         private IIndicatorService indicatorService;
         private IIndicatorCategoryService IndicatorCategoryService;
-        private IClaimUserOnSystemService claimUserOnSystemService;        
+        private IClaimUserOnSystemService claimUserOnSystemService;
         private int fkIndicatorId;
+        private int fkCategoryId;
+
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkIndicatorId, TabControl _tabControl)
+        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorService _indicatorService, ICategoryService _categoryService, int _fkIndicatorId, int _fkCategoryId, TabControl _tabControl)
         {
 
             InitializeComponent();
             IndicatorCategoryService = _IndicatorCategoryService;
             //userService = _userService;
             indicatorService = _indicatorService;
-            lookUpValueService = _lookUpValueService;
+            categoryService = _categoryService;
             fkIndicatorId = _fkIndicatorId;
+            fkCategoryId = _fkCategoryId;
             tabControl = _tabControl;
             claimUserOnSystemService = _claimUserOnSystemService;
             CustomInitialize();
@@ -67,7 +71,7 @@ namespace PMIS.Forms
             {
                 // InitializeComponent();
                 columns = new IndicatorCategoryColumnsDto();
-                await columns.Initialize(lookUpValueService, indicatorService, fkIndicatorId);
+                await columns.Initialize(categoryService, indicatorService, fkIndicatorId, fkCategoryId);
                 lstLogicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 lstPhysicalDeleteRequest = new List<IndicatorCategoryDeleteRequestDto>();
                 lstRecycleRequest = new List<IndicatorCategoryDeleteRequestDto>();
@@ -993,6 +997,68 @@ namespace PMIS.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("عملیات بارگیری موفقیت‌آمیز نبود: " + ex.Message, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvResultsList_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+
+            if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
+            {
+                ComboBox comboBox = e.Control as ComboBox;
+                if (comboBox != null)
+                {
+                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged); // برای جلوگیری از تکرار رویداد  
+                    comboBox.SelectedIndexChanged += new EventHandler(VrtParentCategory_SelectedIndexChanged); // افزودن رویداد  
+                }
+            }
+            else
+            {
+                // اگر برگردید، اطمینان حاصل کنید که رویداد هنگام خروج از ComboBox حذف شود  
+                ComboBox comboBox = e.Control as ComboBox;
+                if (comboBox != null)
+                {
+                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged); // حذف رویداد  
+                }
+            }
+
+        }
+
+
+        private void VrtParentCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvResultsList.CurrentCell.ColumnIndex != dgvResultsList.Columns["VrtParentCategory"].Index)
+                {
+                    return;
+                }
+                if (dgvResultsList.CurrentRow == null) return;
+
+                var selectedMasterCategoryId = (int)((ComboBox)sender).SelectedValue;
+
+                var categoryCell = (DataGridViewComboBoxCell)dgvResultsList.CurrentRow.Cells["FkCategoryId"];
+
+                var allDetailCategories = columns.lstDetailCategory;
+
+                if (allDetailCategories != null)
+                {
+                    var filteredDetailCategories = allDetailCategories
+                        .Where(c => c.FkParentInfo != null && c.FkParentInfo.Id == selectedMasterCategoryId)
+                        .ToList();
+
+                    categoryCell.DataSource = filteredDetailCategories;
+                    categoryCell.DisplayMember = "Title";
+                    categoryCell.ValueMember = "Id";
+
+                    categoryCell.Value = null;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                // throw;
             }
         }
     }

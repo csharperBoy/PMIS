@@ -20,7 +20,9 @@ namespace PMIS.DTO.IndicatorCategory.Info
         public int OrderNum { get; set; }
 
         public string? Description { get; set; }
+        public int FkIndicatorId { get; set; }
 
+        public int FkCategoryId { get; set; }
         public virtual int? VrtParentCategoryId { get; set; } = null;
     }
 }

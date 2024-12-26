@@ -13,6 +13,8 @@ namespace PMIS.DTO.IndicatorCategory
 {
     public class IndicatorCategoryColumnsDto
     {
+       public IEnumerable<CategorySearchResponseDto> lstMasterCategory;
+        public IEnumerable<CategorySearchResponseDto> lstDetailCategory;
         public async Task Initialize(ICategoryService categoryService, IIndicatorService indicatorService, int fkIndicatorId, int fkCategoryId)
         {
 
@@ -55,9 +57,13 @@ namespace PMIS.DTO.IndicatorCategory
                     }
                 }
             });
-            IEnumerable<CategorySearchResponseDto> lstMasterCategory = lstCategory.Where(c => c.FkParentInfo == null).ToList();
+             lstMasterCategory = lstCategory.Where(c => c.FkParentInfo == null).ToList();
+          lstDetailCategory = lstCategory.Where(c => c.FkParentInfo != null).ToList();
             if (fkCategoryId != 0)
-                lstCategory = lstCategory.Where(c => c.Id == fkCategoryId).ToList();
+            {
+                lstDetailCategory = lstDetailCategory.Where(c => c.Id == fkCategoryId).ToList();
+                lstMasterCategory = lstMasterCategory.Where(c => c.Id == lstDetailCategory.First().FkParentInfo.Id);
+            }
 
 
             FilterColumns.AddRange(new List<DataGridViewColumn>()
@@ -119,7 +125,7 @@ namespace PMIS.DTO.IndicatorCategory
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
-                   DividerWidth = 5
+                   DividerWidth = 0
                }, new DataGridViewComboBoxColumn()
                {
                    HeaderText = "دسته بندی اصلی",
@@ -131,7 +137,7 @@ namespace PMIS.DTO.IndicatorCategory
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
-                   DividerWidth = 5
+                   DividerWidth = 0
                }, new DataGridViewComboBoxColumn()
                {
                    HeaderText = "دسته بندی",
@@ -139,11 +145,11 @@ namespace PMIS.DTO.IndicatorCategory
                    DataPropertyName = "FkCategoryId",
                    DisplayMember = "Title",
                    ValueMember = "Id",
-                   DataSource = lstCategory.ToArray(),
+                   DataSource = lstDetailCategory.ToArray(),
                    ReadOnly = true,
                    Visible = true,
                    MinimumWidth = 150,
-                   DividerWidth = 5
+                   DividerWidth = 0
                }   ,
                new DataGridViewTextBoxColumn()
                {
@@ -153,7 +159,7 @@ namespace PMIS.DTO.IndicatorCategory
                    ReadOnly = true,
                    Visible = true,
                   MinimumWidth = 50,
-                   DividerWidth = 5
+                   DividerWidth = 0
                },
                new DataGridViewTextBoxColumn()
                {
@@ -163,7 +169,7 @@ namespace PMIS.DTO.IndicatorCategory
                    ReadOnly = true,
                    Visible = true,
                   MinimumWidth = 200,
-                   DividerWidth = 5
+                   DividerWidth = 0
                }
         });
         }

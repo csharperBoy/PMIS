@@ -9,6 +9,7 @@ namespace PMIS.Forms
     public partial class MainForm : Form
     {
         IIndicatorService indicatorService;
+        ICategoryService categoryService;
         IIndicatorCategoryService indicatorCategoryService;
         IUserService userService;
         ILookUpService lookUpService;
@@ -18,7 +19,7 @@ namespace PMIS.Forms
         IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IClaimUserOnSystemService claimUserOnSystemService;
         private Serilog.ILogger logHandler;
-        public MainForm(IIndicatorService _indicatorService, IIndicatorCategoryService _indicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
+        public MainForm(IIndicatorService _indicatorService, ICategoryService _categoryService, IIndicatorCategoryService _indicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorValueService _indicatorValueService, IUserService _userService, ILookUpService _lookUpService, ILookUpValueService _lookUpValueService, ILookUpDestinationService _lookUpDestinationService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, AbstractGenericLogWithSerilogHandler _logHandler)
         {
             InitializeComponent();
             claimUserOnSystemService = _claimUserOnSystemService;
@@ -30,6 +31,7 @@ namespace PMIS.Forms
             lookUpDestinationService = _lookUpDestinationService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             indicatorCategoryService = _indicatorCategoryService;
+            categoryService = _categoryService;
             logHandler = _logHandler.CreateLogger();
             CustomInitialize();
         }
@@ -121,7 +123,7 @@ namespace PMIS.Forms
 
         private void IndicatorCategoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorCategoryForm(indicatorCategoryService,  claimUserOnSystemService, indicatorService, lookUpValueService,0, tabControlMain);
+            new IndicatorCategoryForm(indicatorCategoryService,  claimUserOnSystemService, indicatorService, categoryService,0,0, tabControlMain);
 
         }
     }

@@ -159,6 +159,7 @@ namespace PMIS.Forms
             dgvResultsList.CellBeginEdit += dgvResultsList_CellBeginEdit;
             dgvResultsList.CellContentClick += dgvResultsList_CellContentClick;
             dgvResultsList.DataError += dgvResultsList_DataError;
+            dgvResultsList.EditingControlShowing += dgvResultsList_EditingControlShowing;
             dgvResultsList.RowEnter += dgvResultsList_RowEnter;
             dgvResultsList.RowLeave += dgvResultsList_RowLeave;
             dgvResultsList.RowPostPaint += dgvResultsList_RowPostPaint;
@@ -193,14 +194,14 @@ namespace PMIS.Forms
             dgvFiltersList.Size = new Size(969, 69);
             dgvFiltersList.TabIndex = 0;
             // 
-            // ClaimUserOnSystemForm
+            // IndicatorCategoryForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1104, 541);
             Controls.Add(panelContent);
             Controls.Add(panelMenu);
-            Name = "ClaimUserOnSystemForm";
+            Name = "IndicatorCategoryForm";
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Text = "NormalForm";
