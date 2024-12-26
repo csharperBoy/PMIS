@@ -876,7 +876,7 @@ namespace PMIS.Forms
                 openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (Path.GetFileName(openFileDialog.FileName).StartsWith("SystemClaims"))
+                    if (Path.GetFileName(openFileDialog.FileName).StartsWith("IndicatorCategory"))
                     {
                         DataTable dataTable = ((DataSet)ExcelManager.Read<DataSet>(openFileDialog.FileName)).Tables[0];
                         dgvResultsList.DataSource = null;
@@ -901,9 +901,17 @@ namespace PMIS.Forms
                                                     cell.Value = selectItem.Id;
                                                 }
                                             }
-                                            else if (dataSource is UserSearchResponseDto[])
+                                            else if (dataSource is CategorySearchResponseDto[])
                                             {
-                                                var selectItem = ((UserSearchResponseDto[])dataSource).FirstOrDefault(item => item.UserName == row[column].ToString());
+                                                var selectItem = ((CategorySearchResponseDto[])dataSource).FirstOrDefault(item => item.Title == row[column].ToString());
+                                                if (selectItem != null)
+                                                {
+                                                    cell.Value = selectItem.Id;
+                                                }
+                                            }
+                                            else if (dataSource is IndicatorSearchResponseDto[])
+                                            {
+                                                var selectItem = ((IndicatorSearchResponseDto[])dataSource).FirstOrDefault(item => item.Title == row[column].ToString());
                                                 if (selectItem != null)
                                                 {
                                                     cell.Value = selectItem.Id;
@@ -930,14 +938,7 @@ namespace PMIS.Forms
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition,
                             });
-                            searchRequest.filters.Add(new GenericSearchFilterDto()
-                            {
-                                columnName = "FkUserId",
-                                value = dgvResultsList.Rows[index].Cells["FkUserId"].Value.ToString(),
-                                LogicalOperator = LogicalOperator.And,
-                                operation = FilterOperator.Equals,
-                                type = PhraseType.Condition,
-                            });
+                           
                             searchRequest.filters.Add(new GenericSearchFilterDto()
                             {
                                 columnName = "FkLkpIndicatorCategoryId",
@@ -980,10 +981,10 @@ namespace PMIS.Forms
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
-                saveFileDialog.FileName = "SystemClaims-" + Helper.Convert.ConvertGregorianToShamsi(DateTime.Now, "RRRRMMDDHH24MISSMS");
+                saveFileDialog.FileName = "IndicatorCategory-" + Helper.Convert.ConvertGregorianToShamsi(DateTime.Now, "RRRRMMDDHH24MISSMS");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    saveFileDialog.FileName = saveFileDialog.FileName.Substring(0, saveFileDialog.FileName.LastIndexOf('.')) + "\\SystemClaims" + saveFileDialog.FileName.Substring(saveFileDialog.FileName.LastIndexOf('.'));
+                    saveFileDialog.FileName = saveFileDialog.FileName.Substring(0, saveFileDialog.FileName.LastIndexOf('.')) + "\\IndicatorCategory" + saveFileDialog.FileName.Substring(saveFileDialog.FileName.LastIndexOf('.'));
                     if (!Directory.Exists(Path.GetDirectoryName(saveFileDialog.FileName)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(saveFileDialog.FileName));
@@ -1003,47 +1004,72 @@ namespace PMIS.Forms
         private void dgvResultsList_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
 
+            ComboBox comboBox = e.Control as ComboBox;
             if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
             {
-                ComboBox comboBox = e.Control as ComboBox;
                 if (comboBox != null)
                 {
-                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged); // برای جلوگیری از تکرار رویداد  
-                    comboBox.SelectedIndexChanged += new EventHandler(VrtParentCategory_SelectedIndexChanged); // افزودن رویداد  
+                    comboBox.DropDown -= new EventHandler(CategoryListRefresh);
+                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                    comboBox.SelectedIndexChanged += new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                }
+            }
+            else if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["FkCategoryId"].Index)
+            {
+                if (comboBox != null)
+                {
+                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                    comboBox.DropDown -= new EventHandler(CategoryListRefresh); 
+                    comboBox.DropDown += new EventHandler(CategoryListRefresh);
                 }
             }
             else
             {
-                // اگر برگردید، اطمینان حاصل کنید که رویداد هنگام خروج از ComboBox حذف شود  
-                ComboBox comboBox = e.Control as ComboBox;
-                if (comboBox != null)
-                {
-                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged); // حذف رویداد  
-                }
-            }
+                comboBox.DropDown -= new EventHandler(CategoryListRefresh);
+                comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
 
+            }
         }
 
+        private void CategoryListRefresh(object sender, EventArgs e)
+        {
+        
+            ComboBox comboBox = sender as ComboBox;
+
+            if (comboBox != null)
+            {
+                var currentRow = dgvResultsList.CurrentRow;
+                if (currentRow != null)
+                {
+                    int? selectedMasterCategoryId = (int?)currentRow.Cells["VrtParentCategory"].Value;
+                    if (selectedMasterCategoryId != null)
+                    {
+                        var filteredDetailCategories = columns.lstDetailCategory
+                            .Where(c => c.FkParentInfo != null && c.FkParentInfo.Id == selectedMasterCategoryId)
+                            .ToList();
+
+                        comboBox.DataSource = filteredDetailCategories;
+                        comboBox.DisplayMember = "Title";
+                        comboBox.ValueMember = "Id";
+                    }
+                }
+            }
+        }
 
         private void VrtParentCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                if (dgvResultsList.CurrentCell.ColumnIndex != dgvResultsList.Columns["VrtParentCategory"].Index)
+                if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
                 {
-                    return;
-                }
-                if (dgvResultsList.CurrentRow == null) return;
+                    if (dgvResultsList.CurrentRow == null) return;
 
-                var selectedMasterCategoryId = (int)((ComboBox)sender).SelectedValue;
+                    var selectedMasterCategoryId = (int)((ComboBox)sender).SelectedValue;
 
-                var categoryCell = (DataGridViewComboBoxCell)dgvResultsList.CurrentRow.Cells["FkCategoryId"];
+                    var categoryCell = (DataGridViewComboBoxCell)dgvResultsList.CurrentRow.Cells["FkCategoryId"];
 
-                var allDetailCategories = columns.lstDetailCategory;
-
-                if (allDetailCategories != null)
-                {
-                    var filteredDetailCategories = allDetailCategories
+                    // فیلتر کردن دسته‌بندی‌ها بر اساس انتخاب دسته‌بندی اصلی  
+                    var filteredDetailCategories = columns.lstDetailCategory
                         .Where(c => c.FkParentInfo != null && c.FkParentInfo.Id == selectedMasterCategoryId)
                         .ToList();
 
@@ -1051,14 +1077,13 @@ namespace PMIS.Forms
                     categoryCell.DisplayMember = "Title";
                     categoryCell.ValueMember = "Id";
 
-                    categoryCell.Value = null;
-
+                    categoryCell.Value = null; // ریست کردن انتخاب  
                 }
             }
             catch (Exception ex)
             {
-
-                // throw;
+                // نمایش پیام خطا یا لاگ کردن  
+                MessageBox.Show($"خطا در انتخاب دسته‌بندی: {ex.Message}");
             }
         }
     }
