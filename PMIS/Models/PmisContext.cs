@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace PMIS.Models;
 
@@ -194,6 +193,8 @@ public partial class PmisContext : DbContext
         modelBuilder.Entity<IndicatorCategory>(entity =>
         {
             entity.ToTable("IndicatorCategory");
+
+            entity.HasIndex(e => new { e.FkCategoryId, e.FkIndicatorId }, "IX_IndicatorCategory").IsUnique();
 
             entity.HasIndex(e => e.FkIndicatorId, "IX_IndicatorCategory_FkIndicatorID");
 
