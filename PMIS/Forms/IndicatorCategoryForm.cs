@@ -39,7 +39,7 @@ namespace PMIS.Forms
         private ICategoryService categoryService;
         // private IUserService userService;
         private IIndicatorService indicatorService;
-        private IIndicatorCategoryService IndicatorCategoryService;
+        private IIndicatorCategoryService indicatorCategoryService;
         private IClaimUserOnSystemService claimUserOnSystemService;
         private int fkIndicatorId;
         private int fkCategoryId;
@@ -48,11 +48,11 @@ namespace PMIS.Forms
         private TabControl tabControl;
         #endregion
 
-        public IndicatorCategoryForm(IIndicatorCategoryService _IndicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorService _indicatorService, ICategoryService _categoryService, int _fkIndicatorId, int _fkCategoryId, TabControl _tabControl)
+        public IndicatorCategoryForm(IIndicatorCategoryService _indicatorCategoryService, IClaimUserOnSystemService _claimUserOnSystemService, IIndicatorService _indicatorService, ICategoryService _categoryService, int _fkIndicatorId, int _fkCategoryId, TabControl _tabControl)
         {
 
             InitializeComponent();
-            IndicatorCategoryService = _IndicatorCategoryService;
+            indicatorCategoryService = _indicatorCategoryService;
             //userService = _userService;
             indicatorService = _indicatorService;
             categoryService = _categoryService;
@@ -213,9 +213,9 @@ namespace PMIS.Forms
                 dgvFiltersList.AllowUserToAddRows = false;
                 AddColumnsToGridView(dgvFiltersList, "FilterColumns");
                 dgvFiltersList.Rows.Add();
-                if (fkIndicatorId != 0)
+                if (fkCategoryId != 0)
                 {
-                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Value = ((UserSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkUserId"]).Items[0]).Id;
+                    ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkCategoryId"]).Value = ((CategorySearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkCategoryId"]).Items[0]).Id;
                 }
                 if (fkIndicatorId != 0)
                 {
@@ -331,26 +331,48 @@ namespace PMIS.Forms
                         comboBoxColumn.DisplayMember = "Display";
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
+                        dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                     }
                     if (comboBoxColumn.DataSource is IndicatorSearchResponseDto[] arrayInd)
                     {
-                        List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
-                        lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
-                        comboBoxColumn.DataSource = lstSourse;
-                        comboBoxColumn.DisplayMember = "Title";
-                        comboBoxColumn.ValueMember = "Id";
-                        // comboBoxColumn.SelectedIndex = 0;
+                       
+                        if (fkIndicatorId != 0)
+                        {
+                            ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value = ((IndicatorSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = ((IndicatorSearchResponseDto)comboBoxColumn.Items[0]).Id;
+                        }
+                        else
+                        {
+                            List<IndicatorSearchResponseDto> lstSourse = arrayInd.ToList();
+                            lstSourse.Insert(0, new IndicatorSearchResponseDto() { Id = 0, Title = "همه", });
+                            comboBoxColumn.DataSource = lstSourse;
+                            comboBoxColumn.DisplayMember = "Title";
+                            comboBoxColumn.ValueMember = "Id";
+                            // comboBoxColumn.SelectedIndex = 0;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+                        }
                     }
-                    if (comboBoxColumn.DataSource is UserSearchResponseDto[] arrayUsr)
+                    if (comboBoxColumn.DataSource is CategorySearchResponseDto[] arrayCtg)
                     {
-                        List<UserSearchResponseDto> lstSourse = arrayUsr.ToList();
-                        lstSourse.Insert(0, new UserSearchResponseDto() { Id = 0, UserName = "همه", });
-                        comboBoxColumn.DataSource = lstSourse;
-                        comboBoxColumn.DisplayMember = "UserName";
-                        comboBoxColumn.ValueMember = "Id";
-                        // comboBoxColumn.SelectedIndex = 0;
+
+                        if (fkCategoryId != 0)
+                        {
+                            ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkCategoryId"]).Value = ((CategorySearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkCategoryId"]).Items[0]).Id;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = ((CategorySearchResponseDto)comboBoxColumn.Items[0]).Id;
+                        }
+                        else
+                        {
+                            List<CategorySearchResponseDto> lstSourse = arrayCtg.ToList();
+                            lstSourse.Insert(0, new CategorySearchResponseDto() { Id = 0, Title = "همه", });
+                            comboBoxColumn.DataSource = lstSourse;
+                            comboBoxColumn.DisplayMember = "Title";
+                            comboBoxColumn.ValueMember = "Id";
+                            // comboBoxColumn.SelectedIndex = 0;
+                            dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+                        }
+                       
                     }
-                    dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+                   // dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }
@@ -476,7 +498,7 @@ namespace PMIS.Forms
             searchRequest.filters.Add(filter);
 
 
-            (bool isSuccess, lstSearchResponse) = await IndicatorCategoryService.Search(searchRequest);
+            (bool isSuccess, lstSearchResponse) = await indicatorCategoryService.Search(searchRequest);
             lstBinding = new BindingList<IndicatorCategorySearchResponseDto>(lstSearchResponse.ToList());
             dgvResultsList.DataSource = lstBinding;
 
@@ -537,7 +559,7 @@ namespace PMIS.Forms
                 }
 
                 //(bool isSuccess, IEnumerable<IndicatorCategoryAddResponseDto> list) = await IndicatorCategoryService.AddGroup(lstAddRequest);
-                bool isSuccess = await IndicatorCategoryService.AddRange(lstAddRequest);
+                bool isSuccess = await indicatorCategoryService.AddRange(lstAddRequest);
 
                 if (isSuccess)
                 {
@@ -583,7 +605,7 @@ namespace PMIS.Forms
                 }
 
                 //(bool isSuccess, IEnumerable<IndicatorCategoryEditResponseDto> list) = await IndicatorCategoryService.EditGroup(lstEditRequest);
-                bool isSuccess = await IndicatorCategoryService.EditRange(lstEditRequest);
+                bool isSuccess = await indicatorCategoryService.EditRange(lstEditRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -605,7 +627,7 @@ namespace PMIS.Forms
             {
 
                 //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await IndicatorCategoryService.LogicalDeleteRange(lstLogicalDeleteRequest);
+                bool isSuccess = await indicatorCategoryService.LogicalDeleteRange(lstLogicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -628,7 +650,7 @@ namespace PMIS.Forms
             {
 
                 //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await IndicatorCategoryService.RecycleRange(lstRecycleRequest);
+                bool isSuccess = await indicatorCategoryService.RecycleRange(lstRecycleRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -651,7 +673,7 @@ namespace PMIS.Forms
             {
 
                 //(bool isSuccess, IEnumerable<IndicatorCategoryDeleteResponseDto> list) = await IndicatorCategoryService.LogicalDeleteGroup(lstDeleteRequest);
-                bool isSuccess = await IndicatorCategoryService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
+                bool isSuccess = await indicatorCategoryService.PhysicalDeleteRange(lstPhysicalDeleteRequest);
                 if (isSuccess)
                 {
                     // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -833,6 +855,7 @@ namespace PMIS.Forms
         private IndicatorCategoryAddRequestDto AfterAddMapping(IndicatorCategoryAddRequestDto addRequest)
         {
             addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
+            addRequest.FkCategoryId = fkCategoryId == 0 ? addRequest.FkCategoryId : fkCategoryId;
             return addRequest;
         }
 
@@ -864,6 +887,7 @@ namespace PMIS.Forms
         private IndicatorCategoryEditRequestDto AfterEditMapping(IndicatorCategoryEditRequestDto addRequest)
         {
             addRequest.FkIndicatorId = fkIndicatorId == 0 ? addRequest.FkIndicatorId : fkIndicatorId;
+            addRequest.FkCategoryId = fkCategoryId == 0 ? addRequest.FkCategoryId : fkCategoryId;
             return addRequest;
         }
 
@@ -941,13 +965,21 @@ namespace PMIS.Forms
                            
                             searchRequest.filters.Add(new GenericSearchFilterDto()
                             {
-                                columnName = "FkLkpIndicatorCategoryId",
-                                value = dgvResultsList.Rows[index].Cells["FkLkpIndicatorCategoryId"].Value.ToString(),
+                                columnName = "FkCategoryId",
+                                value = dgvResultsList.Rows[index].Cells["FkCategoryId"].Value.ToString(),
                                 LogicalOperator = LogicalOperator.And,
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition,
                             });
-                            (bool isSuccess, lstSearchResponse) = await IndicatorCategoryService.Search(searchRequest);
+                            searchRequest.filters.Add(new GenericSearchFilterDto()
+                            {
+                                columnName = "FkIndicatorId",
+                                value = dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString(),
+                                LogicalOperator = LogicalOperator.And,
+                                operation = FilterOperator.Equals,
+                                type = PhraseType.Condition,
+                            });
+                            (bool isSuccess, lstSearchResponse) = await indicatorCategoryService.Search(searchRequest);
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;

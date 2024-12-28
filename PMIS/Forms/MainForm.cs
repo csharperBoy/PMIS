@@ -92,7 +92,7 @@ namespace PMIS.Forms
 
         private void IndicatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new IndicatorForm(indicatorService, claimUserOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
+            new IndicatorForm(indicatorService,indicatorCategoryService,categoryService, claimUserOnSystemService, claimUserOnIndicatorService, userService, lookUpValueService, tabControlMain);
         }
 
         private void ClaimUserOnIndicatorToolStripMenuItem_Click(object sender, EventArgs e)

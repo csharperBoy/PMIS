@@ -81,7 +81,32 @@ namespace PMIS.DTO.IndicatorCategory
                    MinimumWidth = 150,
                    DividerWidth = 5
                },
-
+             //new DataGridViewComboBoxColumn()
+             //  {
+             //      HeaderText = "دسته بندی اصلی",
+             //      Name = "VrtParentCategory",
+             //      DataPropertyName = "VrtParentCategoryId",
+             //      DisplayMember = "Title",
+             //      ValueMember = "Id",
+             //      DataSource = lstMasterCategory.ToArray(),
+             //      ReadOnly = false,
+             //      Visible = true,
+             //      MinimumWidth = 150,
+             //      DividerWidth = 5
+             //  },
+             new DataGridViewComboBoxColumn()
+               {
+                   HeaderText = "دسته بندی",
+                   Name = "FkCategoryId",
+                   DataPropertyName = "FkCategoryId",
+                   DisplayMember = "Title",
+                   ValueMember = "Id",
+                   DataSource = lstDetailCategory.ToArray(),
+                   ReadOnly = false,
+                   Visible = true,
+                   MinimumWidth = 150,
+                   DividerWidth = 5
+               },
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "ترتیب",

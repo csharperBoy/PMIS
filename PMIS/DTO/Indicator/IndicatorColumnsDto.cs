@@ -257,6 +257,15 @@ namespace PMIS.DTO.Indicator
                     ReadOnly = false,
                     Visible = true,
                     UseColumnTextForButtonValue = true,
+                },
+               new DataGridViewButtonColumn()
+                {
+                    HeaderText = "",
+                    Name = "Categories",
+                    Text = "دسته بندی ها",
+                    ReadOnly = false,
+                    Visible = true,
+                    UseColumnTextForButtonValue = true,
                 }
         });
         }

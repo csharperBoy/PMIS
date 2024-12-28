@@ -38,11 +38,14 @@ namespace PMIS.Forms
         private IIndicatorService indicatorService;
         private IClaimUserOnIndicatorService claimUserOnIndicatorService;
         private IClaimUserOnSystemService claimUserOnSystemService;
+        private IIndicatorCategoryService indicatorCategoryService;
+        private ICategoryService categoryService;
+        
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
 
-        public IndicatorForm(IIndicatorService _indicatorService, IClaimUserOnSystemService _claimUserOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
+        public IndicatorForm(IIndicatorService _indicatorService, IIndicatorCategoryService _indicatorCategoryService, ICategoryService _categoryService, IClaimUserOnSystemService _claimUserOnSystemService, IClaimUserOnIndicatorService _claimUserOnIndicatorService, IUserService _userService, ILookUpValueService _lookUpValueService, TabControl _tabControl)
         {
             InitializeComponent();
             claimUserOnSystemService = _claimUserOnSystemService;
@@ -50,6 +53,8 @@ namespace PMIS.Forms
             lookUpValueService = _lookUpValueService;
             claimUserOnIndicatorService = _claimUserOnIndicatorService;
             userService = _userService;
+            indicatorCategoryService = _indicatorCategoryService;
+            categoryService = _categoryService;
             tabControl = _tabControl;
             CustomInitialize();
         }
@@ -734,6 +739,15 @@ namespace PMIS.Forms
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
                     ClaimUserOnIndicatorForm frm = new ClaimUserOnIndicatorForm(claimUserOnSystemService, claimUserOnIndicatorService, userService, indicatorService, lookUpValueService, 0, tempId, tabControl);
+                    frm.Show();
+                }
+            }
+            else if (dgvResultsList.Columns[columnIndex].Name == "Categories" && rowIndex >= 0)
+            {
+                if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
+                {
+                    int tempId = int.Parse(row.Cells["Id"].Value.ToString());
+                    IndicatorCategoryForm frm = new IndicatorCategoryForm(indicatorCategoryService, claimUserOnSystemService, indicatorService, categoryService, tempId,0, tabControl);
                     frm.Show();
                 }
             }
