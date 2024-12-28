@@ -21,6 +21,8 @@ using System.Windows.Forms;
 using WSM.WindowsServices.FileManager;
 using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Category;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Color = System.Drawing.Color;
 
 namespace PMIS.Forms
 {
@@ -932,6 +934,14 @@ namespace PMIS.Forms
                                                 {
                                                     cell.Value = selectItem.Id;
                                                 }
+
+                                                DataGridViewCell cellMaster = dgvResultsList.Rows[index].Cells["VrtParentCategory"];
+                                                object dataSourceMaster = ((DataGridViewComboBoxCell)cellMaster).DataSource;
+                                                var selectItemMaster = ((CategorySearchResponseDto[])dataSourceMaster).FirstOrDefault(item => item.Id == selectItem.FkParentInfo.Id);
+                                                if (selectItemMaster != null)
+                                                {
+                                                    cellMaster.Value = selectItemMaster.Id;
+                                                }
                                             }
                                             else if (dataSource is IndicatorSearchResponseDto[])
                                             {
@@ -948,6 +958,16 @@ namespace PMIS.Forms
                                         }
                                         break;
                                     }
+                                    //else if(item.Name == "VrtParentCategory" && column.ColumnName == "دسته بندی")
+                                    //{
+                                    //    DataGridViewCell cell = dgvResultsList.Rows[index].Cells[item.Name];
+                                    //    object dataSource = ((DataGridViewComboBoxCell)cell).DataSource;
+                                    //    var selectItem = ((CategorySearchResponseDto[])dataSource).FirstOrDefault(item => item.FkParentInfo.Title == row[column].ToString());
+                                    //    if (selectItem != null)
+                                    //    {
+                                    //        cell.Value = selectItem.Id;
+                                    //    }
+                                    //}
                                 }
                             }
                             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
@@ -1097,6 +1117,7 @@ namespace PMIS.Forms
                     if (dgvResultsList.CurrentRow == null) return;
 
                     var selectedMasterCategoryId = (int)((ComboBox)sender).SelectedValue;
+                    //var selectedMasterCategoryId = (int)((DataGridViewComboBoxCell)dgvResultsList.CurrentCell).Value;
 
                     var categoryCell = (DataGridViewComboBoxCell)dgvResultsList.CurrentRow.Cells["FkCategoryId"];
 
