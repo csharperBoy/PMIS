@@ -16,9 +16,9 @@ namespace PMIS.DTO.Category.Info
             return this;
         }
         public int Id { get; set; }
+        public string? Code { get; set; }
         public string? Title { get; set; }
-        public string? CategoryCode { get; set; }
-        public byte? OrderCategory { get; set; }
+        public byte? OrderNum { get; set; }
         public string? Description { get; set; }
     }
 }

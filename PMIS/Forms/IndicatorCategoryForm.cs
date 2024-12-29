@@ -982,7 +982,6 @@ namespace PMIS.Forms
                                 operation = FilterOperator.Equals,
                                 type = PhraseType.Condition,
                             });
-                           
                             searchRequest.filters.Add(new GenericSearchFilterDto()
                             {
                                 columnName = "FkCategoryId",

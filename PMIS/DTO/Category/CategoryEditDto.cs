@@ -46,15 +46,15 @@ namespace PMIS.DTO.Category
         }
         public int Id { get; set; }
 
-        public string? Title { get; set; }
+        public int FkLkpCategoryTypeId { get; set; }
 
         public int? FkParentId { get; set; }
 
-        public string? CategoryCode { get; set; }
+        public string? Code { get; set; }
 
-        public byte? OrderCategory { get; set; }
+        public string? Title { get; set; }
 
-        public int FklkpTypeId { get; set; }
+        public byte? OrderNum { get; set; }
 
         public string? Description { get; set; }
 

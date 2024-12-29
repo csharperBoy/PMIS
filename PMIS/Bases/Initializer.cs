@@ -61,6 +61,10 @@ namespace PMIS.Bases
                     #region SetBaseClaims
                     SetBaseClaims(context);
                     #endregion
+
+                    #region setBaseCategories
+                    setBaseCategories(context);
+                    #endregion
                 }
                 catch (Exception ex)
                 {
@@ -524,99 +528,13 @@ namespace PMIS.Bases
 
                     //add destinations
                     //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "IndicatorCategory", ColumnName = "FkLkpCategoryTypeID" });
+                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "Category", ColumnName = "FkLkpCategoryTypeID" });
                     context.LookUpDestinations.AddRange(lookUpDestination);
                     //------------------------------------
 
                     //add values
                     //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EndUser", Display = "دسته‌بندی کاربر نهایی", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Developer", Display = "دسته‌بندی توسعه‌دهنده", OrderNum = 2 });
-                    context.LookUpValues.AddRange(lookUpValue);
-                    //------------------------------------
-                    context.SaveChanges();
-                    lookUpDestination.Clear();
-                    lookUpValue.Clear();
-                    #endregion
-
-                    #region CategoryMasterEndUser
-                    //add lookup
-                    //------------------------------------
-                    lookup = new LookUp { Code = "LkpCategoryMasterEndUser", Title = "دسته‌بندی‌های کاربر نهایی" };
-                    context.LookUps.Add(lookup);
-                    context.SaveChanges();
-                    //------------------------------------
-
-                    //add destinations
-                    //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "IndicatorCategory", ColumnName = "FkLkpCategoryMasterID" });
-                    context.LookUpDestinations.AddRange(lookUpDestination);
-                    //------------------------------------
-
-                    //add values
-                    //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "SYS", Display = "نظام‌های مدیریتی", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "STD", Display = "استانداردهای مدیریتی", OrderNum = 2 });
-                    context.LookUpValues.AddRange(lookUpValue);
-                    //------------------------------------
-                    context.SaveChanges();
-                    lookUpDestination.Clear();
-                    lookUpValue.Clear();
-                    #endregion
-
-                    #region CategoryDetailEndUserSYS
-                    //add lookup
-                    //------------------------------------
-                    lookup = new LookUp { Code = "LkpCategoryDetailEndUserSYS", Title = "مقادیر نظام‌های مدیریتی" };
-                    context.LookUps.Add(lookup);
-                    context.SaveChanges();
-                    //------------------------------------
-
-                    //add destinations
-                    //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "IndicatorCategory", ColumnName = "FkLkpCategoryDetailID" });
-                    context.LookUpDestinations.AddRange(lookUpDestination);
-                    //------------------------------------
-
-                    //add values
-                    //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "RiskManagement", Display = "مدیریت ریسک", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "ProcessManagement", Display = "مدیریت فرآیندی", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "TaskLevelStrategicManagement", Display = "مدیریت استراتژیک سطح وظیفه‌ای", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "MacroLevelStrategicManagement", Display = "مدیریت استراتژیک سطح کلان", OrderNum = 4 });
-                    context.LookUpValues.AddRange(lookUpValue);
-                    //------------------------------------
-                    context.SaveChanges();
-                    lookUpDestination.Clear();
-                    lookUpValue.Clear();
-                    #endregion
-
-                    #region CategoryDetailEndUserSTD
-                    //add lookup
-                    //------------------------------------
-                    lookup = new LookUp { Code = "LkpCategoryDetailEndUserSTD", Title = "مقادیر استاندارد‌های مدیریتی" };
-                    context.LookUps.Add(lookup);
-                    context.SaveChanges();
-                    //------------------------------------
-
-                    //add destinations
-                    //------------------------------------
-                    lookUpDestination.Add(new LookUpDestination { FkLookUpId = lookup.Id, TableName = "IndicatorCategory", ColumnName = "FkLkpCategoryDetailID" });
-                    context.LookUpDestinations.AddRange(lookUpDestination);
-                    //------------------------------------
-
-                    //add values
-                    //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Quality", Display = "کیفیت ISO9001", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Environmental", Display = "زیست ‌محیطی ISO14001", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "SafetyAndHealth", Display = "ایمنی و بهداشت ISO45001", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Energy", Display = "انرژی ISO50001", OrderNum = 4 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Laboratory", Display = "آزمایشگاه ISO17025", OrderNum = 5 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Education", Display = "آموزش ISO10015", OrderNum = 6 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "CustomerComplaints", Display = "شکایت مشتریان ISO10002", OrderNum = 7 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "CustomerSatisfaction", Display = "رضایت مشتریان ISO10004", OrderNum = 8 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Action", Display = "اقدام", OrderNum = 9 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Other", Display = "سایر", OrderNum = 10 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IndicatorCategory", Display = "دسته‌بندی شاخص‌ها", OrderNum = 1 });
                     context.LookUpValues.AddRange(lookUpValue);
                     //------------------------------------
                     context.SaveChanges();
@@ -650,7 +568,7 @@ namespace PMIS.Bases
                 {
                     List<Models.ClaimUserOnSystem> claim = new List<Models.ClaimUserOnSystem>();
                     #region PrimaryClaims
-                    //add user
+                    //add claim
                     //------------------------------------
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "ChangePasswordForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "UserForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
@@ -660,6 +578,48 @@ namespace PMIS.Bases
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "ClaimUserOnSystemForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     claim.Add(new Models.ClaimUserOnSystem { FkLkpClaimUserOnSystemId = context.LookUpValues.Where(x => x.Value == "IndicatorValueForm" && x.FkLookUp.Code == "LkpClaimUserOnSystem").First().Id, FkUserId = context.Users.Where(x => x.UserName == "Admin").First().Id });
                     context.ClaimUserOnSystems.AddRange(claim);
+                    context.SaveChanges();
+                    //------------------------------------
+                    #endregion
+                }
+            }
+
+            private void setBaseCategories(PmisContext context)
+            {
+                context.Database.EnsureCreated();
+                if (!context.Categories.Any())
+                {
+                    Models.Category categoryParant = new Models.Category();
+                    List<Models.Category> category = new List<Models.Category>();
+                    #region Category
+                    //add category
+                    //------------------------------------
+                    category.Clear();
+                    categoryParant = new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParent = null, Code = "SYS", Title = "نظام‌های مدیریتی", OrderNum = 1 };
+                    context.Categories.Add(categoryParant);
+                    context.SaveChanges();
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "RiskManagement", Title = "مدیریت ریسک", OrderNum = 1 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "ProcessManagement", Title = "مدیریت فرآیندی", OrderNum = 2 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "TaskLevelStrategicManagement", Title = "مدیریت استراتژیک سطح وظیفه‌ای", OrderNum = 3 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "MacroLevelStrategicManagement", Title = "مدیریت استراتژیک سطح کلان", OrderNum = 4 });
+                    context.Categories.AddRange(category);
+                    context.SaveChanges();
+
+                    category.Clear();
+                    categoryParant = new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParent = null, Code = "STD", Title = "استانداردهای مدیریتی", OrderNum = 2 };
+                    context.Categories.Add(categoryParant);
+                    context.SaveChanges();
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Quality", Title = "کیفیت ISO9001", OrderNum = 1 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Environmental", Title = "زیست ‌محیطی ISO14001", OrderNum = 2 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "SafetyAndHealth", Title = "ایمنی و بهداشت ISO45001", OrderNum = 3 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Energy", Title = "انرژی ISO50001", OrderNum = 4 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Laboratory", Title = "آزمایشگاه ISO17025", OrderNum = 5 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Education", Title = "آموزش ISO10015", OrderNum = 6 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerComplaints", Title = "شکایت مشتریان ISO10002", OrderNum = 7 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerSatisfaction", Title = "رضایت مشتریان ISO10004", OrderNum = 8 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Action", Title = "اقدام", OrderNum = 9 });
+                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Other", Title = "سایر", OrderNum = 10 });
+                    context.Categories.AddRange(category);
                     context.SaveChanges();
                     //------------------------------------
                     #endregion

@@ -23,7 +23,7 @@ namespace PMIS.DTO.Category.Info
                 return null;
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
-            this.FklkpTypeInfo = await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FklkpType);
+            this.FkLkpCategoryTypeInfo = await (new LookUpValueTinyInfoDto()).extraMapFromBaseModel(baseModel.FkLkpCategoryType);
             this.FkParentInfo = await (new CategoryTinyInfoDto()).extraMapFromBaseModel(baseModel.FkParent);
             
             this.IndicatorCategoriesInfo = await Task.WhenAll(baseModel.IndicatorCategories.Select(v => (new IndicatorCategoryTinyInfoDto()).extraMapFromBaseModel(v)).ToList());
@@ -33,7 +33,7 @@ namespace PMIS.DTO.Category.Info
         }
         public virtual CategoryTinyInfoDto? FkParentInfo { get; set; }
 
-        public virtual LookUpValueTinyInfoDto FklkpTypeInfo { get; set; } = null!;
+        public virtual LookUpValueTinyInfoDto FkLkpCategoryTypeInfo { get; set; } = null!;
 
         public virtual ICollection<IndicatorCategoryTinyInfoDto> IndicatorCategoriesInfo { get; set; } = new List<IndicatorCategoryTinyInfoDto>();
 

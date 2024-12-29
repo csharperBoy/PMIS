@@ -58,20 +58,20 @@ public partial class PmisContext : DbContext
             entity.ToTable("Category");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CategoryCode)
+            entity.Property(e => e.Code)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .IsFixedLength();
             entity.Property(e => e.FkParentId).HasColumnName("FkParentID");
-            entity.Property(e => e.FklkpTypeId).HasColumnName("FKLkpTypeID");
+            entity.Property(e => e.FkLkpCategoryTypeId).HasColumnName("FKLkpTypeID");
             entity.Property(e => e.Title).HasMaxLength(1500);
 
             entity.HasOne(d => d.FkParent).WithMany(p => p.InverseFkParent)
                 .HasForeignKey(d => d.FkParentId)
                 .HasConstraintName("FK_Category_Category");
 
-            entity.HasOne(d => d.FklkpType).WithMany(p => p.Categories)
-                .HasForeignKey(d => d.FklkpTypeId)
+            entity.HasOne(d => d.FkLkpCategoryType).WithMany(p => p.Categories)
+                .HasForeignKey(d => d.FkLkpCategoryTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Category_LookUpValue");
         });

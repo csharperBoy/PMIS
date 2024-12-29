@@ -17,7 +17,7 @@ public partial class IndicatorCategory
 
     public bool FlgLogicalDelete { get; set; }
 
-    public virtual Category FkCategory { get; set; } = null!;
-
     public virtual Indicator FkIndicator { get; set; } = null!;
+
+    public virtual Category FkCategory { get; set; } = null!;
 }

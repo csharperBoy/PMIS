@@ -17,7 +17,7 @@ public partial class ClaimUserOnSystem
 
     public bool FlgLogicalDelete { get; set; }
 
-    public virtual LookUpValue FkLkpClaimUserOnSystem { get; set; } = null!;
-
     public virtual User FkUser { get; set; } = null!;
+
+    public virtual LookUpValue FkLkpClaimUserOnSystem { get; set; } = null!;
 }

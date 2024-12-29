@@ -31,19 +31,19 @@ public partial class Indicator
 
     public bool FlgLogicalDelete { get; set; }
 
-    public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
-
-    public virtual LookUpValue FkLkpDesirability { get; set; } = null!;
-
     public virtual LookUpValue FkLkpForm { get; set; } = null!;
 
     public virtual LookUpValue FkLkpManuality { get; set; } = null!;
 
-    public virtual LookUpValue FkLkpMeasure { get; set; } = null!;
+    public virtual LookUpValue FkLkpUnit { get; set; } = null!;
 
     public virtual LookUpValue FkLkpPeriod { get; set; } = null!;
 
-    public virtual LookUpValue FkLkpUnit { get; set; } = null!;
+    public virtual LookUpValue FkLkpMeasure { get; set; } = null!;
+
+    public virtual LookUpValue FkLkpDesirability { get; set; } = null!;
+
+    public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
     public virtual ICollection<IndicatorCategory> IndicatorCategories { get; set; } = new List<IndicatorCategory>();
 

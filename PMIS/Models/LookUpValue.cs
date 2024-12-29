@@ -21,25 +21,25 @@ public partial class LookUpValue
 
     public bool FlgLogicalDelete { get; set; }
 
+    public virtual LookUp FkLookUp { get; set; } = null!;
+
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
     public virtual ICollection<ClaimUserOnIndicator> ClaimUserOnIndicators { get; set; } = new List<ClaimUserOnIndicator>();
 
     public virtual ICollection<ClaimUserOnSystem> ClaimUserOnSystems { get; set; } = new List<ClaimUserOnSystem>();
 
-    public virtual LookUp FkLookUp { get; set; } = null!;
-
-    public virtual ICollection<Indicator> IndicatorFkLkpDesirabilities { get; set; } = new List<Indicator>();
-
     public virtual ICollection<Indicator> IndicatorFkLkpForms { get; set; } = new List<Indicator>();
 
     public virtual ICollection<Indicator> IndicatorFkLkpManualities { get; set; } = new List<Indicator>();
 
-    public virtual ICollection<Indicator> IndicatorFkLkpMeasures { get; set; } = new List<Indicator>();
+    public virtual ICollection<Indicator> IndicatorFkLkpUnits { get; set; } = new List<Indicator>();
 
     public virtual ICollection<Indicator> IndicatorFkLkpPeriods { get; set; } = new List<Indicator>();
 
-    public virtual ICollection<Indicator> IndicatorFkLkpUnits { get; set; } = new List<Indicator>();
+    public virtual ICollection<Indicator> IndicatorFkLkpMeasures { get; set; } = new List<Indicator>();
+
+    public virtual ICollection<Indicator> IndicatorFkLkpDesirabilities { get; set; } = new List<Indicator>();
 
     public virtual ICollection<IndicatorValue> IndicatorValueFkLkpShifts { get; set; } = new List<IndicatorValue>();
 
