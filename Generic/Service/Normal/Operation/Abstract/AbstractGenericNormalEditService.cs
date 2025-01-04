@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static Generic.Base.Handler.Map.GenericExceptionHandlerFactory;
@@ -56,19 +57,34 @@ namespace Generic.Service.Normal.Operation.Abstract
                     try
                     {
                         entity = await mapper.Map<TEntityEditRequestDto, TEntity>(req);
-                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
+                        //await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         result = await repository.UpdateAsync(entity);
                         if (!result)
                             throw exceptionHandler.PopException();
                         await repository.SaveAsync();
+                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                     }
                     catch (Exception ex)
                     {
                         await repository.SetEntityStateAsync(entity, EntityState.Detached);
+
+                        
+
+
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
                         responseTemp = (TEntityEditResponseDto)await exceptionHandler.AssignExceptionInfoToObject(responseTemp, ex);
-                      //  responseTemp.
+                        
+                        var entityFields = responseTemp.GetType()
+                                                            .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+
+                      //  var entityFields = responseTemp.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("IsSuccess"));
+
+                        if (fieldName != null)
+                        {
+                            fieldName.SetValue(responseTemp, false);
+                        }
                     }
 
                     results.Add(responseTemp);

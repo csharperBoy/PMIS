@@ -378,7 +378,7 @@ namespace PMIS.Forms
             dgvFiltersList.Rows[0].Cells["DateTimeFrom"].Value = Helper.Convert.ConvertGregorianToShamsi(DateTime.Now.AddDays(-14), "RRRR/MM/DD");
             dgvFiltersList.Rows[0].Cells["DateTimeTo"].Value = Helper.Convert.ConvertGregorianToShamsi(Helper.Convert.ConvertShamsiToGregorian(year + "/01/01").GetValueOrDefault().AddDays(-1), "RRRR/MM/DD");
         }
-
+        
         public void RefreshVisuals()
         {
             try
@@ -391,10 +391,25 @@ namespace PMIS.Forms
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    if (row.Cells["FlgEdited"].Value != null && bool.Parse(row.Cells["FlgEdited"].Value.ToString()))
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                    else if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Honeydew;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
 
-                    row.Cells["FlgEdited"].Value = false;
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.BackColor = Color.White;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+
+
+                    //   row.Cells["FlgEdited"].Value = false;
 
                 }
                 if (dgvResultsList.Rows.Count > 0)
@@ -432,7 +447,10 @@ namespace PMIS.Forms
 
         private bool HasChangeResults()
         {
-            if (dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0) > 0 || // lstAddRequest.Count != 0 ||
+
+            int temp1 = dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null);
+            int temp2 = dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited);
+            if (dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null) > 0 || // lstAddRequest.Count != 0 ||
                 dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
@@ -934,25 +952,41 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<IndicatorValueAddResponseDto> list) = await indicatorValueService.AddGroup(lstAddRequest);
-                bool isSuccess = await indicatorValueService.AddRange(lstAddRequest);
-
-                if (isSuccess)
+                if (lstAddRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    //string errorMessage = String.Join("\n", list.Select((x, index) => new
-                    //{
-                    //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
-                    //    IsSuccess = x.IsSuccess
-                    //})
-                    //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    (bool isSuccess, IEnumerable<IndicatorValueAddResponseDto> list) = await indicatorValueService.AddGroup(lstAddRequest);
+                    //bool isSuccess = await indicatorValueService.AddRange(lstAddRequest);
 
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count && row.Cells["Value"].Value != null) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0 && row.Cells["Value"].Value != null))
+                                {
+                                    row.Cells["Id"].Value = listResponse.FirstOrDefault().Id;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstAddRequest = new List<IndicatorValueAddRequestDto>();
+                    }
+                    else
+                    {
+                        //string errorMessage = String.Join("\n", list.Select((x, index) => new
+                        //{
+                        //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
+                        //    IsSuccess = x.IsSuccess
+                        //})
+                        //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
+                        MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                }
             }
             catch (Exception)
             {
@@ -991,16 +1025,33 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<IndicatorValueEditResponseDto> list) = await indicatorValueService.EditGroup(lstEditRequest);
-                bool isSuccess = await indicatorValueService.EditRange(lstEditRequest);
-                if (isSuccess)
+                if (lstEditRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    (bool isSuccess, IEnumerable<IndicatorValueEditResponseDto> list) = await indicatorValueService.EditGroup(lstEditRequest);
+                    //bool isSuccess = await indicatorValueService.EditRange(lstEditRequest);
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
+                                {
+                                    if (listResponse.FirstOrDefault().IsSuccess)
+                                        row.Cells["FlgEdited"].Value = false;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstEditRequest = new List<IndicatorValueEditRequestDto>();
+                    }
+                    else
+                    {
+                        MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception)

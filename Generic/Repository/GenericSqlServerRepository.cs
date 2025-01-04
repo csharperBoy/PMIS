@@ -89,9 +89,9 @@ namespace Generic.Repository
             bool result;
             try
             {
-                dbSet.Attach(entity);
-                dbContext.Entry(entity).State = EntityState.Modified;
-
+                //dbSet.Attach(entity);
+                //dbContext.Entry(entity).State = EntityState.Modified;
+                dbSet.Update(entity);
                 result = true;
             }
             catch (Exception ex)

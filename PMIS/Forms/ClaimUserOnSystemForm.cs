@@ -43,7 +43,7 @@ namespace PMIS.Forms
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
-        
+
         public ClaimUserOnSystemForm(IClaimUserOnSystemService _claimUserOnSystemService, IUserService _userService, IIndicatorService _indicatorService, ILookUpValueService _lookUpValueService, int _fkUserId, int _fkIndicatorId, TabControl _tabControl)
         {
 
@@ -362,10 +362,25 @@ namespace PMIS.Forms
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    if (row.Cells["FlgEdited"].Value != null && bool.Parse(row.Cells["FlgEdited"].Value.ToString()))
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                    else if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Honeydew;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
 
-                    row.Cells["FlgEdited"].Value = false;
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.BackColor = Color.White;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+
+
+                    //   row.Cells["FlgEdited"].Value = false;
 
                 }
                 if (dgvResultsList.Rows.Count > 0)
@@ -379,7 +394,6 @@ namespace PMIS.Forms
                 throw;
             }
         }
-
         private async void CloseTabPage(object? sender, EventArgs e)
         {
             if (tabControl.Controls[tabControl.SelectedIndex].Controls[0].Controls[0] == this)
@@ -530,23 +544,39 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemAddResponseDto> list) = await claimUserOnSystemService.AddGroup(lstAddRequest);
-                bool isSuccess = await claimUserOnSystemService.AddRange(lstAddRequest);
-
-                if (isSuccess)
+                if (lstAddRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    //string errorMessage = String.Join("\n", list.Select((x, index) => new
-                    //{
-                    //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
-                    //    IsSuccess = x.IsSuccess
-                    //})
-                    //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    (bool isSuccess, IEnumerable<ClaimUserOnSystemAddResponseDto> list) = await claimUserOnSystemService.AddGroup(lstAddRequest);
+                   // bool isSuccess = await claimUserOnSystemService.AddRange(lstAddRequest);
+
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
+                                {
+                                    row.Cells["Id"].Value = listResponse.FirstOrDefault().Id;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstAddRequest = new List<ClaimUserOnSystemAddRequestDto>();
+                    }
+                    else
+                    {
+                        //string errorMessage = String.Join("\n", list.Select((x, index) => new
+                        //{
+                        //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
+                        //    IsSuccess = x.IsSuccess
+                        //})
+                        //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
+                        MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
             }
@@ -576,16 +606,33 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<ClaimUserOnSystemEditResponseDto> list) = await claimUserOnSystemService.EditGroup(lstEditRequest);
-                bool isSuccess = await claimUserOnSystemService.EditRange(lstEditRequest);
-                if (isSuccess)
+                if (lstEditRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    (bool isSuccess, IEnumerable<ClaimUserOnSystemEditResponseDto> list) = await claimUserOnSystemService.EditGroup(lstEditRequest);
+                    //bool isSuccess = await claimUserOnSystemService.EditRange(lstEditRequest);
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
+                                {
+                                    if (listResponse.FirstOrDefault().IsSuccess)
+                                        row.Cells["FlgEdited"].Value = false;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstEditRequest = new List<ClaimUserOnSystemEditRequestDto>();
+                    }
+                    else
+                    {
+                        MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception)

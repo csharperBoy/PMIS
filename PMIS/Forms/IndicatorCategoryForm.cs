@@ -337,7 +337,7 @@ namespace PMIS.Forms
                     }
                     if (comboBoxColumn.DataSource is IndicatorSearchResponseDto[] arrayInd)
                     {
-                       
+
                         if (fkIndicatorId != 0)
                         {
                             ((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Value = ((IndicatorSearchResponseDto)((DataGridViewComboBoxCell)dgvFiltersList.Rows[0].Cells["FkIndicatorId"]).Items[0]).Id;
@@ -372,13 +372,12 @@ namespace PMIS.Forms
                             // comboBoxColumn.SelectedIndex = 0;
                             dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                         }
-                       
+
                     }
-                   // dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
+                    // dgvFiltersList.Rows[0].Cells[column.Name].Value = 0;
                 }
             }
         }
-
         public void RefreshVisuals()
         {
             try
@@ -391,10 +390,25 @@ namespace PMIS.Forms
 
                 foreach (DataGridViewRow row in dgvResultsList.Rows)
                 {
-                    row.DefaultCellStyle.BackColor = Color.White;
-                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    if (row.Cells["FlgEdited"].Value != null && bool.Parse(row.Cells["FlgEdited"].Value.ToString()))
+                    {
+                        row.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                    else if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Honeydew;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
 
-                    row.Cells["FlgEdited"].Value = false;
+                    }
+                    else
+                    {
+                        row.DefaultCellStyle.BackColor = Color.White;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+
+
+                    //   row.Cells["FlgEdited"].Value = false;
 
                 }
                 if (dgvResultsList.Rows.Count > 0)
@@ -408,6 +422,7 @@ namespace PMIS.Forms
                 throw;
             }
         }
+
 
         private async void CloseTabPage(object? sender, EventArgs e)
         {
@@ -559,25 +574,40 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<IndicatorCategoryAddResponseDto> list) = await IndicatorCategoryService.AddGroup(lstAddRequest);
-                bool isSuccess = await indicatorCategoryService.AddRange(lstAddRequest);
-
-                if (isSuccess)
+                if (lstAddRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    //string errorMessage = String.Join("\n", list.Select((x, index) => new
-                    //{
-                    //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
-                    //    IsSuccess = x.IsSuccess
-                    //})
-                    //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
-                    MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    (bool isSuccess, IEnumerable<IndicatorCategoryAddResponseDto> list) = await indicatorCategoryService.AddGroup(lstAddRequest);
+                    //bool isSuccess = await indicatorCategoryService.AddRange(lstAddRequest);
 
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0))
+                                {
+                                    row.Cells["Id"].Value = listResponse.FirstOrDefault().Id;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstAddRequest = new List<IndicatorCategoryAddRequestDto>();
+                    }
+                    else
+                    {
+                        //string errorMessage = String.Join("\n", list.Select((x, index) => new
+                        //{
+                        //    ErrorMessage = (index + 1) + " " + x.ErrorMessage,
+                        //    IsSuccess = x.IsSuccess
+                        //})
+                        //.Where(h => h.IsSuccess == false).Select(m => m.ErrorMessage));
+                        MessageBox.Show("عملیات افزودن موفقیت‌آمیز نبود: \n" /*+ errorMessage*/, "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             catch (Exception)
             {
@@ -605,16 +635,33 @@ namespace PMIS.Forms
                     }
                     catch (Exception) { }
                 }
-
-                //(bool isSuccess, IEnumerable<IndicatorCategoryEditResponseDto> list) = await IndicatorCategoryService.EditGroup(lstEditRequest);
-                bool isSuccess = await indicatorCategoryService.EditRange(lstEditRequest);
-                if (isSuccess)
+                if (lstEditRequest.Count > 0)
                 {
-                    // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    (bool isSuccess, IEnumerable<IndicatorCategoryEditResponseDto> list) = await indicatorCategoryService.EditGroup(lstEditRequest);
+                    //bool isSuccess = await indicatorCategoryService.EditRange(lstEditRequest);
+                    if (isSuccess)
+                    {
+                        var listResponse = list.ToList();
+                        // MessageBox.Show("عملیات موفقیت‌آمیز بود!!!", "موفقیت", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        foreach (DataGridViewRow row in dgvResultsList.Rows)
+                        {
+                            try
+                            {
+                                if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0 && bool.Parse((row.Cells["FlgEdited"].Value ?? false).ToString()) == true)
+                                {
+                                    if (listResponse.FirstOrDefault().IsSuccess)
+                                        row.Cells["FlgEdited"].Value = false;
+                                    listResponse.RemoveAt(0);
+                                }
+                            }
+                            catch (Exception) { }
+                        }
+                        lstEditRequest = new List<IndicatorCategoryEditRequestDto>();
+                    }
+                    else
+                    {
+                        MessageBox.Show("عملیات ویرایش موفقیت آمیز نبود", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception)
@@ -1070,7 +1117,7 @@ namespace PMIS.Forms
                 if (comboBox != null)
                 {
                     comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
-                    comboBox.DropDown -= new EventHandler(CategoryListRefresh); 
+                    comboBox.DropDown -= new EventHandler(CategoryListRefresh);
                     comboBox.DropDown += new EventHandler(CategoryListRefresh);
                 }
             }
@@ -1084,7 +1131,7 @@ namespace PMIS.Forms
 
         private void CategoryListRefresh(object sender, EventArgs e)
         {
-        
+
             ComboBox comboBox = sender as ComboBox;
 
             if (comboBox != null)
