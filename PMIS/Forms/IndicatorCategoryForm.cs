@@ -118,7 +118,7 @@ namespace PMIS.Forms
             tabPage.Padding = new Padding(3);
             tabPage.Size = new Size(192, 0);
             tabPage.TabIndex = 0;
-            tabPage.Text = "ادعاهای کاربران روی سیستم";
+            tabPage.Text = "دسته بندی شاخص ها";
             tabPage.UseVisualStyleBackColor = true;
 
             form.TopLevel = false;
