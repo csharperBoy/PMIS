@@ -1551,6 +1551,7 @@ namespace PMIS.Forms
                             }
                             foreach (DataGridViewColumn item in dgvResultsList.Columns)
                             {
+                                dgvResultsList.Rows[index].Cells["Id"].Value = 0;
                                 CellValidated(index, item.Index);
                             }
                             RowLeave(index);
