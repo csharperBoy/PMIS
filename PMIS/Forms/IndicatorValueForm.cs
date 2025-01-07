@@ -1547,7 +1547,17 @@ namespace PMIS.Forms
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                if (
+                                    dgvResultsList.Rows[index].Cells["Value"].Value.ToString() != lstSearchResponse.FirstOrDefault().Value.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpValueTypeId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpValueTypeInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkIndicatorInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpShiftId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpShiftInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["shamsiDateTime"].Value.ToString() != lstSearchResponse.FirstOrDefault().shamsiDateTime ||
+                                    dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
+                                    )
+                                {
+                                    dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                }
                             }
                             else
                             {
