@@ -40,7 +40,7 @@ namespace PMIS.Forms
         private IClaimUserOnSystemService claimUserOnSystemService;
         private IIndicatorCategoryService indicatorCategoryService;
         private ICategoryService categoryService;
-        
+
         private bool isLoaded = false;
         private TabControl tabControl;
         #endregion
@@ -351,9 +351,9 @@ namespace PMIS.Forms
                         row.DefaultCellStyle.BackColor = Color.White;
                         row.DefaultCellStyle.ForeColor = Color.Black;
                     }
-                    
 
-                 //   row.Cells["FlgEdited"].Value = false;
+
+                    //   row.Cells["FlgEdited"].Value = false;
 
                 }
                 if (dgvResultsList.Rows.Count > 0)
@@ -797,7 +797,7 @@ namespace PMIS.Forms
                 if (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) != 0)
                 {
                     int tempId = int.Parse(row.Cells["Id"].Value.ToString());
-                    IndicatorCategoryForm frm = new IndicatorCategoryForm(indicatorCategoryService, claimUserOnSystemService, indicatorService, categoryService, tempId,0, tabControl);
+                    IndicatorCategoryForm frm = new IndicatorCategoryForm(indicatorCategoryService, claimUserOnSystemService, indicatorService, categoryService, tempId, 0, tabControl);
                     frm.Show();
                 }
             }
@@ -923,6 +923,7 @@ namespace PMIS.Forms
                                     }
                                 }
                             }
+
                             GenericSearchRequestDto searchRequest = new GenericSearchRequestDto()
                             {
                                 filters = new List<GenericSearchFilterDto>(),
@@ -944,10 +945,22 @@ namespace PMIS.Forms
                                 type = PhraseType.Condition,
                             });
                             (bool isSuccess, lstSearchResponse) = await indicatorService.Search(searchRequest);
-                            if (isSuccess  && lstSearchResponse.Count() > 0)
+                            if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                if (dgvResultsList.Rows[index].Cells["Title"].Value.ToString() != lstSearchResponse.FirstOrDefault().Title ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpFormId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpFormInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpManualityId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpManualityInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpUnitId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpUnitInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpPeriodId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpPeriodInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpMeasureId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpMeasureInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpDesirabilityId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpDesirabilityInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["Formula"].Value.ToString() != lstSearchResponse.FirstOrDefault().Formula ||
+                                    dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
+                                    )
+                                {
+                                    dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                }
                             }
                             else
                             {

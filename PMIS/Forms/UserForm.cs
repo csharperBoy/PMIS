@@ -959,7 +959,15 @@ namespace PMIS.Forms
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                if (dgvResultsList.Rows[index].Cells["FullName"].Value.ToString() != lstSearchResponse.FirstOrDefault().FullName ||
+                                    dgvResultsList.Rows[index].Cells["PasswordHash"].Value.ToString() != lstSearchResponse.FirstOrDefault().PasswordHash ||
+                                    dgvResultsList.Rows[index].Cells["Phone"].Value.ToString() != lstSearchResponse.FirstOrDefault().Phone ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpWorkCalendarId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpWorkCalendarInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
+                                    )
+                                {
+                                    dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                }
                             }
                             else
                             {
