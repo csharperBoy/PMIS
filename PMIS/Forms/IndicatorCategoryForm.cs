@@ -1105,8 +1105,14 @@ namespace PMIS.Forms
 
         private void dgvResultsList_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
+            try
+            {
+
+                if (! (e.Control is ComboBox))
+                    return;
 
             ComboBox comboBox = e.Control as ComboBox;
+
             if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
             {
                 if (comboBox != null)
@@ -1130,6 +1136,12 @@ namespace PMIS.Forms
                 comboBox.DropDown -= new EventHandler(CategoryListRefresh);
                 comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
 
+            }
+            }
+            catch (Exception ex)
+            {
+                int i = 1;
+               
             }
         }
 

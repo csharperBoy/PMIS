@@ -107,16 +107,16 @@ namespace PMIS.DTO.IndicatorCategory
                    MinimumWidth = 150,
                    DividerWidth = 5
                },
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "ترتیب",
-                   Name = "OrderNum",
-                   DataPropertyName = "OrderNum",
-                   ReadOnly = false,
-                   Visible = true,
-                  MinimumWidth = 50,
-                   DividerWidth = 5
-               },
+               //new DataGridViewTextBoxColumn()
+               //{
+               //    HeaderText = "ترتیب",
+               //    Name = "OrderNum",
+               //    DataPropertyName = "OrderNum",
+               //    ReadOnly = false,
+               //    Visible = true,
+               //   MinimumWidth = 50,
+               //    DividerWidth = 5
+               //},
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
@@ -176,16 +176,16 @@ namespace PMIS.DTO.IndicatorCategory
                    MinimumWidth = 150,
                    DividerWidth = 0
                }   ,
-               new DataGridViewTextBoxColumn()
-               {
-                   HeaderText = "ترتیب",
-                   Name = "OrderNum",
-                   DataPropertyName = "OrderNum",
-                   ReadOnly = true,
-                   Visible = true,
-                  MinimumWidth = 50,
-                   DividerWidth = 0
-               },
+               //new DataGridViewTextBoxColumn()
+               //{
+               //    HeaderText = "ترتیب",
+               //    Name = "OrderNum",
+               //    DataPropertyName = "OrderNum",
+               //    ReadOnly = true,
+               //    Visible = true,
+               //   MinimumWidth = 50,
+               //    DividerWidth = 0
+               //},
                new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
