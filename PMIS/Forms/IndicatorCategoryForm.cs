@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.IndicatorCategory;
-using PMIS.DTO.IndicatorCategory;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.LookUpValue.Info;
@@ -21,8 +20,6 @@ using System.Windows.Forms;
 using WSM.WindowsServices.FileManager;
 using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Category;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Color = System.Drawing.Color;
 
 namespace PMIS.Forms
 {
@@ -1049,7 +1046,13 @@ namespace PMIS.Forms
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                if (dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkIndicatorInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkCategoryId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkCategoryInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
+                                    )
+                                {
+                                    dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                }
                             }
                             else
                             {
@@ -1108,40 +1111,40 @@ namespace PMIS.Forms
             try
             {
 
-                if (! (e.Control is ComboBox))
+                if (!(e.Control is ComboBox))
                     return;
 
-            ComboBox comboBox = e.Control as ComboBox;
+                ComboBox comboBox = e.Control as ComboBox;
 
-            if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
-            {
-                if (comboBox != null)
+                if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["VrtParentCategory"].Index)
+                {
+                    if (comboBox != null)
+                    {
+                        comboBox.DropDown -= new EventHandler(CategoryListRefresh);
+                        comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                        comboBox.SelectedIndexChanged += new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                    }
+                }
+                else if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["FkCategoryId"].Index)
+                {
+                    if (comboBox != null)
+                    {
+                        comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
+                        comboBox.DropDown -= new EventHandler(CategoryListRefresh);
+                        comboBox.DropDown += new EventHandler(CategoryListRefresh);
+                    }
+                }
+                else
                 {
                     comboBox.DropDown -= new EventHandler(CategoryListRefresh);
                     comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
-                    comboBox.SelectedIndexChanged += new EventHandler(VrtParentCategory_SelectedIndexChanged);
-                }
-            }
-            else if (dgvResultsList.CurrentCell.ColumnIndex == dgvResultsList.Columns["FkCategoryId"].Index)
-            {
-                if (comboBox != null)
-                {
-                    comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
-                    comboBox.DropDown -= new EventHandler(CategoryListRefresh);
-                    comboBox.DropDown += new EventHandler(CategoryListRefresh);
-                }
-            }
-            else
-            {
-                comboBox.DropDown -= new EventHandler(CategoryListRefresh);
-                comboBox.SelectedIndexChanged -= new EventHandler(VrtParentCategory_SelectedIndexChanged);
 
-            }
+                }
             }
             catch (Exception ex)
             {
                 int i = 1;
-               
+
             }
         }
 

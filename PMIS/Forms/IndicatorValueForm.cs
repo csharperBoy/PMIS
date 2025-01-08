@@ -1,4 +1,4 @@
-﻿
+﻿using Generic.Helper;
 using Generic.Service.DTO.Concrete;
 using Generic.Service.Normal.Composition.Contract;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +13,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
-using Generic.Helper;
 using PMIS.DTO.Indicator;
 using System.Collections.Generic;
 using PMIS.DTO.LookUpValue;
@@ -378,7 +377,7 @@ namespace PMIS.Forms
             dgvFiltersList.Rows[0].Cells["DateTimeFrom"].Value = Helper.Convert.ConvertGregorianToShamsi(DateTime.Now.AddDays(-14), "RRRR/MM/DD");
             dgvFiltersList.Rows[0].Cells["DateTimeTo"].Value = Helper.Convert.ConvertGregorianToShamsi(Helper.Convert.ConvertShamsiToGregorian(year + "/01/01").GetValueOrDefault().AddDays(-1), "RRRR/MM/DD");
         }
-        
+
         public void RefreshVisuals()
         {
             try
@@ -1547,12 +1546,11 @@ namespace PMIS.Forms
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                if (
-                                    dgvResultsList.Rows[index].Cells["Value"].Value.ToString() != lstSearchResponse.FirstOrDefault().Value.ToString() ||
-                                    dgvResultsList.Rows[index].Cells["FkLkpValueTypeId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpValueTypeInfo.Id.ToString() ||
-                                    dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkIndicatorInfo.Id.ToString() ||
+                                if (dgvResultsList.Rows[index].Cells["shamsiDateTime"].Value.ToString() != lstSearchResponse.FirstOrDefault().shamsiDateTime ||
                                     dgvResultsList.Rows[index].Cells["FkLkpShiftId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpShiftInfo.Id.ToString() ||
-                                    dgvResultsList.Rows[index].Cells["shamsiDateTime"].Value.ToString() != lstSearchResponse.FirstOrDefault().shamsiDateTime ||
+                                    dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkIndicatorInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpValueTypeId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpValueTypeInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["Value"].Value.ToString() != lstSearchResponse.FirstOrDefault().Value.ToString() ||
                                     dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
                                     )
                                 {

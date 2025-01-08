@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using PMIS.DTO.ClaimUserOnIndicator;
 using PMIS.DTO.ClaimUserOnSystem;
-using PMIS.DTO.ClaimUserOnSystem;
 using PMIS.DTO.Indicator;
 using PMIS.DTO.IndicatorValue;
 using PMIS.DTO.LookUpValue.Info;
@@ -992,7 +991,13 @@ namespace PMIS.Forms
                             if (isSuccess && lstSearchResponse.Count() > 0)
                             {
                                 dgvResultsList.Rows[index].Cells["Id"].Value = lstSearchResponse.FirstOrDefault().Id;
-                                dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                if (dgvResultsList.Rows[index].Cells["FkUserId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkUserInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["FkLkpClaimUserOnSystemId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpClaimUserOnSystemInfo.Id.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
+                                    )
+                                {
+                                    dgvResultsList.Rows[index].Cells["FlgEdited"].Value = true;
+                                }
                             }
                             else
                             {
