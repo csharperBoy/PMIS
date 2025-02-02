@@ -447,9 +447,9 @@ namespace PMIS.Forms
         private bool HasChangeResults()
         {
 
-            int temp1 = dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null);
+            int temp1 = dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null && row.Cells["ValueCumulative"].Value != null);
             int temp2 = dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited);
-            if (dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null) > 0 || // lstAddRequest.Count != 0 ||
+            if (dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["Id"].Value is Int64 id && id == 0 && row.Cells["Value"].Value != null && row.Cells["ValueCumulative"].Value != null) > 0 || // lstAddRequest.Count != 0 ||
                 dgvResultsList.Rows.Cast<DataGridViewRow>().Count(row => row.Cells["FlgEdited"].Value is bool flgEdited && flgEdited) > 0 || // lstEditRequest.Count != 0 ||
                 lstLogicalDeleteRequest.Count != 0 ||
                 lstPhysicalDeleteRequest.Count != 0 ||
@@ -931,7 +931,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.IsNewRow || row.Cells["Value"].Value == null)
+                        if (row.IsNewRow || row.Cells["Value"].Value == null || row.Cells["ValueCumulative"].Value == null)
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
                         string lkpValueType = tempLst.Where(l => l.Id == int.Parse(row.Cells["FkLkpValueTypeId"].Value.ToString())).SingleOrDefault().Value.ToString();
@@ -964,7 +964,7 @@ namespace PMIS.Forms
                         {
                             try
                             {
-                                if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count && row.Cells["Value"].Value != null) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0 && row.Cells["Value"].Value != null))
+                                if ((row.Cells["Id"].Value == null && row.Index + 1 < dgvResultsList.Rows.Count && row.Cells["Value"].Value != null && row.Cells["ValueCumulative"].Value != null) || (row.Cells["Id"].Value != null && int.Parse(row.Cells["Id"].Value.ToString()) == 0 && row.Cells["Value"].Value != null && row.Cells["ValueCumulative"].Value != null))
                                 {
                                     row.Cells["Id"].Value = listResponse.FirstOrDefault().Id;
                                     listResponse.RemoveAt(0);
@@ -1003,7 +1003,7 @@ namespace PMIS.Forms
                 {
                     try
                     {
-                        if (row.IsNewRow || row.Cells["Value"].Value == null)
+                        if (row.IsNewRow || row.Cells["Value"].Value == null || row.Cells["ValueCumulative"].Value == null)
                             continue;
                         var tempLst = ((LookUpValueShortInfoDto[])(((DataGridViewComboBoxCell)row.Cells["FkLkpValueTypeId"]).DataSource)).ToList();
 
@@ -1194,7 +1194,7 @@ namespace PMIS.Forms
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
             }
             // Add Style
-            else if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0 && dgvResultsList.Rows[e.RowIndex].Cells["Value"].Value != null)
+            else if (dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value != null && int.Parse(dgvResultsList.Rows[e.RowIndex].Cells["Id"].Value.ToString()) == 0 && dgvResultsList.Rows[e.RowIndex].Cells["Value"].Value != null && dgvResultsList.Rows[e.RowIndex].Cells["ValueCumulative"].Value != null)
             {
                 previousRow.DefaultCellStyle.BackColor = Color.Honeydew;
                 previousRow.DefaultCellStyle.ForeColor = Color.Black;
@@ -1229,6 +1229,7 @@ namespace PMIS.Forms
                 }
                 dgvResultsList.Rows[rowIndex].Cells["FlgEdited"].Value = true;
                 dgvResultsList.Rows[rowIndex].Cells["Value"].ReadOnly = false;
+                dgvResultsList.Rows[rowIndex].Cells["ValueCumulative"].ReadOnly = false;
             }
             else if (dgvResultsList.Columns[columnIndex].Name == "LogicalDelete" && rowIndex >= 0)
             {
@@ -1551,6 +1552,7 @@ namespace PMIS.Forms
                                     dgvResultsList.Rows[index].Cells["FkIndicatorId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkIndicatorInfo.Id.ToString() ||
                                     dgvResultsList.Rows[index].Cells["FkLkpValueTypeId"].Value.ToString() != lstSearchResponse.FirstOrDefault().FkLkpValueTypeInfo.Id.ToString() ||
                                     dgvResultsList.Rows[index].Cells["Value"].Value.ToString() != lstSearchResponse.FirstOrDefault().Value.ToString() ||
+                                    dgvResultsList.Rows[index].Cells["ValueCumulative"].Value.ToString() != lstSearchResponse.FirstOrDefault().Value.ToString() ||
                                     dgvResultsList.Rows[index].Cells["Description"].Value.ToString() != lstSearchResponse.FirstOrDefault().Description
                                     )
                                 {

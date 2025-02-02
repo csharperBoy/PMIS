@@ -57,21 +57,25 @@ public partial class PmisContext : DbContext
         {
             entity.ToTable("Category");
 
+            entity.HasIndex(e => e.FklkpTypeId, "IX_Category_FKLkpTypeID");
+
+            entity.HasIndex(e => e.FkParentId, "IX_Category_FkParentID");
+
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Code)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .IsFixedLength();
             entity.Property(e => e.FkParentId).HasColumnName("FkParentID");
-            entity.Property(e => e.FkLkpCategoryTypeId).HasColumnName("FKLkpTypeID");
+            entity.Property(e => e.FklkpTypeId).HasColumnName("FKLkpTypeID");
             entity.Property(e => e.Title).HasMaxLength(1500);
 
             entity.HasOne(d => d.FkParent).WithMany(p => p.InverseFkParent)
                 .HasForeignKey(d => d.FkParentId)
                 .HasConstraintName("FK_Category_Category");
 
-            entity.HasOne(d => d.FkLkpCategoryType).WithMany(p => p.Categories)
-                .HasForeignKey(d => d.FkLkpCategoryTypeId)
+            entity.HasOne(d => d.FklkpType).WithMany(p => p.Categories)
+                .HasForeignKey(d => d.FklkpTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Category_LookUpValue");
         });
@@ -232,6 +236,7 @@ public partial class PmisContext : DbContext
             entity.Property(e => e.FkLkpShiftId).HasColumnName("FkLkpShiftID");
             entity.Property(e => e.FkLkpValueTypeId).HasColumnName("FkLkpValueTypeID");
             entity.Property(e => e.Value).HasColumnType("decimal(24, 6)");
+            entity.Property(e => e.ValueCumulative).HasColumnType("decimal(24, 6)");
 
             entity.HasOne(d => d.FkIndicator).WithMany(p => p.IndicatorValues)
                 .HasForeignKey(d => d.FkIndicatorId)

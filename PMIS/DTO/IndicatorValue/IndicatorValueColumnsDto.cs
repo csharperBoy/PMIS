@@ -230,8 +230,15 @@ namespace PMIS.DTO.IndicatorValue
                    DataPropertyName = "Value",
                    ReadOnly = true,
                    Visible = true,
-               },
-                new DataGridViewTextBoxColumn()
+               }, new DataGridViewTextBoxColumn()
+               {
+                   HeaderText = "مقدار تجمعی",
+                   Name = "ValueCumulative",
+                   DataPropertyName = "ValueCumulative",
+                   ReadOnly = true,
+                   Visible = true,
+               },    
+        new DataGridViewTextBoxColumn()
                {
                    HeaderText = "توضیحات",
                    Name = "Description",

@@ -19,9 +19,9 @@ public partial class ClaimUserOnIndicator
 
     public bool FlgLogicalDelete { get; set; }
 
-    public virtual User FkUser { get; set; } = null!;
+    public virtual Indicator FkIndicator { get; set; } = null!;
 
     public virtual LookUpValue FkLkpClaimUserOnIndicator { get; set; } = null!;
 
-    public virtual Indicator FkIndicator { get; set; } = null!;
+    public virtual User FkUser { get; set; } = null!;
 }

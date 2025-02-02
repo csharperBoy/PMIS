@@ -7,7 +7,7 @@ public partial class Category
 {
     public int Id { get; set; }
 
-    public int FkLkpCategoryTypeId { get; set; }
+    public int FklkpTypeId { get; set; }
 
     public int? FkParentId { get; set; }
 
@@ -25,7 +25,7 @@ public partial class Category
 
     public virtual Category? FkParent { get; set; }
 
-    public virtual LookUpValue FkLkpCategoryType { get; set; } = null!;
+    public virtual LookUpValue FklkpType { get; set; } = null!;
 
     public virtual ICollection<IndicatorCategory> IndicatorCategories { get; set; } = new List<IndicatorCategory>();
 

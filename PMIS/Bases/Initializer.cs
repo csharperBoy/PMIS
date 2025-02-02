@@ -521,7 +521,7 @@ namespace PMIS.Bases
                     #region CategoryType
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpCategoryType", Title = "نوع‌های دسته‌بندی" };
+                    lookup = new LookUp { Code = "LkpType", Title = "نوع‌های دسته‌بندی" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
@@ -595,30 +595,30 @@ namespace PMIS.Bases
                     //add category
                     //------------------------------------
                     category.Clear();
-                    categoryParant = new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParent = null, Code = "SYS", Title = "نظام‌های مدیریتی", OrderNum = 1 };
+                    categoryParant = new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParent = null, Code = "SYS", Title = "نظام‌های مدیریتی", OrderNum = 1 };
                     context.Categories.Add(categoryParant);
                     context.SaveChanges();
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "RiskManagement", Title = "مدیریت ریسک", OrderNum = 1 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "ProcessManagement", Title = "مدیریت فرآیندی", OrderNum = 2 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "TaskLevelStrategicManagement", Title = "مدیریت استراتژیک سطح وظیفه‌ای", OrderNum = 3 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "MacroLevelStrategicManagement", Title = "مدیریت استراتژیک سطح کلان", OrderNum = 4 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "RiskManagement", Title = "مدیریت ریسک", OrderNum = 1 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "ProcessManagement", Title = "مدیریت فرآیندی", OrderNum = 2 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "TaskLevelStrategicManagement", Title = "مدیریت استراتژیک سطح وظیفه‌ای", OrderNum = 3 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "MacroLevelStrategicManagement", Title = "مدیریت استراتژیک سطح کلان", OrderNum = 4 });
                     context.Categories.AddRange(category);
                     context.SaveChanges();
 
                     category.Clear();
-                    categoryParant = new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParent = null, Code = "STD", Title = "استانداردهای مدیریتی", OrderNum = 2 };
+                    categoryParant = new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParent = null, Code = "STD", Title = "استانداردهای مدیریتی", OrderNum = 2 };
                     context.Categories.Add(categoryParant);
                     context.SaveChanges();
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Quality", Title = "کیفیت ISO9001", OrderNum = 1 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Environmental", Title = "زیست ‌محیطی ISO14001", OrderNum = 2 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "SafetyAndHealth", Title = "ایمنی و بهداشت ISO45001", OrderNum = 3 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Energy", Title = "انرژی ISO50001", OrderNum = 4 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Laboratory", Title = "آزمایشگاه ISO17025", OrderNum = 5 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Education", Title = "آموزش ISO10015", OrderNum = 6 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerComplaints", Title = "شکایت مشتریان ISO10002", OrderNum = 7 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerSatisfaction", Title = "رضایت مشتریان ISO10004", OrderNum = 8 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Action", Title = "اقدام", OrderNum = 9 });
-                    category.Add(new Models.Category { FkLkpCategoryTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpCategoryType").First().Id, FkParentId = categoryParant.Id, Code = "Other", Title = "سایر", OrderNum = 10 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Quality", Title = "کیفیت ISO9001", OrderNum = 1 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Environmental", Title = "زیست ‌محیطی ISO14001", OrderNum = 2 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "SafetyAndHealth", Title = "ایمنی و بهداشت ISO45001", OrderNum = 3 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Energy", Title = "انرژی ISO50001", OrderNum = 4 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Laboratory", Title = "آزمایشگاه ISO17025", OrderNum = 5 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Education", Title = "آموزش ISO10015", OrderNum = 6 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerComplaints", Title = "شکایت مشتریان ISO10002", OrderNum = 7 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "CustomerSatisfaction", Title = "رضایت مشتریان ISO10004", OrderNum = 8 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Action", Title = "اقدام", OrderNum = 9 });
+                    category.Add(new Models.Category { FklkpTypeId = context.LookUpValues.Where(x => x.Value == "IndicatorCategory" && x.FkLookUp.Code == "LkpType").First().Id, FkParentId = categoryParant.Id, Code = "Other", Title = "سایر", OrderNum = 10 });
                     context.Categories.AddRange(category);
                     context.SaveChanges();
                     //------------------------------------

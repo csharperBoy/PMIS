@@ -19,7 +19,7 @@ namespace PMIS.DTO.Category.Info
                 return null;
             await GenericMapHandlerFactory.GetMapper(GenericMapHandlerFactory.MappingMode.Auto).Map(baseModel, this);
 
-            this.FkLkpCategoryTypeInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FkLkpCategoryType);
+            this.FkLkpCategoryTypeInfo = await (new LookUpValueShortInfoDto()).extraMapFromBaseModel(baseModel.FklkpType);
             this.FkParentInfo = await (new CategoryShortInfoDto()).extraMapFromBaseModel(baseModel.FkParent);
 
             this.IndicatorCategoriesInfo = await Task.WhenAll(baseModel.IndicatorCategories.Select(v => (new IndicatorCategoryShortInfoDto()).extraMapFromBaseModel(v)).ToList());
