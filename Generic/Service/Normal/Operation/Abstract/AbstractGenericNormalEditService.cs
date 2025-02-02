@@ -62,8 +62,18 @@ namespace Generic.Service.Normal.Operation.Abstract
                         if (!result)
                             throw exceptionHandler.PopException();
                         await repository.SaveAsync();
-                        await repository.SetEntityStateAsync(entity, EntityState.Detached);
+                     //   await repository.SetEntityStateAsync(entity, EntityState.Detached);
                         responseTemp = await mapper.Map<TEntity, TEntityEditResponseDto>(entity);
+
+                        var entityFields = responseTemp.GetType()
+                                                           .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+
+                        var fieldName = entityFields.FirstOrDefault(f => f.Name.Equals("IsSuccess"));
+
+                        if (fieldName != null)
+                        {
+                            fieldName.SetValue(responseTemp, result);
+                        }
                     }
                     catch (Exception ex)
                     {

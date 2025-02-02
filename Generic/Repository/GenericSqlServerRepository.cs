@@ -89,9 +89,9 @@ namespace Generic.Repository
             bool result;
             try
             {
-                //dbSet.Attach(entity);
-                //dbContext.Entry(entity).State = EntityState.Modified;
-                dbSet.Update(entity);
+                dbSet.Attach(entity);
+                dbContext.Entry(entity).State = EntityState.Modified;
+                //dbSet.Update(entity);
                 result = true;
             }
             catch (Exception ex)
@@ -367,7 +367,7 @@ namespace Generic.Repository
                     int skip = ((int)pageNumber - 1) * (int)recordCount;
                     query = query.Skip(skip).Take((int)recordCount);
                 }
-                var resultList = await query.ToListAsync();
+                var resultList = await query.AsNoTracking().ToListAsync();
                 return (resultList, count);
             }
             catch (Exception ex)

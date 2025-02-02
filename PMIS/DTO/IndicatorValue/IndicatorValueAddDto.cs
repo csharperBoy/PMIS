@@ -37,7 +37,7 @@ namespace PMIS.DTO.IndicatorValue
 
         public string shamsiDateTime { get; set; }
         public decimal Value { get; set; }
-        public decimal? ValueCumulative { get; set; }
+        public decimal ValueCumulative { get; set; }
         public string? Description { get; set; }
 
         //public string? SystemInfo { get; set; }

@@ -23,7 +23,7 @@ public partial class IndicatorValue
 
     public bool FlgLogicalDelete { get; set; }
 
-    public decimal? ValueCumulative { get; set; }
+    public decimal ValueCumulative { get; set; }
 
     public virtual Indicator FkIndicator { get; set; } = null!;
 

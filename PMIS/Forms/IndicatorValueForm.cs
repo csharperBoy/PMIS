@@ -283,7 +283,7 @@ namespace PMIS.Forms
                     HeaderText = "ویرایش شده",
                     Name = "FlgEdited",
                     ReadOnly = false,
-                    Visible = false,
+                    Visible = false,                   
                     IndeterminateValue = false
                 });
                 dgvResultsList.Columns.Add(new DataGridViewButtonColumn()
