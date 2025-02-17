@@ -14,7 +14,7 @@ namespace PMIS.DTO.ClaimUserOnSystem
 
         public int FkLkpClaimUserOnSystemId { get; set; }
 
-        public int? FkUserId { get; set; }
+        public int FkUserId { get; set; }
 
         public string? Description { get; set; }
 
