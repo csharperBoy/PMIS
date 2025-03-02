@@ -37,11 +37,12 @@ using Serilog;
 using System.Configuration;
 using static Generic.Base.Handler.Map.GenericMapHandlerFactory;
 using PMIS.DTO.Category;
+using System.Globalization;
 namespace PMIS
 {
     internal static class Program
     {
-        public static bool useLazyLoad { get; set; } = true;
+         public static bool useLazyLoad { get; set; } = true;
         public static IConfigurationRoot configuration { get; set; } = new ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory())
                .AddJsonFile("appsettings.json")
@@ -50,7 +51,9 @@ namespace PMIS
         [STAThread]
         static void Main()
         {
-         
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+           Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             ApplicationConfiguration.Initialize();
             new PMIS.Bases.Initializer().Initialize();
             var serviceCollection = new ServiceCollection();
