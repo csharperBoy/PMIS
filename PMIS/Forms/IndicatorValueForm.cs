@@ -845,8 +845,9 @@ namespace PMIS.Forms
                             break;
                         }
                         break;
-                    case "Monthly":                        
-                        if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 31 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 62 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 93 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 124 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 155 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 186 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 216 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 246 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 276 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 306 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 336 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 365 )
+                    case "Monthly":
+                        //if (persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 31 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 62 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 93 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 124 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 155 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 186 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 216 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 246 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 276 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 306 || persianCalendar.GetDayOfYear(indicatorValue.DateTime) == 336 || persianCalendar.GetDayOfYear(indicatorValue.DateTime.AddDays(1)) == 1 )
+                        if (persianCalendar.GetDayOfMonth(indicatorValue.DateTime.AddDays(1)) == 1)
                         {
                             indicatorValue.FkLkpShiftId = shifts.Where(s => s.Value == "0").SingleOrDefault().Id;
                             temp = await mapper.Map<IndicatorValueSearchResponseDto, IndicatorValueSearchResponseDto>(indicatorValue);

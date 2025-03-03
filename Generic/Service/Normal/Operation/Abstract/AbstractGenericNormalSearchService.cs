@@ -93,6 +93,10 @@ namespace Generic.Service.Normal.Operation.Abstract
         }
         private Expression<Func<TEntity, bool>> BuildSingleFilterExpression(GenericSearchFilterDto filter)
         {
+            try
+            {
+
+            
             var parameter = Expression.Parameter(typeof(TEntity), "entity");
             var member = Expression.Property(parameter, filter.columnName);
             //var constant = Expression.Constant(Convert.ChangeType(filter.value, member.Type));
@@ -123,6 +127,12 @@ namespace Generic.Service.Normal.Operation.Abstract
             };
 
             return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
         private Expression<Func<TEntity, bool>> CombineExpressions(Expression<Func<TEntity, bool>> expr1, Expression<Func<TEntity, bool>> expr2, LogicalOperator logicalOperator)
         {
