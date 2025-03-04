@@ -550,7 +550,7 @@ namespace PMIS.Forms
             (bool isSuccess, lstSearchResponse) = await indicatorValueService.Search(searchRequest);
             lstSearchResponse = await indicatorValueService.SearchByExternaFilter(lstSearchResponse, int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpForm"].Value.ToString()), int.Parse(dgvFiltersList.Rows[0].Cells["VrtLkpPeriod"].Value.ToString()));
             // lstSearchResponse = await GenerateRows(lstSearchResponse);
-            lstBinding = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.ToList());
+            lstBinding = new BindingList<IndicatorValueSearchResponseDto>(lstSearchResponse.OrderBy(l=>l.DateTime).ToList());
             resultBindingSource = new BindingSource(lstBinding, null);
             dgvResultsList.DataSource = resultBindingSource;
 
