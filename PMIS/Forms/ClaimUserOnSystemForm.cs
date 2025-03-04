@@ -340,7 +340,8 @@ namespace PMIS.Forms
                         List<UserSearchResponseDto> lstSourse = arrayUsr.ToList();
                         lstSourse.Insert(0, new UserSearchResponseDto() { Id = 0, UserName = "همه", });
                         comboBoxColumn.DataSource = lstSourse;
-                        comboBoxColumn.DisplayMember = "UserName";
+                        //comboBoxColumn.DisplayMember = "UserName";
+                        comboBoxColumn.DisplayMember = "FullName";
                         comboBoxColumn.ValueMember = "Id";
                         // comboBoxColumn.SelectedIndex = 0;
                     }
