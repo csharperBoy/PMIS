@@ -89,6 +89,7 @@ namespace Generic.Repository
             bool result;
             try
             {
+                //await SetEntityStateAsync(entity, EntityState.Modified);
                 dbSet.Attach(entity);
                 dbContext.Entry(entity).State = EntityState.Modified;
                 //dbSet.Update(entity);
@@ -113,6 +114,7 @@ namespace Generic.Repository
             bool result;
             try
             {
+               //await SetEntitiesStateAsync(entities, EntityState.Modified);
                 dbSet.UpdateRange(entities);
                 //foreach (var item in entities)
                 //{
@@ -333,6 +335,7 @@ namespace Generic.Repository
             {
                 TEntity? entity = new TEntity();
                 entity = await dbSet.FindAsync(id);
+               await SetEntityStateAsync(entity, EntityState.Detached);
                 return entity;
             }
             catch (Exception)
