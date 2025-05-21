@@ -158,7 +158,7 @@ namespace PMIS.Bases
                     #region Unit
                     //add lookup
                     //------------------------------------
-                    lookup = new LookUp { Code = "LkpUnit", Title = "واحدهای سازمانی" };
+                    lookup = new LookUp { Code = "LkpUnit", Title = "شاخص یا اقدام" };
                     context.LookUps.Add(lookup);
                     context.SaveChanges();
                     //------------------------------------
@@ -171,28 +171,9 @@ namespace PMIS.Bases
 
                     //add values
                     //------------------------------------
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Nothing", Display = "هیچکدام", OrderNum = 1 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Management/PublicRelations", Display = "حوزه مدیریت/روابط عمومی", OrderNum = 2 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Management/Protection", Display = "حوزه مدیریت/حراست", OrderNum = 3 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Management/LAC", Display = "حوزه مدیریت/امور حقوقی و قراردادها", OrderNum = 4 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "HCM/AdministrativeAffairs", Display = "حوزه سرمایه‌های انسانی/امور اداری", OrderNum = 5 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "HCM/SWA", Display = "حوزه سرمایه‌های انسانی/خدمات و امور رفاهی", OrderNum = 6 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "HCM/TAD", Display = "حوزه سرمایه‌های انسانی/آموزش و توسعه", OrderNum = 7 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "HCM/HSE", Display = "حوزه سرمایه‌های انسانی/ایمنی، بهداشت و محیط‌زیست", OrderNum = 8 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "TAD/EDA", Display = "حوزه تکنولوژی و توسعه/امور مهندسی و توسعه", OrderNum = 9 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "TAD/ICT", Display = "حوزه تکنولوژی و توسعه/فناوری اطلاعات و ارتباطات", OrderNum = 10 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "TAD/QAOE", Display = "حوزه تکنولوژی و توسعه/تضمین کیفیت و تعالی سازمانی", OrderNum = 11 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "TAD/LQC", Display = "حوزه تکنولوژی و توسعه/آزمایشگاه و کنترل کیفی", OrderNum = 12 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Exploitation/PRSO", Display = "حوزه بهره‌برداری/دفتر پشتیبانی تولید و تعمیرات", OrderNum = 13 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Exploitation/NET", Display = "حوزه بهره‌برداری/نگهداری و تعمیرات", OrderNum = 14 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Exploitation/WAO", Display = "حوزه بهره‌برداری/انبار و سفارشات", OrderNum = 15 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Exploitation/CRM", Display = "حوزه بهره‌برداری/مجموعه نورد سرد", OrderNum = 16 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Exploitation/GAL", Display = "حوزه بهره‌برداری/تولید گالوانیزه و برش", OrderNum = 17 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Commerce/Purchase", Display = "حوزه بازرگانی/خرید", OrderNum = 18 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Commerce/MAS", Display = "حوزه بازرگانی/بازاریابی و فروش", OrderNum = 19 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "EAF", Display = "حوزه اقتصادی و مالی", OrderNum = 20 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Audit", Display = "حوزه حسابرسی", OrderNum = 21 });
-                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "IPD", Display = "حوزه اجرایی طرح و توسعه", OrderNum = 22 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Indicator", Display = "شاخص", OrderNum = 1 });
+                    lookUpValue.Add(new LookUpValue { FkLookUpId = lookup.Id, Value = "Action", Display = "اقدام", OrderNum = 2 });
+                   
                     context.LookUpValues.AddRange(lookUpValue);
                     //------------------------------------
                     context.SaveChanges();
